@@ -3,6 +3,9 @@ An abstraction which contains the value or the error of the operation. It can be
 
 # Project status: EARLY STAGE
 
+# Why
+I decided to create a new implementation to address a few missing functionalities in other libraries (e.g., i18n, support for more precise error descriptions) and to better follow industry standards ([RFC 9457](https://datatracker.ietf.org/doc/html/rfc9457)).
+
 # Error Response
 Example
 ```json
@@ -56,3 +59,6 @@ Example
     "location": "252e0b7f-b21c-44ab-bda0-c72fe943b886"
 }
 ```
+
+# Contribution
+Please contact author: tom.maple(at)outlook.com
