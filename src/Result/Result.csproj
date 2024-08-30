@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Maple.Result</RootNamespace>
+    <PackageId>Maple.Result</PackageId>
+    <Title>An abstraction which contains the value or the error of the operation. It can be mapped to the HTTP reponse if needed.</Title>
+    <Authors>Tom.Maple</Authors>
+    <Description>An abstraction which contains the value or the error of the operation. It can be mapped to the HTTP reponse if needed.</Description>
+    <PackageProjectUrl>https://github.com/TomMaple/Result</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/TomMaple/Result</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>result;rfc-9457;rfc-7807</PackageTags>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>
