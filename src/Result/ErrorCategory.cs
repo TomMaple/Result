@@ -4,9 +4,9 @@
 namespace Maple.Result;
 
 /// <summary>
-///     An enumeration representing the different types of errors that can be returned by the Result class.
+///     An enumeration representing the different categories of errors that can be returned by the Result class.
 /// </summary>
-public enum ErrorType
+public enum ErrorCategory
 {
     /// <summary>
     ///     A validation error.
