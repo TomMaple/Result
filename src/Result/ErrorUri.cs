@@ -24,7 +24,8 @@ namespace Maple.Result;
 ///             </description>
 ///         </item>
 ///     </list>
-///     <seealso href="https://datatracker.ietf.org/doc/html/rfc4151" />
+///     For URI locator specification, see also: <seealso href="https://datatracker.ietf.org/doc/html/rfc3986" />.<br />
+///     For URI tag specification, see also: <seealso href="https://datatracker.ietf.org/doc/html/rfc4151" />
 /// </remarks>
 public readonly record struct ErrorUri
 {
