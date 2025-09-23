@@ -22,21 +22,19 @@ public record Error
         Category = ErrorCategory.CriticalError;
         TypeUri = "about:blank";
         Title = "Unknown error";
-        Location = string.Empty;
         Detail = null;
         InstanceUri = null;
         DetailTemplated = null;
         _errorDetails = [];
     }
 
-    internal Error(ErrorCategory category, string typeUri, string title, string location, string? detail = null,
+    internal Error(ErrorCategory category, string typeUri, string title, string? detail = null,
         TemplatedMessage? detailTemplated = null, string? instanceUri = null,
         IReadOnlyList<ErrorDetail>? errorDetails = null)
     {
         Category = category;
         TypeUri = typeUri;
         Title = title;
-        Location = location;
         Detail = detail;
         InstanceUri = instanceUri;
         DetailTemplated = detailTemplated;
@@ -154,14 +152,6 @@ public record Error
     }
 
     /// <summary>
-    ///     The code that uniquely identifies the location of the problem in the source code.
-    /// </summary>
-    /// <remarks>
-    ///     The <c>X-Error-Source-Code-Location</c> HTTP header, if the <see cref="Error" /> is mapped to the HTTP response.
-    /// </remarks>
-    public string Location { get; init; }
-
-    /// <summary>
     ///     Adds details of an individual error occurence found.
     /// </summary>
     /// <param name="propertyPointer">The JSON Pointer which identifies the invalid value in the input data.</param>
@@ -225,7 +215,6 @@ public record Error
             ErrorCategory.Validation,
             typeUri.Value,
             title,
-            location,
             detail,
             detailTemplateId is null
                 ? null
@@ -266,7 +255,6 @@ public record Error
             ErrorCategory.Validation,
             typeUri.Value,
             title,
-            location,
             detail,
             detailTemplateId is null
                 ? null
@@ -308,7 +296,6 @@ public record Error
             ErrorCategory.Unauthenticated,
             typeUri.Value,
             title,
-            location,
             detail,
             detailTemplateId is null
                 ? null
@@ -349,7 +336,6 @@ public record Error
             ErrorCategory.Unauthenticated,
             typeUri.Value,
             title,
-            location,
             detail,
             detailTemplateId is null
                 ? null
@@ -389,7 +375,6 @@ public record Error
         return new Error(ErrorCategory.Forbidden,
             typeUri.Value,
             title,
-            location,
             detail,
             detailTemplateId is null
                 ? null
@@ -430,7 +415,6 @@ public record Error
             ErrorCategory.Forbidden,
             typeUri.Value,
             title,
-            location,
             detail,
             detailTemplateId is null
                 ? null
@@ -471,7 +455,6 @@ public record Error
             ErrorCategory.NotFound,
             typeUri.Value,
             title,
-            location,
             detail,
             detailTemplateId is null
                 ? null
@@ -512,7 +495,6 @@ public record Error
             ErrorCategory.NotFound,
             typeUri.Value,
             title,
-            location,
             detail,
             detailTemplateId is null
                 ? null
@@ -553,7 +535,6 @@ public record Error
             ErrorCategory.Timeout,
             typeUri.Value,
             title,
-            location,
             detail,
             detailTemplateId is null
                 ? null
@@ -594,7 +575,6 @@ public record Error
             ErrorCategory.Timeout,
             typeUri.Value,
             title,
-            location,
             detail,
             detailTemplateId is null
                 ? null
@@ -635,7 +615,6 @@ public record Error
             ErrorCategory.Conflict,
             typeUri.Value,
             title,
-            location,
             detail,
             detailTemplateId is null
                 ? null
@@ -676,7 +655,6 @@ public record Error
             ErrorCategory.Conflict,
             typeUri.Value,
             title,
-            location,
             detail,
             detailTemplateId is null
                 ? null
@@ -717,7 +695,6 @@ public record Error
             ErrorCategory.Failure,
             typeUri.Value,
             title,
-            location,
             detail,
             detailTemplateId is null
                 ? null
@@ -758,7 +735,6 @@ public record Error
             ErrorCategory.Failure,
             typeUri.Value,
             title,
-            location,
             detail,
             detailTemplateId is null
                 ? null
@@ -799,7 +775,6 @@ public record Error
             ErrorCategory.CriticalError,
             typeUri.Value,
             title,
-            location,
             detail,
             detailTemplateId is null
                 ? null
@@ -840,7 +815,6 @@ public record Error
             ErrorCategory.CriticalError,
             typeUri.Value,
             title,
-            location,
             detail,
             detailTemplateId is null
                 ? null
@@ -881,7 +855,6 @@ public record Error
             ErrorCategory.NotImplemented,
             typeUri.Value,
             title,
-            location,
             detail,
             detailTemplateId is null
                 ? null
@@ -922,7 +895,6 @@ public record Error
             ErrorCategory.NotImplemented,
             typeUri.Value,
             title,
-            location,
             detail,
             detailTemplateId is null
                 ? null
@@ -963,7 +935,6 @@ public record Error
             ErrorCategory.Unavailable,
             typeUri.Value,
             title,
-            location,
             detail,
             detailTemplateId is null
                 ? null
@@ -1004,7 +975,6 @@ public record Error
             ErrorCategory.Unavailable,
             typeUri.Value,
             title,
-            location,
             detail,
             detailTemplateId is null
                 ? null

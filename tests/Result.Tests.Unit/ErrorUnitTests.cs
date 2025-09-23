@@ -15,7 +15,6 @@ public class ErrorUnitTests
         // Arrange
         const ErrorCategory ExpectedCategory = ErrorCategory.Timeout;
         const int ExpectedErrorDetailsCount = 0;
-        const string ExpectedLocation = "3c748160-3fda-4364-bf94-75642038dda6";
         const string ExpectedTitle = "Test title";
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
 
@@ -23,8 +22,7 @@ public class ErrorUnitTests
         var sut = new Sut(
             ErrorCategory.Timeout,
             "tag:test.com,2024:Test",
-            "Test title",
-            "3c748160-3fda-4364-bf94-75642038dda6");
+            "Test title");
 
         // Assert
         sut.ShouldNotBeNull();
@@ -34,7 +32,6 @@ public class ErrorUnitTests
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBeNull();
-        sut.Location.ShouldBe(ExpectedLocation);
         sut.Title.ShouldBe(ExpectedTitle);
         sut.TypeUri.ShouldBe(ExpectedTypeUri);
     }
@@ -61,7 +58,6 @@ public class ErrorUnitTests
         const string ExpectedErrorDetail1DetailParam2Key = "pk2";
         const string ExpectedErrorDetail1DetailParam2Value = "pv2";
         const string ExpectedInstance = "http://test.com/instance/1013";
-        const string ExpectedLocation = "3c748160-3fda-4364-bf94-75642038dda6";
         const string ExpectedTitle = "Test title";
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
 
@@ -70,7 +66,6 @@ public class ErrorUnitTests
             ErrorCategory.Unauthenticated,
             "tag:test.com,2024:Test",
             "Test title",
-            "3c748160-3fda-4364-bf94-75642038dda6",
             "Test description.",
             new TemplatedMessage(
                 "message-id",
@@ -118,7 +113,6 @@ public class ErrorUnitTests
         sut.ErrorDetails[0].DetailTemplated.Params.Keys.ShouldContain(ExpectedErrorDetail1DetailParam2Key);
         sut.ErrorDetails[0].DetailTemplated.Params[ExpectedErrorDetail1DetailParam2Key].ToString().ShouldBe(ExpectedErrorDetail1DetailParam2Value);
         sut.InstanceUri.ShouldBe(ExpectedInstance);
-        sut.Location.ShouldBe(ExpectedLocation);
         sut.Title.ShouldBe(ExpectedTitle);
         sut.TypeUri.ShouldBe(ExpectedTypeUri);
     }
@@ -137,8 +131,7 @@ public class ErrorUnitTests
         var sut = new Sut(
             ErrorCategory.Timeout,
             "tag:test.com,2024:Test",
-            "Test title",
-            "3c748160-3fda-4364-bf94-75642038dda6");
+            "Test title");
 
         // Act
         sut.AddDetail(null, "Property 1 test detail");
@@ -169,8 +162,7 @@ public class ErrorUnitTests
         var sut = new Sut(
             ErrorCategory.Timeout,
             "tag:test.com,2024:Test",
-            "Test title",
-            "3c748160-3fda-4364-bf94-75642038dda6");
+            "Test title");
 
         // Act
         sut.AddDetail("#/property1", "Property 1 test detail", "message-property-id",
@@ -205,7 +197,6 @@ public class ErrorUnitTests
         // Arrange
         const ErrorCategory ExpectedCategory = ErrorCategory.Validation;
         const int ExpectedErrorDetailsCount = 0;
-        const string ExpectedLocation = "3c748160-3fda-4364-bf94-75642038dda6";
         const string ExpectedTitle = "Test title";
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
 
@@ -223,7 +214,6 @@ public class ErrorUnitTests
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBeNull();
-        sut.Location.ShouldBe(ExpectedLocation);
         sut.Title.ShouldBe(ExpectedTitle);
         sut.TypeUri.ShouldBe(ExpectedTypeUri);
     }
@@ -242,7 +232,6 @@ public class ErrorUnitTests
         const string ExpectedDetailParam2Value = "value2";
         const int ExpectedErrorDetailsCount = 0;
         const string ExpectedInstance = "http://test.com/instance/1013";
-        const string ExpectedLocation = "3c748160-3fda-4364-bf94-75642038dda6";
         const string ExpectedTitle = "Test title";
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
 
@@ -271,7 +260,6 @@ public class ErrorUnitTests
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBe(ExpectedInstance);
-        sut.Location.ShouldBe(ExpectedLocation);
         sut.Title.ShouldBe(ExpectedTitle);
         sut.TypeUri.ShouldBe(ExpectedTypeUri);
     }
@@ -290,7 +278,6 @@ public class ErrorUnitTests
         const string ExpectedDetailParam2Value = "value2";
         const int ExpectedErrorDetailsCount = 0;
         const string ExpectedInstance = "http://test.com/instance/1013";
-        const string ExpectedLocation = "3c748160-3fda-4364-bf94-75642038dda6";
         const string ExpectedTitle = "Test title";
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
 
@@ -323,7 +310,6 @@ public class ErrorUnitTests
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBe(ExpectedInstance);
-        sut.Location.ShouldBe(ExpectedLocation);
         sut.Title.ShouldBe(ExpectedTitle);
         sut.TypeUri.ShouldBe(ExpectedTypeUri);
     }
@@ -338,7 +324,6 @@ public class ErrorUnitTests
         // Arrange
         const ErrorCategory ExpectedCategory = ErrorCategory.Unauthenticated;
         const int ExpectedErrorDetailsCount = 0;
-        const string ExpectedLocation = "3c748160-3fda-4364-bf94-75642038dda6";
         const string ExpectedTitle = "Test title";
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
 
@@ -356,7 +341,6 @@ public class ErrorUnitTests
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBeNull();
-        sut.Location.ShouldBe(ExpectedLocation);
         sut.Title.ShouldBe(ExpectedTitle);
         sut.TypeUri.ShouldBe(ExpectedTypeUri);
     }
@@ -375,7 +359,6 @@ public class ErrorUnitTests
         const string ExpectedDetailParam2Value = "value2";
         const int ExpectedErrorDetailsCount = 0;
         const string ExpectedInstance = "http://test.com/instance/1013";
-        const string ExpectedLocation = "3c748160-3fda-4364-bf94-75642038dda6";
         const string ExpectedTitle = "Test title";
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
 
@@ -404,7 +387,6 @@ public class ErrorUnitTests
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBe(ExpectedInstance);
-        sut.Location.ShouldBe(ExpectedLocation);
         sut.Title.ShouldBe(ExpectedTitle);
         sut.TypeUri.ShouldBe(ExpectedTypeUri);
     }
@@ -423,7 +405,6 @@ public class ErrorUnitTests
         const string ExpectedDetailParam2Value = "value2";
         const int ExpectedErrorDetailsCount = 0;
         const string ExpectedInstance = "http://test.com/instance/1013";
-        const string ExpectedLocation = "3c748160-3fda-4364-bf94-75642038dda6";
         const string ExpectedTitle = "Test title";
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
 
@@ -456,7 +437,6 @@ public class ErrorUnitTests
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBe(ExpectedInstance);
-        sut.Location.ShouldBe(ExpectedLocation);
         sut.Title.ShouldBe(ExpectedTitle);
         sut.TypeUri.ShouldBe(ExpectedTypeUri);
     }
@@ -471,7 +451,6 @@ public class ErrorUnitTests
         // Arrange
         const ErrorCategory ExpectedCategory = ErrorCategory.Forbidden;
         const int ExpectedErrorDetailsCount = 0;
-        const string ExpectedLocation = "3c748160-3fda-4364-bf94-75642038dda6";
         const string ExpectedTitle = "Test title";
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
 
@@ -489,7 +468,6 @@ public class ErrorUnitTests
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBeNull();
-        sut.Location.ShouldBe(ExpectedLocation);
         sut.Title.ShouldBe(ExpectedTitle);
         sut.TypeUri.ShouldBe(ExpectedTypeUri);
     }
@@ -508,7 +486,6 @@ public class ErrorUnitTests
         const string ExpectedDetailParam2Value = "value2";
         const int ExpectedErrorDetailsCount = 0;
         const string ExpectedInstance = "http://test.com/instance/1013";
-        const string ExpectedLocation = "3c748160-3fda-4364-bf94-75642038dda6";
         const string ExpectedTitle = "Test title";
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
 
@@ -537,7 +514,6 @@ public class ErrorUnitTests
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBe(ExpectedInstance);
-        sut.Location.ShouldBe(ExpectedLocation);
         sut.Title.ShouldBe(ExpectedTitle);
         sut.TypeUri.ShouldBe(ExpectedTypeUri);
     }
@@ -556,7 +532,6 @@ public class ErrorUnitTests
         const string ExpectedDetailParam2Value = "value2";
         const int ExpectedErrorDetailsCount = 0;
         const string ExpectedInstance = "http://test.com/instance/1013";
-        const string ExpectedLocation = "3c748160-3fda-4364-bf94-75642038dda6";
         const string ExpectedTitle = "Test title";
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
 
@@ -589,7 +564,6 @@ public class ErrorUnitTests
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBe(ExpectedInstance);
-        sut.Location.ShouldBe(ExpectedLocation);
         sut.Title.ShouldBe(ExpectedTitle);
         sut.TypeUri.ShouldBe(ExpectedTypeUri);
     }
@@ -604,7 +578,6 @@ public class ErrorUnitTests
         // Arrange
         const ErrorCategory ExpectedCategory = ErrorCategory.NotFound;
         const int ExpectedErrorDetailsCount = 0;
-        const string ExpectedLocation = "3c748160-3fda-4364-bf94-75642038dda6";
         const string ExpectedTitle = "Test title";
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
 
@@ -622,7 +595,6 @@ public class ErrorUnitTests
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBeNull();
-        sut.Location.ShouldBe(ExpectedLocation);
         sut.Title.ShouldBe(ExpectedTitle);
         sut.TypeUri.ShouldBe(ExpectedTypeUri);
     }
@@ -641,7 +613,6 @@ public class ErrorUnitTests
         const string ExpectedDetailParam2Value = "value2";
         const int ExpectedErrorDetailsCount = 0;
         const string ExpectedInstance = "http://test.com/instance/1013";
-        const string ExpectedLocation = "3c748160-3fda-4364-bf94-75642038dda6";
         const string ExpectedTitle = "Test title";
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
 
@@ -670,7 +641,6 @@ public class ErrorUnitTests
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBe(ExpectedInstance);
-        sut.Location.ShouldBe(ExpectedLocation);
         sut.Title.ShouldBe(ExpectedTitle);
         sut.TypeUri.ShouldBe(ExpectedTypeUri);
     }
@@ -689,7 +659,6 @@ public class ErrorUnitTests
         const string ExpectedDetailParam2Value = "value2";
         const int ExpectedErrorDetailsCount = 0;
         const string ExpectedInstance = "http://test.com/instance/1013";
-        const string ExpectedLocation = "3c748160-3fda-4364-bf94-75642038dda6";
         const string ExpectedTitle = "Test title";
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
 
@@ -722,7 +691,6 @@ public class ErrorUnitTests
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBe(ExpectedInstance);
-        sut.Location.ShouldBe(ExpectedLocation);
         sut.Title.ShouldBe(ExpectedTitle);
         sut.TypeUri.ShouldBe(ExpectedTypeUri);
     }
@@ -737,7 +705,6 @@ public class ErrorUnitTests
         // Arrange
         const ErrorCategory ExpectedCategory = ErrorCategory.Timeout;
         const int ExpectedErrorDetailsCount = 0;
-        const string ExpectedLocation = "3c748160-3fda-4364-bf94-75642038dda6";
         const string ExpectedTitle = "Test title";
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
 
@@ -755,7 +722,6 @@ public class ErrorUnitTests
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBeNull();
-        sut.Location.ShouldBe(ExpectedLocation);
         sut.Title.ShouldBe(ExpectedTitle);
         sut.TypeUri.ShouldBe(ExpectedTypeUri);
     }
@@ -774,7 +740,6 @@ public class ErrorUnitTests
         const string ExpectedDetailParam2Value = "value2";
         const int ExpectedErrorDetailsCount = 0;
         const string ExpectedInstance = "http://test.com/instance/1013";
-        const string ExpectedLocation = "3c748160-3fda-4364-bf94-75642038dda6";
         const string ExpectedTitle = "Test title";
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
 
@@ -803,7 +768,6 @@ public class ErrorUnitTests
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBe(ExpectedInstance);
-        sut.Location.ShouldBe(ExpectedLocation);
         sut.Title.ShouldBe(ExpectedTitle);
         sut.TypeUri.ShouldBe(ExpectedTypeUri);
     }
@@ -822,7 +786,6 @@ public class ErrorUnitTests
         const string ExpectedDetailParam2Value = "value2";
         const int ExpectedErrorDetailsCount = 0;
         const string ExpectedInstance = "http://test.com/instance/1013";
-        const string ExpectedLocation = "3c748160-3fda-4364-bf94-75642038dda6";
         const string ExpectedTitle = "Test title";
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
 
@@ -855,7 +818,6 @@ public class ErrorUnitTests
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBe(ExpectedInstance);
-        sut.Location.ShouldBe(ExpectedLocation);
         sut.Title.ShouldBe(ExpectedTitle);
         sut.TypeUri.ShouldBe(ExpectedTypeUri);
     }
@@ -870,7 +832,6 @@ public class ErrorUnitTests
         // Arrange
         const ErrorCategory ExpectedCategory = ErrorCategory.Conflict;
         const int ExpectedErrorDetailsCount = 0;
-        const string ExpectedLocation = "3c748160-3fda-4364-bf94-75642038dda6";
         const string ExpectedTitle = "Test title";
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
 
@@ -888,7 +849,6 @@ public class ErrorUnitTests
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBeNull();
-        sut.Location.ShouldBe(ExpectedLocation);
         sut.Title.ShouldBe(ExpectedTitle);
         sut.TypeUri.ShouldBe(ExpectedTypeUri);
     }
@@ -907,7 +867,6 @@ public class ErrorUnitTests
         const string ExpectedDetailParam2Value = "value2";
         const int ExpectedErrorDetailsCount = 0;
         const string ExpectedInstance = "http://test.com/instance/1013";
-        const string ExpectedLocation = "3c748160-3fda-4364-bf94-75642038dda6";
         const string ExpectedTitle = "Test title";
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
 
@@ -936,7 +895,6 @@ public class ErrorUnitTests
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBe(ExpectedInstance);
-        sut.Location.ShouldBe(ExpectedLocation);
         sut.Title.ShouldBe(ExpectedTitle);
         sut.TypeUri.ShouldBe(ExpectedTypeUri);
     }
@@ -955,7 +913,6 @@ public class ErrorUnitTests
         const string ExpectedDetailParam2Value = "value2";
         const int ExpectedErrorDetailsCount = 0;
         const string ExpectedInstance = "http://test.com/instance/1013";
-        const string ExpectedLocation = "3c748160-3fda-4364-bf94-75642038dda6";
         const string ExpectedTitle = "Test title";
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
 
@@ -988,7 +945,6 @@ public class ErrorUnitTests
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBe(ExpectedInstance);
-        sut.Location.ShouldBe(ExpectedLocation);
         sut.Title.ShouldBe(ExpectedTitle);
         sut.TypeUri.ShouldBe(ExpectedTypeUri);
     }
@@ -1003,7 +959,6 @@ public class ErrorUnitTests
         // Arrange
         const ErrorCategory ExpectedCategory = ErrorCategory.Failure;
         const int ExpectedErrorDetailsCount = 0;
-        const string ExpectedLocation = "3c748160-3fda-4364-bf94-75642038dda6";
         const string ExpectedTitle = "Test title";
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
 
@@ -1021,7 +976,6 @@ public class ErrorUnitTests
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBeNull();
-        sut.Location.ShouldBe(ExpectedLocation);
         sut.Title.ShouldBe(ExpectedTitle);
         sut.TypeUri.ShouldBe(ExpectedTypeUri);
     }
@@ -1040,7 +994,6 @@ public class ErrorUnitTests
         const string ExpectedDetailParam2Value = "value2";
         const int ExpectedErrorDetailsCount = 0;
         const string ExpectedInstance = "http://test.com/instance/1013";
-        const string ExpectedLocation = "3c748160-3fda-4364-bf94-75642038dda6";
         const string ExpectedTitle = "Test title";
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
 
@@ -1069,7 +1022,6 @@ public class ErrorUnitTests
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBe(ExpectedInstance);
-        sut.Location.ShouldBe(ExpectedLocation);
         sut.Title.ShouldBe(ExpectedTitle);
         sut.TypeUri.ShouldBe(ExpectedTypeUri);
     }
@@ -1088,7 +1040,6 @@ public class ErrorUnitTests
         const string ExpectedDetailParam2Value = "value2";
         const int ExpectedErrorDetailsCount = 0;
         const string ExpectedInstance = "http://test.com/instance/1013";
-        const string ExpectedLocation = "3c748160-3fda-4364-bf94-75642038dda6";
         const string ExpectedTitle = "Test title";
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
 
@@ -1121,7 +1072,6 @@ public class ErrorUnitTests
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBe(ExpectedInstance);
-        sut.Location.ShouldBe(ExpectedLocation);
         sut.Title.ShouldBe(ExpectedTitle);
         sut.TypeUri.ShouldBe(ExpectedTypeUri);
     }
@@ -1136,7 +1086,6 @@ public class ErrorUnitTests
         // Arrange
         const ErrorCategory ExpectedCategory = ErrorCategory.CriticalError;
         const int ExpectedErrorDetailsCount = 0;
-        const string ExpectedLocation = "3c748160-3fda-4364-bf94-75642038dda6";
         const string ExpectedTitle = "Test title";
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
 
@@ -1154,7 +1103,6 @@ public class ErrorUnitTests
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBeNull();
-        sut.Location.ShouldBe(ExpectedLocation);
         sut.Title.ShouldBe(ExpectedTitle);
         sut.TypeUri.ShouldBe(ExpectedTypeUri);
     }
@@ -1173,7 +1121,6 @@ public class ErrorUnitTests
         const string ExpectedDetailParam2Value = "value2";
         const int ExpectedErrorDetailsCount = 0;
         const string ExpectedInstance = "http://test.com/instance/1013";
-        const string ExpectedLocation = "3c748160-3fda-4364-bf94-75642038dda6";
         const string ExpectedTitle = "Test title";
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
 
@@ -1202,7 +1149,6 @@ public class ErrorUnitTests
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBe(ExpectedInstance);
-        sut.Location.ShouldBe(ExpectedLocation);
         sut.Title.ShouldBe(ExpectedTitle);
         sut.TypeUri.ShouldBe(ExpectedTypeUri);
     }
@@ -1221,7 +1167,6 @@ public class ErrorUnitTests
         const string ExpectedDetailParam2Value = "value2";
         const int ExpectedErrorDetailsCount = 0;
         const string ExpectedInstance = "http://test.com/instance/1013";
-        const string ExpectedLocation = "3c748160-3fda-4364-bf94-75642038dda6";
         const string ExpectedTitle = "Test title";
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
 
@@ -1254,7 +1199,6 @@ public class ErrorUnitTests
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBe(ExpectedInstance);
-        sut.Location.ShouldBe(ExpectedLocation);
         sut.Title.ShouldBe(ExpectedTitle);
         sut.TypeUri.ShouldBe(ExpectedTypeUri);
     }
@@ -1269,7 +1213,6 @@ public class ErrorUnitTests
         // Arrange
         const ErrorCategory ExpectedCategory = ErrorCategory.NotImplemented;
         const int ExpectedErrorDetailsCount = 0;
-        const string ExpectedLocation = "3c748160-3fda-4364-bf94-75642038dda6";
         const string ExpectedTitle = "Test title";
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
 
@@ -1287,7 +1230,6 @@ public class ErrorUnitTests
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBeNull();
-        sut.Location.ShouldBe(ExpectedLocation);
         sut.Title.ShouldBe(ExpectedTitle);
         sut.TypeUri.ShouldBe(ExpectedTypeUri);
     }
@@ -1306,7 +1248,6 @@ public class ErrorUnitTests
         const string ExpectedDetailParam2Value = "value2";
         const int ExpectedErrorDetailsCount = 0;
         const string ExpectedInstance = "http://test.com/instance/1013";
-        const string ExpectedLocation = "3c748160-3fda-4364-bf94-75642038dda6";
         const string ExpectedTitle = "Test title";
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
 
@@ -1335,7 +1276,6 @@ public class ErrorUnitTests
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBe(ExpectedInstance);
-        sut.Location.ShouldBe(ExpectedLocation);
         sut.Title.ShouldBe(ExpectedTitle);
         sut.TypeUri.ShouldBe(ExpectedTypeUri);
     }
@@ -1354,7 +1294,6 @@ public class ErrorUnitTests
         const string ExpectedDetailParam2Value = "value2";
         const int ExpectedErrorDetailsCount = 0;
         const string ExpectedInstance = "http://test.com/instance/1013";
-        const string ExpectedLocation = "3c748160-3fda-4364-bf94-75642038dda6";
         const string ExpectedTitle = "Test title";
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
 
@@ -1387,7 +1326,6 @@ public class ErrorUnitTests
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBe(ExpectedInstance);
-        sut.Location.ShouldBe(ExpectedLocation);
         sut.Title.ShouldBe(ExpectedTitle);
         sut.TypeUri.ShouldBe(ExpectedTypeUri);
     }
@@ -1402,7 +1340,6 @@ public class ErrorUnitTests
         // Arrange
         const ErrorCategory ExpectedCategory = ErrorCategory.Unavailable;
         const int ExpectedErrorDetailsCount = 0;
-        const string ExpectedLocation = "3c748160-3fda-4364-bf94-75642038dda6";
         const string ExpectedTitle = "Test title";
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
 
@@ -1420,7 +1357,6 @@ public class ErrorUnitTests
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBeNull();
-        sut.Location.ShouldBe(ExpectedLocation);
         sut.Title.ShouldBe(ExpectedTitle);
         sut.TypeUri.ShouldBe(ExpectedTypeUri);
     }
@@ -1439,7 +1375,6 @@ public class ErrorUnitTests
         const string ExpectedDetailParam2Value = "value2";
         const int ExpectedErrorDetailsCount = 0;
         const string ExpectedInstance = "http://test.com/instance/1013";
-        const string ExpectedLocation = "3c748160-3fda-4364-bf94-75642038dda6";
         const string ExpectedTitle = "Test title";
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
 
@@ -1468,7 +1403,6 @@ public class ErrorUnitTests
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBe(ExpectedInstance);
-        sut.Location.ShouldBe(ExpectedLocation);
         sut.Title.ShouldBe(ExpectedTitle);
         sut.TypeUri.ShouldBe(ExpectedTypeUri);
     }
@@ -1487,7 +1421,6 @@ public class ErrorUnitTests
         const string ExpectedDetailParam2Value = "value2";
         const int ExpectedErrorDetailsCount = 0;
         const string ExpectedInstance = "http://test.com/instance/1013";
-        const string ExpectedLocation = "3c748160-3fda-4364-bf94-75642038dda6";
         const string ExpectedTitle = "Test title";
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
 
@@ -1520,7 +1453,6 @@ public class ErrorUnitTests
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBe(ExpectedInstance);
-        sut.Location.ShouldBe(ExpectedLocation);
         sut.Title.ShouldBe(ExpectedTitle);
         sut.TypeUri.ShouldBe(ExpectedTypeUri);
     }
@@ -1553,7 +1485,6 @@ public class ErrorUnitTests
         const string ExpectedErrorDetail1DetailParam2Key = "pk2";
         const string ExpectedErrorDetail1DetailParam2Value = "pv2";
         const string ExpectedInstance = "http://test.com/instance/1013";
-        const string ExpectedLocation = "3c748160-3fda-4364-bf94-75642038dda6";
         const string ExpectedTitle = "Test title";
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
 
@@ -1586,7 +1517,6 @@ public class ErrorUnitTests
         sut.ErrorDetails[0].DetailTemplated.Params.Keys.ShouldContain(ExpectedErrorDetail1DetailParam2Key);
         sut.ErrorDetails[0].DetailTemplated.Params[ExpectedErrorDetail1DetailParam2Key].ToString().ShouldBe(ExpectedErrorDetail1DetailParam2Value);
         sut.InstanceUri.ShouldBe(ExpectedInstance);
-        sut.Location.ShouldBe(ExpectedLocation);
         sut.Title.ShouldBe(ExpectedTitle);
         sut.TypeUri.ShouldBe(ExpectedTypeUri);
     }
@@ -1613,7 +1543,6 @@ public class ErrorUnitTests
         const string ExpectedErrorDetail1DetailParam2Key = "pk2";
         const string ExpectedErrorDetail1DetailParam2Value = "pv2";
         const string ExpectedInstance = "http://test.com/instance/1013";
-        const string ExpectedLocation = "3c748160-3fda-4364-bf94-75642038dda6";
         const string ExpectedTitle = "Test title";
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
 
@@ -1646,7 +1575,6 @@ public class ErrorUnitTests
         sut.ErrorDetails[0].DetailTemplated.Params.Keys.ShouldContain(ExpectedErrorDetail1DetailParam2Key);
         sut.ErrorDetails[0].DetailTemplated.Params[ExpectedErrorDetail1DetailParam2Key].ToString().ShouldBe(ExpectedErrorDetail1DetailParam2Value);
         sut.InstanceUri.ShouldBe(ExpectedInstance);
-        sut.Location.ShouldBe(ExpectedLocation);
         sut.Title.ShouldBe(ExpectedTitle);
         sut.TypeUri.ShouldBe(ExpectedTypeUri);
     }
@@ -1659,7 +1587,7 @@ public class ErrorUnitTests
     public void Serialize_AllPropertiesAndMicrosoftSerializer_ReturnsSerializedValueWithAllProperties()
     {
         // Arrange
-        const string ExpectedText = """{"Category":3,"TypeUri":"tag:test.com,2024:Test","Title":"Test title","Detail":"Test description.","DetailTemplated":{"TemplateId":"messageId","Params":{"key1":"value1","key2":"value2"}},"InstanceUri":"http://test.com/instance/1013","ErrorDetails":[{"PropertyPointer":"#/property1","Detail":"Property 1 test detail","DetailTemplated":{"TemplateId":"message-property-id","Params":{"pk1":"pv1","pk2":"pv2"}}}],"Location":"3c748160-3fda-4364-bf94-75642038dda6"}""";
+        const string ExpectedText = """{"Category":3,"TypeUri":"tag:test.com,2024:Test","Title":"Test title","Detail":"Test description.","DetailTemplated":{"TemplateId":"messageId","Params":{"key1":"value1","key2":"value2"}},"InstanceUri":"http://test.com/instance/1013","ErrorDetails":[{"PropertyPointer":"#/property1","Detail":"Property 1 test detail","DetailTemplated":{"TemplateId":"message-property-id","Params":{"pk1":"pv1","pk2":"pv2"}}}]}""";
 
         var sut = Sut.NotFound(
             ErrorUri.Tag("tag:test.com,2024:Test"),
@@ -1683,7 +1611,7 @@ public class ErrorUnitTests
     public void Serialize_AllPropertiesAndNewtonsoftSerializer_ReturnsSerializedValueWithAllProperties()
     {
         // Arrange
-        const string ExpectedText = """{"Category":3,"TypeUri":"tag:test.com,2024:Test","Title":"Test title","Detail":"Test description.","DetailTemplated":{"TemplateId":"messageId","Params":{"key1":"value1","key2":"value2"}},"InstanceUri":"http://test.com/instance/1013","ErrorDetails":[{"PropertyPointer":"#/property1","Detail":"Property 1 test detail","DetailTemplated":{"TemplateId":"message-property-id","Params":{"pk1":"pv1","pk2":"pv2"}}}],"Location":"3c748160-3fda-4364-bf94-75642038dda6"}""";
+        const string ExpectedText = """{"Category":3,"TypeUri":"tag:test.com,2024:Test","Title":"Test title","Detail":"Test description.","DetailTemplated":{"TemplateId":"messageId","Params":{"key1":"value1","key2":"value2"}},"InstanceUri":"http://test.com/instance/1013","ErrorDetails":[{"PropertyPointer":"#/property1","Detail":"Property 1 test detail","DetailTemplated":{"TemplateId":"message-property-id","Params":{"pk1":"pv1","pk2":"pv2"}}}]}""";
 
         var sut = Sut.NotFound(
             ErrorUri.Tag("tag:test.com,2024:Test"),
