@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Maple.Result;
 using Maple.Result.Converters;
-using Sut = Maple.Result.MessageTemplate;
 
 namespace Result.Tests.Unit;
 
-public class MessageTemplateUnitTests
+public class TemplatedMessageUnitTests
 {
     #region read-only fields
 
@@ -23,7 +23,7 @@ public class MessageTemplateUnitTests
     #region Deserialize
 
     [Fact]
-    public void Deserialize_OnlyTemplateId_ReturnsMessageTemplateWithMessageId()
+    public void Deserialize_OnlyTemplateId_ReturnsTemplateMessageWithMessageId()
     {
         // Arrange
         const string ExpectedTemplateId = "user.account.activated";
@@ -39,7 +39,7 @@ public class MessageTemplateUnitTests
     }
 
     [Fact]
-    public void Deserialize_TemplateIdAndEmptyParameters_ReturnsMessageTemplateWithMessageIdAndEmptyParameters()
+    public void Deserialize_TemplateIdAndEmptyParameters_ReturnsTemplatedMessageWithMessageIdAndEmptyParameters()
     {
         // Arrange
         const string ExpectedTemplateId = "user.account.activated";
@@ -55,7 +55,7 @@ public class MessageTemplateUnitTests
     }
 
     [Fact]
-    public void Deserialize_TemplateIdAndParameters_ReturnsMessageTemplateWithMessageIdAndParameters()
+    public void Deserialize_TemplateIdAndParameters_ReturnsTemplatedMessageWithMessageIdAndParameters()
     {
         // Arrange
         _jsonSerializerOptions.Converters.Add(new ObjectAsPrimitiveConverter());
@@ -106,7 +106,7 @@ public class MessageTemplateUnitTests
         const string ExpectedText = "{\"templateId\":\"user.account.activated\"}";
 
         const string TemplateId = "user.account.activated";
-        var sut = new Sut(TemplateId);
+        var sut = new TemplatedMessage(TemplateId);
 
         // Act
         var result = Serialize(sut);
@@ -122,7 +122,7 @@ public class MessageTemplateUnitTests
         const string ExpectedText = "{\"templateId\":\"user.account.activated\",\"params\":{}}";
 
         const string TemplateId = "user.account.activated";
-        var sut = new Sut(TemplateId, new Dictionary<string, object>());
+        var sut = new TemplatedMessage(TemplateId, new Dictionary<string, object>());
 
         // Act
         var result = Serialize(sut);
@@ -149,7 +149,7 @@ public class MessageTemplateUnitTests
             ["registered"] = new DateTimeOffset(2022, 4, 15, 12, 17, 58, TimeSpan.FromHours(-5))
         };
 
-        var sut = new Sut(TemplateId, parameters);
+        var sut = new TemplatedMessage(TemplateId, parameters);
 
         // Act
         var result = Serialize(sut);
@@ -169,7 +169,7 @@ public class MessageTemplateUnitTests
         const string ExpectedText = "{\"templateId\":\"user.account.activated\"}";
 
         const string TemplateId = "user.account.activated";
-        var sut = new Sut(TemplateId);
+        var sut = new TemplatedMessage(TemplateId);
 
         // Act
         var json = Serialize(sut);
@@ -187,7 +187,7 @@ public class MessageTemplateUnitTests
         const string ExpectedText = "{\"templateId\":\"user.account.activated\",\"params\":{}}";
 
         const string TemplateId = "user.account.activated";
-        var sut = new Sut(TemplateId, new Dictionary<string, object>());
+        var sut = new TemplatedMessage(TemplateId, new Dictionary<string, object>());
 
         // Act
         var json = Serialize(sut);
@@ -215,7 +215,7 @@ public class MessageTemplateUnitTests
             ["dob"] = new DateOnly(1980, 4, 19)
         };
 
-        var sut = new Sut(TemplateId, parameters);
+        var sut = new TemplatedMessage(TemplateId, parameters);
 
         // Act
         var json = Serialize(sut);
@@ -230,15 +230,15 @@ public class MessageTemplateUnitTests
 
     #region helper methods
 
-    private Sut Deserialize(string json)
+    private TemplatedMessage Deserialize(string json)
     {
-        var result = JsonSerializer.Deserialize<Sut>(json, _jsonSerializerOptions);
+        var result = JsonSerializer.Deserialize<TemplatedMessage>(json, _jsonSerializerOptions);
         return result;
     }
 
-    private string Serialize(Sut messageTemplate)
+    private string Serialize(TemplatedMessage templatedMessage)
     {
-        var result = JsonSerializer.Serialize(messageTemplate, _jsonSerializerOptions);
+        var result = JsonSerializer.Serialize(templatedMessage, _jsonSerializerOptions);
         return result;
     }
 
