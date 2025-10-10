@@ -45,7 +45,7 @@ public record Result : IResult
     /// <summary>
     ///     Returns a successful <see cref="Result" /> instance.
     /// </summary>
-    public static Result Success
+    public static Result Success()
         => new();
 
     public Error? Error { get; init; }
