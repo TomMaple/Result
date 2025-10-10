@@ -25,6 +25,10 @@
     </ItemGroup>
 
     <ItemGroup>
+        <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
+    </ItemGroup>
+
+    <ItemGroup>
       <ProjectReference Include="..\..\src\Maple.Result\Maple.Result.csproj" />
     </ItemGroup>
 
