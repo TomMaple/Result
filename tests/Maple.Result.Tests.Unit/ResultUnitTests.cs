@@ -276,7 +276,7 @@ public class ResultUnitTests
     public void Success_Always_ReturnsSuccessResult()
     {
         // Act
-        var result = Sut.Success;
+        var result = Sut.Success();
 
         // Assert
         result.ShouldNotBeNull();
@@ -1029,7 +1029,7 @@ public class ResultUnitTests
     public void Serialize_SuccessWithValueAndMicrosoftSerializer_ReturnsSerializedValueWithAllProperties()
     {
         // Arrange
-        const string ExpectedText = """{"Error":null,"Value":{"Text":"Test text","Number":137}}""";
+        const string ExpectedText = """{"Value":{"Text":"Test text","Number":137},"Error":null}""";
 
         var value = new TestClass
         {
@@ -1050,7 +1050,7 @@ public class ResultUnitTests
     public void Serialize_SuccessWithValueAndNewtonsoftSerializer_ReturnsSerializedValueWithAllProperties()
     {
         // Arrange
-        const string ExpectedText = """{"Error":null,"Value":{"Text":"Test text","Number":137}}""";
+        const string ExpectedText = """{"Value":{"Text":"Test text","Number":137},"Error":null}""";
 
         var value = new TestClass
         {
@@ -1071,7 +1071,7 @@ public class ResultUnitTests
     public void Serialize_ErrorAllPropertiesAndMicrosoftSerializer_ReturnsSerializedValueWithAllProperties()
     {
         // Arrange
-        const string ExpectedText = """{"Error":{"Category":3,"TypeUri":"tag:test.com,2024:Test","Title":"Test title","Detail":"Test description.","DetailTemplated":{"TemplateId":"messageId","Params":{"key1":"value1","key2":"value2"}},"InstanceUri":"http://test.com/instance/1013","ErrorDetails":[{"PropertyPointer":"#/property1","Detail":"Property 1 test detail","DetailTemplated":{"TemplateId":"message-property-id","Params":{"pk1":"pv1","pk2":"pv2"}}}]},"Value":null}""";
+        const string ExpectedText = """{"Value":null,"Error":{"Category":3,"TypeUri":"tag:test.com,2024:Test","Title":"Test title","Detail":"Test description.","DetailTemplated":{"TemplateId":"messageId","Params":{"key1":"value1","key2":"value2"}},"InstanceUri":"http://test.com/instance/1013","ErrorDetails":[{"PropertyPointer":"#/property1","Detail":"Property 1 test detail","DetailTemplated":{"TemplateId":"message-property-id","Params":{"pk1":"pv1","pk2":"pv2"}}}]}}""";
 
         var error = Error.NotFound(
             ErrorUri.Tag("tag:test.com,2024:Test"),
@@ -1097,7 +1097,7 @@ public class ResultUnitTests
     public void Serialize_ErrorAllPropertiesAndNewtonsoftSerializer_ReturnsSerializedValueWithAllProperties()
     {
         // Arrange
-        const string ExpectedText = """{"Error":{"Category":3,"TypeUri":"tag:test.com,2024:Test","Title":"Test title","Detail":"Test description.","DetailTemplated":{"TemplateId":"messageId","Params":{"key1":"value1","key2":"value2"}},"InstanceUri":"http://test.com/instance/1013","ErrorDetails":[{"PropertyPointer":"#/property1","Detail":"Property 1 test detail","DetailTemplated":{"TemplateId":"message-property-id","Params":{"pk1":"pv1","pk2":"pv2"}}}]},"Value":null}""";
+        const string ExpectedText = """{"Value":null,"Error":{"Category":3,"TypeUri":"tag:test.com,2024:Test","Title":"Test title","Detail":"Test description.","DetailTemplated":{"TemplateId":"messageId","Params":{"key1":"value1","key2":"value2"}},"InstanceUri":"http://test.com/instance/1013","ErrorDetails":[{"PropertyPointer":"#/property1","Detail":"Property 1 test detail","DetailTemplated":{"TemplateId":"message-property-id","Params":{"pk1":"pv1","pk2":"pv2"}}}]}}""";
 
         var error = Error.NotFound(
             ErrorUri.Tag("tag:test.com,2024:Test"),
