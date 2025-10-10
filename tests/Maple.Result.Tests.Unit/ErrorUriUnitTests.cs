@@ -1,7 +1,6 @@
-﻿using Maple.Result;
-using System;
+﻿using System;
 
-namespace Result.Tests.Unit;
+namespace Maple.Result.Tests.Unit;
 
 public class ErrorUriUnitTests
 {

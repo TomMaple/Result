@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace Result.Tests.Unit.Helpers;
+namespace Maple.Result.Tests.Unit.Helpers;
 
 internal static class SerializationHelper
 {

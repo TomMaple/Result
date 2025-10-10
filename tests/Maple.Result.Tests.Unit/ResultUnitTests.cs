@@ -1,9 +1,8 @@
 ﻿using System;
-using Maple.Result;
-using Result.Tests.Unit.Helpers;
+using Maple.Result.Tests.Unit.Helpers;
 using Sut = Maple.Result.Result;
 
-namespace Result.Tests.Unit;
+namespace Maple.Result.Tests.Unit;
 
 public class ResultUnitTests
 {

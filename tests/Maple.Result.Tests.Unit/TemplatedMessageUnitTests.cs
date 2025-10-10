@@ -2,10 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Maple.Result;
 using Maple.Result.Converters;
 
-namespace Result.Tests.Unit;
+namespace Maple.Result.Tests.Unit;
 
 public class TemplatedMessageUnitTests
 {

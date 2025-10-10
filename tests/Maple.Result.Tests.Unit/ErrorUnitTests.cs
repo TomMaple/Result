@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using Maple.Result;
-using Result.Tests.Unit.Helpers;
+using Maple.Result.Tests.Unit.Helpers;
 using Sut = Maple.Result.Error;
 
-namespace Result.Tests.Unit;
+namespace Maple.Result.Tests.Unit;
 
 public class ErrorUnitTests
 {
