@@ -31,8 +31,8 @@ public static class IfErrorExtensions
     public static TResult IfError<TResult>(this TResult result, Action<Error> ifErrorAction)
         where TResult : IResult
     {
-        ArgumentNullException.ThrowIfNull(result, nameof(result));
-        ArgumentNullException.ThrowIfNull(ifErrorAction, nameof(ifErrorAction));
+        ArgumentNullException.ThrowIfNull(result);
+        ArgumentNullException.ThrowIfNull(ifErrorAction);
 
         if (!result.IsSuccess())
             ifErrorAction(result.Error!);
@@ -58,8 +58,8 @@ public static class IfErrorExtensions
     public static TResult IfError<TResult>(this TResult result, Func<Error, TResult> ifErrorFunction)
         where TResult : IResult
     {
-        ArgumentNullException.ThrowIfNull(result, nameof(result));
-        ArgumentNullException.ThrowIfNull(ifErrorFunction, nameof(ifErrorFunction));
+        ArgumentNullException.ThrowIfNull(result);
+        ArgumentNullException.ThrowIfNull(ifErrorFunction);
 
         if (result.IsSuccess())
             return result;

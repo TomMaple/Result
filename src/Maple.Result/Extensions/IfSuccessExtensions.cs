@@ -37,8 +37,8 @@ public static class IfSuccessExtensions
     /// </exception>
     public static Result IfSuccess(this Result result, Action ifSuccessAction)
     {
-        ArgumentNullException.ThrowIfNull(result, nameof(result));
-        ArgumentNullException.ThrowIfNull(ifSuccessAction, nameof(ifSuccessAction));
+        ArgumentNullException.ThrowIfNull(result);
+        ArgumentNullException.ThrowIfNull(ifSuccessAction);
 
         if (result.IsSuccess())
             ifSuccessAction();
@@ -69,8 +69,8 @@ public static class IfSuccessExtensions
     /// </exception>
     public static Result IfSuccess(this Result result, Func<Result> ifSuccessFunc)
     {
-        ArgumentNullException.ThrowIfNull(result, nameof(result));
-        ArgumentNullException.ThrowIfNull(ifSuccessFunc, nameof(ifSuccessFunc));
+        ArgumentNullException.ThrowIfNull(result);
+        ArgumentNullException.ThrowIfNull(ifSuccessFunc);
 
         if (!result.IsSuccess())
             return result.Error!;
@@ -104,8 +104,8 @@ public static class IfSuccessExtensions
     /// </exception>
     public static Result<T> IfSuccess<T>(this Result result, Func<T> ifSuccessFunc)
     {
-        ArgumentNullException.ThrowIfNull(result, nameof(result));
-        ArgumentNullException.ThrowIfNull(ifSuccessFunc, nameof(ifSuccessFunc));
+        ArgumentNullException.ThrowIfNull(result);
+        ArgumentNullException.ThrowIfNull(ifSuccessFunc);
 
         if (!result.IsSuccess())
             return result.Error!;
@@ -139,8 +139,8 @@ public static class IfSuccessExtensions
     /// </exception>
     public static Result<T> IfSuccess<T>(this Result result, Func<Result<T>> ifSuccessFunc)
     {
-        ArgumentNullException.ThrowIfNull(result, nameof(result));
-        ArgumentNullException.ThrowIfNull(ifSuccessFunc, nameof(ifSuccessFunc));
+        ArgumentNullException.ThrowIfNull(result);
+        ArgumentNullException.ThrowIfNull(ifSuccessFunc);
 
         if (!result.IsSuccess())
             return result.Error!;
@@ -175,8 +175,8 @@ public static class IfSuccessExtensions
     /// </exception>
     public static Result<T> IfSuccess<T>(this Result<T> result, Action<T> ifSuccessAction)
     {
-        ArgumentNullException.ThrowIfNull(result, nameof(result));
-        ArgumentNullException.ThrowIfNull(ifSuccessAction, nameof(ifSuccessAction));
+        ArgumentNullException.ThrowIfNull(result);
+        ArgumentNullException.ThrowIfNull(ifSuccessAction);
 
         if (result.IsSuccess())
             ifSuccessAction(result.Value!);
@@ -208,8 +208,8 @@ public static class IfSuccessExtensions
     /// </exception>
     public static Result IfSuccess<T>(this Result<T> result, Func<T, Result> ifSuccessFunc)
     {
-        ArgumentNullException.ThrowIfNull(result, nameof(result));
-        ArgumentNullException.ThrowIfNull(ifSuccessFunc, nameof(ifSuccessFunc));
+        ArgumentNullException.ThrowIfNull(result);
+        ArgumentNullException.ThrowIfNull(ifSuccessFunc);
 
         if (!result.IsSuccess())
             return result.Error!;
@@ -253,8 +253,8 @@ public static class IfSuccessExtensions
     /// </exception>
     public static Result<TNext> IfSuccess<T, TNext>(this Result<T> result, Func<T, TNext> ifSuccessFunc)
     {
-        ArgumentNullException.ThrowIfNull(result, nameof(result));
-        ArgumentNullException.ThrowIfNull(ifSuccessFunc, nameof(ifSuccessFunc));
+        ArgumentNullException.ThrowIfNull(result);
+        ArgumentNullException.ThrowIfNull(ifSuccessFunc);
 
         if (!result.IsSuccess())
             return result.Error!;
@@ -298,8 +298,8 @@ public static class IfSuccessExtensions
     /// </exception>
     public static Result<TNext> IfSuccess<T, TNext>(this Result<T> result, Func<T, Result<TNext>> ifSuccessFunc)
     {
-        ArgumentNullException.ThrowIfNull(result, nameof(result));
-        ArgumentNullException.ThrowIfNull(ifSuccessFunc, nameof(ifSuccessFunc));
+        ArgumentNullException.ThrowIfNull(result);
+        ArgumentNullException.ThrowIfNull(ifSuccessFunc);
 
         if (!result.IsSuccess())
             return result.Error!;

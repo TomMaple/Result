@@ -45,8 +45,8 @@ public static class IfSuccessAsyncExtensions
     public static async Task<Result> IfSuccessAsync(this Result result, Func<Task> ifSuccessAction,
         bool continueOnCapturedContext)
     {
-        ArgumentNullException.ThrowIfNull(result, nameof(result));
-        ArgumentNullException.ThrowIfNull(ifSuccessAction, nameof(ifSuccessAction));
+        ArgumentNullException.ThrowIfNull(result);
+        ArgumentNullException.ThrowIfNull(ifSuccessAction);
 
         if (result.IsSuccess())
             await ifSuccessAction();
@@ -85,8 +85,8 @@ public static class IfSuccessAsyncExtensions
     public static async Task<Result> IfSuccessAsync(this Result result, Func<Task<Result>> ifSuccessFunc,
         bool continueOnCapturedContext)
     {
-        ArgumentNullException.ThrowIfNull(result, nameof(result));
-        ArgumentNullException.ThrowIfNull(ifSuccessFunc, nameof(ifSuccessFunc));
+        ArgumentNullException.ThrowIfNull(result);
+        ArgumentNullException.ThrowIfNull(ifSuccessFunc);
 
         if (!result.IsSuccess())
             return result.Error!;
@@ -128,8 +128,8 @@ public static class IfSuccessAsyncExtensions
     public static async Task<Result<T>> IfSuccessAsync<T>(this Result result, Func<Task<T>> ifSuccessFunc,
         bool continueOnCapturedContext)
     {
-        ArgumentNullException.ThrowIfNull(result, nameof(result));
-        ArgumentNullException.ThrowIfNull(ifSuccessFunc, nameof(ifSuccessFunc));
+        ArgumentNullException.ThrowIfNull(result);
+        ArgumentNullException.ThrowIfNull(ifSuccessFunc);
 
         if (!result.IsSuccess())
             return result.Error!;
@@ -171,8 +171,8 @@ public static class IfSuccessAsyncExtensions
     public static async Task<Result<T>> IfSuccessAsync<T>(this Result result, Func<Task<Result<T>>> ifSuccessFunc,
         bool continueOnCapturedContext)
     {
-        ArgumentNullException.ThrowIfNull(result, nameof(result));
-        ArgumentNullException.ThrowIfNull(ifSuccessFunc, nameof(ifSuccessFunc));
+        ArgumentNullException.ThrowIfNull(result);
+        ArgumentNullException.ThrowIfNull(ifSuccessFunc);
 
         if (!result.IsSuccess())
             return result.Error!;
@@ -213,8 +213,8 @@ public static class IfSuccessAsyncExtensions
     public static async Task<Result<T>> IfSuccessAsync<T>(this Result<T> result, Func<T, Task> ifSuccessAction,
         bool continueOnCapturedContext)
     {
-        ArgumentNullException.ThrowIfNull(result, nameof(result));
-        ArgumentNullException.ThrowIfNull(ifSuccessAction, nameof(ifSuccessAction));
+        ArgumentNullException.ThrowIfNull(result);
+        ArgumentNullException.ThrowIfNull(ifSuccessAction);
 
         if (result.IsSuccess())
             await ifSuccessAction(result.Value!);
@@ -252,8 +252,8 @@ public static class IfSuccessAsyncExtensions
     public static async Task<Result> IfSuccessAsync<T>(this Result<T> result, Func<T, Task<Result>> ifSuccessFunc,
         bool continueOnCapturedContext)
     {
-        ArgumentNullException.ThrowIfNull(result, nameof(result));
-        ArgumentNullException.ThrowIfNull(ifSuccessFunc, nameof(ifSuccessFunc));
+        ArgumentNullException.ThrowIfNull(result);
+        ArgumentNullException.ThrowIfNull(ifSuccessFunc);
 
         if (!result.IsSuccess())
             return result.Error!;
@@ -302,8 +302,8 @@ public static class IfSuccessAsyncExtensions
     public static async Task<Result<TNext>> IfSuccessAsync<T, TNext>(this Result<T> result,
         Func<T, Task<TNext>> ifSuccessFunc, bool continueOnCapturedContext)
     {
-        ArgumentNullException.ThrowIfNull(result, nameof(result));
-        ArgumentNullException.ThrowIfNull(ifSuccessFunc, nameof(ifSuccessFunc));
+        ArgumentNullException.ThrowIfNull(result);
+        ArgumentNullException.ThrowIfNull(ifSuccessFunc);
 
         if (!result.IsSuccess())
             return result.Error!;
@@ -352,8 +352,8 @@ public static class IfSuccessAsyncExtensions
     public static async Task<Result<TNext>> IfSuccessAsync<T, TNext>(this Result<T> result,
         Func<T, Task<Result<TNext>>> ifSuccessFunc, bool continueOnCapturedContext)
     {
-        ArgumentNullException.ThrowIfNull(result, nameof(result));
-        ArgumentNullException.ThrowIfNull(ifSuccessFunc, nameof(ifSuccessFunc));
+        ArgumentNullException.ThrowIfNull(result);
+        ArgumentNullException.ThrowIfNull(ifSuccessFunc);
 
         if (!result.IsSuccess())
             return result.Error!;

@@ -42,8 +42,8 @@ public static class IfErrorAsyncExtensions
         bool continueOnCapturedContext)
         where TResult : IResult
     {
-        ArgumentNullException.ThrowIfNull(result, nameof(result));
-        ArgumentNullException.ThrowIfNull(ifErrorAction, nameof(ifErrorAction));
+        ArgumentNullException.ThrowIfNull(result);
+        ArgumentNullException.ThrowIfNull(ifErrorAction);
 
         if (!result.IsSuccess())
             await ifErrorAction(result.Error!).ConfigureAwait(continueOnCapturedContext);
@@ -80,8 +80,8 @@ public static class IfErrorAsyncExtensions
         Func<Error, Task<IResult>> ifErrorFunction, bool continueOnCapturedContext)
         where TResult : IResult
     {
-        ArgumentNullException.ThrowIfNull(result, nameof(result));
-        ArgumentNullException.ThrowIfNull(ifErrorFunction, nameof(ifErrorFunction));
+        ArgumentNullException.ThrowIfNull(result);
+        ArgumentNullException.ThrowIfNull(ifErrorFunction);
 
         if (result.IsSuccess())
             return result;
