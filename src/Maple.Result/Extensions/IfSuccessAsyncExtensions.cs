@@ -30,6 +30,10 @@ public static class IfSuccessAsyncExtensions
     ///     The asynchronous action to execute if the <paramref name="result" /> is successful.
     ///     Cannot be <see langword="null" />.
     /// </param>
+    /// <param name="continueOnCapturedContext">
+    ///     <see langword="true" /> to attempt to marshal the continuation back to
+    ///     the original context captured; otherwise, <see langword="false" />.
+    /// </param>
     /// <returns>
     ///     A <see cref="Task{Result}" /> that represents the original <paramref name="result" />,
     ///     allowing for method chaining.
@@ -38,7 +42,8 @@ public static class IfSuccessAsyncExtensions
     ///     If any of the <paramref name="result" /> or <paramref name="ifSuccessAction" />
     ///     parameters are <see langword="null" />.
     /// </exception>
-    public static async Task<Result> IfSuccessAsync(this Result result, Func<Task> ifSuccessAction)
+    public static async Task<Result> IfSuccessAsync(this Result result, Func<Task> ifSuccessAction,
+        bool continueOnCapturedContext)
     {
         ArgumentNullException.ThrowIfNull(result, nameof(result));
         ArgumentNullException.ThrowIfNull(ifSuccessAction, nameof(ifSuccessAction));
@@ -64,6 +69,10 @@ public static class IfSuccessAsyncExtensions
     ///     An asynchronous function to execute if <paramref name="result" /> is successful. The function must return
     ///     a <see cref="Task{Result}" /> and must not be <see langword="null" />.
     /// </param>
+    /// <param name="continueOnCapturedContext">
+    ///     <see langword="true" /> to attempt to marshal the continuation back to
+    ///     the original context captured; otherwise, <see langword="false" />.
+    /// </param>
     /// <returns>
     ///     A <see cref="Task{Result}" /> returned by <paramref name="ifSuccessFunc" />
     ///     if <paramref name="result" /> is successful;
@@ -73,7 +82,8 @@ public static class IfSuccessAsyncExtensions
     ///     If any of the <paramref name="result" /> or <paramref name="ifSuccessFunc" />
     ///     parameters are <see langword="null" />.
     /// </exception>
-    public static async Task<Result> IfSuccessAsync(this Result result, Func<Task<Result>> ifSuccessFunc)
+    public static async Task<Result> IfSuccessAsync(this Result result, Func<Task<Result>> ifSuccessFunc,
+        bool continueOnCapturedContext)
     {
         ArgumentNullException.ThrowIfNull(result, nameof(result));
         ArgumentNullException.ThrowIfNull(ifSuccessFunc, nameof(ifSuccessFunc));
@@ -100,6 +110,10 @@ public static class IfSuccessAsyncExtensions
     ///     An asynchronous function to execute if the <paramref name="result" /> is successful. The function’s return value
     ///     is used as the successful <see cref="Result{T}" />. Must not be <see langword="null" />.
     /// </param>
+    /// <param name="continueOnCapturedContext">
+    ///     <see langword="true" /> to attempt to marshal the continuation back to
+    ///     the original context captured; otherwise, <see langword="false" />.
+    /// </param>
     /// <returns>
     ///     A <see cref="Task{TResult}" /> that represents the successful <see cref="Result{T}" />
     ///     containing the value returned by <paramref name="ifSuccessFunc" />
@@ -111,7 +125,8 @@ public static class IfSuccessAsyncExtensions
     ///     If any of the <paramref name="result" /> or <paramref name="ifSuccessFunc" />
     ///     parameters are <see langword="null" />.
     /// </exception>
-    public static async Task<Result<T>> IfSuccessAsync<T>(this Result result, Func<Task<T>> ifSuccessFunc)
+    public static async Task<Result<T>> IfSuccessAsync<T>(this Result result, Func<Task<T>> ifSuccessFunc,
+        bool continueOnCapturedContext)
     {
         ArgumentNullException.ThrowIfNull(result, nameof(result));
         ArgumentNullException.ThrowIfNull(ifSuccessFunc, nameof(ifSuccessFunc));
@@ -139,6 +154,10 @@ public static class IfSuccessAsyncExtensions
     ///     An asynchronous function to execute if the <paramref name="result" /> is successful. The function’s return value
     ///     is used as the successful <see cref="Result{T}" />. Must not be <see langword="null" />.
     /// </param>
+    /// <param name="continueOnCapturedContext">
+    ///     <see langword="true" /> to attempt to marshal the continuation back to
+    ///     the original context captured; otherwise, <see langword="false" />.
+    /// </param>
     /// <returns>
     ///     A <see cref="Task{TResult}" /> that represents a successful <see cref="Result{T}" />
     ///     returned by <paramref name="ifSuccessFunc" /> if <paramref name="result" /> is successful;
@@ -149,7 +168,8 @@ public static class IfSuccessAsyncExtensions
     ///     If any of the <paramref name="result" /> or <paramref name="ifSuccessFunc" />
     ///     parameters are <see langword="null" />.
     /// </exception>
-    public static async Task<Result<T>> IfSuccessAsync<T>(this Result result, Func<Task<Result<T>>> ifSuccessFunc)
+    public static async Task<Result<T>> IfSuccessAsync<T>(this Result result, Func<Task<Result<T>>> ifSuccessFunc,
+        bool continueOnCapturedContext)
     {
         ArgumentNullException.ThrowIfNull(result, nameof(result));
         ArgumentNullException.ThrowIfNull(ifSuccessFunc, nameof(ifSuccessFunc));
@@ -178,6 +198,10 @@ public static class IfSuccessAsyncExtensions
     ///     The value of the successful <see cref="Result{T}" /> is passed as a parameter.
     ///     Must not be <see langword="null" />.
     /// </param>
+    /// <param name="continueOnCapturedContext">
+    ///     <see langword="true" /> to attempt to marshal the continuation back to
+    ///     the original context captured; otherwise, <see langword="false" />.
+    /// </param>
     /// <returns>
     ///     A <see cref="Task{TResult}" /> that represents the original <paramref name="result" />,
     ///     allowing for method chaining.
@@ -186,7 +210,8 @@ public static class IfSuccessAsyncExtensions
     ///     If any of the <paramref name="result" /> or <paramref name="ifSuccessAction" />
     ///     parameters are <see langword="null" />.
     /// </exception>
-    public static async Task<Result<T>> IfSuccessAsync<T>(this Result<T> result, Func<T, Task> ifSuccessAction)
+    public static async Task<Result<T>> IfSuccessAsync<T>(this Result<T> result, Func<T, Task> ifSuccessAction,
+        bool continueOnCapturedContext)
     {
         ArgumentNullException.ThrowIfNull(result, nameof(result));
         ArgumentNullException.ThrowIfNull(ifSuccessAction, nameof(ifSuccessAction));
@@ -212,6 +237,10 @@ public static class IfSuccessAsyncExtensions
     ///     <see cref="Result{T}" /> is passed as a parameter. The function must return
     ///     a <see cref="Task{Result}" /> and must not be <see langword="null" />.
     /// </param>
+    /// <param name="continueOnCapturedContext">
+    ///     <see langword="true" /> to attempt to marshal the continuation back to
+    ///     the original context captured; otherwise, <see langword="false" />.
+    /// </param>
     /// <returns>
     ///     A <see cref="Task{Result}" /> that is returned by <paramref name="ifSuccessFunc" /> if <paramref name="result" />
     ///     is successful; otherwise, a failed <see cref="Result" /> with the original <see cref="Error" />.
@@ -220,7 +249,8 @@ public static class IfSuccessAsyncExtensions
     ///     If any of the <paramref name="result" /> or <paramref name="ifSuccessFunc" />
     ///     parameters are <see langword="null" />.
     /// </exception>
-    public static async Task<Result> IfSuccessAsync<T>(this Result<T> result, Func<T, Task<Result>> ifSuccessFunc)
+    public static async Task<Result> IfSuccessAsync<T>(this Result<T> result, Func<T, Task<Result>> ifSuccessFunc,
+        bool continueOnCapturedContext)
     {
         ArgumentNullException.ThrowIfNull(result, nameof(result));
         ArgumentNullException.ThrowIfNull(ifSuccessFunc, nameof(ifSuccessFunc));
@@ -256,6 +286,10 @@ public static class IfSuccessAsyncExtensions
     ///     The function’s return value is used as the successful <see cref="Result{TNext}" />.
     ///     Must not be <see langword="null" />.
     /// </param>
+    /// <param name="continueOnCapturedContext">
+    ///     <see langword="true" /> to attempt to marshal the continuation back to
+    ///     the original context captured; otherwise, <see langword="false" />.
+    /// </param>
     /// <returns>
     ///     A <see cref="Task{TResult}" /> that represents the successful <see cref="Result{TNext}" /> containing
     ///     the value returned by <paramref name="ifSuccessFunc" /> if <paramref name="result" /> is successful;
@@ -266,7 +300,7 @@ public static class IfSuccessAsyncExtensions
     ///     parameters are <see langword="null" />.
     /// </exception>
     public static async Task<Result<TNext>> IfSuccessAsync<T, TNext>(this Result<T> result,
-        Func<T, Task<TNext>> ifSuccessFunc)
+        Func<T, Task<TNext>> ifSuccessFunc, bool continueOnCapturedContext)
     {
         ArgumentNullException.ThrowIfNull(result, nameof(result));
         ArgumentNullException.ThrowIfNull(ifSuccessFunc, nameof(ifSuccessFunc));
@@ -302,6 +336,10 @@ public static class IfSuccessAsyncExtensions
     ///     The function’s must return <see cref="Task{Result}" /> that represents <see cref="Result{TNext}" />.
     ///     Must not be <see langword="null" />.
     /// </param>
+    /// <param name="continueOnCapturedContext">
+    ///     <see langword="true" /> to attempt to marshal the continuation back to
+    ///     the original context captured; otherwise, <see langword="false" />.
+    /// </param>
     /// <returns>
     ///     A <see cref="Task{TResult}" /> that represents the successful <see cref="Result{TNext}" /> returned by
     ///     <paramref name="ifSuccessFunc" /> if <paramref name="result" /> is successful;
@@ -312,7 +350,7 @@ public static class IfSuccessAsyncExtensions
     ///     parameters are <see langword="null" />.
     /// </exception>
     public static async Task<Result<TNext>> IfSuccessAsync<T, TNext>(this Result<T> result,
-        Func<T, Task<Result<TNext>>> ifSuccessFunc)
+        Func<T, Task<Result<TNext>>> ifSuccessFunc, bool continueOnCapturedContext)
     {
         ArgumentNullException.ThrowIfNull(result, nameof(result));
         ArgumentNullException.ThrowIfNull(ifSuccessFunc, nameof(ifSuccessFunc));

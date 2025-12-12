@@ -30,18 +30,23 @@ public static class IfErrorAsyncExtensions
     ///     The <see cref="Error" /> associated with the <paramref name="result" /> is passed to this asynchronous action.
     ///     Must not be <see langword="null" />.
     /// </param>
+    /// <param name="continueOnCapturedContext">
+    ///     <see langword="true" /> to attempt to marshal the continuation back to
+    ///     the original context captured; otherwise, <see langword="false" />.
+    /// </param>
     /// <returns>
     ///     A <see cref="Task{IResult}" /> that represents the original <paramref name="result" /> instance,
     ///     regardless of whether the action was invoked.
     /// </returns>
-    public static async Task<IResult> IfErrorAsync<TResult>(this TResult result, Func<Error, Task> ifErrorAction)
+    public static async Task<IResult> IfErrorAsync<TResult>(this TResult result, Func<Error, Task> ifErrorAction,
+        bool continueOnCapturedContext)
         where TResult : IResult
     {
         ArgumentNullException.ThrowIfNull(result, nameof(result));
         ArgumentNullException.ThrowIfNull(ifErrorAction, nameof(ifErrorAction));
 
         if (!result.IsSuccess())
-            await ifErrorAction(result.Error!);
+            await ifErrorAction(result.Error!).ConfigureAwait(continueOnCapturedContext);
 
         return result;
     }
@@ -62,12 +67,17 @@ public static class IfErrorAsyncExtensions
     ///     A function to invoke asynchronously if the <paramref name="result" /> represents an error.
     ///     The function receives the error and returns a new result. Must not be <see langword="null" />.
     /// </param>
+    /// <param name="continueOnCapturedContext">
+    ///     <see langword="true" /> to attempt to marshal the continuation back to
+    ///     the original context captured; otherwise, <see langword="false" />.
+    /// </param>
     /// <returns>
     ///     A <see cref="Task{IResult}" /> that represents the <see cref="IResult" /> outcome of the asynchronous operation.
     ///     The <see cref="Task{IResult}" /> is either the original <paramref name="result" /> if it indicates success, or
     ///     the result returned by the <see cref="ifErrorFunction" /> if an <see cref="Error" /> is present.
     /// </returns>
-    public static async Task<IResult> IfErrorAsync<TResult>(this TResult result, Func<Error, Task<IResult>> ifErrorFunction)
+    public static async Task<IResult> IfErrorAsync<TResult>(this TResult result,
+        Func<Error, Task<IResult>> ifErrorFunction, bool continueOnCapturedContext)
         where TResult : IResult
     {
         ArgumentNullException.ThrowIfNull(result, nameof(result));
