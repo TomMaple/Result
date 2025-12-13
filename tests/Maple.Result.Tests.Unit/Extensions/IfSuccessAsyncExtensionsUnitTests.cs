@@ -6,7 +6,7 @@ using Moq;
 
 namespace Maple.Result.Tests.Unit.Extensions;
 
-public class IfSuccessAsyncUnitTests
+public class IfSuccessAsyncExtensionsUnitTests
 {
     #region read-only fields
 
@@ -18,7 +18,7 @@ public class IfSuccessAsyncUnitTests
 
     #region set up
 
-    public IfSuccessAsyncUnitTests()
+    public IfSuccessAsyncExtensionsUnitTests()
     {
         _testMock = new Mock<ITest>();
     }
