@@ -28,6 +28,10 @@ public static class IfErrorExtensions
     ///     the <paramref name="result" /> is passed to this action. Must not be <see langword="null" />.
     /// </param>
     /// <returns>The original <paramref name="result" /> instance, regardless of whether the action was invoked.</returns>
+    /// <exception cref="ArgumentNullException">
+    ///     If any of the <paramref name="result" /> or <paramref name="ifErrorAction" />
+    ///     parameters are <see langword="null" />.
+    /// </exception>
     public static TResult IfError<TResult>(this TResult result, Action<Error> ifErrorAction)
         where TResult : IResult
     {
@@ -55,6 +59,10 @@ public static class IfErrorExtensions
     ///     The original <paramref name="result" /> if it represents success;
     ///     otherwise, the outcome of the <paramref name="ifErrorFunction" />.
     /// </returns>
+    /// <exception cref="ArgumentNullException">
+    ///     If any of the <paramref name="result" /> or <paramref name="ifErrorFunction" />
+    ///     parameters are <see langword="null" />.
+    /// </exception>
     public static TResult IfError<TResult>(this TResult result, Func<Error, TResult> ifErrorFunction)
         where TResult : IResult
     {

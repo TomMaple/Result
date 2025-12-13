@@ -38,6 +38,10 @@ public static class IfErrorAsyncExtensions
     ///     A <see cref="Task{IResult}" /> that represents the original <paramref name="result" /> instance,
     ///     regardless of whether the action was invoked.
     /// </returns>
+    /// <exception cref="ArgumentNullException">
+    ///     If any of the <paramref name="result" /> or <paramref name="ifErrorAction" />
+    ///     parameters are <see langword="null" />.
+    /// </exception>
     public static async Task<IResult> IfErrorAsync<TResult>(this TResult result, Func<Error, Task> ifErrorAction,
         bool continueOnCapturedContext)
         where TResult : IResult
@@ -76,6 +80,10 @@ public static class IfErrorAsyncExtensions
     ///     The <see cref="Task{IResult}" /> is either the original <paramref name="result" /> if it indicates success, or
     ///     the result returned by the <see cref="ifErrorFunction" /> if an <see cref="Error" /> is present.
     /// </returns>
+    /// <exception cref="ArgumentNullException">
+    ///     If any of the <paramref name="result" /> or <paramref name="ifErrorFunction" />
+    ///     parameters are <see langword="null" />.
+    /// </exception>
     public static async Task<IResult> IfErrorAsync<TResult>(this TResult result,
         Func<Error, Task<IResult>> ifErrorFunction, bool continueOnCapturedContext)
         where TResult : IResult
