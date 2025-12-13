@@ -65,7 +65,7 @@ public static class IfSuccessAsyncExtensions
     ///     the provided function is not invoked.
     /// </remarks>
     /// <param name="result">The <see cref="Result" /> to evaluate for success. Must not be <see langword="null" />.</param>
-    /// <param name="ifSuccessFunc">
+    /// <param name="ifSuccessFunction">
     ///     An asynchronous function to execute if <paramref name="result" /> is successful. The function must return
     ///     a <see cref="Task{Result}" /> and must not be <see langword="null" />.
     /// </param>
@@ -74,24 +74,24 @@ public static class IfSuccessAsyncExtensions
     ///     the original context captured; otherwise, <see langword="false" />.
     /// </param>
     /// <returns>
-    ///     A <see cref="Task{Result}" /> returned by <paramref name="ifSuccessFunc" />
+    ///     A <see cref="Task{Result}" /> returned by <paramref name="ifSuccessFunction" />
     ///     if <paramref name="result" /> is successful;
     ///     otherwise, a <see cref="Task{Result}" /> that represents the original error <paramref name="result" />.
     /// </returns>
     /// <exception cref="ArgumentNullException">
-    ///     If any of the <paramref name="result" /> or <paramref name="ifSuccessFunc" />
+    ///     If any of the <paramref name="result" /> or <paramref name="ifSuccessFunction" />
     ///     parameters are <see langword="null" />.
     /// </exception>
-    public static async Task<Result> IfSuccessAsync(this Result result, Func<Task<Result>> ifSuccessFunc,
+    public static async Task<Result> IfSuccessAsync(this Result result, Func<Task<Result>> ifSuccessFunction,
         bool continueOnCapturedContext)
     {
         ArgumentNullException.ThrowIfNull(result);
-        ArgumentNullException.ThrowIfNull(ifSuccessFunc);
+        ArgumentNullException.ThrowIfNull(ifSuccessFunction);
 
         if (!result.IsSuccess())
             return result.Error!;
 
-        return await ifSuccessFunc();
+        return await ifSuccessFunction();
     }
 
     /// <summary>
@@ -106,7 +106,7 @@ public static class IfSuccessAsyncExtensions
     /// </remarks>
     /// <typeparam name="T">The type of the <see cref="Result{T}" /> value to return if the operation is successful.</typeparam>
     /// <param name="result">The <see cref="Result" /> to evaluate for success. Must not be <see langword="null" />.</param>
-    /// <param name="ifSuccessFunc">
+    /// <param name="ifSuccessFunction">
     ///     An asynchronous function to execute if the <paramref name="result" /> is successful. The function’s return value
     ///     is used as the successful <see cref="Result{T}" />. Must not be <see langword="null" />.
     /// </param>
@@ -116,25 +116,25 @@ public static class IfSuccessAsyncExtensions
     /// </param>
     /// <returns>
     ///     A <see cref="Task{TResult}" /> that represents the successful <see cref="Result{T}" />
-    ///     containing the value returned by <paramref name="ifSuccessFunc" />
+    ///     containing the value returned by <paramref name="ifSuccessFunction" />
     ///     if <paramref name="result" /> is successful;
     ///     otherwise, a <see cref="Task{TResult}" /> that represents the failed <see cref="Result{T}" />
     ///     with the original <see cref="Error" />.
     /// </returns>
     /// <exception cref="ArgumentNullException">
-    ///     If any of the <paramref name="result" /> or <paramref name="ifSuccessFunc" />
+    ///     If any of the <paramref name="result" /> or <paramref name="ifSuccessFunction" />
     ///     parameters are <see langword="null" />.
     /// </exception>
-    public static async Task<Result<T>> IfSuccessAsync<T>(this Result result, Func<Task<T>> ifSuccessFunc,
+    public static async Task<Result<T>> IfSuccessAsync<T>(this Result result, Func<Task<T>> ifSuccessFunction,
         bool continueOnCapturedContext)
     {
         ArgumentNullException.ThrowIfNull(result);
-        ArgumentNullException.ThrowIfNull(ifSuccessFunc);
+        ArgumentNullException.ThrowIfNull(ifSuccessFunction);
 
         if (!result.IsSuccess())
             return result.Error!;
 
-        return await ifSuccessFunc();
+        return await ifSuccessFunction();
     }
 
     /// <summary>
@@ -150,7 +150,7 @@ public static class IfSuccessAsyncExtensions
     /// </remarks>
     /// <typeparam name="T">The type of the <see cref="Result{T}" /> value to return if the operation is successful.</typeparam>
     /// <param name="result">The <see cref="Result" /> to evaluate for success. Must not be <see langword="null" />.</param>
-    /// <param name="ifSuccessFunc">
+    /// <param name="ifSuccessFunction">
     ///     An asynchronous function to execute if the <paramref name="result" /> is successful. The function’s return value
     ///     is used as the successful <see cref="Result{T}" />. Must not be <see langword="null" />.
     /// </param>
@@ -160,24 +160,24 @@ public static class IfSuccessAsyncExtensions
     /// </param>
     /// <returns>
     ///     A <see cref="Task{TResult}" /> that represents a successful <see cref="Result{T}" />
-    ///     returned by <paramref name="ifSuccessFunc" /> if <paramref name="result" /> is successful;
+    ///     returned by <paramref name="ifSuccessFunction" /> if <paramref name="result" /> is successful;
     ///     otherwise, a <see cref="Task{TResult}" /> that represents the failed <see cref="Result{T}" />
     ///     with the original <see cref="Error" />.
     /// </returns>
     /// <exception cref="ArgumentNullException">
-    ///     If any of the <paramref name="result" /> or <paramref name="ifSuccessFunc" />
+    ///     If any of the <paramref name="result" /> or <paramref name="ifSuccessFunction" />
     ///     parameters are <see langword="null" />.
     /// </exception>
-    public static async Task<Result<T>> IfSuccessAsync<T>(this Result result, Func<Task<Result<T>>> ifSuccessFunc,
+    public static async Task<Result<T>> IfSuccessAsync<T>(this Result result, Func<Task<Result<T>>> ifSuccessFunction,
         bool continueOnCapturedContext)
     {
         ArgumentNullException.ThrowIfNull(result);
-        ArgumentNullException.ThrowIfNull(ifSuccessFunc);
+        ArgumentNullException.ThrowIfNull(ifSuccessFunction);
 
         if (!result.IsSuccess())
             return result.Error!;
 
-        return await ifSuccessFunc();
+        return await ifSuccessFunction();
     }
 
     #endregion
@@ -232,7 +232,7 @@ public static class IfSuccessAsyncExtensions
     ///     the provided asynchronous function is not invoked.
     /// </remarks>
     /// <param name="result">The <see cref="Result{T}" /> to evaluate for success. Must not be <see langword="null" />.</param>
-    /// <param name="ifSuccessFunc">
+    /// <param name="ifSuccessFunction">
     ///     The asynchronous function to execute if <paramref name="result" /> is successful. The value of the successful
     ///     <see cref="Result{T}" /> is passed as a parameter. The function must return
     ///     a <see cref="Task{Result}" /> and must not be <see langword="null" />.
@@ -242,23 +242,23 @@ public static class IfSuccessAsyncExtensions
     ///     the original context captured; otherwise, <see langword="false" />.
     /// </param>
     /// <returns>
-    ///     A <see cref="Task{Result}" /> that is returned by <paramref name="ifSuccessFunc" /> if <paramref name="result" />
+    ///     A <see cref="Task{Result}" /> that is returned by <paramref name="ifSuccessFunction" /> if <paramref name="result" />
     ///     is successful; otherwise, a failed <see cref="Result" /> with the original <see cref="Error" />.
     /// </returns>
     /// <exception cref="ArgumentNullException">
-    ///     If any of the <paramref name="result" /> or <paramref name="ifSuccessFunc" />
+    ///     If any of the <paramref name="result" /> or <paramref name="ifSuccessFunction" />
     ///     parameters are <see langword="null" />.
     /// </exception>
-    public static async Task<Result> IfSuccessAsync<T>(this Result<T> result, Func<T, Task<Result>> ifSuccessFunc,
+    public static async Task<Result> IfSuccessAsync<T>(this Result<T> result, Func<T, Task<Result>> ifSuccessFunction,
         bool continueOnCapturedContext)
     {
         ArgumentNullException.ThrowIfNull(result);
-        ArgumentNullException.ThrowIfNull(ifSuccessFunc);
+        ArgumentNullException.ThrowIfNull(ifSuccessFunction);
 
         if (!result.IsSuccess())
             return result.Error!;
 
-        return await ifSuccessFunc(result.Value!);
+        return await ifSuccessFunction(result.Value!);
     }
 
     /// <summary>
@@ -280,7 +280,7 @@ public static class IfSuccessAsyncExtensions
     ///     value to return.
     /// </typeparam>
     /// <param name="result">The <see cref="Result{T}" /> to evaluate for success. Must not be <see langword="null" />.</param>
-    /// <param name="ifSuccessFunc">
+    /// <param name="ifSuccessFunction">
     ///     An asynchronous function to execute if the <paramref name="result" /> is successful.
     ///     The value of the successful <see cref="Result{T}" /> is passed as a parameter.
     ///     The function’s return value is used as the successful <see cref="Result{TNext}" />.
@@ -292,23 +292,23 @@ public static class IfSuccessAsyncExtensions
     /// </param>
     /// <returns>
     ///     A <see cref="Task{TResult}" /> that represents the successful <see cref="Result{TNext}" /> containing
-    ///     the value returned by <paramref name="ifSuccessFunc" /> if <paramref name="result" /> is successful;
+    ///     the value returned by <paramref name="ifSuccessFunction" /> if <paramref name="result" /> is successful;
     ///     otherwise, a failed <see cref="Result{TNext}" /> with the original <see cref="Error" />.
     /// </returns>
     /// <exception cref="ArgumentNullException">
-    ///     If any of the <paramref name="result" /> or <paramref name="ifSuccessFunc" />
+    ///     If any of the <paramref name="result" /> or <paramref name="ifSuccessFunction" />
     ///     parameters are <see langword="null" />.
     /// </exception>
     public static async Task<Result<TNext>> IfSuccessAsync<T, TNext>(this Result<T> result,
-        Func<T, Task<TNext>> ifSuccessFunc, bool continueOnCapturedContext)
+        Func<T, Task<TNext>> ifSuccessFunction, bool continueOnCapturedContext)
     {
         ArgumentNullException.ThrowIfNull(result);
-        ArgumentNullException.ThrowIfNull(ifSuccessFunc);
+        ArgumentNullException.ThrowIfNull(ifSuccessFunction);
 
         if (!result.IsSuccess())
             return result.Error!;
 
-        return await ifSuccessFunc(result.Value!);
+        return await ifSuccessFunction(result.Value!);
     }
 
     /// <summary>
@@ -330,7 +330,7 @@ public static class IfSuccessAsyncExtensions
     ///     of the passed function.
     /// </typeparam>
     /// <param name="result">The <see cref="Result{T}" /> to evaluate for success. Must not be <see langword="null" />.</param>
-    /// <param name="ifSuccessFunc">
+    /// <param name="ifSuccessFunction">
     ///     An asynchronous function to execute if the <paramref name="result" /> is successful.
     ///     The value of the successful <see cref="Result{T}" /> is passed as a parameter.
     ///     The function’s must return <see cref="Task{Result}" /> that represents <see cref="Result{TNext}" />.
@@ -342,23 +342,23 @@ public static class IfSuccessAsyncExtensions
     /// </param>
     /// <returns>
     ///     A <see cref="Task{TResult}" /> that represents the successful <see cref="Result{TNext}" /> returned by
-    ///     <paramref name="ifSuccessFunc" /> if <paramref name="result" /> is successful;
+    ///     <paramref name="ifSuccessFunction" /> if <paramref name="result" /> is successful;
     ///     otherwise, a failed <see cref="Result{TNext}" /> with the original <see cref="Error" />.
     /// </returns>
     /// <exception cref="ArgumentNullException">
-    ///     If any of the <paramref name="result" /> or <paramref name="ifSuccessFunc" />
+    ///     If any of the <paramref name="result" /> or <paramref name="ifSuccessFunction" />
     ///     parameters are <see langword="null" />.
     /// </exception>
     public static async Task<Result<TNext>> IfSuccessAsync<T, TNext>(this Result<T> result,
-        Func<T, Task<Result<TNext>>> ifSuccessFunc, bool continueOnCapturedContext)
+        Func<T, Task<Result<TNext>>> ifSuccessFunction, bool continueOnCapturedContext)
     {
         ArgumentNullException.ThrowIfNull(result);
-        ArgumentNullException.ThrowIfNull(ifSuccessFunc);
+        ArgumentNullException.ThrowIfNull(ifSuccessFunction);
 
         if (!result.IsSuccess())
             return result.Error!;
 
-        return await ifSuccessFunc(result.Value!);
+        return await ifSuccessFunction(result.Value!);
     }
 
     #endregion
