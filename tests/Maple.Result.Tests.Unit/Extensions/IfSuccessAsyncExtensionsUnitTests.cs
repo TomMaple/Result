@@ -25,7 +25,7 @@ public class IfSuccessAsyncExtensionsUnitTests
 
     #endregion
 
-    #region IfSuccess (Result, Action)
+    #region IfSuccessAsync (Result, Func<Task>)
 
     [Fact]
     public async Task IfSuccessAsync_NoResultWithAction_ThrowsException()
@@ -133,7 +133,7 @@ public class IfSuccessAsyncExtensionsUnitTests
 
     #endregion
 
-    #region IfSuccess (Result, Func<Result>)
+    #region IfSuccessAsync (Result, Func<Task<Result>>)
 
     [Fact]
     public async Task IfSuccessAsync_NoResultWithResultFunction_ThrowsException()
@@ -263,7 +263,7 @@ public class IfSuccessAsyncExtensionsUnitTests
 
     #endregion
 
-    #region IfSuccess (Result, Func<T>)
+    #region IfSuccessAsync (Result, Func<Task<T>>)
 
     [Fact]
     public async Task IfSuccessAsync_NoResultWithIntFunction_ThrowsException()
@@ -376,7 +376,7 @@ public class IfSuccessAsyncExtensionsUnitTests
 
     #endregion
 
-    #region IfSuccess (Result, Func<Result<T>>)
+    #region IfSuccessAsync (Result, Func<Task<Result<T>>>)
 
     [Fact]
     public async Task IfSuccessAsync_NoResultWithIntResultFunction_ThrowsException()
@@ -509,7 +509,7 @@ public class IfSuccessAsyncExtensionsUnitTests
 
     #endregion
 
-    #region IfSuccess (Result<T>, Action<T>)
+    #region IfSuccessAsync (Result<T>, Func<T, Task>)
 
     [Fact]
     public async Task IfSuccessAsync_NoIntResultWithIntAction_ThrowsException()
@@ -621,7 +621,7 @@ public class IfSuccessAsyncExtensionsUnitTests
 
     #endregion
 
-    #region IfSuccess (Result<T>, Func<T, Result>)
+    #region IfSuccessAsync (Result<T>, Func<T, Task<Result>>)
 
     [Fact]
     public async Task IfSuccessAsync_NoStringResultWithResultFunction_ThrowsException()
@@ -760,7 +760,7 @@ public class IfSuccessAsyncExtensionsUnitTests
 
     #endregion
 
-    #region IfSuccess (Result<T>, Func<T, TNext>)
+    #region IfSuccessAsync (Result<T>, Func<T, Task<TNext>>)
 
     [Fact]
     public async Task IfSuccessAsync_NoDoubleResultWithIntFunction_ThrowsException()
@@ -877,7 +877,7 @@ public class IfSuccessAsyncExtensionsUnitTests
 
     #endregion
 
-    #region IfSuccess (Result<T>, Func<T, Result<TNext>>)
+    #region IfSuccessAsync (Result<T>, Func<T, Task<Result<TNext>>>)
 
     [Fact]
     public async Task IfSuccessAsync_NoIntResultWithStringResultFunction_ThrowsException()
