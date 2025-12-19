@@ -43,7 +43,7 @@ public static class IfErrorAsyncExtensions
     ///     parameters are <see langword="null" />.
     /// </exception>
     public static async Task<IResult> IfErrorAsync<TResult>(this TResult result, Func<Error, Task> ifErrorAction,
-        bool continueOnCapturedContext)
+        bool continueOnCapturedContext = false)
         where TResult : IResult
     {
         ArgumentNullException.ThrowIfNull(result);
@@ -85,7 +85,7 @@ public static class IfErrorAsyncExtensions
     ///     parameters are <see langword="null" />.
     /// </exception>
     public static async Task<IResult> IfErrorAsync<TResult>(this TResult result,
-        Func<Error, Task<IResult>> ifErrorFunction, bool continueOnCapturedContext)
+        Func<Error, Task<IResult>> ifErrorFunction, bool continueOnCapturedContext = false)
         where TResult : IResult
     {
         ArgumentNullException.ThrowIfNull(result);
@@ -94,6 +94,6 @@ public static class IfErrorAsyncExtensions
         if (result.IsSuccess())
             return result;
 
-        return await ifErrorFunction(result.Error!);
+        return await ifErrorFunction(result.Error!).ConfigureAwait(false);
     }
 }

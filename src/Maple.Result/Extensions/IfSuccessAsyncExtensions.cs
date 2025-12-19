@@ -43,13 +43,13 @@ public static class IfSuccessAsyncExtensions
     ///     parameters are <see langword="null" />.
     /// </exception>
     public static async Task<Result> IfSuccessAsync(this Result result, Func<Task> ifSuccessAction,
-        bool continueOnCapturedContext)
+        bool continueOnCapturedContext = false)
     {
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifSuccessAction);
 
         if (result.IsSuccess())
-            await ifSuccessAction();
+            await ifSuccessAction().ConfigureAwait(continueOnCapturedContext);
 
         return result;
     }
@@ -83,7 +83,7 @@ public static class IfSuccessAsyncExtensions
     ///     parameters are <see langword="null" />.
     /// </exception>
     public static async Task<Result> IfSuccessAsync(this Result result, Func<Task<Result>> ifSuccessFunction,
-        bool continueOnCapturedContext)
+        bool continueOnCapturedContext  = false)
     {
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
@@ -91,7 +91,7 @@ public static class IfSuccessAsyncExtensions
         if (!result.IsSuccess())
             return result.Error!;
 
-        return await ifSuccessFunction();
+        return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext);
     }
 
     /// <summary>
@@ -126,7 +126,7 @@ public static class IfSuccessAsyncExtensions
     ///     parameters are <see langword="null" />.
     /// </exception>
     public static async Task<Result<T>> IfSuccessAsync<T>(this Result result, Func<Task<T>> ifSuccessFunction,
-        bool continueOnCapturedContext)
+        bool continueOnCapturedContext = false)
     {
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
@@ -134,7 +134,7 @@ public static class IfSuccessAsyncExtensions
         if (!result.IsSuccess())
             return result.Error!;
 
-        return await ifSuccessFunction();
+        return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext);
     }
 
     /// <summary>
@@ -169,7 +169,7 @@ public static class IfSuccessAsyncExtensions
     ///     parameters are <see langword="null" />.
     /// </exception>
     public static async Task<Result<T>> IfSuccessAsync<T>(this Result result, Func<Task<Result<T>>> ifSuccessFunction,
-        bool continueOnCapturedContext)
+        bool continueOnCapturedContext = false)
     {
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
@@ -177,7 +177,7 @@ public static class IfSuccessAsyncExtensions
         if (!result.IsSuccess())
             return result.Error!;
 
-        return await ifSuccessFunction();
+        return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext);
     }
 
     #endregion
@@ -211,13 +211,13 @@ public static class IfSuccessAsyncExtensions
     ///     parameters are <see langword="null" />.
     /// </exception>
     public static async Task<Result<T>> IfSuccessAsync<T>(this Result<T> result, Func<T, Task> ifSuccessAction,
-        bool continueOnCapturedContext)
+        bool continueOnCapturedContext = false)
     {
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifSuccessAction);
 
         if (result.IsSuccess())
-            await ifSuccessAction(result.Value!);
+            await ifSuccessAction(result.Value!).ConfigureAwait(continueOnCapturedContext);
 
         return result;
     }
@@ -250,7 +250,7 @@ public static class IfSuccessAsyncExtensions
     ///     parameters are <see langword="null" />.
     /// </exception>
     public static async Task<Result> IfSuccessAsync<T>(this Result<T> result, Func<T, Task<Result>> ifSuccessFunction,
-        bool continueOnCapturedContext)
+        bool continueOnCapturedContext = false)
     {
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
@@ -258,7 +258,7 @@ public static class IfSuccessAsyncExtensions
         if (!result.IsSuccess())
             return result.Error!;
 
-        return await ifSuccessFunction(result.Value!);
+        return await ifSuccessFunction(result.Value!).ConfigureAwait(continueOnCapturedContext);
     }
 
     /// <summary>
@@ -300,7 +300,7 @@ public static class IfSuccessAsyncExtensions
     ///     parameters are <see langword="null" />.
     /// </exception>
     public static async Task<Result<TNext>> IfSuccessAsync<T, TNext>(this Result<T> result,
-        Func<T, Task<TNext>> ifSuccessFunction, bool continueOnCapturedContext)
+        Func<T, Task<TNext>> ifSuccessFunction, bool continueOnCapturedContext = false)
     {
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
@@ -308,7 +308,7 @@ public static class IfSuccessAsyncExtensions
         if (!result.IsSuccess())
             return result.Error!;
 
-        return await ifSuccessFunction(result.Value!);
+        return await ifSuccessFunction(result.Value!).ConfigureAwait(continueOnCapturedContext);
     }
 
     /// <summary>
@@ -350,7 +350,7 @@ public static class IfSuccessAsyncExtensions
     ///     parameters are <see langword="null" />.
     /// </exception>
     public static async Task<Result<TNext>> IfSuccessAsync<T, TNext>(this Result<T> result,
-        Func<T, Task<Result<TNext>>> ifSuccessFunction, bool continueOnCapturedContext)
+        Func<T, Task<Result<TNext>>> ifSuccessFunction, bool continueOnCapturedContext = false)
     {
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
@@ -358,7 +358,7 @@ public static class IfSuccessAsyncExtensions
         if (!result.IsSuccess())
             return result.Error!;
 
-        return await ifSuccessFunction(result.Value!);
+        return await ifSuccessFunction(result.Value!).ConfigureAwait(false);
     }
 
     #endregion
