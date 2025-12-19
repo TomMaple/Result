@@ -1,5 +1,5 @@
-﻿using System;
-using Maple.Result.Tests.Unit.Helpers;
+﻿using Maple.Result.Tests.Unit.Helpers;
+using System;
 using Sut = Maple.Result.Result;
 
 namespace Maple.Result.Tests.Unit;

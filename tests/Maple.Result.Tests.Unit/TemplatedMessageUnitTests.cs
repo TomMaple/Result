@@ -1,8 +1,8 @@
+using Maple.Result.Converters;
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Maple.Result.Converters;
 
 namespace Maple.Result.Tests.Unit;
 

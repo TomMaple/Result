@@ -1,7 +1,7 @@
-﻿using System;
-using Maple.Result.Extensions;
+﻿using Maple.Result.Extensions;
 using Maple.Result.Tests.Unit.Helpers;
 using Moq;
+using System;
 
 namespace Maple.Result.Tests.Unit.Extensions;
 

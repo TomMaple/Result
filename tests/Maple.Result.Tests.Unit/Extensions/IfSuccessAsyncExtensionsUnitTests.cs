@@ -1,8 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
-using Maple.Result.Extensions;
+﻿using Maple.Result.Extensions;
 using Maple.Result.Tests.Unit.Helpers;
 using Moq;
+using System;
+using System.Threading.Tasks;
 
 namespace Maple.Result.Tests.Unit.Extensions;
 
