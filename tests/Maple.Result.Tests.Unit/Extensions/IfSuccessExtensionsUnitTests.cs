@@ -1,5 +1,4 @@
 ﻿using Maple.Result.Extensions;
-using Maple.Result.Tests.Unit.Helpers;
 using Moq;
 using System;
 
@@ -7,23 +6,6 @@ namespace Maple.Result.Tests.Unit.Extensions;
 
 public class IfSuccessExtensionsUnitTests
 {
-    #region read-only fields
-
-    private readonly Mock<ITest> _testMock;
-
-    #endregion
-
-    private ITest TestObj => _testMock.Object;
-
-    #region set up
-
-    public IfSuccessExtensionsUnitTests()
-    {
-        _testMock = new Mock<ITest>();
-    }
-
-    #endregion
-
     #region IfSuccess (Result, Action)
 
     [Fact]
@@ -33,7 +15,7 @@ public class IfSuccessExtensionsUnitTests
         const Result? Sut = null;
 
         // Act
-        var exception = Record.Exception(() => Sut.IfSuccess(() => TestObj.Action()));
+        var exception = Record.Exception(() => Sut.IfSuccess(() => { }));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -45,8 +27,9 @@ public class IfSuccessExtensionsUnitTests
     public void IfSuccess_SuccessfulResultWithNoAction_ThrowsException()
     {
         // Arrange
-        var sut = Result.Success();
         const Action? Action = null;
+
+        var sut = Result.Success();
 
         // Act
         var exception = Record.Exception(() => sut.IfSuccess(Action));
@@ -61,8 +44,9 @@ public class IfSuccessExtensionsUnitTests
     public void IfSuccess_ErrorResultWithNoAction_ThrowsException()
     {
         // Arrange
-        var sut = GetErrorResult();
         const Action? Action = null;
+
+        var sut = GetErrorResult();
 
         // Act
         var exception = Record.Exception(() => sut.IfSuccess(Action));
@@ -77,13 +61,15 @@ public class IfSuccessExtensionsUnitTests
     public void IfSuccess_SuccessfulResultWithAction_CallsAction()
     {
         // Arrange
+        var actionMock = new Mock<Action>();
+
         var sut = Result.Success();
 
         // Act
-        _ = sut.IfSuccess(() => TestObj.Action());
+        _ = sut.IfSuccess(actionMock.Object);
 
         // Assert
-        _testMock.Verify(x => x.Action(), Times.Once);
+        actionMock.Verify(x => x.Invoke(), Times.Once);
     }
 
     [Fact]
@@ -93,7 +79,7 @@ public class IfSuccessExtensionsUnitTests
         var sut = Result.Success();
 
         // Act
-        var result = sut.IfSuccess(() => TestObj.Action());
+        var result = sut.IfSuccess(() => { });
 
         // Assert
         result.ShouldNotBeNull();
@@ -105,13 +91,15 @@ public class IfSuccessExtensionsUnitTests
     public void IfSuccess_ErrorResultWithAction_DoesNotCallAction()
     {
         // Arrange
+        var actionMock = new Mock<Action>();
+
         var sut = GetErrorResult();
 
         // Act
-        _ = sut.IfSuccess(() => TestObj.Action());
+        _ = sut.IfSuccess(actionMock.Object);
 
         // Assert
-        _testMock.Verify(x => x.Action(), Times.Never);
+        actionMock.Verify(x => x.Invoke(), Times.Never);
     }
 
     [Fact]
@@ -121,7 +109,7 @@ public class IfSuccessExtensionsUnitTests
         var sut = GetErrorResult();
 
         // Act
-        var result = sut.IfSuccess(() => TestObj.Action());
+        var result = sut.IfSuccess(() => { });
 
         // Assert
         result.ShouldNotBeNull();
@@ -141,7 +129,7 @@ public class IfSuccessExtensionsUnitTests
         const Result? Sut = null;
 
         // Act
-        var exception = Record.Exception(() => Sut.IfSuccess(() => TestObj.ResultFunc()));
+        var exception = Record.Exception(() => Sut.IfSuccess(Result.Success));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -153,8 +141,9 @@ public class IfSuccessExtensionsUnitTests
     public void IfSuccess_SuccessfulResultWithNoResultFunction_ThrowsException()
     {
         // Arrange
-        var sut = Result.Success();
         const Func<Result>? Function = null;
+
+        var sut = Result.Success();
 
         // Act
         var exception = Record.Exception(() => sut.IfSuccess(Function));
@@ -169,8 +158,9 @@ public class IfSuccessExtensionsUnitTests
     public void IfSuccess_ErrorResultWithNoResultFunction_ThrowsException()
     {
         // Arrange
-        var sut = GetErrorResult();
         const Func<Result>? Function = null;
+
+        var sut = GetErrorResult();
 
         // Act
         var exception = Record.Exception(() => sut.IfSuccess(Function));
@@ -185,13 +175,15 @@ public class IfSuccessExtensionsUnitTests
     public void IfSuccess_SuccessfulResultWithResultFunction_CallsFunction()
     {
         // Arrange
+        var functionMock = new Mock<Func<Result>>();
+
         var sut = Result.Success();
 
         // Act
-        _ = sut.IfSuccess(() => TestObj.ResultFunc());
+        _ = sut.IfSuccess(functionMock.Object);
 
         // Assert
-        _testMock.Verify(x => x.ResultFunc(), Times.Once);
+        functionMock.Verify(x => x.Invoke(), Times.Once);
     }
 
     [Fact]
@@ -199,12 +191,9 @@ public class IfSuccessExtensionsUnitTests
     {
         // Arrange
         var sut = Result.Success();
-        _testMock
-            .Setup(x => x.ResultFunc())
-            .Returns(Result.Success());
 
         // Act
-        var result = sut.IfSuccess(() => TestObj.ResultFunc());
+        var result = sut.IfSuccess(Result.Success);
 
         // Assert
         result.ShouldNotBeNull();
@@ -216,14 +205,12 @@ public class IfSuccessExtensionsUnitTests
     public void IfSuccess_SuccessfulResultWithErrorResultFunction_ReturnsErrorResultWithFunctionError()
     {
         // Arrange
-        var sut = Result.Success();
         var errorResult = GetErrorResult();
-        _testMock
-            .Setup(x => x.ResultFunc())
-            .Returns(errorResult);
+
+        var sut = Result.Success();
 
         // Act
-        var result = sut.IfSuccess(() => TestObj.ResultFunc());
+        var result = sut.IfSuccess(() => errorResult);
 
         // Assert
         result.ShouldNotBeNull();
@@ -235,13 +222,15 @@ public class IfSuccessExtensionsUnitTests
     public void IfSuccess_ErrorResultWithResultFunction_DoesNotCallFunction()
     {
         // Arrange
+        var functionMock = new Mock<Func<Result>>();
+
         var sut = GetErrorResult();
 
         // Act
-        _ = sut.IfSuccess(() => TestObj.ResultFunc());
+        _ = sut.IfSuccess(functionMock.Object);
 
         // Assert
-        _testMock.Verify(x => x.ResultFunc(), Times.Never);
+        functionMock.Verify(x => x.Invoke(), Times.Never);
     }
 
     [Fact]
@@ -251,7 +240,7 @@ public class IfSuccessExtensionsUnitTests
         var sut = GetErrorResult();
 
         // Act
-        var result = sut.IfSuccess(() => TestObj.ResultFunc());
+        var result = sut.IfSuccess(Result.Success);
 
         // Assert
         result.ShouldNotBeNull();
@@ -271,7 +260,7 @@ public class IfSuccessExtensionsUnitTests
         const Result? Sut = null;
 
         // Act
-        var exception = Record.Exception(() => Sut.IfSuccess(() => TestObj.IntFunc()));
+        var exception = Record.Exception(() => Sut.IfSuccess(() => 38));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -283,8 +272,9 @@ public class IfSuccessExtensionsUnitTests
     public void IfSuccess_SuccessfulResultWithNoIntFunction_ThrowsException()
     {
         // Arrange
-        var sut = Result.Success();
         const Func<int>? Function = null;
+
+        var sut = Result.Success();
 
         // Act
         var exception = Record.Exception(() => sut.IfSuccess(Function));
@@ -299,8 +289,9 @@ public class IfSuccessExtensionsUnitTests
     public void IfSuccess_ErrorResultWithNoIntFunction_ThrowsException()
     {
         // Arrange
-        var sut = GetErrorResult();
         const Func<int>? Function = null;
+
+        var sut = GetErrorResult();
 
         // Act
         var exception = Record.Exception(() => sut.IfSuccess(Function));
@@ -315,13 +306,15 @@ public class IfSuccessExtensionsUnitTests
     public void IfSuccess_SuccessfulResultWithIntFunction_CallsFunction()
     {
         // Arrange
+        var functionMock = new Mock<Func<int>>();
+
         var sut = Result.Success();
 
         // Act
-        _ = sut.IfSuccess(() => TestObj.IntFunc());
+        _ = sut.IfSuccess(functionMock.Object);
 
         // Assert
-        _testMock.Verify(x => x.IntFunc(), Times.Once);
+        functionMock.Verify(x => x.Invoke(), Times.Once);
     }
 
     [Fact]
@@ -329,13 +322,11 @@ public class IfSuccessExtensionsUnitTests
     {
         // Arrange
         const int Value = 2463;
+
         var sut = Result.Success();
-        _testMock
-            .Setup(x => x.IntFunc())
-            .Returns(Value);
 
         // Act
-        var result = sut.IfSuccess(() => TestObj.IntFunc());
+        var result = sut.IfSuccess(() => Value);
 
         // Assert
         result.ShouldNotBeNull();
@@ -348,13 +339,15 @@ public class IfSuccessExtensionsUnitTests
     public void IfSuccess_ErrorResultWithIntFunction_DoesNotCallFunction()
     {
         // Arrange
+        var functionMock = new Mock<Func<int>>();
+
         var sut = GetErrorResult();
 
         // Act
-        _ = sut.IfSuccess(() => TestObj.IntFunc());
+        _ = sut.IfSuccess(functionMock.Object);
 
         // Assert
-        _testMock.Verify(x => x.IntFunc(), Times.Never);
+        functionMock.Verify(x => x.Invoke(), Times.Never);
     }
 
     [Fact]
@@ -364,7 +357,7 @@ public class IfSuccessExtensionsUnitTests
         var sut = GetErrorResult();
 
         // Act
-        var result = sut.IfSuccess(() => TestObj.IntFunc());
+        var result = sut.IfSuccess(() => 2987);
 
         // Assert
         result.ShouldNotBeNull();
@@ -378,13 +371,13 @@ public class IfSuccessExtensionsUnitTests
     #region IfSuccess (Result, Func<Result<T>>)
 
     [Fact]
-    public void IfSuccess_NoResultWithIntResultFunction_ThrowsException()
+    public void IfSuccess_NoResultWithGenericResultFunction_ThrowsException()
     {
         // Arrange
         const Result? Sut = null;
 
         // Act
-        var exception = Record.Exception(() => Sut.IfSuccess(() => TestObj.IntResultFunc()));
+        var exception = Record.Exception(() => Sut.IfSuccess(() => Result.FromValue(897)));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -393,11 +386,12 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_SuccessfulResultWithNoIntResultFunction_ThrowsException()
+    public void IfSuccess_SuccessfulResultWithNoGenericResultFunction_ThrowsException()
     {
         // Arrange
-        var sut = Result.Success();
         const Func<Result<int>>? Function = null;
+
+        var sut = Result.Success();
 
         // Act
         var exception = Record.Exception(() => sut.IfSuccess(Function));
@@ -409,11 +403,12 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_ErrorResultWithNoIntResultFunction_ThrowsException()
+    public void IfSuccess_ErrorResultWithNoGenericResultFunction_ThrowsException()
     {
         // Arrange
-        var sut = GetErrorResult();
         const Func<Result<int>>? Function = null;
+
+        var sut = GetErrorResult();
 
         // Act
         var exception = Record.Exception(() => sut.IfSuccess(Function));
@@ -428,47 +423,45 @@ public class IfSuccessExtensionsUnitTests
     public void IfSuccess_SuccessfulResultWithResultIntFunction_CallsFunction()
     {
         // Arrange
+        var functionMock = new Mock<Func<Result<int>>>();
+
         var sut = Result.Success();
 
         // Act
-        _ = sut.IfSuccess(() => TestObj.IntResultFunc());
+        _ = sut.IfSuccess(functionMock.Object);
 
         // Assert
-        _testMock.Verify(x => x.IntResultFunc(), Times.Once);
+        functionMock.Verify(x => x.Invoke(), Times.Once);
     }
 
     [Fact]
     public void IfSuccess_SuccessfulResultWithSuccessfulResultIntFunction_ReturnsSuccessfulResultWithInt()
     {
         // Arrange
-        const int Value = 2463;
+        const int ExpectedValue = 2463;
+
         var sut = Result.Success();
-        _testMock
-            .Setup(x => x.IntResultFunc())
-            .Returns(Value);
 
         // Act
-        var result = sut.IfSuccess(() => TestObj.IntResultFunc());
+        var result = sut.IfSuccess(() => Result.FromValue(ExpectedValue));
 
         // Assert
         result.ShouldNotBeNull();
         result.ShouldBeOfType<Result<int>>();
         result.IsSuccess().ShouldBeTrue();
-        result.Value.ShouldBe(Value);
+        result.Value.ShouldBe(ExpectedValue);
     }
 
     [Fact]
     public void IfSuccess_SuccessfulResultWithErrorResultIntFunction_ReturnsErrorResultWithFunctionError()
     {
         // Arrange
-        var error = GetError1();
+        var error = GetError();
+
         var sut = Result.Success();
-        _testMock
-            .Setup(x => x.IntResultFunc())
-            .Returns(error);
 
         // Act
-        var result = sut.IfSuccess(() => TestObj.IntResultFunc());
+        var result = sut.IfSuccess(() => Result<int>.FromError(error));
 
         // Assert
         result.ShouldNotBeNull();
@@ -481,13 +474,15 @@ public class IfSuccessExtensionsUnitTests
     public void IfSuccess_ErrorResultWithResultIntFunction_DoesNotCallFunction()
     {
         // Arrange
+        var functionMock = new Mock<Func<Result<int>>>();
+
         var sut = GetErrorResult();
 
         // Act
-        _ = sut.IfSuccess(() => TestObj.IntResultFunc());
+        _ = sut.IfSuccess(functionMock.Object);
 
         // Assert
-        _testMock.Verify(x => x.IntResultFunc(), Times.Never);
+        functionMock.Verify(x => x.Invoke(), Times.Never);
     }
 
     [Fact]
@@ -497,7 +492,7 @@ public class IfSuccessExtensionsUnitTests
         var sut = GetErrorResult();
 
         // Act
-        var result = sut.IfSuccess(() => TestObj.IntResultFunc());
+        var result = sut.IfSuccess(() => Result.FromValue(321));
 
         // Assert
         result.ShouldNotBeNull();
@@ -511,13 +506,13 @@ public class IfSuccessExtensionsUnitTests
     #region IfSuccess (Result<T>, Action<T>)
 
     [Fact]
-    public void IfSuccess_NoIntResultWithIntAction_ThrowsException()
+    public void IfSuccess_NoGenericResultWithIntAction_ThrowsException()
     {
         // Arrange
         const Result<int>? Sut = null;
 
         // Act
-        var exception = Record.Exception(() => Sut.IfSuccess(x => TestObj.IntAction(x)));
+        var exception = Record.Exception(() => Sut.IfSuccess(x => { }));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -526,12 +521,13 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_SuccessfulIntResultWithNoIntAction_ThrowsException()
+    public void IfSuccess_SuccessfulGenericResultWithNoIntAction_ThrowsException()
     {
         // Arrange
         const int Value = 35;
-        Result<int> sut = Value;
         const Action<int>? Action = null;
+        
+        Result<int> sut = Value;
 
         // Act
         var exception = Record.Exception(() => sut.IfSuccess(Action));
@@ -543,11 +539,12 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_ErrorIntResultWithNoIntAction_ThrowsException()
+    public void IfSuccess_ErrorGenericResultWithNoIntAction_ThrowsException()
     {
         // Arrange
+        const Action<int>? Action = null;
+
         var sut = GetErrorResult<int>();
-        const Action<int>? Action = null;
 
         // Act
         var exception = Record.Exception(() => sut.IfSuccess(Action));
@@ -559,28 +556,31 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_SuccessfulIntResultWithIntAction_CallsAction()
+    public void IfSuccess_SuccessfulGenericResultWithIntAction_CallsAction()
     {
         // Arrange
         const int Value = 35;
+        var actionMock = new Mock<Action<int>>();
+
         Result<int> sut = Value;
 
         // Act
-        _ = sut.IfSuccess(x => TestObj.IntAction(x));
+        _ = sut.IfSuccess(actionMock.Object);
 
         // Assert
-        _testMock.Verify(x => x.IntAction(Value), Times.Once);
+        actionMock.Verify(x => x.Invoke(Value), Times.Once);
     }
 
     [Fact]
-    public void IfSuccess_SuccessfulIntResultWithIntAction_ReturnsResultWithOriginalIntValue()
+    public void IfSuccess_SuccessfulGenericResultWithIntAction_ReturnsResultWithOriginalIntValue()
     {
         // Arrange
         const int Value = 35;
+
         Result<int> sut = Value;
 
         // Act
-        var result = sut.IfSuccess(x => TestObj.IntAction(x));
+        var result = sut.IfSuccess(_ => { });
 
         // Assert
         result.ShouldNotBeNull();
@@ -590,26 +590,28 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_ErrorIntResultWithIntAction_DoesNotCallAction()
+    public void IfSuccess_ErrorGenericResultWithIntAction_DoesNotCallAction()
     {
         // Arrange
+        var actionMock = new Mock<Action<int>>();
+
         var sut = GetErrorResult<int>();
 
         // Act
-        _ = sut.IfSuccess(x => TestObj.IntAction(x));
+        _ = sut.IfSuccess(actionMock.Object);
 
         // Assert
-        _testMock.Verify(x => x.IntAction(It.IsAny<int>()), Times.Never);
+        actionMock.Verify(x => x.Invoke(It.IsAny<int>()), Times.Never);
     }
 
     [Fact]
-    public void IfSuccess_ErrorIntResultWithIntAction_ReturnsOriginalErrorResult()
+    public void IfSuccess_ErrorGenericResultWithIntAction_ReturnsOriginalErrorResult()
     {
         // Arrange
         var sut = GetErrorResult<int>();
 
         // Act
-        var result = sut.IfSuccess(x => TestObj.IntAction(x));
+        var result = sut.IfSuccess(_ => { });
 
         // Assert
         result.ShouldNotBeNull();
@@ -623,13 +625,13 @@ public class IfSuccessExtensionsUnitTests
     #region IfSuccess (Result<T>, Func<T, Result>)
 
     [Fact]
-    public void IfSuccess_NoStringResultWithResultFunction_ThrowsException()
+    public void IfSuccess_NoGenericResultWithResultFunction_ThrowsException()
     {
         // Arrange
         const Result<string>? Sut = null;
 
         // Act
-        var exception = Record.Exception(() => Sut.IfSuccess((x => TestObj.ResultFunc(x))));
+        var exception = Record.Exception(() => Sut.IfSuccess((x => Result.Success())));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -638,11 +640,12 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_SuccessfulStringResultWithNoResultFunction_ThrowsException()
+    public void IfSuccess_SuccessfulGenericResultWithNoResultFunction_ThrowsException()
     {
         // Arrange
         const string Value = "Start";
         Result<string> sut = Value;
+
         const Func<string, Result>? Function = null;
 
         // Act
@@ -655,11 +658,12 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_ErrorStringResultWithNoResultFunction_ThrowsException()
+    public void IfSuccess_ErrorGenericResultWithNoResultFunction_ThrowsException()
     {
         // Arrange
+        const Func<string, Result>? Function = null;
+
         var sut = GetErrorResult<string>();
-        const Func<string, Result>? Function = null;
 
         // Act
         var exception = Record.Exception(() => sut.IfSuccess(Function));
@@ -671,33 +675,31 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_SuccessfulStringResultWithResultFunction_CallsFunction()
+    public void IfSuccess_SuccessfulGenericResultWithResultFunction_CallsFunction()
     {
         // Arrange
         const string Value = "Start";
+        var functionMock = new Mock<Func<string, Result>>();
+
         Result<string> sut = Value;
 
         // Act
-        _ = sut.IfSuccess(x => TestObj.ResultFunc(x));
+        _ = sut.IfSuccess(functionMock.Object);
 
         // Assert
-        _testMock.Verify(x => x.ResultFunc(Value), Times.Once);
+        functionMock.Verify(x => x.Invoke(Value), Times.Once);
     }
 
     [Fact]
-    public void IfSuccess_SuccessfulStringResultWithSuccessfulResultFunction_ReturnsResultWithNewResultValue()
+    public void IfSuccess_SuccessfulGenericResultWithSuccessfulResultFunction_ReturnsResultWithNewResultValue()
     {
         // Arrange
         const string Value = "Start";
 
-        _testMock
-            .Setup(x => x.ResultFunc(Value))
-            .Returns(Result.Success());
-
         Result<string> sut = Value;
 
         // Act
-        var result = sut.IfSuccess(x => TestObj.ResultFunc(x));
+        var result = sut.IfSuccess(_ => Result.Success());
 
         // Assert
         result.ShouldNotBeNull();
@@ -706,20 +708,16 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_SuccessfulStringResultWithErrorResultFunction_ReturnsErrorResultWithFunctionError()
+    public void IfSuccess_SuccessfulGenericResultWithErrorResultFunction_ReturnsErrorResultWithFunctionError()
     {
         // Arrange
         var errorResult = GetErrorResult();
         const string Value = "Start";
 
-        _testMock
-            .Setup(x => x.ResultFunc(Value))
-            .Returns(errorResult);
-
         Result<string> sut = Value;
 
         // Act
-        var result = sut.IfSuccess(x => TestObj.ResultFunc(x));
+        var result = sut.IfSuccess(_ => errorResult);
 
         // Assert
         result.ShouldNotBeNull();
@@ -729,26 +727,28 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_ErrorStringResultWithResultFunction_DoesNotCallFunction()
+    public void IfSuccess_ErrorGenericResultWithResultFunction_DoesNotCallFunction()
     {
         // Arrange
+        var functionMock = new Mock<Func<string, Result>>();
+
         var sut = GetErrorResult<string>();
 
         // Act
-        _ = sut.IfSuccess(x => TestObj.ResultFunc(x));
+        _ = sut.IfSuccess(functionMock.Object);
 
         // Assert
-        _testMock.Verify(x => x.ResultFunc(It.IsAny<string>()), Times.Never);
+        functionMock.Verify(x => x.Invoke(It.IsAny<string>()), Times.Never);
     }
 
     [Fact]
-    public void IfSuccess_ErrorStringResultWithResultFunction_ReturnsOriginalErrorResult()
+    public void IfSuccess_ErrorGenericResultWithResultFunction_ReturnsOriginalErrorResult()
     {
         // Arrange
         var sut = GetErrorResult<string>();
 
         // Act
-        var result = sut.IfSuccess(x => TestObj.ResultFunc(x));
+        var result = sut.IfSuccess(_ => Result.Success());
 
         // Assert
         result.ShouldNotBeNull();
@@ -762,13 +762,13 @@ public class IfSuccessExtensionsUnitTests
     #region IfSuccess (Result<T>, Func<T, TNext>)
 
     [Fact]
-    public void IfSuccess_NoDoubleResultWithIntFunction_ThrowsException()
+    public void IfSuccess_NoGenericResultWithIntFunction_ThrowsException()
     {
         // Arrange
         const Result<double>? Sut = null;
 
         // Act
-        var exception = Record.Exception(() => Sut.IfSuccess((x => TestObj.IntFunc(x))));
+        var exception = Record.Exception(() => Sut.IfSuccess(x => 428));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -777,12 +777,13 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_SuccessfulDoubleResultWithNoIntFunction_ThrowsException()
+    public void IfSuccess_SuccessfulGenericResultWithNoIntFunction_ThrowsException()
     {
         // Arrange
         const double Value = 12.34;
-        Result<double> sut = Value;
         const Func<double, int>? Function = null;
+
+        Result<double> sut = Value;
 
         // Act
         var exception = Record.Exception(() => sut.IfSuccess(Function));
@@ -794,11 +795,12 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_ErrorDoubleResultWithNoIntFunction_ThrowsException()
+    public void IfSuccess_ErrorGenericResultWithNoIntFunction_ThrowsException()
     {
         // Arrange
+        const Func<double, int>? Function = null;
+
         var sut = GetErrorResult<double>();
-        const Func<double, int>? Function = null;
 
         // Act
         var exception = Record.Exception(() => sut.IfSuccess(Function));
@@ -810,33 +812,32 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_SuccessfulDoubleResultWithIntFunction_CallsFunction()
+    public void IfSuccess_SuccessfulGenericResultWithIntFunction_CallsFunction()
     {
         // Arrange
         const double Value = 12.34;
+        var functionMock = new Mock<Func<double, int>>();
+
         Result<double> sut = Value;
 
         // Act
-        _ = sut.IfSuccess(x => TestObj.IntFunc(x));
+        _ = sut.IfSuccess(functionMock.Object);
 
         // Assert
-        _testMock.Verify(x => x.IntFunc(Value), Times.Once);
+        functionMock.Verify(x => x.Invoke(Value), Times.Once);
     }
 
     [Fact]
-    public void IfSuccess_SuccessfulDoubleResultWithIntFunction_ReturnsResultWithIntValue()
+    public void IfSuccess_SuccessfulGenericResultWithIntFunction_ReturnsResultWithIntValue()
     {
         // Arrange
         const int ExpectedValue = 4937;
         const double Value = 12.34;
 
         Result<double> sut = Value;
-        _testMock
-            .Setup(x => x.IntFunc(Value))
-            .Returns(ExpectedValue);
 
         // Act
-        var result = sut.IfSuccess(x => TestObj.IntFunc(x));
+        var result = sut.IfSuccess(_ => ExpectedValue);
 
         // Assert
         result.ShouldNotBeNull();
@@ -846,26 +847,28 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_ErrorDoubleResultWithIntFunction_DoesNotCallFunction()
+    public void IfSuccess_ErrorGenericResultWithIntFunction_DoesNotCallFunction()
     {
         // Arrange
+        var functionMock = new Mock<Func<double, int>>();
+
         var sut = GetErrorResult<double>();
 
         // Act
-        _ = sut.IfSuccess(x => TestObj.IntFunc(x));
+        _ = sut.IfSuccess(functionMock.Object);
 
         // Assert
-        _testMock.Verify(x => x.IntFunc(It.IsAny<double>()), Times.Never);
+        functionMock.Verify(x => x.Invoke(It.IsAny<double>()), Times.Never);
     }
 
     [Fact]
-    public void IfSuccess_ErrorDoubleResultWithIntFunction_ReturnsOriginalErrorResult()
+    public void IfSuccess_ErrorGenericResultWithIntFunction_ReturnsOriginalErrorResult()
     {
         // Arrange
         var sut = GetErrorResult<double>();
 
         // Act
-        var result = sut.IfSuccess(x => TestObj.IntFunc(x));
+        var result = sut.IfSuccess(_ => 4873);
 
         // Assert
         result.ShouldNotBeNull();
@@ -879,13 +882,13 @@ public class IfSuccessExtensionsUnitTests
     #region IfSuccess (Result<T>, Func<T, Result<TNext>>)
 
     [Fact]
-    public void IfSuccess_NoIntResultWithStringResultFunction_ThrowsException()
+    public void IfSuccess_NoGenericResultWithGenericResultFunction_ThrowsException()
     {
         // Arrange
         const Result<int>? Sut = null;
 
         // Act
-        var exception = Record.Exception(() => Sut.IfSuccess(x => TestObj.StringResultFunc(x)));
+        var exception = Record.Exception(() => Sut.IfSuccess(x => Result.FromValue("new text value")));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -894,12 +897,13 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_SuccessfulIntResultWithNoStringResultFunction_ThrowsException()
+    public void IfSuccess_SuccessfulGenericResultWithNoGenericResultFunction_ThrowsException()
     {
         // Arrange
         const int Value = 39;
-        Result<int> sut = Value;
         const Func<int, Result<string>>? Function = null;
+
+        Result<int> sut = Value;
 
         // Act
         var exception = Record.Exception(() => sut.IfSuccess(Function));
@@ -911,11 +915,12 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_ErrorIntResultWithNoStringResultFunction_ThrowsException()
+    public void IfSuccess_ErrorGenericResultWithNoGenericResultFunction_ThrowsException()
     {
         // Arrange
+        const Func<int, Result<string>>? Function = null;
+        
         var sut = GetErrorResult<int>();
-        const Func<int, Result<string>>? Function = null;
 
         // Act
         var exception = Record.Exception(() => sut.IfSuccess(Function));
@@ -927,34 +932,32 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_SuccessfulIntResultWithStringResultFunction_CallsFunction()
+    public void IfSuccess_SuccessfulGenericResultWithGenericResultFunction_CallsFunction()
     {
         // Arrange
         const int Value = 39;
+        var functionMock = new Mock<Func<int,  Result<string>>>();
+
         Result<int> sut = Value;
 
         // Act
-        _ = sut.IfSuccess(x => TestObj.StringResultFunc(x));
+        _ = sut.IfSuccess(functionMock.Object);
 
         // Assert
-        _testMock.Verify(x => x.StringResultFunc(Value), Times.Once);
+        functionMock.Verify(x => x.Invoke(Value), Times.Once);
     }
 
     [Fact]
-    public void IfSuccess_SuccessfulIntResultWithSuccessfulStringResultFunction_ReturnsStringResult()
+    public void IfSuccess_SuccessfulGenericResultWithSuccessfulGenericResultFunction_ReturnsGenericResult()
     {
         // Arrange
         const string ExpectedValue = "New Value";
         const int Value = 49;
 
-        _testMock
-            .Setup(x => x.StringResultFunc(Value))
-            .Returns(Result<string>.FromValue(ExpectedValue));
-
         Result<int> sut = Value;
 
         // Act
-        var result = sut.IfSuccess(x => TestObj.StringResultFunc(x));
+        var result = sut.IfSuccess(_ => Result.FromValue(ExpectedValue));
 
         // Assert
         result.ShouldNotBeNull();
@@ -964,20 +967,16 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_SuccessfulIntResultWithErrorStringResultFunction_ReturnsErrorResultWithFunctionError()
+    public void IfSuccess_SuccessfulGenericResultWithErrorGenericResultFunction_ReturnsErrorResultWithFunctionError()
     {
         // Arrange
         const int Value = 49;
         var errorResult = GetErrorResult<string>();
 
-        _testMock
-            .Setup(x => x.StringResultFunc(Value))
-            .Returns(errorResult);
-
         Result<int> sut = Value;
 
         // Act
-        var result = sut.IfSuccess(x => TestObj.StringResultFunc(x));
+        var result = sut.IfSuccess(_ => errorResult);
 
         // Assert
         result.ShouldNotBeNull();
@@ -987,26 +986,28 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_ErrorIntResultWithStringResultFunction_DoesNotCallFunction()
+    public void IfSuccess_ErrorGenericResultWithGenericResultFunction_DoesNotCallFunction()
     {
         // Arrange
+        var functionMock = new Mock<Func<int, Result<string>>>();
+
         var sut = GetErrorResult<int>();
 
         // Act
-        _ = sut.IfSuccess(x => TestObj.StringResultFunc(x));
+        _ = sut.IfSuccess(functionMock.Object);
 
         // Assert
-        _testMock.Verify(x => x.StringResultFunc(It.IsAny<int>()), Times.Never);
+        functionMock.Verify(x => x.Invoke(It.IsAny<int>()), Times.Never);
     }
 
     [Fact]
-    public void IfSuccess_ErrorIntResultWithStringResultFunction_ReturnsOriginalErrorResult()
+    public void IfSuccess_ErrorGenericResultWithGenericResultFunction_ReturnsOriginalErrorResult()
     {
         // Arrange
         var sut = GetErrorResult<int>();
 
         // Act
-        var result = sut.IfSuccess(x => TestObj.StringResultFunc(x));
+        var result = sut.IfSuccess(_ => Result.FromValue("new text value"));
 
         // Assert
         result.ShouldNotBeNull();
@@ -1019,14 +1020,9 @@ public class IfSuccessExtensionsUnitTests
 
     #region helper methods
 
-    private static Error GetError1()
+    private static Error GetError()
     {
         return Error.Failure(ErrorUri.None(), "e06d75de-115c-46ec-a5f6-f6373007ec61", "Error title 1");
-    }
-
-    private static Error GetError2()
-    {
-        return Error.Failure(ErrorUri.None(), "8f5969ac-f23b-46e1-84f4-530b209c07df", "Error title 2");
     }
 
     private static Result GetErrorResult()

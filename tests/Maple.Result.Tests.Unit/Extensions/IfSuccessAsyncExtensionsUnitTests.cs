@@ -1,5 +1,4 @@
 ﻿using Maple.Result.Extensions;
-using Maple.Result.Tests.Unit.Helpers;
 using Moq;
 using System;
 using System.Threading.Tasks;
@@ -8,23 +7,6 @@ namespace Maple.Result.Tests.Unit.Extensions;
 
 public class IfSuccessAsyncExtensionsUnitTests
 {
-    #region read-only fields
-
-    private readonly Mock<ITest> _testMock;
-
-    #endregion
-
-    private ITest TestObj => _testMock.Object;
-
-    #region set up
-
-    public IfSuccessAsyncExtensionsUnitTests()
-    {
-        _testMock = new Mock<ITest>();
-    }
-
-    #endregion
-
     #region IfSuccessAsync (Result, Func<Task>)
 
     [Fact]
@@ -34,7 +16,7 @@ public class IfSuccessAsyncExtensionsUnitTests
         const Result? Sut = null;
 
         // Act
-        var exception = await Record.ExceptionAsync(() => Sut.IfSuccessAsync(() => TestObj.ActionAsync()));
+        var exception = await Record.ExceptionAsync(() => Sut.IfSuccessAsync(() => new Task(() => { })));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -46,8 +28,9 @@ public class IfSuccessAsyncExtensionsUnitTests
     public async Task IfSuccessAsync_SuccessfulResultWithNoAction_ThrowsException()
     {
         // Arrange
-        var sut = Result.Success();
         const Func<Task>? ActionAsync = null;
+
+        var sut = Result.Success();
 
         // Act
         var exception = await Record.ExceptionAsync(() => sut.IfSuccessAsync(ActionAsync));
@@ -62,8 +45,9 @@ public class IfSuccessAsyncExtensionsUnitTests
     public async Task IfSuccessAsync_ErrorResultWithNoAction_ThrowsException()
     {
         // Arrange
-        var sut = GetErrorResult();
         const Func<Task>? ActionAsync = null;
+
+        var sut = GetErrorResult();
 
         // Act
         var exception = await Record.ExceptionAsync(() => sut.IfSuccessAsync(ActionAsync));
@@ -78,13 +62,15 @@ public class IfSuccessAsyncExtensionsUnitTests
     public async Task IfSuccessAsync_SuccessfulResultWithAction_CallsAction()
     {
         // Arrange
+        var actionMock = new Mock<Func<Task>>();
+
         var sut = Result.Success();
 
         // Act
-        _ = await sut.IfSuccessAsync(() => TestObj.ActionAsync());
+        _ = await sut.IfSuccessAsync(actionMock.Object);
 
         // Assert
-        _testMock.Verify(x => x.ActionAsync(), Times.Once);
+        actionMock.Verify(x => x.Invoke(), Times.Once);
     }
 
     [Fact]
@@ -94,7 +80,7 @@ public class IfSuccessAsyncExtensionsUnitTests
         var sut = Result.Success();
 
         // Act
-        var result = await sut.IfSuccessAsync(() => TestObj.ActionAsync());
+        var result = await sut.IfSuccessAsync(() => Task.CompletedTask);
 
         // Assert
         result.ShouldNotBeNull();
@@ -106,13 +92,15 @@ public class IfSuccessAsyncExtensionsUnitTests
     public async Task IfSuccessAsync_ErrorResultWithAction_DoesNotCallAction()
     {
         // Arrange
+        var actionMock = new Mock<Func<Task>>();
+
         var sut = GetErrorResult();
 
         // Act
-        _ = await sut.IfSuccessAsync(() => TestObj.ActionAsync());
+        _ = await sut.IfSuccessAsync(actionMock.Object);
 
         // Assert
-        _testMock.Verify(x => x.ActionAsync(), Times.Never);
+        actionMock.Verify(x => x.Invoke(), Times.Never);
     }
 
     [Fact]
@@ -122,7 +110,7 @@ public class IfSuccessAsyncExtensionsUnitTests
         var sut = GetErrorResult();
 
         // Act
-        var result = await sut.IfSuccessAsync(() => TestObj.ActionAsync());
+        var result = await sut.IfSuccessAsync(() => Task.CompletedTask);
 
         // Assert
         result.ShouldNotBeNull();
@@ -142,7 +130,7 @@ public class IfSuccessAsyncExtensionsUnitTests
         const Result? Sut = null;
 
         // Act
-        var exception = await Record.ExceptionAsync(() => Sut.IfSuccessAsync(() => TestObj.ResultFuncAsync()));
+        var exception = await Record.ExceptionAsync(() => Sut.IfSuccessAsync(() => Task.FromResult(Result.Success())));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -154,8 +142,9 @@ public class IfSuccessAsyncExtensionsUnitTests
     public async Task IfSuccessAsync_SuccessfulResultWithNoResultFunction_ThrowsException()
     {
         // Arrange
-        var sut = Result.Success();
         const Func<Task<Result>>? Function = null;
+
+        var sut = Result.Success();
 
         // Act
         var exception = await Record.ExceptionAsync(() => sut.IfSuccessAsync(Function));
@@ -170,8 +159,9 @@ public class IfSuccessAsyncExtensionsUnitTests
     public async Task IfSuccessAsync_ErrorResultWithNoResultFunction_ThrowsException()
     {
         // Arrange
-        var sut = GetErrorResult();
         const Func<Task<Result>>? Function = null;
+
+        var sut = GetErrorResult();
 
         // Act
         var exception = await Record.ExceptionAsync(() => sut.IfSuccessAsync(Function));
@@ -186,13 +176,15 @@ public class IfSuccessAsyncExtensionsUnitTests
     public async Task IfSuccessAsync_SuccessfulResultWithResultFunction_CallsFunction()
     {
         // Arrange
+        var functionMock = new Mock<Func<Task<Result>>>();
+
         var sut = Result.Success();
 
         // Act
-        _ = await sut.IfSuccessAsync(() => TestObj.ResultFuncAsync());
+        _ = await sut.IfSuccessAsync(functionMock.Object);
 
         // Assert
-        _testMock.Verify(x => x.ResultFuncAsync(), Times.Once);
+        functionMock.Verify(x => x.Invoke(), Times.Once);
     }
 
     [Fact]
@@ -200,12 +192,9 @@ public class IfSuccessAsyncExtensionsUnitTests
     {
         // Arrange
         var sut = Result.Success();
-        _testMock
-            .Setup(x => x.ResultFuncAsync())
-            .ReturnsAsync(Result.Success());
 
         // Act
-        var result = await sut.IfSuccessAsync(() => TestObj.ResultFuncAsync());
+        var result = await sut.IfSuccessAsync(() => Task.FromResult(Result.Success()));
 
         // Assert
         result.ShouldNotBeNull();
@@ -217,14 +206,12 @@ public class IfSuccessAsyncExtensionsUnitTests
     public async Task IfSuccessAsync_SuccessfulResultWithErrorResultFunction_ReturnsErrorResultWithFunctionError()
     {
         // Arrange
-        var sut = Result.Success();
         var errorResult = GetErrorResult();
-        _testMock
-            .Setup(x => x.ResultFuncAsync())
-            .ReturnsAsync(errorResult);
+
+        var sut = Result.Success();
 
         // Act
-        var result = await sut.IfSuccessAsync(() => TestObj.ResultFuncAsync());
+        var result = await sut.IfSuccessAsync(() => Task.FromResult(errorResult));
 
         // Assert
         result.ShouldNotBeNull();
@@ -236,13 +223,15 @@ public class IfSuccessAsyncExtensionsUnitTests
     public async Task IfSuccessAsync_ErrorResultWithResultFunction_DoesNotCallFunction()
     {
         // Arrange
+        var functionMock = new Mock<Func<Task<Result>>>();
+
         var sut = GetErrorResult();
 
         // Act
-        _ = await sut.IfSuccessAsync(() => TestObj.ResultFuncAsync());
+        _ = await sut.IfSuccessAsync(functionMock.Object);
 
         // Assert
-        _testMock.Verify(x => x.ResultFuncAsync(), Times.Never);
+        functionMock.Verify(x => x.Invoke(), Times.Never);
     }
 
     [Fact]
@@ -252,7 +241,7 @@ public class IfSuccessAsyncExtensionsUnitTests
         var sut = GetErrorResult();
 
         // Act
-        var result = await sut.IfSuccessAsync(() => TestObj.ResultFuncAsync());
+        var result = await sut.IfSuccessAsync(() => Task.FromResult(Result.Success()));
 
         // Assert
         result.ShouldNotBeNull();
@@ -272,7 +261,7 @@ public class IfSuccessAsyncExtensionsUnitTests
         const Result? Sut = null;
 
         // Act
-        var exception = await Record.ExceptionAsync(() => Sut.IfSuccessAsync(() => TestObj.IntFuncAsync()));
+        var exception = await Record.ExceptionAsync(() => Sut.IfSuccessAsync(() => Task.FromResult(456)));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -284,8 +273,9 @@ public class IfSuccessAsyncExtensionsUnitTests
     public async Task IfSuccessAsync_SuccessfulResultWithNoIntFunction_ThrowsException()
     {
         // Arrange
-        var sut = Result.Success();
         const Func<Task<int>>? Function = null;
+
+        var sut = Result.Success();
 
         // Act
         var exception = await Record.ExceptionAsync(() => sut.IfSuccessAsync(Function));
@@ -300,8 +290,9 @@ public class IfSuccessAsyncExtensionsUnitTests
     public async Task IfSuccessAsync_ErrorResultWithNoIntFunction_ThrowsException()
     {
         // Arrange
-        var sut = GetErrorResult();
         const Func<Task<int>>? Function = null;
+
+        var sut = GetErrorResult();
 
         // Act
         var exception = await Record.ExceptionAsync(() => sut.IfSuccessAsync(Function));
@@ -316,13 +307,15 @@ public class IfSuccessAsyncExtensionsUnitTests
     public async Task IfSuccessAsync_SuccessfulResultWithIntFunction_CallsFunction()
     {
         // Arrange
+        var functionMock = new Mock<Func<Task<int>>>();
+
         var sut = Result.Success();
 
         // Act
-        _ = await sut.IfSuccessAsync(() => TestObj.IntFuncAsync());
+        _ = await sut.IfSuccessAsync(functionMock.Object);
 
         // Assert
-        _testMock.Verify(x => x.IntFuncAsync(), Times.Once);
+        functionMock.Verify(x => x.Invoke(), Times.Once);
     }
 
     [Fact]
@@ -330,13 +323,11 @@ public class IfSuccessAsyncExtensionsUnitTests
     {
         // Arrange
         const int Value = 2463;
+
         var sut = Result.Success();
-        _testMock
-            .Setup(x => x.IntFuncAsync())
-            .ReturnsAsync(Value);
 
         // Act
-        var result = await sut.IfSuccessAsync(() => TestObj.IntFuncAsync());
+        var result = await sut.IfSuccessAsync(() => Task.FromResult(Value));
 
         // Assert
         result.ShouldNotBeNull();
@@ -349,13 +340,15 @@ public class IfSuccessAsyncExtensionsUnitTests
     public async Task IfSuccessAsync_ErrorResultWithIntFunction_DoesNotCallFunction()
     {
         // Arrange
+        var functionMock = new Mock<Func<Task<int>>>();
+
         var sut = GetErrorResult();
 
         // Act
-        _ = await sut.IfSuccessAsync(() => TestObj.IntFuncAsync());
+        _ = await sut.IfSuccessAsync(functionMock.Object);
 
         // Assert
-        _testMock.Verify(x => x.IntFuncAsync(), Times.Never);
+        functionMock.Verify(x => x.Invoke(), Times.Never);
     }
 
     [Fact]
@@ -365,7 +358,7 @@ public class IfSuccessAsyncExtensionsUnitTests
         var sut = GetErrorResult();
 
         // Act
-        var result = await sut.IfSuccessAsync(() => TestObj.IntFuncAsync());
+        var result = await sut.IfSuccessAsync(() => Task.FromResult(234));
 
         // Assert
         result.ShouldNotBeNull();
@@ -379,13 +372,13 @@ public class IfSuccessAsyncExtensionsUnitTests
     #region IfSuccessAsync (Result, Func<Task<Result<T>>>)
 
     [Fact]
-    public async Task IfSuccessAsync_NoResultWithIntResultFunction_ThrowsException()
+    public async Task IfSuccessAsync_NoResultWithGenericResultFunction_ThrowsException()
     {
         // Arrange
         const Result? Sut = null;
 
         // Act
-        var exception = await Record.ExceptionAsync(() => Sut.IfSuccessAsync(() => TestObj.IntResultFuncAsync()));
+        var exception = await Record.ExceptionAsync(() => Sut.IfSuccessAsync(() => Task.FromResult(Result.FromValue(123))));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -394,11 +387,12 @@ public class IfSuccessAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfSuccessAsync_SuccessfulResultWithNoIntResultFunction_ThrowsException()
+    public async Task IfSuccessAsync_SuccessfulResultWithNoGenericResultFunction_ThrowsException()
     {
         // Arrange
-        var sut = Result.Success();
         const Func<Task<Result<int>>>? Function = null;
+
+        var sut = Result.Success();
 
         // Act
         var exception = await Record.ExceptionAsync(() => sut.IfSuccessAsync(Function));
@@ -410,11 +404,12 @@ public class IfSuccessAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfSuccessAsync_ErrorResultWithNoIntResultFunction_ThrowsException()
+    public async Task IfSuccessAsync_ErrorResultWithNoGenericResultFunction_ThrowsException()
     {
         // Arrange
-        var sut = GetErrorResult();
         const Func<Task<Result<int>>>? Function = null;
+
+        var sut = GetErrorResult();
 
         // Act
         var exception = await Record.ExceptionAsync(() => sut.IfSuccessAsync(Function));
@@ -429,13 +424,15 @@ public class IfSuccessAsyncExtensionsUnitTests
     public async Task IfSuccessAsync_SuccessfulResultWithResultIntFunction_CallsFunction()
     {
         // Arrange
+        var functionMock = new Mock<Func<Task<Result<int>>>>();
+
         var sut = Result.Success();
 
         // Act
-        _ = await sut.IfSuccessAsync(() => TestObj.IntResultFuncAsync());
+        _ = await sut.IfSuccessAsync(functionMock.Object);
 
         // Assert
-        _testMock.Verify(x => x.IntResultFuncAsync(), Times.Once);
+        functionMock.Verify(x => x.Invoke(), Times.Once);
     }
 
     [Fact]
@@ -443,13 +440,11 @@ public class IfSuccessAsyncExtensionsUnitTests
     {
         // Arrange
         const int Value = 2463;
+
         var sut = Result.Success();
-        _testMock
-            .Setup(x => x.IntResultFuncAsync())
-            .ReturnsAsync(Value);
 
         // Act
-        var result = await sut.IfSuccessAsync(() => TestObj.IntResultFuncAsync());
+        var result = await sut.IfSuccessAsync(() => Task.FromResult(Result.FromValue(Value)));
 
         // Assert
         result.ShouldNotBeNull();
@@ -462,14 +457,12 @@ public class IfSuccessAsyncExtensionsUnitTests
     public async Task IfSuccessAsync_SuccessfulResultWithErrorResultIntFunction_ReturnsErrorResultWithFunctionError()
     {
         // Arrange
-        var error = GetError1();
+        var error = GetError();
+
         var sut = Result.Success();
-        _testMock
-            .Setup(x => x.IntResultFuncAsync())
-            .ReturnsAsync(error);
 
         // Act
-        var result = await sut.IfSuccessAsync(() => TestObj.IntResultFuncAsync());
+        var result = await sut.IfSuccessAsync(() => Task.FromResult(Result<int>.FromError(error)));
 
         // Assert
         result.ShouldNotBeNull();
@@ -482,13 +475,15 @@ public class IfSuccessAsyncExtensionsUnitTests
     public async Task IfSuccessAsync_ErrorResultWithResultIntFunction_DoesNotCallFunction()
     {
         // Arrange
+        var functionMock = new Mock<Func<Task<Result<int>>>>();
+
         var sut = GetErrorResult();
 
         // Act
-        _ = await sut.IfSuccessAsync(() => TestObj.IntResultFuncAsync());
+        _ = await sut.IfSuccessAsync(functionMock.Object);
 
         // Assert
-        _testMock.Verify(x => x.IntResultFuncAsync(), Times.Never);
+        functionMock.Verify(x => x.Invoke(), Times.Never);
     }
 
     [Fact]
@@ -498,7 +493,7 @@ public class IfSuccessAsyncExtensionsUnitTests
         var sut = GetErrorResult();
 
         // Act
-        var result = await sut.IfSuccessAsync(() => TestObj.IntResultFuncAsync());
+        var result = await sut.IfSuccessAsync(() => Task.FromResult(Result.FromValue(678)));
 
         // Assert
         result.ShouldNotBeNull();
@@ -512,13 +507,13 @@ public class IfSuccessAsyncExtensionsUnitTests
     #region IfSuccessAsync (Result<T>, Func<T, Task>)
 
     [Fact]
-    public async Task IfSuccessAsync_NoIntResultWithIntAction_ThrowsException()
+    public async Task IfSuccessAsync_NoGenericResultWithIntAction_ThrowsException()
     {
         // Arrange
         const Result<int>? Sut = null;
 
         // Act
-        var exception = await Record.ExceptionAsync(() => Sut.IfSuccessAsync(x => TestObj.IntActionAsync(x)));
+        var exception = await Record.ExceptionAsync(() => Sut.IfSuccessAsync(_ => Task.CompletedTask));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -527,12 +522,13 @@ public class IfSuccessAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfSuccessAsync_SuccessfulIntResultWithNoIntAction_ThrowsException()
+    public async Task IfSuccessAsync_SuccessfulGenericResultWithNoIntAction_ThrowsException()
     {
         // Arrange
         const int Value = 35;
-        Result<int> sut = Value;
         const Func<int, Task>? ActionAsync = null;
+        
+        Result<int> sut = Value;
 
         // Act
         var exception = await Record.ExceptionAsync(() => sut.IfSuccessAsync(ActionAsync));
@@ -544,11 +540,12 @@ public class IfSuccessAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfSuccessAsync_ErrorIntResultWithNoIntAction_ThrowsException()
+    public async Task IfSuccessAsync_ErrorGenericResultWithNoIntAction_ThrowsException()
     {
         // Arrange
+        const Func<int, Task>? ActionAsync = null;
+
         var sut = GetErrorResult<int>();
-        const Func<int, Task>? ActionAsync = null;
 
         // Act
         var exception = await Record.ExceptionAsync(() => sut.IfSuccessAsync(ActionAsync));
@@ -560,28 +557,31 @@ public class IfSuccessAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfSuccessAsync_SuccessfulIntResultWithIntAction_CallsAction()
+    public async Task IfSuccessAsync_SuccessfulGenericResultWithIntAction_CallsAction()
     {
         // Arrange
         const int Value = 35;
+        var functionMock = new Mock<Func<int, Task>>();
+
         Result<int> sut = Value;
 
         // Act
-        _ = await sut.IfSuccessAsync(x => TestObj.IntActionAsync(x));
+        _ = await sut.IfSuccessAsync(functionMock.Object);
 
         // Assert
-        _testMock.Verify(x => x.IntActionAsync(Value), Times.Once);
+        functionMock.Verify(x => x.Invoke(Value), Times.Once);
     }
 
     [Fact]
-    public async Task IfSuccessAsync_SuccessfulIntResultWithIntAction_ReturnsResultWithOriginalIntValue()
+    public async Task IfSuccessAsync_SuccessfulGenericResultWithIntAction_ReturnsResultWithOriginalIntValue()
     {
         // Arrange
         const int Value = 35;
+
         Result<int> sut = Value;
 
         // Act
-        var result = await sut.IfSuccessAsync(x => TestObj.IntActionAsync(x));
+        var result = await sut.IfSuccessAsync(_ => Task.CompletedTask);
 
         // Assert
         result.ShouldNotBeNull();
@@ -591,26 +591,28 @@ public class IfSuccessAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfSuccessAsync_ErrorIntResultWithIntAction_DoesNotCallAction()
+    public async Task IfSuccessAsync_ErrorGenericResultWithIntAction_DoesNotCallAction()
     {
         // Arrange
+        var functionMock = new Mock<Func<int, Task>>();
+
         var sut = GetErrorResult<int>();
 
         // Act
-        _ = await sut.IfSuccessAsync(x => TestObj.IntActionAsync(x));
+        _ = await sut.IfSuccessAsync(functionMock.Object);
 
         // Assert
-        _testMock.Verify(x => x.IntActionAsync(It.IsAny<int>()), Times.Never);
+        functionMock.Verify(x => x.Invoke(It.IsAny<int>()), Times.Never);
     }
 
     [Fact]
-    public async Task IfSuccessAsync_ErrorIntResultWithIntAction_ReturnsOriginalErrorResult()
+    public async Task IfSuccessAsync_ErrorGenericResultWithIntAction_ReturnsOriginalErrorResult()
     {
         // Arrange
         var sut = GetErrorResult<int>();
 
         // Act
-        var result = await sut.IfSuccessAsync(x => TestObj.IntActionAsync(x));
+        var result = await sut.IfSuccessAsync(_ => Task.CompletedTask);
 
         // Assert
         result.ShouldNotBeNull();
@@ -624,13 +626,13 @@ public class IfSuccessAsyncExtensionsUnitTests
     #region IfSuccessAsync (Result<T>, Func<T, Task<Result>>)
 
     [Fact]
-    public async Task IfSuccessAsync_NoStringResultWithResultFunction_ThrowsException()
+    public async Task IfSuccessAsync_NoGenericResultWithResultFunction_ThrowsException()
     {
         // Arrange
         const Result<string>? Sut = null;
 
         // Act
-        var exception = await Record.ExceptionAsync(() => Sut.IfSuccessAsync((x => TestObj.ResultFuncAsync(x))));
+        var exception = await Record.ExceptionAsync(() => Sut.IfSuccessAsync(_ => Task.FromResult(Result.Success())));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -639,12 +641,13 @@ public class IfSuccessAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfSuccessAsync_SuccessfulStringResultWithNoResultFunction_ThrowsException()
+    public async Task IfSuccessAsync_SuccessfulGenericResultWithNoResultFunction_ThrowsException()
     {
         // Arrange
         const string Value = "Start";
-        Result<string> sut = Value;
         const Func<string, Task<Result>>? Function = null;
+
+        Result<string> sut = Value;
 
         // Act
         var exception = await Record.ExceptionAsync(() => sut.IfSuccessAsync(Function));
@@ -656,11 +659,12 @@ public class IfSuccessAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfSuccessAsync_ErrorStringResultWithNoResultFunction_ThrowsException()
+    public async Task IfSuccessAsync_ErrorGenericResultWithNoResultFunction_ThrowsException()
     {
         // Arrange
+        const Func<string, Task<Result>>? Function = null;
+
         var sut = GetErrorResult<string>();
-        const Func<string, Task<Result>>? Function = null;
 
         // Act
         var exception = await Record.ExceptionAsync(() => sut.IfSuccessAsync(Function));
@@ -672,33 +676,31 @@ public class IfSuccessAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfSuccessAsync_SuccessfulStringResultWithResultFunction_CallsFunction()
+    public async Task IfSuccessAsync_SuccessfulGenericResultWithResultFunction_CallsFunction()
     {
         // Arrange
         const string Value = "Start";
+        var functionMock = new Mock<Func<string, Task<Result>>>();
+
         Result<string> sut = Value;
 
         // Act
-        _ = await sut.IfSuccessAsync(x => TestObj.ResultFuncAsync(x));
+        _ = await sut.IfSuccessAsync(functionMock.Object);
 
         // Assert
-        _testMock.Verify(x => x.ResultFuncAsync(Value), Times.Once);
+        functionMock.Verify(x => x.Invoke(Value), Times.Once);
     }
 
     [Fact]
-    public async Task IfSuccessAsync_SuccessfulStringResultWithSuccessfulResultFunction_ReturnsResultWithNewResultValue()
+    public async Task IfSuccessAsync_SuccessfulGenericResultWithSuccessfulResultFunction_ReturnsResultWithNewResultValue()
     {
         // Arrange
         const string Value = "Start";
 
-        _testMock
-            .Setup(x => x.ResultFuncAsync(Value))
-            .ReturnsAsync(Result.Success());
-
         Result<string> sut = Value;
 
         // Act
-        var result = await sut.IfSuccessAsync(x => TestObj.ResultFuncAsync(x));
+        var result = await sut.IfSuccessAsync(_ => Task.FromResult(Result.Success()));
 
         // Assert
         result.ShouldNotBeNull();
@@ -707,20 +709,16 @@ public class IfSuccessAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfSuccessAsync_SuccessfulStringResultWithErrorResultFunction_ReturnsErrorResultWithFunctionError()
+    public async Task IfSuccessAsync_SuccessfulGenericResultWithErrorResultFunction_ReturnsErrorResultWithFunctionError()
     {
         // Arrange
-        var errorResult = GetErrorResult();
         const string Value = "Start";
-
-        _testMock
-            .Setup(x => x.ResultFuncAsync(Value))
-            .ReturnsAsync(errorResult);
+        var errorResult = GetErrorResult();
 
         Result<string> sut = Value;
 
         // Act
-        var result = await sut.IfSuccessAsync(x => TestObj.ResultFuncAsync(x));
+        var result = await sut.IfSuccessAsync(_ => Task.FromResult(errorResult));
 
         // Assert
         result.ShouldNotBeNull();
@@ -730,26 +728,28 @@ public class IfSuccessAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfSuccessAsync_ErrorStringResultWithResultFunction_DoesNotCallFunction()
+    public async Task IfSuccessAsync_ErrorGenericResultWithResultFunction_DoesNotCallFunction()
     {
         // Arrange
+        var functionMock = new Mock<Func<string, Task<Result>>>();
+
         var sut = GetErrorResult<string>();
 
         // Act
-        _ = await sut.IfSuccessAsync(x => TestObj.ResultFuncAsync(x));
+        _ = await sut.IfSuccessAsync(functionMock.Object);
 
         // Assert
-        _testMock.Verify(x => x.ResultFuncAsync(It.IsAny<string>()), Times.Never);
+        functionMock.Verify(x => x.Invoke(It.IsAny<string>()), Times.Never);
     }
 
     [Fact]
-    public async Task IfSuccessAsync_ErrorStringResultWithResultFunction_ReturnsOriginalErrorResult()
+    public async Task IfSuccessAsync_ErrorGenericResultWithResultFunction_ReturnsOriginalErrorResult()
     {
         // Arrange
         var sut = GetErrorResult<string>();
 
         // Act
-        var result = await sut.IfSuccessAsync(x => TestObj.ResultFuncAsync(x));
+        var result = await sut.IfSuccessAsync(x => Task.FromResult(Result.Success()));
 
         // Assert
         result.ShouldNotBeNull();
@@ -763,13 +763,13 @@ public class IfSuccessAsyncExtensionsUnitTests
     #region IfSuccessAsync (Result<T>, Func<T, Task<TNext>>)
 
     [Fact]
-    public async Task IfSuccessAsync_NoDoubleResultWithIntFunction_ThrowsException()
+    public async Task IfSuccessAsync_NoGenericResultWithIntFunction_ThrowsException()
     {
         // Arrange
         const Result<double>? Sut = null;
 
         // Act
-        var exception = await Record.ExceptionAsync(() => Sut.IfSuccessAsync((x => TestObj.IntFuncAsync(x))));
+        var exception = await Record.ExceptionAsync(() => Sut.IfSuccessAsync(_ => Task.FromResult(12.34)));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -778,12 +778,13 @@ public class IfSuccessAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfSuccessAsync_SuccessfulDoubleResultWithNoIntFunction_ThrowsException()
+    public async Task IfSuccessAsync_SuccessfulGenericResultWithNoIntFunction_ThrowsException()
     {
         // Arrange
         const double Value = 12.34;
-        Result<double> sut = Value;
         const Func<double, Task<int>>? Function = null;
+
+        Result<double> sut = Value;
 
         // Act
         var exception = await Record.ExceptionAsync(() => sut.IfSuccessAsync(Function));
@@ -795,11 +796,12 @@ public class IfSuccessAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfSuccessAsync_ErrorDoubleResultWithNoIntFunction_ThrowsException()
+    public async Task IfSuccessAsync_ErrorGenericResultWithNoIntFunction_ThrowsException()
     {
         // Arrange
+        const Func<double, Task<int>>? Function = null;
+
         var sut = GetErrorResult<double>();
-        const Func<double, Task<int>>? Function = null;
 
         // Act
         var exception = await Record.ExceptionAsync(() => sut.IfSuccessAsync(Function));
@@ -811,33 +813,32 @@ public class IfSuccessAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfSuccessAsync_SuccessfulDoubleResultWithIntFunction_CallsFunction()
+    public async Task IfSuccessAsync_SuccessfulGenericResultWithIntFunction_CallsFunction()
     {
         // Arrange
         const double Value = 12.34;
+        var functionMock = new Mock<Func<double, Task<int>>>();
+
         Result<double> sut = Value;
 
         // Act
-        _ = await sut.IfSuccessAsync(x => TestObj.IntFuncAsync(x));
+        _ = await sut.IfSuccessAsync(functionMock.Object);
 
         // Assert
-        _testMock.Verify(x => x.IntFuncAsync(Value), Times.Once);
+        functionMock.Verify(x => x.Invoke(Value), Times.Once);
     }
 
     [Fact]
-    public async Task IfSuccessAsync_SuccessfulDoubleResultWithIntFunction_ReturnsResultWithIntValue()
+    public async Task IfSuccessAsync_SuccessfulGenericResultWithIntFunction_ReturnsResultWithIntValue()
     {
         // Arrange
         const int ExpectedValue = 4937;
         const double Value = 12.34;
 
         Result<double> sut = Value;
-        _testMock
-            .Setup(x => x.IntFuncAsync(Value))
-            .ReturnsAsync(ExpectedValue);
 
         // Act
-        var result = await sut.IfSuccessAsync(x => TestObj.IntFuncAsync(x));
+        var result = await sut.IfSuccessAsync(_ => Task.FromResult(ExpectedValue));
 
         // Assert
         result.ShouldNotBeNull();
@@ -847,26 +848,28 @@ public class IfSuccessAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfSuccessAsync_ErrorDoubleResultWithIntFunction_DoesNotCallFunction()
+    public async Task IfSuccessAsync_ErrorGenericResultWithIntFunction_DoesNotCallFunction()
     {
         // Arrange
+        var functionMock = new Mock<Func<double, Task<int>>>();
+
         var sut = GetErrorResult<double>();
 
         // Act
-        _ = await sut.IfSuccessAsync(x => TestObj.IntFuncAsync(x));
+        _ = await sut.IfSuccessAsync(functionMock.Object);
 
         // Assert
-        _testMock.Verify(x => x.IntFuncAsync(It.IsAny<double>()), Times.Never);
+        functionMock.Verify(x => x.Invoke(It.IsAny<double>()), Times.Never);
     }
 
     [Fact]
-    public async Task IfSuccessAsync_ErrorDoubleResultWithIntFunction_ReturnsOriginalErrorResult()
+    public async Task IfSuccessAsync_ErrorGenericResultWithIntFunction_ReturnsOriginalErrorResult()
     {
         // Arrange
         var sut = GetErrorResult<double>();
 
         // Act
-        var result = await sut.IfSuccessAsync(x => TestObj.IntFuncAsync(x));
+        var result = await sut.IfSuccessAsync(_ => Task.FromResult(9827));
 
         // Assert
         result.ShouldNotBeNull();
@@ -880,13 +883,13 @@ public class IfSuccessAsyncExtensionsUnitTests
     #region IfSuccessAsync (Result<T>, Func<T, Task<Result<TNext>>>)
 
     [Fact]
-    public async Task IfSuccessAsync_NoIntResultWithStringResultFunction_ThrowsException()
+    public async Task IfSuccessAsync_NoGenericResultWithGenericResultFunction_ThrowsException()
     {
         // Arrange
         const Result<int>? Sut = null;
 
         // Act
-        var exception = await Record.ExceptionAsync(() => Sut.IfSuccessAsync(x => TestObj.StringResultFuncAsync(x)));
+        var exception = await Record.ExceptionAsync(() => Sut.IfSuccessAsync(x => Task.FromResult(Result.FromValue(x.ToString()))));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -895,12 +898,13 @@ public class IfSuccessAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfSuccessAsync_SuccessfulIntResultWithNoStringResultFunction_ThrowsException()
+    public async Task IfSuccessAsync_SuccessfulGenericResultWithNoGenericResultFunction_ThrowsException()
     {
         // Arrange
         const int Value = 39;
-        Result<int> sut = Value;
         const Func<int, Task<Result<string>>>? Function = null;
+
+        Result<int> sut = Value;
 
         // Act
         var exception = await Record.ExceptionAsync(() => sut.IfSuccessAsync(Function));
@@ -912,11 +916,12 @@ public class IfSuccessAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfSuccessAsync_ErrorIntResultWithNoStringResultFunction_ThrowsException()
+    public async Task IfSuccessAsync_ErrorGenericResultWithNoGenericResultFunction_ThrowsException()
     {
         // Arrange
+        const Func<int, Task<Result<string>>>? Function = null;
+
         var sut = GetErrorResult<int>();
-        const Func<int, Task<Result<string>>>? Function = null;
 
         // Act
         var exception = await Record.ExceptionAsync(() => sut.IfSuccessAsync(Function));
@@ -928,34 +933,32 @@ public class IfSuccessAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfSuccessAsync_SuccessfulIntResultWithStringResultFunction_CallsFunction()
+    public async Task IfSuccessAsync_SuccessfulGenericResultWithGenericResultFunction_CallsFunction()
     {
         // Arrange
         const int Value = 39;
+        var functionMock = new Mock<Func<int, Task<Result<string>>>>();
+
         Result<int> sut = Value;
 
         // Act
-        _ = await sut.IfSuccessAsync(x => TestObj.StringResultFuncAsync(x));
+        _ = await sut.IfSuccessAsync(functionMock.Object);
 
         // Assert
-        _testMock.Verify(x => x.StringResultFuncAsync(Value), Times.Once);
+        functionMock.Verify(x => x.Invoke(Value), Times.Once);
     }
 
     [Fact]
-    public async Task IfSuccessAsync_SuccessfulIntResultWithSuccessfulStringResultFunction_ReturnsStringResult()
+    public async Task IfSuccessAsync_SuccessfulGenericResultWithSuccessfulGenericResultFunction_ReturnsGenericResult()
     {
         // Arrange
         const string ExpectedValue = "New Value";
         const int Value = 49;
 
-        _testMock
-            .Setup(x => x.StringResultFuncAsync(Value))
-            .ReturnsAsync(Result<string>.FromValue(ExpectedValue));
-
         Result<int> sut = Value;
 
         // Act
-        var result = await sut.IfSuccessAsync(x => TestObj.StringResultFuncAsync(x));
+        var result = await sut.IfSuccessAsync(_ => Task.FromResult(Result.FromValue(ExpectedValue)));
 
         // Assert
         result.ShouldNotBeNull();
@@ -965,20 +968,16 @@ public class IfSuccessAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfSuccessAsync_SuccessfulIntResultWithErrorStringResultFunction_ReturnsErrorResultWithFunctionError()
+    public async Task IfSuccessAsync_SuccessfulGenericResultWithErrorGenericResultFunction_ReturnsErrorResultWithFunctionError()
     {
         // Arrange
         const int Value = 49;
         var errorResult = GetErrorResult<string>();
 
-        _testMock
-            .Setup(x => x.StringResultFuncAsync(Value))
-            .ReturnsAsync(errorResult);
-
         Result<int> sut = Value;
 
         // Act
-        var result = await sut.IfSuccessAsync(x => TestObj.StringResultFuncAsync(x));
+        var result = await sut.IfSuccessAsync(_ => Task.FromResult(errorResult));
 
         // Assert
         result.ShouldNotBeNull();
@@ -988,26 +987,28 @@ public class IfSuccessAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfSuccessAsync_ErrorIntResultWithStringResultFunction_DoesNotCallFunction()
+    public async Task IfSuccessAsync_ErrorGenericResultWithGenericResultFunction_DoesNotCallFunction()
     {
         // Arrange
+        var functionMock = new Mock<Func<int, Task<Result<string>>>>();
+
         var sut = GetErrorResult<int>();
 
         // Act
-        _ = await sut.IfSuccessAsync(x => TestObj.StringResultFuncAsync(x));
+        _ = await sut.IfSuccessAsync(functionMock.Object);
 
         // Assert
-        _testMock.Verify(x => x.StringResultFuncAsync(It.IsAny<int>()), Times.Never);
+        functionMock.Verify(x => x.Invoke(It.IsAny<int>()), Times.Never);
     }
 
     [Fact]
-    public async Task IfSuccessAsync_ErrorIntResultWithStringResultFunction_ReturnsOriginalErrorResult()
+    public async Task IfSuccessAsync_ErrorGenericResultWithGenericResultFunction_ReturnsOriginalErrorResult()
     {
         // Arrange
         var sut = GetErrorResult<int>();
 
         // Act
-        var result = await sut.IfSuccessAsync(x => TestObj.StringResultFuncAsync(x));
+        var result = await sut.IfSuccessAsync(x => Task.FromResult(Result.FromValue(x.ToString())));
 
         // Assert
         result.ShouldNotBeNull();
@@ -1020,14 +1021,9 @@ public class IfSuccessAsyncExtensionsUnitTests
 
     #region helper methods
 
-    private static Error GetError1()
+    private static Error GetError()
     {
         return Error.Failure(ErrorUri.None(), "e06d75de-115c-46ec-a5f6-f6373007ec61", "Error title 1");
-    }
-
-    private static Error GetError2()
-    {
-        return Error.Failure(ErrorUri.None(), "8f5969ac-f23b-46e1-84f4-530b209c07df", "Error title 2");
     }
 
     private static Result GetErrorResult()
