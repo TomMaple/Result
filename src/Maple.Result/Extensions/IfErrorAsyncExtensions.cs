@@ -94,6 +94,6 @@ public static class IfErrorAsyncExtensions
         if (result.IsSuccess())
             return result;
 
-        return await ifErrorFunction(result.Error!).ConfigureAwait(false);
+        return await ifErrorFunction(result.Error!).ConfigureAwait(continueOnCapturedContext);
     }
 }

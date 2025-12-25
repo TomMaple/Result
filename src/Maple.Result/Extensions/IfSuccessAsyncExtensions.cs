@@ -358,7 +358,7 @@ public static class IfSuccessAsyncExtensions
         if (!result.IsSuccess())
             return result.Error!;
 
-        return await ifSuccessFunction(result.Value!).ConfigureAwait(false);
+        return await ifSuccessFunction(result.Value!).ConfigureAwait(continueOnCapturedContext);
     }
 
     #endregion
