@@ -42,7 +42,7 @@ public static class IfErrorAsyncExtensions
     ///     If any of the <paramref name="result" /> or <paramref name="ifErrorAction" />
     ///     parameters are <see langword="null" />.
     /// </exception>
-    public static async Task<IResult> IfErrorAsync<TResult>(this TResult result, Func<Error, Task> ifErrorAction,
+    public static async Task<TResult> IfErrorAsync<TResult>(this TResult result, Func<Error, Task> ifErrorAction,
         bool continueOnCapturedContext = false)
         where TResult : IResult
     {
@@ -84,8 +84,8 @@ public static class IfErrorAsyncExtensions
     ///     If any of the <paramref name="result" /> or <paramref name="ifErrorFunction" />
     ///     parameters are <see langword="null" />.
     /// </exception>
-    public static async Task<IResult> IfErrorAsync<TResult>(this TResult result,
-        Func<Error, Task<IResult>> ifErrorFunction, bool continueOnCapturedContext = false)
+    public static async Task<TResult> IfErrorAsync<TResult>(this TResult result,
+        Func<Error, Task<TResult>> ifErrorFunction, bool continueOnCapturedContext = false)
         where TResult : IResult
     {
         ArgumentNullException.ThrowIfNull(result);
