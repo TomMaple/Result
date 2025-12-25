@@ -67,7 +67,7 @@ public class IfSuccessAsyncExtensionsUnitTests
         var sut = Result.Success();
 
         // Act
-        _ = await sut.IfSuccessAsync(actionMock.Object);
+        await sut.IfSuccessAsync(actionMock.Object);
 
         // Assert
         actionMock.Verify(x => x.Invoke(), Times.Once);
@@ -97,7 +97,7 @@ public class IfSuccessAsyncExtensionsUnitTests
         var sut = GetErrorResult();
 
         // Act
-        _ = await sut.IfSuccessAsync(actionMock.Object);
+        await sut.IfSuccessAsync(actionMock.Object);
 
         // Assert
         actionMock.Verify(x => x.Invoke(), Times.Never);
@@ -181,7 +181,7 @@ public class IfSuccessAsyncExtensionsUnitTests
         var sut = Result.Success();
 
         // Act
-        _ = await sut.IfSuccessAsync(functionMock.Object);
+        await sut.IfSuccessAsync(functionMock.Object);
 
         // Assert
         functionMock.Verify(x => x.Invoke(), Times.Once);
@@ -228,7 +228,7 @@ public class IfSuccessAsyncExtensionsUnitTests
         var sut = GetErrorResult();
 
         // Act
-        _ = await sut.IfSuccessAsync(functionMock.Object);
+        await sut.IfSuccessAsync(functionMock.Object);
 
         // Assert
         functionMock.Verify(x => x.Invoke(), Times.Never);
@@ -312,7 +312,7 @@ public class IfSuccessAsyncExtensionsUnitTests
         var sut = Result.Success();
 
         // Act
-        _ = await sut.IfSuccessAsync(functionMock.Object);
+        await sut.IfSuccessAsync(functionMock.Object);
 
         // Assert
         functionMock.Verify(x => x.Invoke(), Times.Once);
@@ -345,7 +345,7 @@ public class IfSuccessAsyncExtensionsUnitTests
         var sut = GetErrorResult();
 
         // Act
-        _ = await sut.IfSuccessAsync(functionMock.Object);
+        await sut.IfSuccessAsync(functionMock.Object);
 
         // Assert
         functionMock.Verify(x => x.Invoke(), Times.Never);
@@ -429,7 +429,7 @@ public class IfSuccessAsyncExtensionsUnitTests
         var sut = Result.Success();
 
         // Act
-        _ = await sut.IfSuccessAsync(functionMock.Object);
+        await sut.IfSuccessAsync(functionMock.Object);
 
         // Assert
         functionMock.Verify(x => x.Invoke(), Times.Once);
@@ -480,7 +480,7 @@ public class IfSuccessAsyncExtensionsUnitTests
         var sut = GetErrorResult();
 
         // Act
-        _ = await sut.IfSuccessAsync(functionMock.Object);
+        await sut.IfSuccessAsync(functionMock.Object);
 
         // Assert
         functionMock.Verify(x => x.Invoke(), Times.Never);
@@ -566,7 +566,7 @@ public class IfSuccessAsyncExtensionsUnitTests
         Result<int> sut = Value;
 
         // Act
-        _ = await sut.IfSuccessAsync(functionMock.Object);
+        await sut.IfSuccessAsync(functionMock.Object);
 
         // Assert
         functionMock.Verify(x => x.Invoke(Value), Times.Once);
@@ -599,7 +599,7 @@ public class IfSuccessAsyncExtensionsUnitTests
         var sut = GetErrorResult<int>();
 
         // Act
-        _ = await sut.IfSuccessAsync(functionMock.Object);
+        await sut.IfSuccessAsync(functionMock.Object);
 
         // Assert
         functionMock.Verify(x => x.Invoke(It.IsAny<int>()), Times.Never);
@@ -685,7 +685,7 @@ public class IfSuccessAsyncExtensionsUnitTests
         Result<string> sut = Value;
 
         // Act
-        _ = await sut.IfSuccessAsync(functionMock.Object);
+        await sut.IfSuccessAsync(functionMock.Object);
 
         // Assert
         functionMock.Verify(x => x.Invoke(Value), Times.Once);
@@ -736,7 +736,7 @@ public class IfSuccessAsyncExtensionsUnitTests
         var sut = GetErrorResult<string>();
 
         // Act
-        _ = await sut.IfSuccessAsync(functionMock.Object);
+        await sut.IfSuccessAsync(functionMock.Object);
 
         // Assert
         functionMock.Verify(x => x.Invoke(It.IsAny<string>()), Times.Never);
@@ -822,7 +822,7 @@ public class IfSuccessAsyncExtensionsUnitTests
         Result<double> sut = Value;
 
         // Act
-        _ = await sut.IfSuccessAsync(functionMock.Object);
+        await sut.IfSuccessAsync(functionMock.Object);
 
         // Assert
         functionMock.Verify(x => x.Invoke(Value), Times.Once);
@@ -856,7 +856,7 @@ public class IfSuccessAsyncExtensionsUnitTests
         var sut = GetErrorResult<double>();
 
         // Act
-        _ = await sut.IfSuccessAsync(functionMock.Object);
+        await sut.IfSuccessAsync(functionMock.Object);
 
         // Assert
         functionMock.Verify(x => x.Invoke(It.IsAny<double>()), Times.Never);
@@ -942,7 +942,7 @@ public class IfSuccessAsyncExtensionsUnitTests
         Result<int> sut = Value;
 
         // Act
-        _ = await sut.IfSuccessAsync(functionMock.Object);
+        await sut.IfSuccessAsync(functionMock.Object);
 
         // Assert
         functionMock.Verify(x => x.Invoke(Value), Times.Once);
@@ -995,7 +995,7 @@ public class IfSuccessAsyncExtensionsUnitTests
         var sut = GetErrorResult<int>();
 
         // Act
-        _ = await sut.IfSuccessAsync(functionMock.Object);
+        await sut.IfSuccessAsync(functionMock.Object);
 
         // Assert
         functionMock.Verify(x => x.Invoke(It.IsAny<int>()), Times.Never);

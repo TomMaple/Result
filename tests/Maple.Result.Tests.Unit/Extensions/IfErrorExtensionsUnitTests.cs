@@ -66,7 +66,7 @@ public class IfErrorExtensionsUnitTests
         var sut = Result.Success();
 
         // Act
-        _ = sut.IfError(actionMock.Object);
+        sut.IfError(actionMock.Object);
 
         // Assert
         actionMock.Verify(x => x.Invoke(It.IsAny<Error>()), Times.Never);
@@ -96,7 +96,7 @@ public class IfErrorExtensionsUnitTests
         var sut = GetErrorResult();
 
         // Act
-        _ = sut.IfError(actionMock.Object);
+        sut.IfError(actionMock.Object);
 
         // Assert
         actionMock.Verify(x => x.Invoke(sut.Error!), Times.Once);
@@ -209,7 +209,7 @@ public class IfErrorExtensionsUnitTests
         var sut = GetErrorResult();
 
         // Act
-        _ = sut.IfError(functionMock.Object);
+        sut.IfError(functionMock.Object);
 
         // Assert
         functionMock.Verify(x => x.Invoke(sut.Error!), Times.Once);
@@ -311,7 +311,7 @@ public class IfErrorExtensionsUnitTests
         Result<int> sut = Value;
 
         // Act
-        _ = sut.IfError(actionMock.Object);
+        sut.IfError(actionMock.Object);
 
         // Assert
         actionMock.Verify(x => x.Invoke(It.IsAny<Error>()), Times.Never);
@@ -344,7 +344,7 @@ public class IfErrorExtensionsUnitTests
         var sut = GetErrorResult<int>();
 
         // Act
-        _ = sut.IfError(actionMock.Object);
+        sut.IfError(actionMock.Object);
 
         // Assert
         actionMock.Verify(x => x.Invoke(sut.Error!), Times.Once);
@@ -463,7 +463,7 @@ public class IfErrorExtensionsUnitTests
         var sut = GetErrorResult<int>();
 
         // Act
-        _ = sut.IfError(functionMock.Object);
+        sut.IfError(functionMock.Object);
 
         // Assert
         functionMock.Verify(x => x.Invoke(sut.Error!), Times.Once);
