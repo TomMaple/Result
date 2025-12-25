@@ -202,7 +202,6 @@ public class ErrorUnitTests
         // Act
         var sut = Sut.Validation(
             ErrorUri.Tag("tag:test.com,2024:Test"),
-            "3c748160-3fda-4364-bf94-75642038dda6",
             "Test title");
 
         // Assert
@@ -237,7 +236,6 @@ public class ErrorUnitTests
         // Act
         var sut = Sut.Validation(
             ErrorUri.Tag("tag:test.com,2024:Test"),
-            "3c748160-3fda-4364-bf94-75642038dda6",
             "Test title",
             "Test description.",
             ErrorUri.Locator("http://test.com/instance/1013"),
@@ -283,7 +281,6 @@ public class ErrorUnitTests
         // Act
         var sut = Sut.Validation(
             ErrorUri.Tag("tag:test.com,2024:Test"),
-            "3c748160-3fda-4364-bf94-75642038dda6",
             "Test title",
             "Test description.",
             ErrorUri.Locator("http://test.com/instance/1013"),
@@ -329,7 +326,6 @@ public class ErrorUnitTests
         // Act
         var sut = Sut.Unauthenticated(
             ErrorUri.Tag("tag:test.com,2024:Test"),
-            "3c748160-3fda-4364-bf94-75642038dda6",
             "Test title");
 
         // Assert
@@ -364,7 +360,6 @@ public class ErrorUnitTests
         // Act
         var sut = Sut.Unauthenticated(
             ErrorUri.Tag("tag:test.com,2024:Test"),
-            "3c748160-3fda-4364-bf94-75642038dda6",
             "Test title",
             "Test description.",
             ErrorUri.Locator("http://test.com/instance/1013"),
@@ -410,7 +405,6 @@ public class ErrorUnitTests
         // Act
         var sut = Sut.Unauthenticated(
             ErrorUri.Tag("tag:test.com,2024:Test"),
-            "3c748160-3fda-4364-bf94-75642038dda6",
             "Test title",
             "Test description.",
             ErrorUri.Locator("http://test.com/instance/1013"),
@@ -456,7 +450,6 @@ public class ErrorUnitTests
         // Act
         var sut = Sut.Forbidden(
             ErrorUri.Tag("tag:test.com,2024:Test"),
-            "3c748160-3fda-4364-bf94-75642038dda6",
             "Test title");
 
         // Assert
@@ -491,7 +484,6 @@ public class ErrorUnitTests
         // Act
         var sut = Sut.Forbidden(
             ErrorUri.Tag("tag:test.com,2024:Test"),
-            "3c748160-3fda-4364-bf94-75642038dda6",
             "Test title",
             "Test description.",
             ErrorUri.Locator("http://test.com/instance/1013"),
@@ -537,7 +529,6 @@ public class ErrorUnitTests
         // Act
         var sut = Sut.Forbidden(
             ErrorUri.Tag("tag:test.com,2024:Test"),
-            "3c748160-3fda-4364-bf94-75642038dda6",
             "Test title",
             "Test description.",
             ErrorUri.Locator("http://test.com/instance/1013"),
@@ -583,7 +574,6 @@ public class ErrorUnitTests
         // Act
         var sut = Sut.NotFound(
             ErrorUri.Tag("tag:test.com,2024:Test"),
-            "3c748160-3fda-4364-bf94-75642038dda6",
             "Test title");
 
         // Assert
@@ -618,7 +608,6 @@ public class ErrorUnitTests
         // Act
         var sut = Sut.NotFound(
             ErrorUri.Tag("tag:test.com,2024:Test"),
-            "3c748160-3fda-4364-bf94-75642038dda6",
             "Test title",
             "Test description.",
             ErrorUri.Locator("http://test.com/instance/1013"),
@@ -664,7 +653,6 @@ public class ErrorUnitTests
         // Act
         var sut = Sut.NotFound(
             ErrorUri.Tag("tag:test.com,2024:Test"),
-            "3c748160-3fda-4364-bf94-75642038dda6",
             "Test title",
             "Test description.",
             ErrorUri.Locator("http://test.com/instance/1013"),
@@ -710,7 +698,6 @@ public class ErrorUnitTests
         // Act
         var sut = Sut.Timeout(
             ErrorUri.Tag("tag:test.com,2024:Test"),
-            "3c748160-3fda-4364-bf94-75642038dda6",
             "Test title");
 
         // Assert
@@ -745,7 +732,6 @@ public class ErrorUnitTests
         // Act
         var sut = Sut.Timeout(
             ErrorUri.Tag("tag:test.com,2024:Test"),
-            "3c748160-3fda-4364-bf94-75642038dda6",
             "Test title",
             "Test description.",
             ErrorUri.Locator("http://test.com/instance/1013"),
@@ -791,7 +777,6 @@ public class ErrorUnitTests
         // Act
         var sut = Sut.Timeout(
             ErrorUri.Tag("tag:test.com,2024:Test"),
-            "3c748160-3fda-4364-bf94-75642038dda6",
             "Test title",
             "Test description.",
             ErrorUri.Locator("http://test.com/instance/1013"),
@@ -837,7 +822,6 @@ public class ErrorUnitTests
         // Act
         var sut = Sut.Conflict(
             ErrorUri.Tag("tag:test.com,2024:Test"),
-            "3c748160-3fda-4364-bf94-75642038dda6",
             "Test title");
 
         // Assert
@@ -872,7 +856,6 @@ public class ErrorUnitTests
         // Act
         var sut = Sut.Conflict(
             ErrorUri.Tag("tag:test.com,2024:Test"),
-            "3c748160-3fda-4364-bf94-75642038dda6",
             "Test title",
             "Test description.",
             ErrorUri.Locator("http://test.com/instance/1013"),
@@ -918,7 +901,6 @@ public class ErrorUnitTests
         // Act
         var sut = Sut.Conflict(
             ErrorUri.Tag("tag:test.com,2024:Test"),
-            "3c748160-3fda-4364-bf94-75642038dda6",
             "Test title",
             "Test description.",
             ErrorUri.Locator("http://test.com/instance/1013"),
@@ -964,7 +946,6 @@ public class ErrorUnitTests
         // Act
         var sut = Sut.Failure(
             ErrorUri.Tag("tag:test.com,2024:Test"),
-            "3c748160-3fda-4364-bf94-75642038dda6",
             "Test title");
 
         // Assert
@@ -999,7 +980,6 @@ public class ErrorUnitTests
         // Act
         var sut = Sut.Failure(
             ErrorUri.Tag("tag:test.com,2024:Test"),
-            "3c748160-3fda-4364-bf94-75642038dda6",
             "Test title",
             "Test description.",
             ErrorUri.Locator("http://test.com/instance/1013"),
@@ -1045,7 +1025,6 @@ public class ErrorUnitTests
         // Act
         var sut = Sut.Failure(
             ErrorUri.Tag("tag:test.com,2024:Test"),
-            "3c748160-3fda-4364-bf94-75642038dda6",
             "Test title",
             "Test description.",
             ErrorUri.Locator("http://test.com/instance/1013"),
@@ -1091,7 +1070,6 @@ public class ErrorUnitTests
         // Act
         var sut = Sut.CriticalError(
             ErrorUri.Tag("tag:test.com,2024:Test"),
-            "3c748160-3fda-4364-bf94-75642038dda6",
             "Test title");
 
         // Assert
@@ -1126,7 +1104,6 @@ public class ErrorUnitTests
         // Act
         var sut = Sut.CriticalError(
             ErrorUri.Tag("tag:test.com,2024:Test"),
-            "3c748160-3fda-4364-bf94-75642038dda6",
             "Test title",
             "Test description.",
             ErrorUri.Locator("http://test.com/instance/1013"),
@@ -1172,7 +1149,6 @@ public class ErrorUnitTests
         // Act
         var sut = Sut.CriticalError(
             ErrorUri.Tag("tag:test.com,2024:Test"),
-            "3c748160-3fda-4364-bf94-75642038dda6",
             "Test title",
             "Test description.",
             ErrorUri.Locator("http://test.com/instance/1013"),
@@ -1218,7 +1194,6 @@ public class ErrorUnitTests
         // Act
         var sut = Sut.NotImplemented(
             ErrorUri.Tag("tag:test.com,2024:Test"),
-            "3c748160-3fda-4364-bf94-75642038dda6",
             "Test title");
 
         // Assert
@@ -1253,7 +1228,6 @@ public class ErrorUnitTests
         // Act
         var sut = Sut.NotImplemented(
             ErrorUri.Tag("tag:test.com,2024:Test"),
-            "3c748160-3fda-4364-bf94-75642038dda6",
             "Test title",
             "Test description.",
             ErrorUri.Locator("http://test.com/instance/1013"),
@@ -1299,7 +1273,6 @@ public class ErrorUnitTests
         // Act
         var sut = Sut.NotImplemented(
             ErrorUri.Tag("tag:test.com,2024:Test"),
-            "3c748160-3fda-4364-bf94-75642038dda6",
             "Test title",
             "Test description.",
             ErrorUri.Locator("http://test.com/instance/1013"),
@@ -1345,7 +1318,6 @@ public class ErrorUnitTests
         // Act
         var sut = Sut.Unavailable(
             ErrorUri.Tag("tag:test.com,2024:Test"),
-            "3c748160-3fda-4364-bf94-75642038dda6",
             "Test title");
 
         // Assert
@@ -1380,7 +1352,6 @@ public class ErrorUnitTests
         // Act
         var sut = Sut.Unavailable(
             ErrorUri.Tag("tag:test.com,2024:Test"),
-            "3c748160-3fda-4364-bf94-75642038dda6",
             "Test title",
             "Test description.",
             ErrorUri.Locator("http://test.com/instance/1013"),
@@ -1426,7 +1397,6 @@ public class ErrorUnitTests
         // Act
         var sut = Sut.Unavailable(
             ErrorUri.Tag("tag:test.com,2024:Test"),
-            "3c748160-3fda-4364-bf94-75642038dda6",
             "Test title",
             "Test description.",
             ErrorUri.Locator("http://test.com/instance/1013"),
@@ -1487,7 +1457,7 @@ public class ErrorUnitTests
         const string ExpectedTitle = "Test title";
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
 
-        const string Json = """{"Category":3,"TypeUri":"tag:test.com,2024:Test","Title":"Test title","Detail":"Test description.","DetailTemplated":{"TemplateId":"message-id","Params":{"key1":"value1","key2":"value2"}},"InstanceUri":"http://test.com/instance/1013","ErrorDetails":[{"PropertyPointer":"#/property1","Detail":"Property 1 test detail","DetailTemplated":{"TemplateId":"message-property-id","Params":{"pk1":"pv1","pk2":"pv2"}}}],"Location":"3c748160-3fda-4364-bf94-75642038dda6"}""";
+        const string Json = """{"Category":3,"TypeUri":"tag:test.com,2024:Test","Title":"Test title","Detail":"Test description.","DetailTemplated":{"TemplateId":"message-id","Params":{"key1":"value1","key2":"value2"}},"InstanceUri":"http://test.com/instance/1013","ErrorDetails":[{"PropertyPointer":"#/property1","Detail":"Property 1 test detail","DetailTemplated":{"TemplateId":"message-property-id","Params":{"pk1":"pv1","pk2":"pv2"}}}]}""";
 
         // Act
         var sut = SerializationHelper.DeserializeWithMicrosoft<Sut>(Json);
@@ -1545,7 +1515,7 @@ public class ErrorUnitTests
         const string ExpectedTitle = "Test title";
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
 
-        const string Json = """{"Category":3,"TypeUri":"tag:test.com,2024:Test","Title":"Test title","Detail":"Test description.","DetailTemplated":{"TemplateId":"message-id","Params":{"key1":"value1","key2":"value2"}},"InstanceUri":"http://test.com/instance/1013","ErrorDetails":[{"PropertyPointer":"#/property1","Detail":"Property 1 test detail","DetailTemplated":{"TemplateId":"message-property-id","Params":{"pk1":"pv1","pk2":"pv2"}}}],"Location":"3c748160-3fda-4364-bf94-75642038dda6"}""";
+        const string Json = """{"Category":3,"TypeUri":"tag:test.com,2024:Test","Title":"Test title","Detail":"Test description.","DetailTemplated":{"TemplateId":"message-id","Params":{"key1":"value1","key2":"value2"}},"InstanceUri":"http://test.com/instance/1013","ErrorDetails":[{"PropertyPointer":"#/property1","Detail":"Property 1 test detail","DetailTemplated":{"TemplateId":"message-property-id","Params":{"pk1":"pv1","pk2":"pv2"}}}]}""";
 
         // Act
         var sut = SerializationHelper.DeserializeWithNewtonsoft<Sut>(Json);
@@ -1590,7 +1560,6 @@ public class ErrorUnitTests
 
         var sut = Sut.NotFound(
             ErrorUri.Tag("tag:test.com,2024:Test"),
-            "3c748160-3fda-4364-bf94-75642038dda6",
             "Test title",
             "Test description.",
             ErrorUri.Locator("http://test.com/instance/1013"),
@@ -1614,7 +1583,6 @@ public class ErrorUnitTests
 
         var sut = Sut.NotFound(
             ErrorUri.Tag("tag:test.com,2024:Test"),
-            "3c748160-3fda-4364-bf94-75642038dda6",
             "Test title",
             "Test description.",
             ErrorUri.Locator("http://test.com/instance/1013"),

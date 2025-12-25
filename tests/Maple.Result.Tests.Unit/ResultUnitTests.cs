@@ -46,7 +46,6 @@ public class ResultUnitTests
 
         var error = Error.NotFound(
             ErrorUri.Tag("tag:test.com,2024:Test"),
-            "3c748160-3fda-4364-bf94-75642038dda6",
             "Test title",
             "Test description.",
             ErrorUri.Locator("http://test.com/instance/1013"),
@@ -121,7 +120,6 @@ public class ResultUnitTests
         
         var error = Error.NotFound(
             ErrorUri.Tag("tag:test.com,2024:Test"),
-            "3c748160-3fda-4364-bf94-75642038dda6",
             "Test title",
             "Test description.",
             ErrorUri.Locator("http://test.com/instance/1013"),
@@ -224,7 +222,6 @@ public class ResultUnitTests
         
         var error = Error.NotFound(
             ErrorUri.Tag("tag:test.com,2024:Test"),
-            "3c748160-3fda-4364-bf94-75642038dda6",
             "Test title",
             "Test description.",
             ErrorUri.Locator("http://test.com/instance/1013"),
@@ -341,7 +338,7 @@ public class ResultUnitTests
         const string ExpectedTitle = "Test title";
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
 
-        const string Json = """{"Error":{"Category":3,"TypeUri":"tag:test.com,2024:Test","Title":"Test title","Detail":"Test description.","DetailTemplated":{"TemplateId":"message-id","Params":{"key1":"value1","key2":"value2"}},"InstanceUri":"http://test.com/instance/1013","ErrorDetails":[{"PropertyPointer":"#/property1","Detail":"Property 1 test detail","DetailTemplated":{"TemplateId":"message-property-id","Params":{"pk1":"pv1","pk2":"pv2"}}}],"Location":"3c748160-3fda-4364-bf94-75642038dda6"}}""";
+        const string Json = """{"Error":{"Category":3,"TypeUri":"tag:test.com,2024:Test","Title":"Test title","Detail":"Test description.","DetailTemplated":{"TemplateId":"message-id","Params":{"key1":"value1","key2":"value2"}},"InstanceUri":"http://test.com/instance/1013","ErrorDetails":[{"PropertyPointer":"#/property1","Detail":"Property 1 test detail","DetailTemplated":{"TemplateId":"message-property-id","Params":{"pk1":"pv1","pk2":"pv2"}}}]}}""";
 
         // Act
         var result = SerializationHelper.DeserializeWithMicrosoft<Sut>(Json);
@@ -402,7 +399,7 @@ public class ResultUnitTests
         const string ExpectedTitle = "Test title";
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
 
-        const string Json = """{"Error":{"Category":3,"TypeUri":"tag:test.com,2024:Test","Title":"Test title","Detail":"Test description.","DetailTemplated":{"TemplateId":"message-id","Params":{"key1":"value1","key2":"value2"}},"InstanceUri":"http://test.com/instance/1013","ErrorDetails":[{"PropertyPointer":"#/property1","Detail":"Property 1 test detail","DetailTemplated":{"TemplateId":"message-property-id","Params":{"pk1":"pv1","pk2":"pv2"}}}],"Location":"3c748160-3fda-4364-bf94-75642038dda6"}}""";
+        const string Json = """{"Error":{"Category":3,"TypeUri":"tag:test.com,2024:Test","Title":"Test title","Detail":"Test description.","DetailTemplated":{"TemplateId":"message-id","Params":{"key1":"value1","key2":"value2"}},"InstanceUri":"http://test.com/instance/1013","ErrorDetails":[{"PropertyPointer":"#/property1","Detail":"Property 1 test detail","DetailTemplated":{"TemplateId":"message-property-id","Params":{"pk1":"pv1","pk2":"pv2"}}}]}}""";
 
         // Act
         var result = SerializationHelper.DeserializeWithNewtonsoft<Sut>(Json);
@@ -450,7 +447,6 @@ public class ResultUnitTests
 
         var error = Error.NotFound(
             ErrorUri.Tag("tag:test.com,2024:Test"),
-            "3c748160-3fda-4364-bf94-75642038dda6",
             "Test title",
             "Test description.",
             ErrorUri.Locator("http://test.com/instance/1013"),
@@ -476,7 +472,6 @@ public class ResultUnitTests
 
         var error = Error.NotFound(
             ErrorUri.Tag("tag:test.com,2024:Test"),
-            "3c748160-3fda-4364-bf94-75642038dda6",
             "Test title",
             "Test description.",
             ErrorUri.Locator("http://test.com/instance/1013"),
@@ -534,7 +529,6 @@ public class ResultUnitTests
 
         var error = Error.NotFound(
             ErrorUri.Tag("tag:test.com,2024:Test"),
-            "3c748160-3fda-4364-bf94-75642038dda6",
             "Test title",
             "Test description.",
             ErrorUri.Locator("http://test.com/instance/1013"),
@@ -579,7 +573,6 @@ public class ResultUnitTests
 
         var error = Error.NotFound(
             ErrorUri.Tag("tag:test.com,2024:Test"),
-            "3c748160-3fda-4364-bf94-75642038dda6",
             "Test title",
             "Test description.",
             ErrorUri.Locator("http://test.com/instance/1013"),
@@ -635,7 +628,6 @@ public class ResultUnitTests
 
         var error = Error.NotFound(
             ErrorUri.Tag("tag:test.com,2024:Test"),
-            "3c748160-3fda-4364-bf94-75642038dda6",
             "Test title",
             "Test description.",
             ErrorUri.Locator("http://test.com/instance/1013"),
@@ -708,7 +700,6 @@ public class ResultUnitTests
 
         var error = Error.NotFound(
             ErrorUri.Tag("tag:test.com,2024:Test"),
-            "3c748160-3fda-4364-bf94-75642038dda6",
             "Test title",
             "Test description.",
             ErrorUri.Locator("http://test.com/instance/1013"),
@@ -811,7 +802,6 @@ public class ResultUnitTests
 
         var error = Error.NotFound(
             ErrorUri.Tag("tag:test.com,2024:Test"),
-            "3c748160-3fda-4364-bf94-75642038dda6",
             "Test title",
             "Test description.",
             ErrorUri.Locator("http://test.com/instance/1013"),
@@ -924,7 +914,7 @@ public class ResultUnitTests
         const string ExpectedTitle = "Test title";
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
 
-        const string Json = """{"Error":{"Category":3,"TypeUri":"tag:test.com,2024:Test","Title":"Test title","Detail":"Test description.","DetailTemplated":{"TemplateId":"message-id","Params":{"key1":"value1","key2":"value2"}},"InstanceUri":"http://test.com/instance/1013","ErrorDetails":[{"PropertyPointer":"#/property1","Detail":"Property 1 test detail","DetailTemplated":{"TemplateId":"message-property-id","Params":{"pk1":"pv1","pk2":"pv2"}}}],"Location":"3c748160-3fda-4364-bf94-75642038dda6"}}""";
+        const string Json = """{"Error":{"Category":3,"TypeUri":"tag:test.com,2024:Test","Title":"Test title","Detail":"Test description.","DetailTemplated":{"TemplateId":"message-id","Params":{"key1":"value1","key2":"value2"}},"InstanceUri":"http://test.com/instance/1013","ErrorDetails":[{"PropertyPointer":"#/property1","Detail":"Property 1 test detail","DetailTemplated":{"TemplateId":"message-property-id","Params":{"pk1":"pv1","pk2":"pv2"}}}]}}""";
 
         // Act
         var result = SerializationHelper.DeserializeWithMicrosoft<Result<TestClass>>(Json);
@@ -985,7 +975,7 @@ public class ResultUnitTests
         const string ExpectedTitle = "Test title";
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
 
-        const string Json = """{"Error":{"Category":3,"TypeUri":"tag:test.com,2024:Test","Title":"Test title","Detail":"Test description.","DetailTemplated":{"TemplateId":"message-id","Params":{"key1":"value1","key2":"value2"}},"InstanceUri":"http://test.com/instance/1013","ErrorDetails":[{"PropertyPointer":"#/property1","Detail":"Property 1 test detail","DetailTemplated":{"TemplateId":"message-property-id","Params":{"pk1":"pv1","pk2":"pv2"}}}],"Location":"3c748160-3fda-4364-bf94-75642038dda6"}}""";
+        const string Json = """{"Error":{"Category":3,"TypeUri":"tag:test.com,2024:Test","Title":"Test title","Detail":"Test description.","DetailTemplated":{"TemplateId":"message-id","Params":{"key1":"value1","key2":"value2"}},"InstanceUri":"http://test.com/instance/1013","ErrorDetails":[{"PropertyPointer":"#/property1","Detail":"Property 1 test detail","DetailTemplated":{"TemplateId":"message-property-id","Params":{"pk1":"pv1","pk2":"pv2"}}}]}}""";
 
         // Act
         var result = SerializationHelper.DeserializeWithNewtonsoft<Result<TestClass>>(Json);
@@ -1075,7 +1065,6 @@ public class ResultUnitTests
 
         var error = Error.NotFound(
             ErrorUri.Tag("tag:test.com,2024:Test"),
-            "3c748160-3fda-4364-bf94-75642038dda6",
             "Test title",
             "Test description.",
             ErrorUri.Locator("http://test.com/instance/1013"),
@@ -1101,7 +1090,6 @@ public class ResultUnitTests
 
         var error = Error.NotFound(
             ErrorUri.Tag("tag:test.com,2024:Test"),
-            "3c748160-3fda-4364-bf94-75642038dda6",
             "Test title",
             "Test description.",
             ErrorUri.Locator("http://test.com/instance/1013"),

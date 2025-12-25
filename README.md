@@ -55,8 +55,7 @@ Example
             "currentBalance": 30,
             "requiredBalance": 50
         }
-    },
-    "location": "252e0b7f-b21c-44ab-bda0-c72fe943b886"
+    }
 }
 ```
 
