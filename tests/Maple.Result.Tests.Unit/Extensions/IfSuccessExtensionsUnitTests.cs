@@ -15,7 +15,7 @@ public class IfSuccessExtensionsUnitTests
         const Result? Sut = null;
 
         // Act
-        var exception = Record.Exception(() => Sut.IfSuccess(() => { }));
+        var exception = Record.Exception(() => Sut!.IfSuccess(() => { }));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -32,7 +32,7 @@ public class IfSuccessExtensionsUnitTests
         var sut = Result.Success();
 
         // Act
-        var exception = Record.Exception(() => sut.IfSuccess(Action));
+        var exception = Record.Exception(() => sut.IfSuccess(Action!));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -49,7 +49,7 @@ public class IfSuccessExtensionsUnitTests
         var sut = GetErrorResult();
 
         // Act
-        var exception = Record.Exception(() => sut.IfSuccess(Action));
+        var exception = Record.Exception(() => sut.IfSuccess(Action!));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -73,7 +73,7 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_SuccessfulResultWithAction_ReturnsSuccessfulResult()
+    public void IfSuccess_SuccessfulResultWithAction_ReturnsOriginalSuccessfulResult()
     {
         // Arrange
         var sut = Result.Success();
@@ -85,6 +85,7 @@ public class IfSuccessExtensionsUnitTests
         result.ShouldNotBeNull();
         result.ShouldBeOfType<Result>();
         result.IsSuccess().ShouldBeTrue();
+        result.ShouldBeSameAs(sut);
     }
 
     [Fact]
@@ -115,7 +116,7 @@ public class IfSuccessExtensionsUnitTests
         result.ShouldNotBeNull();
         result.ShouldBeOfType<Result>();
         result.IsSuccess().ShouldBeFalse();
-        result.Error.ShouldBe(sut.Error);
+        result.Error.ShouldBeSameAs(sut.Error);
     }
 
     #endregion
@@ -129,7 +130,7 @@ public class IfSuccessExtensionsUnitTests
         const Result? Sut = null;
 
         // Act
-        var exception = Record.Exception(() => Sut.IfSuccess(Result.Success));
+        var exception = Record.Exception(() => Sut!.IfSuccess(Result.Success));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -146,7 +147,7 @@ public class IfSuccessExtensionsUnitTests
         var sut = Result.Success();
 
         // Act
-        var exception = Record.Exception(() => sut.IfSuccess(Function));
+        var exception = Record.Exception(() => sut.IfSuccess(Function!));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -163,7 +164,7 @@ public class IfSuccessExtensionsUnitTests
         var sut = GetErrorResult();
 
         // Act
-        var exception = Record.Exception(() => sut.IfSuccess(Function));
+        var exception = Record.Exception(() => sut.IfSuccess(Function!));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -190,32 +191,35 @@ public class IfSuccessExtensionsUnitTests
     public void IfSuccess_SuccessfulResultWithSuccessfulResultFunction_ReturnsSuccessfulResult()
     {
         // Arrange
+        var funcResult = Result.Success();
+
         var sut = Result.Success();
 
         // Act
-        var result = sut.IfSuccess(Result.Success);
+        var result = sut.IfSuccess(() => funcResult);
 
         // Assert
         result.ShouldNotBeNull();
         result.ShouldBeOfType<Result>();
         result.IsSuccess().ShouldBeTrue();
+        result.ShouldBeSameAs(funcResult);
     }
 
     [Fact]
     public void IfSuccess_SuccessfulResultWithErrorResultFunction_ReturnsErrorResultWithFunctionError()
     {
         // Arrange
-        var errorResult = GetErrorResult();
+        var funcError = GetErrorResult();
 
         var sut = Result.Success();
 
         // Act
-        var result = sut.IfSuccess(() => errorResult);
+        var result = sut.IfSuccess(() => funcError);
 
         // Assert
         result.ShouldNotBeNull();
         result.IsSuccess().ShouldBeFalse();
-        result.Error.ShouldBe(errorResult.Error);
+        result.Error.ShouldBeSameAs(funcError.Error);
     }
 
     [Fact]
@@ -246,7 +250,7 @@ public class IfSuccessExtensionsUnitTests
         result.ShouldNotBeNull();
         result.ShouldBeOfType<Result>();
         result.IsSuccess().ShouldBeFalse();
-        result.Error.ShouldBe(sut.Error);
+        result.Error.ShouldBeSameAs(sut.Error);
     }
 
     #endregion
@@ -260,7 +264,7 @@ public class IfSuccessExtensionsUnitTests
         const Result? Sut = null;
 
         // Act
-        var exception = Record.Exception(() => Sut.IfSuccess(() => 38));
+        var exception = Record.Exception(() => Sut!.IfSuccess(() => 38));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -277,7 +281,7 @@ public class IfSuccessExtensionsUnitTests
         var sut = Result.Success();
 
         // Act
-        var exception = Record.Exception(() => sut.IfSuccess(Function));
+        var exception = Record.Exception(() => sut.IfSuccess(Function!));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -294,7 +298,7 @@ public class IfSuccessExtensionsUnitTests
         var sut = GetErrorResult();
 
         // Act
-        var exception = Record.Exception(() => sut.IfSuccess(Function));
+        var exception = Record.Exception(() => sut.IfSuccess(Function!));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -321,18 +325,18 @@ public class IfSuccessExtensionsUnitTests
     public void IfSuccess_SuccessfulResultWithIntFunction_ReturnsSuccessfulResultWithInt()
     {
         // Arrange
-        const int Value = 2463;
+        const int FuncValue = 2463;
 
         var sut = Result.Success();
 
         // Act
-        var result = sut.IfSuccess(() => Value);
+        var result = sut.IfSuccess(() => FuncValue);
 
         // Assert
         result.ShouldNotBeNull();
         result.ShouldBeOfType<Result<int>>();
         result.IsSuccess().ShouldBeTrue();
-        result.Value.ShouldBe(Value);
+        result.Value.ShouldBe(FuncValue);
     }
 
     [Fact]
@@ -351,7 +355,7 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_ErrorResultWithIntFunction_ReturnsErrorResult()
+    public void IfSuccess_ErrorResultWithIntFunction_ReturnsOriginalErrorResult()
     {
         // Arrange
         var sut = GetErrorResult();
@@ -363,7 +367,7 @@ public class IfSuccessExtensionsUnitTests
         result.ShouldNotBeNull();
         result.ShouldBeOfType<Result<int>>();
         result.IsSuccess().ShouldBeFalse();
-        result.Error.ShouldBe(sut.Error);
+        result.Error.ShouldBeSameAs(sut.Error);
     }
 
     #endregion
@@ -377,7 +381,7 @@ public class IfSuccessExtensionsUnitTests
         const Result? Sut = null;
 
         // Act
-        var exception = Record.Exception(() => Sut.IfSuccess(() => Result.FromValue(897)));
+        var exception = Record.Exception(() => Sut!.IfSuccess(() => Result.FromValue(897)));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -394,7 +398,7 @@ public class IfSuccessExtensionsUnitTests
         var sut = Result.Success();
 
         // Act
-        var exception = Record.Exception(() => sut.IfSuccess(Function));
+        var exception = Record.Exception(() => sut.IfSuccess(Function!));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -411,7 +415,7 @@ public class IfSuccessExtensionsUnitTests
         var sut = GetErrorResult();
 
         // Act
-        var exception = Record.Exception(() => sut.IfSuccess(Function));
+        var exception = Record.Exception(() => sut.IfSuccess(Function!));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -438,36 +442,36 @@ public class IfSuccessExtensionsUnitTests
     public void IfSuccess_SuccessfulResultWithSuccessfulResultIntFunction_ReturnsSuccessfulResultWithInt()
     {
         // Arrange
-        const int ExpectedValue = 2463;
+        const int FuncValue = 2463;
 
         var sut = Result.Success();
 
         // Act
-        var result = sut.IfSuccess(() => Result.FromValue(ExpectedValue));
+        var result = sut.IfSuccess(() => Result.FromValue(FuncValue));
 
         // Assert
         result.ShouldNotBeNull();
         result.ShouldBeOfType<Result<int>>();
         result.IsSuccess().ShouldBeTrue();
-        result.Value.ShouldBe(ExpectedValue);
+        result.Value.ShouldBe(FuncValue);
     }
 
     [Fact]
     public void IfSuccess_SuccessfulResultWithErrorResultIntFunction_ReturnsErrorResultWithFunctionError()
     {
         // Arrange
-        var error = GetError();
+        var funcError = GetError();
 
         var sut = Result.Success();
 
         // Act
-        var result = sut.IfSuccess(() => Result<int>.FromError(error));
+        var result = sut.IfSuccess(() => Result<int>.FromError(funcError));
 
         // Assert
         result.ShouldNotBeNull();
         result.ShouldBeOfType<Result<int>>();
         result.IsSuccess().ShouldBeFalse();
-        result.Error.ShouldBe(error);
+        result.Error.ShouldBeSameAs(funcError);
     }
 
     [Fact]
@@ -498,7 +502,7 @@ public class IfSuccessExtensionsUnitTests
         result.ShouldNotBeNull();
         result.ShouldBeOfType<Result<int>>();
         result.IsSuccess().ShouldBeFalse();
-        result.Error.ShouldBe(sut.Error);
+        result.Error.ShouldBeSameAs(sut.Error);
     }
 
     #endregion
@@ -512,7 +516,7 @@ public class IfSuccessExtensionsUnitTests
         const Result<int>? Sut = null;
 
         // Act
-        var exception = Record.Exception(() => Sut.IfSuccess(x => { }));
+        var exception = Record.Exception(() => Sut!.IfSuccess(_ => { }));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -524,13 +528,13 @@ public class IfSuccessExtensionsUnitTests
     public void IfSuccess_SuccessfulGenericResultWithNoIntAction_ThrowsException()
     {
         // Arrange
-        const int Value = 35;
+        const int InitialValue = 35;
         const Action<int>? Action = null;
         
-        Result<int> sut = Value;
+        Result<int> sut = InitialValue;
 
         // Act
-        var exception = Record.Exception(() => sut.IfSuccess(Action));
+        var exception = Record.Exception(() => sut.IfSuccess(Action!));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -547,7 +551,7 @@ public class IfSuccessExtensionsUnitTests
         var sut = GetErrorResult<int>();
 
         // Act
-        var exception = Record.Exception(() => sut.IfSuccess(Action));
+        var exception = Record.Exception(() => sut.IfSuccess(Action!));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -559,25 +563,25 @@ public class IfSuccessExtensionsUnitTests
     public void IfSuccess_SuccessfulGenericResultWithIntAction_CallsAction()
     {
         // Arrange
-        const int Value = 35;
+        const int InitialValue = 35;
         var actionMock = new Mock<Action<int>>();
 
-        Result<int> sut = Value;
+        Result<int> sut = InitialValue;
 
         // Act
         sut.IfSuccess(actionMock.Object);
 
         // Assert
-        actionMock.Verify(x => x.Invoke(Value), Times.Once);
+        actionMock.Verify(x => x.Invoke(InitialValue), Times.Once);
     }
 
     [Fact]
     public void IfSuccess_SuccessfulGenericResultWithIntAction_ReturnsResultWithOriginalIntValue()
     {
         // Arrange
-        const int Value = 35;
+        const int InitialValue = 35;
 
-        Result<int> sut = Value;
+        Result<int> sut = InitialValue;
 
         // Act
         var result = sut.IfSuccess(_ => { });
@@ -586,7 +590,7 @@ public class IfSuccessExtensionsUnitTests
         result.ShouldNotBeNull();
         result.ShouldBeOfType<Result<int>>();
         result.IsSuccess().ShouldBeTrue();
-        result.Value.ShouldBe(Value);
+        result.Value.ShouldBe(InitialValue);
     }
 
     [Fact]
@@ -617,7 +621,7 @@ public class IfSuccessExtensionsUnitTests
         result.ShouldNotBeNull();
         result.ShouldBeOfType<Result<int>>();
         result.IsSuccess().ShouldBeFalse();
-        result.Error.ShouldBe(sut.Error);
+        result.Error.ShouldBeSameAs(sut.Error);
     }
 
     #endregion
@@ -631,7 +635,7 @@ public class IfSuccessExtensionsUnitTests
         const Result<string>? Sut = null;
 
         // Act
-        var exception = Record.Exception(() => Sut.IfSuccess((x => Result.Success())));
+        var exception = Record.Exception(() => Sut!.IfSuccess((_ => Result.Success())));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -643,13 +647,13 @@ public class IfSuccessExtensionsUnitTests
     public void IfSuccess_SuccessfulGenericResultWithNoResultFunction_ThrowsException()
     {
         // Arrange
-        const string Value = "Start";
-        Result<string> sut = Value;
+        const string InitialValue = "Start";
+        Result<string> sut = InitialValue;
 
         const Func<string, Result>? Function = null;
 
         // Act
-        var exception = Record.Exception(() => sut.IfSuccess(Function));
+        var exception = Record.Exception(() => sut.IfSuccess(Function!));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -666,7 +670,7 @@ public class IfSuccessExtensionsUnitTests
         var sut = GetErrorResult<string>();
 
         // Act
-        var exception = Record.Exception(() => sut.IfSuccess(Function));
+        var exception = Record.Exception(() => sut.IfSuccess(Function!));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -678,52 +682,54 @@ public class IfSuccessExtensionsUnitTests
     public void IfSuccess_SuccessfulGenericResultWithResultFunction_CallsFunction()
     {
         // Arrange
-        const string Value = "Start";
+        const string InitialValue = "Start";
         var functionMock = new Mock<Func<string, Result>>();
 
-        Result<string> sut = Value;
+        Result<string> sut = InitialValue;
 
         // Act
         sut.IfSuccess(functionMock.Object);
 
         // Assert
-        functionMock.Verify(x => x.Invoke(Value), Times.Once);
+        functionMock.Verify(x => x.Invoke(InitialValue), Times.Once);
     }
 
     [Fact]
     public void IfSuccess_SuccessfulGenericResultWithSuccessfulResultFunction_ReturnsResultWithNewResultValue()
     {
         // Arrange
-        const string Value = "Start";
+        const string InitialValue = "Start";
+        var expectedResult = Result.Success();
 
-        Result<string> sut = Value;
+        Result<string> sut = InitialValue;
 
         // Act
-        var result = sut.IfSuccess(_ => Result.Success());
+        var result = sut.IfSuccess(_ => expectedResult);
 
         // Assert
         result.ShouldNotBeNull();
         result.ShouldBeOfType<Result>();
         result.IsSuccess().ShouldBeTrue();
+        result.ShouldBeSameAs(expectedResult);
     }
 
     [Fact]
     public void IfSuccess_SuccessfulGenericResultWithErrorResultFunction_ReturnsErrorResultWithFunctionError()
     {
         // Arrange
-        var errorResult = GetErrorResult();
+        var funcError = GetErrorResult();
         const string Value = "Start";
 
         Result<string> sut = Value;
 
         // Act
-        var result = sut.IfSuccess(_ => errorResult);
+        var result = sut.IfSuccess(_ => funcError);
 
         // Assert
         result.ShouldNotBeNull();
         result.ShouldBeOfType<Result>();
         result.IsSuccess().ShouldBeFalse();
-        result.Error.ShouldBe(errorResult.Error);
+        result.Error.ShouldBeSameAs(funcError.Error);
     }
 
     [Fact]
@@ -754,7 +760,7 @@ public class IfSuccessExtensionsUnitTests
         result.ShouldNotBeNull();
         result.ShouldBeOfType<Result>();
         result.IsSuccess().ShouldBeFalse();
-        result.Error.ShouldBe(sut.Error);
+        result.Error.ShouldBeSameAs(sut.Error);
     }
 
     #endregion
@@ -768,7 +774,7 @@ public class IfSuccessExtensionsUnitTests
         const Result<double>? Sut = null;
 
         // Act
-        var exception = Record.Exception(() => Sut.IfSuccess(x => 428));
+        var exception = Record.Exception(() => Sut!.IfSuccess(_ => 428));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -780,13 +786,13 @@ public class IfSuccessExtensionsUnitTests
     public void IfSuccess_SuccessfulGenericResultWithNoIntFunction_ThrowsException()
     {
         // Arrange
-        const double Value = 12.34;
+        const double InitialValue = 12.34;
         const Func<double, int>? Function = null;
 
-        Result<double> sut = Value;
+        Result<double> sut = InitialValue;
 
         // Act
-        var exception = Record.Exception(() => sut.IfSuccess(Function));
+        var exception = Record.Exception(() => sut.IfSuccess(Function!));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -803,7 +809,7 @@ public class IfSuccessExtensionsUnitTests
         var sut = GetErrorResult<double>();
 
         // Act
-        var exception = Record.Exception(() => sut.IfSuccess(Function));
+        var exception = Record.Exception(() => sut.IfSuccess(Function!));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -815,35 +821,35 @@ public class IfSuccessExtensionsUnitTests
     public void IfSuccess_SuccessfulGenericResultWithIntFunction_CallsFunction()
     {
         // Arrange
-        const double Value = 12.34;
+        const double InitialValue = 12.34;
         var functionMock = new Mock<Func<double, int>>();
 
-        Result<double> sut = Value;
+        Result<double> sut = InitialValue;
 
         // Act
         sut.IfSuccess(functionMock.Object);
 
         // Assert
-        functionMock.Verify(x => x.Invoke(Value), Times.Once);
+        functionMock.Verify(x => x.Invoke(InitialValue), Times.Once);
     }
 
     [Fact]
     public void IfSuccess_SuccessfulGenericResultWithIntFunction_ReturnsResultWithIntValue()
     {
         // Arrange
-        const int ExpectedValue = 4937;
-        const double Value = 12.34;
+        const double InitialValue = 12.34;
+        const int FuncValue = 4937;
 
-        Result<double> sut = Value;
+        Result<double> sut = InitialValue;
 
         // Act
-        var result = sut.IfSuccess(_ => ExpectedValue);
+        var result = sut.IfSuccess(_ => FuncValue);
 
         // Assert
         result.ShouldNotBeNull();
         result.ShouldBeOfType<Result<int>>();
         result.IsSuccess().ShouldBeTrue();
-        result.Value.ShouldBe(ExpectedValue);
+        result.Value.ShouldBe(FuncValue);
     }
 
     [Fact]
@@ -874,7 +880,7 @@ public class IfSuccessExtensionsUnitTests
         result.ShouldNotBeNull();
         result.ShouldBeOfType<Result<int>>();
         result.IsSuccess().ShouldBeFalse();
-        result.Error.ShouldBe(sut.Error);
+        result.Error.ShouldBeSameAs(sut.Error);
     }
 
     #endregion
@@ -888,7 +894,7 @@ public class IfSuccessExtensionsUnitTests
         const Result<int>? Sut = null;
 
         // Act
-        var exception = Record.Exception(() => Sut.IfSuccess(x => Result.FromValue("new text value")));
+        var exception = Record.Exception(() => Sut!.IfSuccess(x => Result.FromValue("new text value")));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -900,13 +906,13 @@ public class IfSuccessExtensionsUnitTests
     public void IfSuccess_SuccessfulGenericResultWithNoGenericResultFunction_ThrowsException()
     {
         // Arrange
-        const int Value = 39;
+        const int InitialValue = 39;
         const Func<int, Result<string>>? Function = null;
 
-        Result<int> sut = Value;
+        Result<int> sut = InitialValue;
 
         // Act
-        var exception = Record.Exception(() => sut.IfSuccess(Function));
+        var exception = Record.Exception(() => sut.IfSuccess(Function!));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -923,7 +929,7 @@ public class IfSuccessExtensionsUnitTests
         var sut = GetErrorResult<int>();
 
         // Act
-        var exception = Record.Exception(() => sut.IfSuccess(Function));
+        var exception = Record.Exception(() => sut.IfSuccess(Function!));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -935,54 +941,54 @@ public class IfSuccessExtensionsUnitTests
     public void IfSuccess_SuccessfulGenericResultWithGenericResultFunction_CallsFunction()
     {
         // Arrange
-        const int Value = 39;
+        const int InitialValue = 39;
         var functionMock = new Mock<Func<int,  Result<string>>>();
 
-        Result<int> sut = Value;
+        Result<int> sut = InitialValue;
 
         // Act
         sut.IfSuccess(functionMock.Object);
 
         // Assert
-        functionMock.Verify(x => x.Invoke(Value), Times.Once);
+        functionMock.Verify(x => x.Invoke(InitialValue), Times.Once);
     }
 
     [Fact]
     public void IfSuccess_SuccessfulGenericResultWithSuccessfulGenericResultFunction_ReturnsGenericResult()
     {
         // Arrange
-        const string ExpectedValue = "New Value";
-        const int Value = 49;
+        const int InitialValue = 49;
+        const string FuncValue = "New Value";
 
-        Result<int> sut = Value;
+        Result<int> sut = InitialValue;
 
         // Act
-        var result = sut.IfSuccess(_ => Result.FromValue(ExpectedValue));
+        var result = sut.IfSuccess(_ => Result.FromValue(FuncValue));
 
         // Assert
         result.ShouldNotBeNull();
         result.ShouldBeOfType<Result<string>>();
         result.IsSuccess().ShouldBeTrue();
-        result.Value.ShouldBe(ExpectedValue);
+        result.Value.ShouldBe(FuncValue);
     }
 
     [Fact]
     public void IfSuccess_SuccessfulGenericResultWithErrorGenericResultFunction_ReturnsErrorResultWithFunctionError()
     {
         // Arrange
-        const int Value = 49;
-        var errorResult = GetErrorResult<string>();
+        const int InitialValue = 49;
+        var funcErrorResult = GetErrorResult<string>();
 
-        Result<int> sut = Value;
+        Result<int> sut = InitialValue;
 
         // Act
-        var result = sut.IfSuccess(_ => errorResult);
+        var result = sut.IfSuccess(_ => funcErrorResult);
 
         // Assert
         result.ShouldNotBeNull();
         result.ShouldBeOfType<Result<string>>();
         result.IsSuccess().ShouldBeFalse();
-        result.Error.ShouldBe(errorResult.Error);
+        result.Error.ShouldBeSameAs(funcErrorResult.Error);
     }
 
     [Fact]
@@ -1013,7 +1019,7 @@ public class IfSuccessExtensionsUnitTests
         result.ShouldNotBeNull();
         result.ShouldBeOfType<Result<string>>();
         result.IsSuccess().ShouldBeFalse();
-        result.Error.ShouldBe(sut.Error);
+        result.Error.ShouldBeSameAs(sut.Error);
     }
 
     #endregion

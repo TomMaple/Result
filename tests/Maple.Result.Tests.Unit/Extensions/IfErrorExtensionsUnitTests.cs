@@ -15,7 +15,7 @@ public class IfErrorExtensionsUnitTests
         const Result? Sut = null;
 
         // Act
-        var exception = Record.Exception(() => Sut.IfError(_ => { }));
+        var exception = Record.Exception(() => Sut!.IfError(_ => { }));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -32,7 +32,7 @@ public class IfErrorExtensionsUnitTests
         var sut = Result.Success();
 
         // Act
-        var exception = Record.Exception(() => sut.IfError(Action));
+        var exception = Record.Exception(() => sut.IfError(Action!));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -49,7 +49,7 @@ public class IfErrorExtensionsUnitTests
         var sut = GetErrorResult();
 
         // Act
-        var exception = Record.Exception(() => sut.IfError(Action));
+        var exception = Record.Exception(() => sut.IfError(Action!));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -129,7 +129,7 @@ public class IfErrorExtensionsUnitTests
         const Result? Sut = null;
 
         // Act
-        var exception = Record.Exception(() => Sut.IfError(_ => Result.Success()));
+        var exception = Record.Exception(() => Sut!.IfError(_ => Result.Success()));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -146,7 +146,7 @@ public class IfErrorExtensionsUnitTests
         var sut = Result.Success();
 
         // Act
-        var exception = Record.Exception(() => sut.IfError(Function));
+        var exception = Record.Exception(() => sut.IfError(Function!));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -163,7 +163,7 @@ public class IfErrorExtensionsUnitTests
         var sut = GetErrorResult();
 
         // Act
-        var exception = Record.Exception(() => sut.IfError(Function));
+        var exception = Record.Exception(() => sut.IfError(Function!));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -219,32 +219,32 @@ public class IfErrorExtensionsUnitTests
     public void IfError_ErrorResultWithResultFunction_ReturnsFunctionResult()
     {
         // Arrange
-        var replacementResult = Result.Success();
+        var funcResult = Result.Success();
 
         var sut = GetErrorResult();
 
         // Act
-        var result = sut.IfError(_ => replacementResult);
+        var result = sut.IfError(_ => funcResult);
 
         // Assert
-        result.ShouldBeSameAs(replacementResult);
+        result.ShouldBeSameAs(funcResult);
     }
 
     [Fact]
     public void IfError_ErrorResultWithErrorResultFunction_ReturnsErrorFromFunction()
     {
         // Arrange
-        var replacementError = GetReplacementError();
+        var funcError = GetReplacementError();
 
         var sut = GetErrorResult();
 
         // Act
-        var result = sut.IfError(_ => replacementError);
+        var result = sut.IfError(_ => funcError);
 
         // Assert
         result.ShouldNotBeNull();
         result.IsSuccess().ShouldBeFalse();
-        result.Error.ShouldBe(replacementError);
+        result.Error.ShouldBe(funcError);
     }
 
     #endregion
@@ -258,7 +258,7 @@ public class IfErrorExtensionsUnitTests
         const Result? Sut = null;
 
         // Act
-        var exception = Record.Exception(() => Sut.IfError(_ => { }));
+        var exception = Record.Exception(() => Sut!.IfError(_ => { }));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -270,13 +270,13 @@ public class IfErrorExtensionsUnitTests
     public void IfError_SuccessGenericResultWithNoAction_ThrowsException()
     {
         // Arrange
-        const int Value = 24;
+        const int InitialValue = 24;
         const Action<Error>? Action = null;
 
-        Result<int> sut = Value;
+        Result<int> sut = InitialValue;
 
         // Act
-        var exception = Record.Exception(() => sut.IfError(Action));
+        var exception = Record.Exception(() => sut.IfError(Action!));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -293,7 +293,7 @@ public class IfErrorExtensionsUnitTests
         var sut = GetErrorResult<int>();
 
         // Act
-        var exception = Record.Exception(() => sut.IfError(Action));
+        var exception = Record.Exception(() => sut.IfError(Action!));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -305,10 +305,10 @@ public class IfErrorExtensionsUnitTests
     public void IfError_SuccessGenericResultWithAction_DoesNotCallAction()
     {
         // Arrange
-        const int Value = 29;
+        const int InitialValue = 29;
         var actionMock = new Mock<Action<Error>>();
 
-        Result<int> sut = Value;
+        Result<int> sut = InitialValue;
 
         // Act
         sut.IfError(actionMock.Object);
@@ -321,9 +321,9 @@ public class IfErrorExtensionsUnitTests
     public void IfError_SuccessGenericResultWithAction_ReturnsOriginalSuccessResult()
     {
         // Arrange
-        const int Value = 38;
+        const int InitialValue = 38;
 
-        Result<int> sut = Value;
+        Result<int> sut = InitialValue;
 
         // Act
         var result = sut.IfError(_ => { });
@@ -332,7 +332,7 @@ public class IfErrorExtensionsUnitTests
         result.ShouldNotBeNull();
         result.ShouldBeSameAs(sut);
         result.IsSuccess().ShouldBeTrue();
-        result.Value.ShouldBe(Value);
+        result.Value.ShouldBe(InitialValue);
     }
 
     [Fact]
@@ -377,7 +377,7 @@ public class IfErrorExtensionsUnitTests
         const Result<int>? Sut = null;
 
         // Act
-        var exception = Record.Exception(() => Sut.IfError(_ => Result<int>.FromValue(1)));
+        var exception = Record.Exception(() => Sut!.IfError(_ => Result<int>.FromValue(1)));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -389,13 +389,13 @@ public class IfErrorExtensionsUnitTests
     public void IfError_SuccessfulGenericResultWithNoResultFunction_ThrowsException()
     {
         // Arrange
-        const int Value = 24;
+        const int InitialValue = 24;
         const Func<Error, Result<int>>? Function = null;
 
-        Result<int> sut = Value;
+        Result<int> sut = InitialValue;
 
         // Act
-        var exception = Record.Exception(() => sut.IfError(Function));
+        var exception = Record.Exception(() => sut.IfError(Function!));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -412,7 +412,7 @@ public class IfErrorExtensionsUnitTests
         var sut = GetErrorResult<int>();
 
         // Act
-        var exception = Record.Exception(() => sut.IfError(Function));
+        var exception = Record.Exception(() => sut.IfError(Function!));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -424,10 +424,10 @@ public class IfErrorExtensionsUnitTests
     public void IfError_SuccessfulGenericResultWithResultFunction_DoesNotCallFunction()
     {
         // Arrange
-        const int Value = 42;
+        const int InitialValue = 42;
         var functionMock = new Mock<Func<Error, Result<int>>>();
 
-        Result<int> sut = Value;
+        Result<int> sut = InitialValue;
 
         // Act
         var result = sut.IfError(functionMock.Object);
@@ -435,23 +435,23 @@ public class IfErrorExtensionsUnitTests
         // Assert
         functionMock.Verify(x => x.Invoke(It.IsAny<Error>()), Times.Never);
         result.ShouldBeSameAs(sut);
-        result.Value.ShouldBe(Value);
+        result.Value.ShouldBe(InitialValue);
     }
 
     [Fact]
     public void IfError_SuccessfulGenericResultWithResultFunction_ReturnsOriginalSuccessResult()
     {
         // Arrange
-        const int Value = 11;
+        const int InitialValue = 11;
 
-        Result<int> sut = Value;
+        Result<int> sut = InitialValue;
 
         // Act
         var result = sut.IfError(_ => Result<int>.FromValue(2));
 
         // Assert
         result.ShouldBeSameAs(sut);
-        result.Value.ShouldBe(Value);
+        result.Value.ShouldBe(InitialValue);
     }
 
     [Fact]
@@ -473,15 +473,15 @@ public class IfErrorExtensionsUnitTests
     public void IfError_ErrorGenericResultWithResultFunction_ReturnsFunctionResult()
     {
         // Arrange
-        var replacementResult = Result<int>.FromValue(58);
+        var funcResult = Result<int>.FromValue(58);
 
         var sut = GetErrorResult<int>();
 
         // Act
-        var result = sut.IfError(_ => replacementResult);
+        var result = sut.IfError(_ => funcResult);
 
         // Assert
-        result.ShouldBeSameAs(replacementResult);
+        result.ShouldBeSameAs(funcResult);
         result.Value.ShouldBe(58);
     }
 
@@ -489,17 +489,17 @@ public class IfErrorExtensionsUnitTests
     public void IfError_ErrorGenericResultWithResultFunction_ReturnsErrorFromFunction()
     {
         // Arrange
-        var replacementError = GetReplacementError();
+        var funcError = GetReplacementError();
 
         var sut = GetErrorResult<int>();
 
         // Act
-        var result = sut.IfError(_ => replacementError);
+        var result = sut.IfError(_ => funcError);
 
         // Assert
         result.ShouldNotBeNull();
         result.IsSuccess().ShouldBeFalse();
-        result.Error.ShouldBe(replacementError);
+        result.Error.ShouldBe(funcError);
     }
 
     #endregion
