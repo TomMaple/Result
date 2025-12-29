@@ -530,7 +530,7 @@ public class IfSuccessExtensionsUnitTests
         // Arrange
         const int InitialValue = 35;
         const Action<int>? Action = null;
-        
+
         Result<int> sut = InitialValue;
 
         // Act
@@ -635,7 +635,7 @@ public class IfSuccessExtensionsUnitTests
         const Result<string>? Sut = null;
 
         // Act
-        var exception = Record.Exception(() => Sut!.IfSuccess((_ => Result.Success())));
+        var exception = Record.Exception(() => Sut!.IfSuccess(_ => Result.Success()));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -925,7 +925,7 @@ public class IfSuccessExtensionsUnitTests
     {
         // Arrange
         const Func<int, Result<string>>? Function = null;
-        
+
         var sut = GetErrorResult<int>();
 
         // Act
@@ -942,7 +942,7 @@ public class IfSuccessExtensionsUnitTests
     {
         // Arrange
         const int InitialValue = 39;
-        var functionMock = new Mock<Func<int,  Result<string>>>();
+        var functionMock = new Mock<Func<int, Result<string>>>();
 
         Result<int> sut = InitialValue;
 

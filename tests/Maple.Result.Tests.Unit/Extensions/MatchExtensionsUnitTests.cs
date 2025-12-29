@@ -506,7 +506,7 @@ public class MatchExtensionsUnitTests
     {
         // Arrange
         var successFunctionMock = new Mock<Func<int>>();
-        
+
         var sut = Result.Success();
 
         // Act
@@ -521,7 +521,7 @@ public class MatchExtensionsUnitTests
     {
         // Arrange
         var errorActionMock = new Mock<Action<Error>>();
-        
+
         var sut = Result.Success();
 
         // Act
@@ -1553,7 +1553,7 @@ public class MatchExtensionsUnitTests
     {
         // Arrange
         var errorActionMock = new Mock<Action<Error>>();
-        
+
         Result<int> sut = 88;
 
         // Act
@@ -1574,7 +1574,7 @@ public class MatchExtensionsUnitTests
         Result<int> sut = Value;
 
         // Act
-        var result = sut.Match(x => Result.FromValue((x+2).ToString()), _ => { });
+        var result = sut.Match(x => Result.FromValue((x + 2).ToString()), _ => { });
 
         // Assert
         result.ShouldNotBeNull();
@@ -1639,7 +1639,8 @@ public class MatchExtensionsUnitTests
         const Result<int>? Sut = null;
 
         // Act
-        var exception = Record.Exception(() => Sut!.Match(x => Result.FromValue(x.ToString()), _ => Result.FromValue("error value")));
+        var exception = Record.Exception(
+            () => Sut!.Match(x => Result.FromValue(x.ToString()), _ => Result.FromValue("error value")));
 
         // Assert
         exception.ShouldNotBeNull();

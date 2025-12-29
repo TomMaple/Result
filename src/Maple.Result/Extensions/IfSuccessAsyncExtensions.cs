@@ -83,7 +83,7 @@ public static class IfSuccessAsyncExtensions
     ///     parameters are <see langword="null" />.
     /// </exception>
     public static async Task<Result> IfSuccessAsync(this Result result, Func<Task<Result>> ifSuccessFunction,
-        bool continueOnCapturedContext  = false)
+        bool continueOnCapturedContext = false)
     {
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
@@ -242,8 +242,9 @@ public static class IfSuccessAsyncExtensions
     ///     the original context captured; otherwise, <see langword="false" />.
     /// </param>
     /// <returns>
-    ///     A <see cref="Task{Result}" /> that is returned by <paramref name="ifSuccessFunction" /> if <paramref name="result" />
-    ///     is successful; otherwise, a failed <see cref="Result" /> with the original <see cref="Error" />.
+    ///     A <see cref="Task{Result}" /> that is returned by <paramref name="ifSuccessFunction" />
+    ///     if <paramref name="result" /> is successful;
+    ///     otherwise, a failed <see cref="Result" /> with the original <see cref="Error" />.
     /// </returns>
     /// <exception cref="ArgumentNullException">
     ///     If any of the <paramref name="result" /> or <paramref name="ifSuccessFunction" />

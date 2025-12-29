@@ -56,8 +56,8 @@ public static class MatchExtensions
 
     /// <summary>
     ///     Invokes the provided function and returns its <see cref="Result" /> output
-    ///     if the <paramref name="result"/> is successful, or the provided action and
-    ///     returns <see cref="Result"/> with the original error.
+    ///     if the <paramref name="result" /> is successful, or the provided action and
+    ///     returns <see cref="Result" /> with the original error.
     /// </summary>
     /// <param name="result">The <see cref="Result" /> whose outcome is inspected. Must not be <see langword="null" />.</param>
     /// <param name="ifSuccessFunction">
@@ -71,7 +71,7 @@ public static class MatchExtensions
     /// </param>
     /// <returns>
     ///     The <see cref="Result" /> returned by either <paramref name="ifSuccessFunction" />
-    ///     if <paramref name="result"/> is successful, or the original <paramref name="result"/> after invoking
+    ///     if <paramref name="result" /> is successful, or the original <paramref name="result" /> after invoking
     ///     <paramref name="ifErrorAction" />.
     /// </returns>
     /// <exception cref="ArgumentNullException">
@@ -117,7 +117,7 @@ public static class MatchExtensions
     ///     or <paramref name="ifErrorFunction" /> parameters are <see langword="null" />.
     /// </exception>
     public static Result Match(this Result result, Func<Result> ifSuccessFunction,
-    Func<Error, Result> ifErrorFunction)
+        Func<Error, Result> ifErrorFunction)
     {
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
@@ -130,8 +130,8 @@ public static class MatchExtensions
 
     /// <summary>
     ///     Invokes the provided function and returns its value as a <see cref="Result{T}" /> instance
-    ///     if the <paramref name="result"/> is successful, or the provided action and
-    ///     returns <see cref="Result{T}"/> with the original error.
+    ///     if the <paramref name="result" /> is successful, or the provided action and
+    ///     returns <see cref="Result{T}" /> with the original error.
     /// </summary>
     /// <typeparam name="T">The return type produced by the successful branch.</typeparam>
     /// <param name="result">
@@ -148,9 +148,9 @@ public static class MatchExtensions
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <returns>
-    ///     The <see cref="Result{T}" /> with the value returned by either the <paramref name="ifSuccessFunction"/>
-    ///     if <paramref name="result" /> is successful, or the <see cref="Result{T}"/> with
-    ///     the original <paramref name="result"/> after invoking <paramref name="ifErrorAction" />.
+    ///     The <see cref="Result{T}" /> with the value returned by either the <paramref name="ifSuccessFunction" />
+    ///     if <paramref name="result" /> is successful, or the <see cref="Result{T}" /> with
+    ///     the original <paramref name="result" /> after invoking <paramref name="ifErrorAction" />.
     /// </returns>
     /// <exception cref="ArgumentNullException">
     ///     If any of the <paramref name="result" />, <paramref name="ifSuccessFunction" />,
@@ -190,7 +190,7 @@ public static class MatchExtensions
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <returns>
-    ///     The <see cref="Result{T}"/> with the value produced by either <paramref name="ifSuccessFunction" />
+    ///     The <see cref="Result{T}" /> with the value produced by either <paramref name="ifSuccessFunction" />
     ///     or <paramref name="ifErrorFunction" />.
     /// </returns>
     /// <exception cref="ArgumentNullException">
@@ -210,8 +210,8 @@ public static class MatchExtensions
 
     /// <summary>
     ///     Invokes the provided function and returns its <see cref="Result{T}" /> output
-    ///     if the <paramref name="result"/> is successful, or the provided action and
-    ///     returns <see cref="Result{T}"/> with the original error.
+    ///     if the <paramref name="result" /> is successful, or the provided action and
+    ///     returns <see cref="Result{T}" /> with the original error.
     /// </summary>
     /// <typeparam name="T">The type of the <see cref="Result{T}" /> returned by the matching branch.</typeparam>
     /// <param name="result">
@@ -228,9 +228,9 @@ public static class MatchExtensions
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <returns>
-    ///     The <see cref="Result{T}" /> returned by the <paramref name="ifSuccessFunction"/>
-    ///     if <paramref name="result"/> is successful, or the <see cref="Result{T}"/> with
-    ///     the original <paramref name="result"/> after invoking <paramref name="ifErrorAction" />.
+    ///     The <see cref="Result{T}" /> returned by the <paramref name="ifSuccessFunction" />
+    ///     if <paramref name="result" /> is successful, or the <see cref="Result{T}" /> with
+    ///     the original <paramref name="result" /> after invoking <paramref name="ifErrorAction" />.
     /// </returns>
     /// <exception cref="ArgumentNullException">
     ///     If any of the <paramref name="result" />, <paramref name="ifSuccessFunction" />,
@@ -337,8 +337,8 @@ public static class MatchExtensions
 
     /// <summary>
     ///     Invokes the provided function and returns its value as a <see cref="Result{TNext}" /> instance
-    ///     if the <paramref name="result"/> is successful, or the provided action and
-    ///     returns <see cref="Result{TNext}"/> with the original error.
+    ///     if the <paramref name="result" /> is successful, or the provided action and
+    ///     returns <see cref="Result{TNext}" /> with the original error.
     /// </summary>
     /// <typeparam name="T">The type wrapped by the source <see cref="Result{T}" />.</typeparam>
     /// <typeparam name="TNext">The type produced by either branch.</typeparam>
@@ -357,9 +357,9 @@ public static class MatchExtensions
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <returns>
-    ///     The <see cref="Result{TNext}"/> with the value returned by <paramref name="ifSuccessFunction" />
-    ///     if <paramref name="result" /> is successful, or the <see cref="Result{TNext}"/> with
-    ///     the original <paramref name="result"/> after invoking <paramref name="ifErrorAction" />.
+    ///     The <see cref="Result{TNext}" /> with the value returned by <paramref name="ifSuccessFunction" />
+    ///     if <paramref name="result" /> is successful, or the <see cref="Result{TNext}" /> with
+    ///     the original <paramref name="result" /> after invoking <paramref name="ifErrorAction" />.
     /// </returns>
     /// <exception cref="ArgumentNullException">
     ///     If any of the <paramref name="result" />, <paramref name="ifSuccessFunction" />,
@@ -402,7 +402,7 @@ public static class MatchExtensions
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <returns>
-    ///     The <see cref="Result{TNext}"/> with the value returned by
+    ///     The <see cref="Result{TNext}" /> with the value returned by
     ///     either <paramref name="ifSuccessFunction" /> or <paramref name="ifErrorFunction" />.
     /// </returns>
     /// <exception cref="ArgumentNullException">
@@ -423,8 +423,8 @@ public static class MatchExtensions
 
     /// <summary>
     ///     Invokes the provided function and returns its <see cref="Result{TNext}" /> output
-    ///     if the <paramref name="result"/> is successful, or the provided action and
-    ///     returns <see cref="Result{TNext}"/> with the original error.
+    ///     if the <paramref name="result" /> is successful, or the provided action and
+    ///     returns <see cref="Result{TNext}" /> with the original error.
     /// </summary>
     /// <typeparam name="T">The type wrapped by the source <see cref="Result{T}" />.</typeparam>
     /// <typeparam name="TNext">The type of the <see cref="Result{TNext}" /> returned by the invoked function.</typeparam>
@@ -444,8 +444,8 @@ public static class MatchExtensions
     /// </param>
     /// <returns>
     ///     The <see cref="Result{TNext}" /> returned by <paramref name="ifSuccessFunction" />
-    ///     if the <paramref name="result"/> is successful, or the <see cref="Result{TNext}"/> with
-    ///     the original <paramref name="result"/> after invoking <paramref name="ifErrorAction" />.
+    ///     if the <paramref name="result" /> is successful, or the <see cref="Result{TNext}" /> with
+    ///     the original <paramref name="result" /> after invoking <paramref name="ifErrorAction" />.
     /// </returns>
     /// <exception cref="ArgumentNullException">
     ///     If any of the <paramref name="result" />, <paramref name="ifSuccessFunction" />,

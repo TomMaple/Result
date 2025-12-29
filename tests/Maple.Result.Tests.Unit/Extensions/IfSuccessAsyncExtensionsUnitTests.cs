@@ -382,7 +382,8 @@ public class IfSuccessAsyncExtensionsUnitTests
         const Result? Sut = null;
 
         // Act
-        var exception = await Record.ExceptionAsync(() => Sut!.IfSuccessAsync(() => Task.FromResult(Result.FromValue(123))));
+        var exception =
+            await Record.ExceptionAsync(() => Sut!.IfSuccessAsync(() => Task.FromResult(Result.FromValue(123))));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -531,7 +532,7 @@ public class IfSuccessAsyncExtensionsUnitTests
         // Arrange
         const int InitialValue = 35;
         const Func<int, Task>? ActionAsync = null;
-        
+
         Result<int> sut = InitialValue;
 
         // Act
@@ -893,7 +894,8 @@ public class IfSuccessAsyncExtensionsUnitTests
         const Result<int>? Sut = null;
 
         // Act
-        var exception = await Record.ExceptionAsync(() => Sut!.IfSuccessAsync(x => Task.FromResult(Result.FromValue(x.ToString()))));
+        var exception = await Record.ExceptionAsync(
+            () => Sut!.IfSuccessAsync(x => Task.FromResult(Result.FromValue(x.ToString()))));
 
         // Assert
         exception.ShouldNotBeNull();
