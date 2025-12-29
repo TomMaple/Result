@@ -1111,7 +1111,7 @@ public class ResultUnitTests
 
     #region helper classes
 
-    public class TestClass
+    private class TestClass
     {
         public string? Text { get; set; }
         public int Number { get; set; }
