@@ -35,8 +35,11 @@ public class ErrorUriUnitTests
     [Fact]
     public void Locator_NullLocator_ThrowsException()
     {
+        // Arrange
+        const string? Locator = null;
+
         // Act
-        var exception = Record.Exception(() => ErrorUri.Locator(null));
+        var exception = Record.Exception(() => ErrorUri.Locator(Locator!));
 
         // Assert
         exception.ShouldNotBeNull();
@@ -98,8 +101,11 @@ public class ErrorUriUnitTests
     [Fact]
     public void Tag_NullLocator_ThrowsException()
     {
+        // Arrange
+        const string? Tag = null;
+
         // Act
-        var exception = Record.Exception(() => ErrorUri.Tag(null));
+        var exception = Record.Exception(() => ErrorUri.Tag(Tag!));
 
         // Assert
         exception.ShouldNotBeNull();

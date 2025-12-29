@@ -232,7 +232,7 @@ public class TemplatedMessageUnitTests
     private TemplatedMessage Deserialize(string json)
     {
         var result = JsonSerializer.Deserialize<TemplatedMessage>(json, _jsonSerializerOptions);
-        return result;
+        return result!;
     }
 
     private string Serialize(TemplatedMessage templatedMessage)
