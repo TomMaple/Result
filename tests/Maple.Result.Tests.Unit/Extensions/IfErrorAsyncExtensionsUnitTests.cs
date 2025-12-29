@@ -25,7 +25,7 @@ public class IfErrorAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfErrorAsync_SuccessResultWithNoAction_ThrowsException()
+    public async Task IfErrorAsync_SuccessfulResultWithNoAction_ThrowsException()
     {
         // Arrange
         const Func<Error, Task>? AsyncAction = null;
@@ -59,7 +59,7 @@ public class IfErrorAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfErrorAsync_SuccessResultWithAction_DoesNotCallAction()
+    public async Task IfErrorAsync_SuccessfulResultWithAction_DoesNotCallAction()
     {
         // Arrange
         var actionMock = new Mock<Func<Error, Task>>();
@@ -74,7 +74,7 @@ public class IfErrorAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfErrorAsync_SuccessResultWithAction_ReturnsOriginalSuccessResult()
+    public async Task IfErrorAsync_SuccessfulResultWithAction_ReturnsOriginalResult()
     {
         // Arrange
         var sut = Result.Success();
@@ -104,7 +104,7 @@ public class IfErrorAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfErrorAsync_ErrorResultWithAction_ReturnsOriginalErrorResult()
+    public async Task IfErrorAsync_ErrorResultWithAction_ReturnsOriginalResult()
     {
         // Arrange
         var sut = GetErrorResult();
@@ -139,7 +139,7 @@ public class IfErrorAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfErrorAsync_SuccessResultWithNoResultFunction_ThrowsException()
+    public async Task IfErrorAsync_SuccessfulResultWithNoResultFunction_ThrowsException()
     {
         // Arrange
         const Func<Error, Task<Result>>? Function = null;
@@ -173,7 +173,7 @@ public class IfErrorAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfErrorAsync_SuccessResultWithResultFunction_DoesNotCallFunction()
+    public async Task IfErrorAsync_SuccessfulResultWithResultFunction_DoesNotCallFunction()
     {
         // Arrange
         var functionMock = new Mock<Func<Error, Task<Result>>>();
@@ -188,7 +188,7 @@ public class IfErrorAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfErrorAsync_SuccessResultWithResultFunction_ReturnsOriginalSuccessResult()
+    public async Task IfErrorAsync_SuccessfulResultWithResultFunction_ReturnsOriginalResult()
     {
         // Arrange
         var sut = Result.Success();
@@ -218,7 +218,7 @@ public class IfErrorAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfErrorAsync_ErrorResultWithResultFunction_ReturnsFunctionResult()
+    public async Task IfErrorAsync_ErrorResultWithSuccessResultFunction_ReturnsFunctionResult()
     {
         // Arrange
         var asyncFuncResult = Result.Success();
@@ -234,7 +234,7 @@ public class IfErrorAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfErrorAsync_ErrorResultWithErrorResultFunction_ReturnsFunctionError()
+    public async Task IfErrorAsync_ErrorResultWithErrorResultFunction_ReturnsFunctionResult()
     {
         // Arrange
         var asyncFuncError = GetReplacementError();
@@ -270,7 +270,7 @@ public class IfErrorAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfErrorAsync_SuccessGenericResultWithNoAction_ThrowsException()
+    public async Task IfErrorAsync_SuccessfulGenericResultWithNoAction_ThrowsException()
     {
         // Arrange
         const int InitialValue = 24;
@@ -305,7 +305,7 @@ public class IfErrorAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfErrorAsync_SuccessGenericResultWithAction_DoesNotCallAction()
+    public async Task IfErrorAsync_SuccessfulGenericResultWithAction_DoesNotCallAction()
     {
         // Arrange
         const int InitialValue = 29;
@@ -321,7 +321,7 @@ public class IfErrorAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfErrorAsync_SuccessGenericResultWithAction_ReturnsOriginalSuccessResult()
+    public async Task IfErrorAsync_SuccessfulGenericResultWithAction_ReturnsOriginalValueResult()
     {
         // Arrange
         const int InitialValue = 38;
@@ -354,7 +354,7 @@ public class IfErrorAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfErrorAsync_ErrorGenericResultWithAction_ReturnsOriginalErrorResult()
+    public async Task IfErrorAsync_ErrorGenericResultWithAction_ReturnsOriginalValueResultWithError()
     {
         // Arrange
         var sut = GetErrorResult<int>();
@@ -374,7 +374,7 @@ public class IfErrorAsyncExtensionsUnitTests
     #region IfErrorAsync (Result<T>, Func<Error, Task<IResult>>)
 
     [Fact]
-    public async Task IfErrorAsync_NoGenericResultWithResultFunction_ThrowsException()
+    public async Task IfErrorAsync_NoGenericResultWithGenericResultFunction_ThrowsException()
     {
         // Arrange
         const Result<int>? Sut = null;
@@ -389,7 +389,7 @@ public class IfErrorAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfErrorAsync_SuccessfulGenericResultWithNoResultFunction_ThrowsException()
+    public async Task IfErrorAsync_SuccessfulGenericResultWithNoGenericResultFunction_ThrowsException()
     {
         // Arrange
         const int InitialValue = 24;
@@ -407,7 +407,7 @@ public class IfErrorAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfErrorAsync_ErrorGenericResultWithNoResultFunction_ThrowsException()
+    public async Task IfErrorAsync_ErrorGenericResultWithNoGenericResultFunction_ThrowsException()
     {
         // Arrange
         const Func<Error, Task<Result<int>>>? Function = null;
@@ -424,7 +424,7 @@ public class IfErrorAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfErrorAsync_SuccessfulGenericResultWithResultFunction_DoesNotCallFunction()
+    public async Task IfErrorAsync_SuccessfulGenericResultWithGenericResultFunction_DoesNotCallFunction()
     {
         // Arrange
         const int InitialValue = 42;
@@ -440,7 +440,7 @@ public class IfErrorAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfErrorAsync_SuccessfulGenericResultWithResultFunction_ReturnsOriginalSuccessResult()
+    public async Task IfErrorAsync_SuccessfulGenericResultWithGenericResultFunction_ReturnsOriginalValueResult()
     {
         // Arrange
         const int InitialValue = 11;
@@ -457,7 +457,7 @@ public class IfErrorAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfErrorAsync_ErrorGenericResultWithResultFunction_CallsFunction()
+    public async Task IfErrorAsync_ErrorGenericResultWithGenericResultFunction_CallsFunction()
     {
         // Arrange
         var functionMock = new Mock<Func<Error, Task<Result<int>>>>();
@@ -472,7 +472,7 @@ public class IfErrorAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfErrorAsync_ErrorGenericResultWithResultFunction_ReturnsFunctionResult()
+    public async Task IfErrorAsync_ErrorGenericResultWithGenericResultFunction_ReturnsFunctionValueResult()
     {
         // Arrange
         var asyncFuncResult = Result.FromValue(58);
@@ -489,7 +489,7 @@ public class IfErrorAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfErrorAsync_ErrorGenericResultWithResultFunction_ReturnsErrorFromFunction()
+    public async Task IfErrorAsync_ErrorGenericResultWithGenericResultFunction_ReturnsFunctionValueResultWithError()
     {
         // Arrange
         var asyncFuncError = GetReplacementError();

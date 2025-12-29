@@ -73,7 +73,7 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_SuccessfulResultWithAction_ReturnsOriginalSuccessfulResult()
+    public void IfSuccess_SuccessfulResultWithAction_ReturnsOriginalResult()
     {
         // Arrange
         var sut = Result.Success();
@@ -104,7 +104,7 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_ErrorResultWithAction_ReturnsErrorResult()
+    public void IfSuccess_ErrorResultWithAction_ReturnsOriginalResult()
     {
         // Arrange
         var sut = GetErrorResult();
@@ -188,7 +188,7 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_SuccessfulResultWithSuccessfulResultFunction_ReturnsSuccessfulResult()
+    public void IfSuccess_SuccessfulResultWithSuccessfulResultFunction_ReturnsFunctionResult()
     {
         // Arrange
         var funcResult = Result.Success();
@@ -206,7 +206,7 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_SuccessfulResultWithErrorResultFunction_ReturnsErrorResultWithFunctionError()
+    public void IfSuccess_SuccessfulResultWithErrorResultFunction_ReturnsFunctionResult()
     {
         // Arrange
         var funcError = GetErrorResult();
@@ -238,7 +238,7 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_ErrorResultWithResultFunction_ReturnsOriginalErrorResult()
+    public void IfSuccess_ErrorResultWithResultFunction_ReturnsOriginalResult()
     {
         // Arrange
         var sut = GetErrorResult();
@@ -258,7 +258,7 @@ public class IfSuccessExtensionsUnitTests
     #region IfSuccess (Result, Func<T>)
 
     [Fact]
-    public void IfSuccess_NoResultWithIntFunction_ThrowsException()
+    public void IfSuccess_NoResultWithGenericFunction_ThrowsException()
     {
         // Arrange
         const Result? Sut = null;
@@ -273,7 +273,7 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_SuccessfulResultWithNoIntFunction_ThrowsException()
+    public void IfSuccess_SuccessfulResultWithNoGenericFunction_ThrowsException()
     {
         // Arrange
         const Func<int>? Function = null;
@@ -290,7 +290,7 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_ErrorResultWithNoIntFunction_ThrowsException()
+    public void IfSuccess_ErrorResultWithNoGenericFunction_ThrowsException()
     {
         // Arrange
         const Func<int>? Function = null;
@@ -307,7 +307,7 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_SuccessfulResultWithIntFunction_CallsFunction()
+    public void IfSuccess_SuccessfulResultWithGenericFunction_CallsFunction()
     {
         // Arrange
         var functionMock = new Mock<Func<int>>();
@@ -322,7 +322,7 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_SuccessfulResultWithIntFunction_ReturnsSuccessfulResultWithInt()
+    public void IfSuccess_SuccessfulResultWithGenericFunction_ReturnsFunctionValueResult()
     {
         // Arrange
         const int FuncValue = 2463;
@@ -340,7 +340,7 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_ErrorResultWithIntFunction_DoesNotCallFunction()
+    public void IfSuccess_ErrorResultWithGenericFunction_DoesNotCallFunction()
     {
         // Arrange
         var functionMock = new Mock<Func<int>>();
@@ -355,7 +355,7 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_ErrorResultWithIntFunction_ReturnsOriginalErrorResult()
+    public void IfSuccess_ErrorResultWithGenericFunction_ReturnsOriginalResult()
     {
         // Arrange
         var sut = GetErrorResult();
@@ -424,7 +424,7 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_SuccessfulResultWithResultIntFunction_CallsFunction()
+    public void IfSuccess_SuccessfulResultWithGenericResultFunction_CallsFunction()
     {
         // Arrange
         var functionMock = new Mock<Func<Result<int>>>();
@@ -439,7 +439,7 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_SuccessfulResultWithSuccessfulResultIntFunction_ReturnsSuccessfulResultWithInt()
+    public void IfSuccess_SuccessfulResultWithSuccessGenericResultFunction_ReturnsFunctionValueResult()
     {
         // Arrange
         const int FuncValue = 2463;
@@ -457,7 +457,7 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_SuccessfulResultWithErrorResultIntFunction_ReturnsErrorResultWithFunctionError()
+    public void IfSuccess_SuccessfulResultWithGenericErrorResultFunction_ReturnsErrorResult()
     {
         // Arrange
         var funcError = GetError();
@@ -475,7 +475,7 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_ErrorResultWithResultIntFunction_DoesNotCallFunction()
+    public void IfSuccess_ErrorResultWithGenericResultFunction_DoesNotCallFunction()
     {
         // Arrange
         var functionMock = new Mock<Func<Result<int>>>();
@@ -490,7 +490,7 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_ErrorResultWithResultIntFunction_ReturnsOriginalErrorResult()
+    public void IfSuccess_ErrorResultWithGenericResultFunction_ReturnsOriginalValueResultWithError()
     {
         // Arrange
         var sut = GetErrorResult();
@@ -510,7 +510,7 @@ public class IfSuccessExtensionsUnitTests
     #region IfSuccess (Result<T>, Action<T>)
 
     [Fact]
-    public void IfSuccess_NoGenericResultWithIntAction_ThrowsException()
+    public void IfSuccess_NoGenericResultWithGenericAction_ThrowsException()
     {
         // Arrange
         const Result<int>? Sut = null;
@@ -525,7 +525,7 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_SuccessfulGenericResultWithNoIntAction_ThrowsException()
+    public void IfSuccess_SuccessfulGenericResultWithNoGenericAction_ThrowsException()
     {
         // Arrange
         const int InitialValue = 35;
@@ -543,7 +543,7 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_ErrorGenericResultWithNoIntAction_ThrowsException()
+    public void IfSuccess_ErrorGenericResultWithNoGenericAction_ThrowsException()
     {
         // Arrange
         const Action<int>? Action = null;
@@ -560,7 +560,7 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_SuccessfulGenericResultWithIntAction_CallsAction()
+    public void IfSuccess_SuccessfulGenericResultWithGenericAction_CallsAction()
     {
         // Arrange
         const int InitialValue = 35;
@@ -576,7 +576,7 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_SuccessfulGenericResultWithIntAction_ReturnsResultWithOriginalIntValue()
+    public void IfSuccess_SuccessfulGenericResultWithGenericAction_ReturnsOriginalValueResult()
     {
         // Arrange
         const int InitialValue = 35;
@@ -594,7 +594,7 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_ErrorGenericResultWithIntAction_DoesNotCallAction()
+    public void IfSuccess_ErrorGenericResultWithGenericAction_DoesNotCallAction()
     {
         // Arrange
         var actionMock = new Mock<Action<int>>();
@@ -609,7 +609,7 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_ErrorGenericResultWithIntAction_ReturnsOriginalErrorResult()
+    public void IfSuccess_ErrorGenericResultWithGenericAction_ReturnsOriginalValueResultWithError()
     {
         // Arrange
         var sut = GetErrorResult<int>();
@@ -695,7 +695,7 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_SuccessfulGenericResultWithSuccessfulResultFunction_ReturnsResultWithNewResultValue()
+    public void IfSuccess_SuccessfulGenericResultWithSuccessResultFunction_ReturnsFunctionResult()
     {
         // Arrange
         const string InitialValue = "Start";
@@ -714,7 +714,7 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_SuccessfulGenericResultWithErrorResultFunction_ReturnsErrorResultWithFunctionError()
+    public void IfSuccess_SuccessfulGenericResultWithErrorResultFunction_ReturnsFunctionResult()
     {
         // Arrange
         var funcError = GetErrorResult();
@@ -748,7 +748,7 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_ErrorGenericResultWithResultFunction_ReturnsOriginalErrorResult()
+    public void IfSuccess_ErrorGenericResultWithResultFunction_ReturnsOriginalValueResultWithError()
     {
         // Arrange
         var sut = GetErrorResult<string>();
@@ -768,7 +768,7 @@ public class IfSuccessExtensionsUnitTests
     #region IfSuccess (Result<T>, Func<T, TNext>)
 
     [Fact]
-    public void IfSuccess_NoGenericResultWithIntFunction_ThrowsException()
+    public void IfSuccess_NoGenericResultWithGenericFunction_ThrowsException()
     {
         // Arrange
         const Result<double>? Sut = null;
@@ -783,7 +783,7 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_SuccessfulGenericResultWithNoIntFunction_ThrowsException()
+    public void IfSuccess_SuccessfulGenericResultWithNoGenericFunction_ThrowsException()
     {
         // Arrange
         const double InitialValue = 12.34;
@@ -801,7 +801,7 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_ErrorGenericResultWithNoIntFunction_ThrowsException()
+    public void IfSuccess_ErrorGenericResultWithNoGenericFunction_ThrowsException()
     {
         // Arrange
         const Func<double, int>? Function = null;
@@ -818,7 +818,7 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_SuccessfulGenericResultWithIntFunction_CallsFunction()
+    public void IfSuccess_SuccessfulGenericResultWithGenericFunction_CallsFunction()
     {
         // Arrange
         const double InitialValue = 12.34;
@@ -834,7 +834,7 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_SuccessfulGenericResultWithIntFunction_ReturnsResultWithIntValue()
+    public void IfSuccess_SuccessfulGenericResultWithGenericFunction_ReturnsFunctionValueResult()
     {
         // Arrange
         const double InitialValue = 12.34;
@@ -853,7 +853,7 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_ErrorGenericResultWithIntFunction_DoesNotCallFunction()
+    public void IfSuccess_ErrorGenericResultWithGenericFunction_DoesNotCallFunction()
     {
         // Arrange
         var functionMock = new Mock<Func<double, int>>();
@@ -868,7 +868,7 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_ErrorGenericResultWithIntFunction_ReturnsOriginalErrorResult()
+    public void IfSuccess_ErrorGenericResultWithGenericFunction_ReturnsOriginalValueResultWithError()
     {
         // Arrange
         var sut = GetErrorResult<double>();
@@ -954,7 +954,7 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_SuccessfulGenericResultWithSuccessfulGenericResultFunction_ReturnsGenericResult()
+    public void IfSuccess_SuccessfulGenericResultWithSuccessfulGenericResultFunction_ReturnsFunctionValueResult()
     {
         // Arrange
         const int InitialValue = 49;
@@ -973,7 +973,7 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_SuccessfulGenericResultWithErrorGenericResultFunction_ReturnsErrorResultWithFunctionError()
+    public void IfSuccess_SuccessfulGenericResultWithErrorGenericResultFunction_ReturnsFunctionValueResultWithError()
     {
         // Arrange
         const int InitialValue = 49;
@@ -1007,7 +1007,7 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_ErrorGenericResultWithGenericResultFunction_ReturnsOriginalErrorResult()
+    public void IfSuccess_ErrorGenericResultWithGenericResultFunction_ReturnsOriginalValueResultWithError()
     {
         // Arrange
         var sut = GetErrorResult<int>();

@@ -228,7 +228,7 @@ public class MatchExtensionsUnitTests
     }
 
     [Fact]
-    public void Match_SuccessfulResultWithSuccessResultFunctionAndErrorAction_ReturnsSuccessFunctionSuccessResult()
+    public void Match_SuccessfulResultWithSuccessResultFunctionAndErrorAction_ReturnsSuccessFunctionResult()
     {
         // Arrange
         var successFunctionResult = Result.Success();
@@ -244,7 +244,7 @@ public class MatchExtensionsUnitTests
     }
 
     [Fact]
-    public void Match_SuccessfulResultWithSuccessErrorResultFunctionAndErrorAction_ReturnsSuccessFunctionErrorResult()
+    public void Match_SuccessfulResultWithSuccessErrorResultFunctionAndErrorAction_ReturnsSuccessFunctionResult()
     {
         // Arrange
         var successFunctionError = GetErrorResult();
@@ -579,7 +579,7 @@ public class MatchExtensionsUnitTests
     }
 
     [Fact]
-    public void Match_ErrorResultWithGenericSuccessFunctionAndErrorAction_ReturnsOriginalError()
+    public void Match_ErrorResultWithGenericSuccessFunctionAndErrorAction_ReturnsOriginalResult()
     {
         // Arrange
         var sut = GetErrorResult();
@@ -871,7 +871,7 @@ public class MatchExtensionsUnitTests
     }
 
     [Fact]
-    public void Match_ErrorResultWithGenericResultSuccessFunctionAndErrorAction_ReturnsOriginalError()
+    public void Match_ErrorResultWithGenericResultSuccessFunctionAndErrorAction_ReturnsOriginalResult()
     {
         // Arrange
         var sut = GetErrorResult();
@@ -1016,7 +1016,7 @@ public class MatchExtensionsUnitTests
     }
 
     [Fact]
-    public void Match_ErrorResultWithGenericResultSuccessAndErrorFunctions_ReturnsErrorFunctionResultValue()
+    public void Match_ErrorResultWithGenericResultSuccessAndErrorFunctions_ReturnsErrorFunctionValueResult()
     {
         // Arrange
         var expectedResult = Result.FromValue(15);
@@ -1117,7 +1117,7 @@ public class MatchExtensionsUnitTests
     }
 
     [Fact]
-    public void Match_SuccessfulGenericResultWithSuccessAndErrorActions_ReturnsOriginalResult()
+    public void Match_SuccessfulGenericResultWithSuccessAndErrorActions_ReturnsOriginalValueResult()
     {
         // Arrange
         const int Value = 25;
@@ -1163,7 +1163,7 @@ public class MatchExtensionsUnitTests
     }
 
     [Fact]
-    public void Match_ErrorGenericResultWithSuccessAndErrorActions_ReturnsOriginalResult()
+    public void Match_ErrorGenericResultWithSuccessAndErrorActions_ReturnsOriginalValueResultWithError()
     {
         // Arrange
         var sut = GetErrorResult<int>();
@@ -1310,7 +1310,7 @@ public class MatchExtensionsUnitTests
     }
 
     [Fact]
-    public void Match_ErrorGenericResultWithGenericSuccessFunctionAndErrorAction_ReturnsOriginalError()
+    public void Match_ErrorGenericResultWithGenericSuccessFunctionAndErrorAction_ReturnsOriginalValueResultWithError()
     {
         // Arrange
         var sut = GetErrorResult<int>();
@@ -1564,7 +1564,7 @@ public class MatchExtensionsUnitTests
     }
 
     [Fact]
-    public void Match_SuccessfulGenericResultWithGenericResultSuccessFunctionAndErrorAction_ReturnsSuccessFunctionResultValue()
+    public void Match_SuccessfulGenericResultWithGenericResultSuccessFunctionAndErrorAction_ReturnsSuccessFunctionValueResult()
     {
         // Arrange
         const string ExpectedValue = "90";
@@ -1614,7 +1614,7 @@ public class MatchExtensionsUnitTests
     }
 
     [Fact]
-    public void Match_ErrorGenericResultWithGenericResultSuccessFunctionAndErrorAction_ReturnsOriginalError()
+    public void Match_ErrorGenericResultWithGenericResultSuccessFunctionAndErrorAction_ReturnsOriginalValueResultWithError()
     {
         // Arrange
         var sut = GetErrorResult<int>();
@@ -1713,7 +1713,7 @@ public class MatchExtensionsUnitTests
     }
 
     [Fact]
-    public void Match_SuccessfulGenericResultWithGenericResultSuccessAndErrorFunctions_ReturnsSuccessFunctionResultValue()
+    public void Match_SuccessfulGenericResultWithGenericResultSuccessAndErrorFunctions_ReturnsSuccessFunctionValueResult()
     {
         // Arrange
         const string ExpectedValue = "-90-";
@@ -1761,7 +1761,7 @@ public class MatchExtensionsUnitTests
     }
 
     [Fact]
-    public void Match_ErrorGenericResultWithGenericResultSuccessAndErrorFunctions_ReturnsErrorFunctionResultValue()
+    public void Match_ErrorGenericResultWithGenericResultSuccessAndErrorFunctions_ReturnsErrorFunctionValueResult()
     {
         // Arrange
         const string ExpectedValue = "error value";
