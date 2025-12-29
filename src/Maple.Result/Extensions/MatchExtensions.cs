@@ -69,7 +69,6 @@ public static class MatchExtensions
     ///     The <see cref="Error" /> associated with the <paramref name="result" /> is passed to this function.
     ///     Must not be <see langword="null" />.
     /// </param>
-    /// <typeparam name="TNext">The type parameter enabling fluent chaining in subsequent operations.</typeparam>
     /// <returns>
     ///     The <see cref="Result" /> returned by either <paramref name="ifSuccessFunction" />
     ///     if <paramref name="result"/> is successful, or the original <paramref name="result"/> after invoking
@@ -109,7 +108,6 @@ public static class MatchExtensions
     ///     The <see cref="Error" /> associated with the <paramref name="result" /> is passed to this function.
     ///     Must not be <see langword="null" />.
     /// </param>
-    /// <typeparam name="TNext">The type parameter enabling fluent chaining in subsequent operations.</typeparam>
     /// <returns>
     ///     The <see cref="Result" /> returned by either <paramref name="ifSuccessFunction" /> or
     ///     <paramref name="ifErrorFunction" />.
