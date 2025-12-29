@@ -836,19 +836,19 @@ public class IfSuccessAsyncExtensionsUnitTests
     public async Task IfSuccessAsync_SuccessfulGenericResultWithGenericFunction_ReturnsFunctionValueResult()
     {
         // Arrange
-        const int FuncValue = 4937;
+        const int ExpectedValue = 13;
         const double InitialValue = 12.34;
 
         Result<double> sut = InitialValue;
 
         // Act
-        var result = await sut.IfSuccessAsync(_ => Task.FromResult(FuncValue));
+        var result = await sut.IfSuccessAsync(x => Task.FromResult((int)x + 1));
 
         // Assert
         result.ShouldNotBeNull();
         result.ShouldBeOfType<Result<int>>();
         result.IsSuccess().ShouldBeTrue();
-        result.Value.ShouldBe(FuncValue);
+        result.Value.ShouldBe(ExpectedValue);
     }
 
     [Fact]
@@ -957,12 +957,12 @@ public class IfSuccessAsyncExtensionsUnitTests
     {
         // Arrange
         const int InitialValue = 49;
-        const string FuncValue = "New Value";
+        const string FuncValue = "50";
 
         Result<int> sut = InitialValue;
 
         // Act
-        var result = await sut.IfSuccessAsync(_ => Task.FromResult(Result.FromValue(FuncValue)));
+        var result = await sut.IfSuccessAsync(x => Task.FromResult(Result.FromValue((x + 1).ToString())));
 
         // Assert
         result.ShouldNotBeNull();
