@@ -1,11 +1,10 @@
+using Maple.Result.Converters;
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Maple.Result;
-using Maple.Result.Converters;
 
-namespace Result.Tests.Unit;
+namespace Maple.Result.Tests.Unit;
 
 public class TemplatedMessageUnitTests
 {
@@ -233,7 +232,7 @@ public class TemplatedMessageUnitTests
     private TemplatedMessage Deserialize(string json)
     {
         var result = JsonSerializer.Deserialize<TemplatedMessage>(json, _jsonSerializerOptions);
-        return result;
+        return result!;
     }
 
     private string Serialize(TemplatedMessage templatedMessage)

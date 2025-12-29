@@ -18,7 +18,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <InternalsVisibleTo Include="Result.Tests.Unit" />
+    <InternalsVisibleTo Include="Maple.Result.Tests.Unit" />
   </ItemGroup>
 
   <ItemGroup>

@@ -186,7 +186,6 @@ public record Error
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.Validation" /> category.
     /// </summary>
     /// <param name="typeUri">The text containing a URI reference that identifies the problem type.</param>
-    /// <param name="location">The code that uniquely identifies the location of the problem in the source code.</param>
     /// <param name="title">The short, human-readable summary of the problem type.</param>
     /// <param name="detail">The human-readable explanation specific to this occurrence of the problem.</param>
     /// <param name="instanceUri">The URI reference that identifies the specific occurrence of the problem.</param>
@@ -207,7 +206,7 @@ public record Error
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
     ///     that is not a valid HTTP/HTTPS URI or a valid URI Tag.
     /// </exception>
-    public static Error Validation(ErrorUri typeUri, string location, string title, string? detail = null,
+    public static Error Validation(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
         params (string Key, object Value)[] detailNamedValues)
     {
@@ -226,7 +225,6 @@ public record Error
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.Validation" /> category.
     /// </summary>
     /// <param name="typeUri">The text containing a URI reference that identifies the problem type.</param>
-    /// <param name="location">The code that uniquely identifies the location of the problem in the source code.</param>
     /// <param name="title">The short, human-readable summary of the problem type.</param>
     /// <param name="detail">The human-readable explanation specific to this occurrence of the problem.</param>
     /// <param name="instanceUri">The URI reference that identifies the specific occurrence of the problem.</param>
@@ -247,7 +245,7 @@ public record Error
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
     ///     that is not a valid HTTP/HTTPS URI or a valid URI Tag.
     /// </exception>
-    public static Error Validation(ErrorUri typeUri, string location, string title, string? detail = null,
+    public static Error Validation(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
         IEnumerable<KeyValuePair<string, object>>? detailNamedValues = null)
     {
@@ -267,7 +265,6 @@ public record Error
     ///     category.
     /// </summary>
     /// <param name="typeUri">The text containing a URI reference that identifies the problem type.</param>
-    /// <param name="location">The code that uniquely identifies the location of the problem in the source code.</param>
     /// <param name="title">The short, human-readable summary of the problem type.</param>
     /// <param name="detail">The human-readable explanation specific to this occurrence of the problem.</param>
     /// <param name="instanceUri">The URI reference that identifies the specific occurrence of the problem.</param>
@@ -288,7 +285,7 @@ public record Error
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
     ///     that is not a valid HTTP/HTTP URI or a valid URI Tag.
     /// </exception>
-    public static Error Unauthenticated(ErrorUri typeUri, string location, string title, string? detail = null,
+    public static Error Unauthenticated(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
         params (string Key, object Value)[] detailNamedValues)
     {
@@ -307,7 +304,6 @@ public record Error
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.Unauthenticated" /> category.
     /// </summary>
     /// <param name="typeUri">The text containing a URI reference that identifies the problem type.</param>
-    /// <param name="location">The code that uniquely identifies the location of the problem in the source code.</param>
     /// <param name="title">The short, human-readable summary of the problem type.</param>
     /// <param name="detail">The human-readable explanation specific to this occurrence of the problem.</param>
     /// <param name="instanceUri">The URI reference that identifies the specific occurrence of the problem.</param>
@@ -328,7 +324,7 @@ public record Error
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
     ///     that is not a valid HTTP/HTTPS URI or a valid URI Tag.
     /// </exception>
-    public static Error Unauthenticated(ErrorUri typeUri, string location, string title, string? detail = null,
+    public static Error Unauthenticated(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
         IEnumerable<KeyValuePair<string, object>>? detailNamedValues = null)
     {
@@ -347,7 +343,6 @@ public record Error
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.Forbidden" /> category.
     /// </summary>
     /// <param name="typeUri">The text containing a URI reference that identifies the problem type.</param>
-    /// <param name="location">The code that uniquely identifies the location of the problem in the source code.</param>
     /// <param name="title">The short, human-readable summary of the problem type.</param>
     /// <param name="detail">The human-readable explanation specific to this occurrence of the problem.</param>
     /// <param name="instanceUri">The URI reference that identifies the specific occurrence of the problem.</param>
@@ -368,7 +363,7 @@ public record Error
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
     ///     that is not a valid HTTP/HTTP URI or a valid URI Tag.
     /// </exception>
-    public static Error Forbidden(ErrorUri typeUri, string location, string title, string? detail = null,
+    public static Error Forbidden(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
         params (string Key, object Value)[] detailNamedValues)
     {
@@ -386,7 +381,6 @@ public record Error
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.Forbidden" /> category.
     /// </summary>
     /// <param name="typeUri">The text containing a URI reference that identifies the problem type.</param>
-    /// <param name="location">The code that uniquely identifies the location of the problem in the source code.</param>
     /// <param name="title">The short, human-readable summary of the problem type.</param>
     /// <param name="detail">The human-readable explanation specific to this occurrence of the problem.</param>
     /// <param name="instanceUri">The URI reference that identifies the specific occurrence of the problem.</param>
@@ -407,7 +401,7 @@ public record Error
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
     ///     that is not a valid HTTP/HTTPS URI or a valid URI Tag.
     /// </exception>
-    public static Error Forbidden(ErrorUri typeUri, string location, string title, string? detail = null,
+    public static Error Forbidden(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
         IEnumerable<KeyValuePair<string, object>>? detailNamedValues = null)
     {
@@ -426,7 +420,6 @@ public record Error
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.NotFound" /> category.
     /// </summary>
     /// <param name="typeUri">The text containing a URI reference that identifies the problem type.</param>
-    /// <param name="location">The code that uniquely identifies the location of the problem in the source code.</param>
     /// <param name="title">The short, human-readable summary of the problem type.</param>
     /// <param name="detail">The human-readable explanation specific to this occurrence of the problem.</param>
     /// <param name="instanceUri">The URI reference that identifies the specific occurrence of the problem.</param>
@@ -447,7 +440,7 @@ public record Error
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
     ///     that is not a valid HTTP/HTTP URI or a valid URI Tag.
     /// </exception>
-    public static Error NotFound(ErrorUri typeUri, string location, string title, string? detail = null,
+    public static Error NotFound(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
         params (string Key, object Value)[] detailNamedValues)
     {
@@ -466,7 +459,6 @@ public record Error
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.NotFound" /> category.
     /// </summary>
     /// <param name="typeUri">The text containing a URI reference that identifies the problem type.</param>
-    /// <param name="location">The code that uniquely identifies the location of the problem in the source code.</param>
     /// <param name="title">The short, human-readable summary of the problem type.</param>
     /// <param name="detail">The human-readable explanation specific to this occurrence of the problem.</param>
     /// <param name="instanceUri">The URI reference that identifies the specific occurrence of the problem.</param>
@@ -487,7 +479,7 @@ public record Error
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
     ///     that is not a valid HTTP/HTTPS URI or a valid URI Tag.
     /// </exception>
-    public static Error NotFound(ErrorUri typeUri, string location, string title, string? detail = null,
+    public static Error NotFound(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
         IEnumerable<KeyValuePair<string, object>>? detailNamedValues = null)
     {
@@ -506,7 +498,6 @@ public record Error
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.Timeout" /> category.
     /// </summary>
     /// <param name="typeUri">The text containing a URI reference that identifies the problem type.</param>
-    /// <param name="location">The code that uniquely identifies the location of the problem in the source code.</param>
     /// <param name="title">The short, human-readable summary of the problem type.</param>
     /// <param name="detail">The human-readable explanation specific to this occurrence of the problem.</param>
     /// <param name="instanceUri">The URI reference that identifies the specific occurrence of the problem.</param>
@@ -527,7 +518,7 @@ public record Error
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
     ///     that is not a valid HTTP/HTTP URI or a valid URI Tag.
     /// </exception>
-    public static Error Timeout(ErrorUri typeUri, string location, string title, string? detail = null,
+    public static Error Timeout(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
         params (string Key, object Value)[] detailNamedValues)
     {
@@ -546,7 +537,6 @@ public record Error
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.Timeout" /> category.
     /// </summary>
     /// <param name="typeUri">The text containing a URI reference that identifies the problem type.</param>
-    /// <param name="location">The code that uniquely identifies the location of the problem in the source code.</param>
     /// <param name="title">The short, human-readable summary of the problem type.</param>
     /// <param name="detail">The human-readable explanation specific to this occurrence of the problem.</param>
     /// <param name="instanceUri">The URI reference that identifies the specific occurrence of the problem.</param>
@@ -567,7 +557,7 @@ public record Error
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
     ///     that is not a valid HTTP/HTTPS URI or a valid URI Tag.
     /// </exception>
-    public static Error Timeout(ErrorUri typeUri, string location, string title, string? detail = null,
+    public static Error Timeout(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
         IEnumerable<KeyValuePair<string, object>>? detailNamedValues = null)
     {
@@ -586,7 +576,6 @@ public record Error
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.Conflict" /> category.
     /// </summary>
     /// <param name="typeUri">The text containing a URI reference that identifies the problem type.</param>
-    /// <param name="location">The code that uniquely identifies the location of the problem in the source code.</param>
     /// <param name="title">The short, human-readable summary of the problem type.</param>
     /// <param name="detail">The human-readable explanation specific to this occurrence of the problem.</param>
     /// <param name="instanceUri">The URI reference that identifies the specific occurrence of the problem.</param>
@@ -607,7 +596,7 @@ public record Error
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
     ///     that is not a valid HTTP/HTTP URI or a valid URI Tag.
     /// </exception>
-    public static Error Conflict(ErrorUri typeUri, string location, string title, string? detail = null,
+    public static Error Conflict(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
         params (string Key, object Value)[] detailNamedValues)
     {
@@ -626,7 +615,6 @@ public record Error
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.Conflict" /> category.
     /// </summary>
     /// <param name="typeUri">The text containing a URI reference that identifies the problem type.</param>
-    /// <param name="location">The code that uniquely identifies the location of the problem in the source code.</param>
     /// <param name="title">The short, human-readable summary of the problem type.</param>
     /// <param name="detail">The human-readable explanation specific to this occurrence of the problem.</param>
     /// <param name="instanceUri">The URI reference that identifies the specific occurrence of the problem.</param>
@@ -647,7 +635,7 @@ public record Error
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
     ///     that is not a valid HTTP/HTTPS URI or a valid URI Tag.
     /// </exception>
-    public static Error Conflict(ErrorUri typeUri, string location, string title, string? detail = null,
+    public static Error Conflict(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
         IEnumerable<KeyValuePair<string, object>>? detailNamedValues = null)
     {
@@ -666,7 +654,6 @@ public record Error
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.Failure" /> category.
     /// </summary>
     /// <param name="typeUri">The text containing a URI reference that identifies the problem type.</param>
-    /// <param name="location">The code that uniquely identifies the location of the problem in the source code.</param>
     /// <param name="title">The short, human-readable summary of the problem type.</param>
     /// <param name="detail">The human-readable explanation specific to this occurrence of the problem.</param>
     /// <param name="instanceUri">The URI reference that identifies the specific occurrence of the problem.</param>
@@ -687,7 +674,7 @@ public record Error
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
     ///     that is not a valid HTTP/HTTP URI or a valid URI Tag.
     /// </exception>
-    public static Error Failure(ErrorUri typeUri, string location, string title, string? detail = null,
+    public static Error Failure(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
         params (string Key, object Value)[] detailNamedValues)
     {
@@ -706,7 +693,6 @@ public record Error
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.Failure" /> category.
     /// </summary>
     /// <param name="typeUri">The text containing a URI reference that identifies the problem type.</param>
-    /// <param name="location">The code that uniquely identifies the location of the problem in the source code.</param>
     /// <param name="title">The short, human-readable summary of the problem type.</param>
     /// <param name="detail">The human-readable explanation specific to this occurrence of the problem.</param>
     /// <param name="instanceUri">The URI reference that identifies the specific occurrence of the problem.</param>
@@ -727,7 +713,7 @@ public record Error
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
     ///     that is not a valid HTTP/HTTPS URI or a valid URI Tag.
     /// </exception>
-    public static Error Failure(ErrorUri typeUri, string location, string title, string? detail = null,
+    public static Error Failure(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
         IEnumerable<KeyValuePair<string, object>>? detailNamedValues = null)
     {
@@ -746,7 +732,6 @@ public record Error
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.CriticalError" /> category.
     /// </summary>
     /// <param name="typeUri">The text containing a URI reference that identifies the problem type.</param>
-    /// <param name="location">The code that uniquely identifies the location of the problem in the source code.</param>
     /// <param name="title">The short, human-readable summary of the problem type.</param>
     /// <param name="detail">The human-readable explanation specific to this occurrence of the problem.</param>
     /// <param name="instanceUri">The URI reference that identifies the specific occurrence of the problem.</param>
@@ -767,7 +752,7 @@ public record Error
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
     ///     that is not a valid HTTP/HTTP URI or a valid URI Tag.
     /// </exception>
-    public static Error CriticalError(ErrorUri typeUri, string location, string title, string? detail = null,
+    public static Error CriticalError(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
         params (string Key, object Value)[] detailNamedValues)
     {
@@ -786,7 +771,6 @@ public record Error
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.CriticalError" /> category.
     /// </summary>
     /// <param name="typeUri">The text containing a URI reference that identifies the problem type.</param>
-    /// <param name="location">The code that uniquely identifies the location of the problem in the source code.</param>
     /// <param name="title">The short, human-readable summary of the problem type.</param>
     /// <param name="detail">The human-readable explanation specific to this occurrence of the problem.</param>
     /// <param name="instanceUri">The URI reference that identifies the specific occurrence of the problem.</param>
@@ -807,7 +791,7 @@ public record Error
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
     ///     that is not a valid HTTP/HTTPS URI or a valid URI Tag.
     /// </exception>
-    public static Error CriticalError(ErrorUri typeUri, string location, string title, string? detail = null,
+    public static Error CriticalError(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
         IEnumerable<KeyValuePair<string, object>>? detailNamedValues = null)
     {
@@ -826,7 +810,6 @@ public record Error
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.NotImplemented" /> category.
     /// </summary>
     /// <param name="typeUri">The text containing a URI reference that identifies the problem type.</param>
-    /// <param name="location">The code that uniquely identifies the location of the problem in the source code.</param>
     /// <param name="title">The short, human-readable summary of the problem type.</param>
     /// <param name="detail">The human-readable explanation specific to this occurrence of the problem.</param>
     /// <param name="instanceUri">The URI reference that identifies the specific occurrence of the problem.</param>
@@ -847,7 +830,7 @@ public record Error
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
     ///     that is not a valid HTTP/HTTP URI or a valid URI Tag.
     /// </exception>
-    public static Error NotImplemented(ErrorUri typeUri, string location, string title, string? detail = null,
+    public static Error NotImplemented(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
         params (string Key, object Value)[] detailNamedValues)
     {
@@ -866,7 +849,6 @@ public record Error
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.NotImplemented" /> category.
     /// </summary>
     /// <param name="typeUri">The text containing a URI reference that identifies the problem type.</param>
-    /// <param name="location">The code that uniquely identifies the location of the problem in the source code.</param>
     /// <param name="title">The short, human-readable summary of the problem type.</param>
     /// <param name="detail">The human-readable explanation specific to this occurrence of the problem.</param>
     /// <param name="instanceUri">The URI reference that identifies the specific occurrence of the problem.</param>
@@ -887,7 +869,7 @@ public record Error
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
     ///     that is not a valid HTTP/HTTPS URI or a valid URI Tag.
     /// </exception>
-    public static Error NotImplemented(ErrorUri typeUri, string location, string title, string? detail = null,
+    public static Error NotImplemented(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
         IEnumerable<KeyValuePair<string, object>>? detailNamedValues = null)
     {
@@ -906,7 +888,6 @@ public record Error
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.Unavailable" /> category.
     /// </summary>
     /// <param name="typeUri">The text containing a URI reference that identifies the problem type.</param>
-    /// <param name="location">The code that uniquely identifies the location of the problem in the source code.</param>
     /// <param name="title">The short, human-readable summary of the problem type.</param>
     /// <param name="detail">The human-readable explanation specific to this occurrence of the problem.</param>
     /// <param name="instanceUri">The URI reference that identifies the specific occurrence of the problem.</param>
@@ -927,7 +908,7 @@ public record Error
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
     ///     that is not a valid HTTP/HTTP URI or a valid URI Tag.
     /// </exception>
-    public static Error Unavailable(ErrorUri typeUri, string location, string title, string? detail = null,
+    public static Error Unavailable(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
         params (string Key, object Value)[] detailNamedValues)
     {
@@ -946,7 +927,6 @@ public record Error
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.Unavailable" /> category.
     /// </summary>
     /// <param name="typeUri">The text containing a URI reference that identifies the problem type.</param>
-    /// <param name="location">The code that uniquely identifies the location of the problem in the source code.</param>
     /// <param name="title">The short, human-readable summary of the problem type.</param>
     /// <param name="detail">The human-readable explanation specific to this occurrence of the problem.</param>
     /// <param name="instanceUri">The URI reference that identifies the specific occurrence of the problem.</param>
@@ -967,7 +947,7 @@ public record Error
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
     ///     that is not a valid HTTP/HTTPS URI or a valid URI Tag.
     /// </exception>
-    public static Error Unavailable(ErrorUri typeUri, string location, string title, string? detail = null,
+    public static Error Unavailable(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
         IEnumerable<KeyValuePair<string, object>>? detailNamedValues = null)
     {
