@@ -68,7 +68,7 @@ public static class IfErrorAsyncExtensions
     /// </typeparam>
     /// <param name="result">The result to evaluate for success or error. Must not be <see langword="null" />.</param>
     /// <param name="ifErrorFunction">
-    ///     A function to invoke asynchronously if the <paramref name="result" /> represents an error.
+    ///     The function to invoke asynchronously if the <paramref name="result" /> represents an error.
     ///     The function receives the error and returns a new result. Must not be <see langword="null" />.
     /// </param>
     /// <param name="continueOnCapturedContext">

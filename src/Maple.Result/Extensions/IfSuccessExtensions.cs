@@ -56,7 +56,7 @@ public static class IfSuccessExtensions
     /// </remarks>
     /// <param name="result">The <see cref="Result" /> to evaluate for success. Must not be <see langword="null" />.</param>
     /// <param name="ifSuccessFunc">
-    ///     A function to execute if <paramref name="result" /> is successful. The function must return
+    ///     The function to execute if <paramref name="result" /> is successful. The function must return
     ///     a <see cref="Result" /> and must not be <see langword="null" />.
     /// </param>
     /// <returns>
@@ -90,7 +90,7 @@ public static class IfSuccessExtensions
     /// <typeparam name="T">The type of the <see cref="Result{T}" /> value to return if the operation is successful.</typeparam>
     /// <param name="result">The <see cref="Result" /> to evaluate for success. Must not be <see langword="null" />.</param>
     /// <param name="ifSuccessFunc">
-    ///     A function to execute if the <paramref name="result" /> is successful. The function’s return value is used
+    ///     The function to execute if the <paramref name="result" /> is successful. The function’s return value is used
     ///     as the successful <see cref="Result{T}" />. Must not be <see langword="null" />.
     /// </param>
     /// <returns>
@@ -125,7 +125,7 @@ public static class IfSuccessExtensions
     /// <typeparam name="T">The type of the <see cref="Result{T}" /> value to return if the operation is successful.</typeparam>
     /// <param name="result">The <see cref="Result" /> to evaluate for success. Must not be <see langword="null" />.</param>
     /// <param name="ifSuccessFunc">
-    ///     A function to execute if the <paramref name="result" /> is successful. The function’s return value is used
+    ///     The function to execute if the <paramref name="result" /> is successful. The function’s return value is used
     ///     as the successful <see cref="Result{T}" />. Must not be <see langword="null" />.
     /// </param>
     /// <returns>
@@ -194,7 +194,7 @@ public static class IfSuccessExtensions
     /// </remarks>
     /// <param name="result">The <see cref="Result{T}" /> to evaluate for success. Must not be <see langword="null" />.</param>
     /// <param name="ifSuccessFunc">
-    ///     A function to execute if <paramref name="result" /> is successful. The value of the successful
+    ///     The function to execute if <paramref name="result" /> is successful. The value of the successful
     ///     <see cref="Result{T}" /> is passed as a parameter. The function must return
     ///     a <see cref="Result" /> and must not be <see langword="null" />.
     /// </param>
@@ -237,7 +237,7 @@ public static class IfSuccessExtensions
     /// </typeparam>
     /// <param name="result">The <see cref="Result{T}" /> to evaluate for success. Must not be <see langword="null" />.</param>
     /// <param name="ifSuccessFunc">
-    ///     A function to execute if the <paramref name="result" /> is successful.
+    ///     The function to execute if the <paramref name="result" /> is successful.
     ///     The value of the successful <see cref="Result{T}" /> is passed as a parameter.
     ///     The function’s return value is used as the successful <see cref="Result{TNext}" />.
     ///     Must not be <see langword="null" />.
@@ -282,7 +282,7 @@ public static class IfSuccessExtensions
     /// </typeparam>
     /// <param name="result">The <see cref="Result{T}" /> to evaluate for success. Must not be <see langword="null" />.</param>
     /// <param name="ifSuccessFunc">
-    ///     A function to execute if the <paramref name="result" /> is successful.
+    ///     The function to execute if the <paramref name="result" /> is successful.
     ///     The value of the successful <see cref="Result{T}" /> is passed as a parameter.
     ///     The function’s must return <see cref="Result{TNext}" />.
     ///     Must not be <see langword="null" />.

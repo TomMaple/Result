@@ -61,7 +61,7 @@ public static class MatchExtensions
     /// </summary>
     /// <param name="result">The <see cref="Result" /> whose outcome is inspected. Must not be <see langword="null" />.</param>
     /// <param name="ifSuccessFunction">
-    ///     Function invoked when the <paramref name="result" /> represents success.
+    ///     The function invoked when the <paramref name="result" /> represents success.
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="ifErrorAction">
@@ -100,11 +100,11 @@ public static class MatchExtensions
     /// </summary>
     /// <param name="result">The <see cref="Result" /> whose outcome is inspected. Must not be <see langword="null" />.</param>
     /// <param name="ifSuccessFunction">
-    ///     Function invoked when the <paramref name="result" /> represents success.
+    ///     The function invoked when the <paramref name="result" /> represents success.
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="ifErrorFunction">
-    ///     Function invoked when the <paramref name="result" /> represents failure.
+    ///     The function invoked when the <paramref name="result" /> represents failure.
     ///     The <see cref="Error" /> associated with the <paramref name="result" /> is passed to this function.
     ///     Must not be <see langword="null" />.
     /// </param>
@@ -139,7 +139,7 @@ public static class MatchExtensions
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="ifSuccessFunction">
-    ///     Function invoked when the <paramref name="result" /> represents success.
+    ///     The function invoked when the <paramref name="result" /> represents success.
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="ifErrorAction">
@@ -181,11 +181,11 @@ public static class MatchExtensions
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="ifSuccessFunction">
-    ///     Function invoked when the <paramref name="result" /> represents success.
+    ///     The function invoked when the <paramref name="result" /> represents success.
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="ifErrorFunction">
-    ///     Function invoked when the <paramref name="result" /> represents failure.
+    ///     The function invoked when the <paramref name="result" /> represents failure.
     ///     The <see cref="Error" /> associated with the <paramref name="result" /> is passed to this function.
     ///     Must not be <see langword="null" />.
     /// </param>
@@ -219,7 +219,7 @@ public static class MatchExtensions
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="ifSuccessFunction">
-    ///     Function invoked when the <paramref name="result" /> represents success.
+    ///     The function invoked when the <paramref name="result" /> represents success.
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="ifErrorAction">
@@ -262,11 +262,11 @@ public static class MatchExtensions
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="ifSuccessFunction">
-    ///     Function invoked when the <paramref name="result" /> represents success.
+    ///     The function invoked when the <paramref name="result" /> represents success.
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="ifErrorFunction">
-    ///     Function invoked when the <paramref name="result" /> represents failure.
+    ///     The function invoked when the <paramref name="result" /> represents failure.
     ///     The <see cref="Error" /> associated with the <paramref name="result" /> is passed to this function.
     ///     Must not be <see langword="null" />.
     /// </param>
@@ -347,7 +347,7 @@ public static class MatchExtensions
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="ifSuccessFunction">
-    ///     Function executed when the <paramref name="result" /> represents success.
+    ///     The function executed when the <paramref name="result" /> represents success.
     ///     The value of the successful <see cref="Result{T}" /> is passed as a parameter.
     ///     Must not be <see langword="null" />.
     /// </param>
@@ -392,12 +392,12 @@ public static class MatchExtensions
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="ifSuccessFunction">
-    ///     Function executed when the <paramref name="result" /> represents success.
+    ///     The function executed when the <paramref name="result" /> represents success.
     ///     The value of the successful <see cref="Result{T}" /> is passed as a parameter.
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="ifErrorFunction">
-    ///     Function executed when the <paramref name="result" /> represents failure.
+    ///     The function executed when the <paramref name="result" /> represents failure.
     ///     The <see cref="Error" /> associated with the <paramref name="result" /> is passed to this function.
     ///     Must not be <see langword="null" />.
     /// </param>
@@ -433,7 +433,7 @@ public static class MatchExtensions
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="ifSuccessFunction">
-    ///     Function executed when the <paramref name="result" /> represents success.
+    ///     The function executed when the <paramref name="result" /> represents success.
     ///     The value of the successful <see cref="Result{T}" /> is passed as a parameter.
     ///     Must not be <see langword="null" />.
     /// </param>
@@ -478,12 +478,12 @@ public static class MatchExtensions
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="ifSuccessFunction">
-    ///     Function executed when the <paramref name="result" /> represents success.
+    ///     The function executed when the <paramref name="result" /> represents success.
     ///     The value of the successful <see cref="Result{T}" /> is passed as a parameter.
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="ifErrorFunction">
-    ///     Function executed when the <paramref name="result" /> represents failure.
+    ///     The function executed when the <paramref name="result" /> represents failure.
     ///     The <see cref="Error" /> associated with the <paramref name="result" /> is passed to this function.
     ///     Must not be <see langword="null" />.
     /// </param>
