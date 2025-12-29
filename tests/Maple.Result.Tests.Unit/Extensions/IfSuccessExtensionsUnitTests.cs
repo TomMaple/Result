@@ -894,7 +894,7 @@ public class IfSuccessExtensionsUnitTests
         const Result<int>? Sut = null;
 
         // Act
-        var exception = Record.Exception(() => Sut!.IfSuccess(x => Result.FromValue("new text value")));
+        var exception = Record.Exception(() => Sut!.IfSuccess(_ => Result.FromValue("new text value")));
 
         // Assert
         exception.ShouldNotBeNull();

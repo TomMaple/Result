@@ -1754,7 +1754,7 @@ public class MatchExtensionsUnitTests
         var sut = GetErrorResult<int>();
 
         // Act
-        var result = sut.Match(x => Result.FromValue(x.ToString()), errorFunctionMock.Object);
+        sut.Match(x => Result.FromValue(x.ToString()), errorFunctionMock.Object);
 
         // Assert
         errorFunctionMock.Verify(x => x.Invoke(sut.Error!), Times.Once);

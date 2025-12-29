@@ -753,7 +753,7 @@ public class IfSuccessAsyncExtensionsUnitTests
         var sut = GetErrorResult<string>();
 
         // Act
-        var result = await sut.IfSuccessAsync(x => Task.FromResult(Result.Success()));
+        var result = await sut.IfSuccessAsync(_ => Task.FromResult(Result.Success()));
 
         // Assert
         result.ShouldNotBeNull();
