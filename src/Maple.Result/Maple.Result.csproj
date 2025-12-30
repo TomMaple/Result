@@ -4,21 +4,27 @@
     <TargetFrameworks>net8.0;net10.0</TargetFrameworks>
     <ImplicitUsings>disable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <AssemblyName>Maple.Result</AssemblyName>
     <RootNamespace>Maple.Result</RootNamespace>
 
     <PackageId>Maple.Result</PackageId>
     <Title>An abstraction which contains the value or the error of the operation. It can be mapped to the HTTP reponse if needed.</Title>
     <Description>An abstraction which contains the value or the error of the operation. It can be mapped to the HTTP reponse if needed.</Description>
-    <Authors>Tom.Maple</Authors>
+    <Authors>Tom Maple</Authors>
     <PublisherName>Tom Maple</PublisherName>
     <PackageTags>Result;Error;RFC-9457;RFC-7807</PackageTags>
-
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
 
     <PackageProjectUrl>https://github.com/TomMaple/Result</PackageProjectUrl>
     <RepositoryUrl>https://github.com/TomMaple/Result</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
