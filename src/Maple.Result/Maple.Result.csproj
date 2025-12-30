@@ -5,16 +5,20 @@
     <ImplicitUsings>disable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>Maple.Result</RootNamespace>
+
     <PackageId>Maple.Result</PackageId>
     <Title>An abstraction which contains the value or the error of the operation. It can be mapped to the HTTP reponse if needed.</Title>
-    <Authors>Tom.Maple</Authors>
     <Description>An abstraction which contains the value or the error of the operation. It can be mapped to the HTTP reponse if needed.</Description>
-    <PackageProjectUrl>https://github.com/TomMaple/Result</PackageProjectUrl>
+    <Authors>Tom.Maple</Authors>
+    <PublisherName>Tom Maple</PublisherName>
+    <PackageTags>Result;Error;RFC-9457;RFC-7807</PackageTags>
+
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+
+    <PackageProjectUrl>https://github.com/TomMaple/Result</PackageProjectUrl>
     <RepositoryUrl>https://github.com/TomMaple/Result</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>result;rfc-9457;rfc-7807</PackageTags>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
