@@ -22,14 +22,27 @@ jobs:
       with:
         fetch-depth: 0
 
-    - uses: paulhatch/semantic-version@v5.4.0
+    - name: Get semantic version
+      uses: paulhatch/semantic-version@v5.4.0
       id: semantic_version
       with:
         bump_each_commit: true
-        version_format: ${major}.${minor}.${patch}-prerelease${increment}+{commit}
+
+    - name: Generate final version
+      id: calculate_version
+      run: |
+        if [ "${GITHUB_REF_NAME}" = "main" ]; then
+          echo "version=${SEMVER}+${COMMIT}" >> $GITHUB_OUTPUT
+        else
+          CLEAN_BRANCH=$(echo "${GITHUB_REF_NAME}" | sed 's|^[^/]*\/||' | tr '[:upper:]' '[:lower:]' | tr -c '0-9a-z.-' '-')
+          echo "version=${SEMVER}-${CLEAN_BRANCH}+${COMMIT}" >> $GITHUB_OUTPUT
+        fi
+      env:
+        SEMVER: ${{ steps.semantic_version.outputs.version }}
+        COMMIT: ${{ steps.semantic_version.outputs.current_commit }}
 
     - name: Display all outputs from the previous step
-      run: echo "${{ toJSON(steps.semantic_version.outputs) }}"
+      run: echo "${{ steps.calculate_version.outputs.version }}"
       shell: bash
 
     - name: Setup .NET 8
@@ -46,7 +59,7 @@ jobs:
       run: dotnet restore
 
     - name: Build
-      run: dotnet build --no-restore -p:Version=${{ steps.semantic_version.outputs.version }} --configuration Release --verbosity normal
+      run: dotnet build --no-restore -p:Version=${{ steps.calculate_version.outputs.version }} --configuration Release --verbosity normal
 
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --no-build --configuration Release --verbosity normal
