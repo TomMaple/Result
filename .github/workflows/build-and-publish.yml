@@ -24,6 +24,8 @@ jobs:
       uses: paulhatch/semantic-version@v5.4.0
       id: semantic_version
       with:
+        tag_prefix: "v"
+        major_pattern: "/!:|BREAKING CHANGE:/"
         bump_each_commit: true
 
     - name: Generate final version
@@ -39,7 +41,7 @@ jobs:
         SEMVER: ${{ steps.semantic_version.outputs.version }}
         COMMIT: ${{ steps.semantic_version.outputs.current_commit }}
 
-    - name: Display all outputs from the previous step
+    - name: Display calculated version
       run: echo "${{ steps.calculate_version.outputs.version }}"
       shell: bash
 
