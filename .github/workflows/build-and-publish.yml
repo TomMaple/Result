@@ -50,7 +50,9 @@ jobs:
         COMMIT: ${{ steps.semantic_version.outputs.current_commit }}
 
     - name: Display calculated version
-      run: echo "${{ steps.calculate_version.outputs.version }}"
+      run: |
+        echo "Package version: ${{ steps.calculate_version.outputs.package_version }}"
+        echo "Informational version: ${{ steps.calculate_version.outputs.informational_version }}"
       shell: bash
 
     - name: Setup .NET 8
