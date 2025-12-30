@@ -1,4 +1,14 @@
-﻿#pragma warning disable HAA0601
+﻿// SPDX-License-Identifier: MIT
+/*
+ * This code is a part of a Maple.Result library project.
+ * https://github.com/TomMaple/Result/
+ * Copyright (c) Tom Maple
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+#pragma warning disable HAA0601
 
 using System;
 using System.Collections.Generic;

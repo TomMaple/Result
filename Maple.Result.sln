@@ -25,6 +25,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maple.Result", "src\Maple.R
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maple.Result.Tests.Unit", "tests\Maple.Result.Tests.Unit\Maple.Result.Tests.Unit.csproj", "{7CF5C16B-62D9-F1B1-E2FB-C05515F96CB2}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{A6FB494F-29B8-49EA-A7CE-FE26E828D00C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{63943D00-F1D6-4390-A150-C9F0796C1752}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\build-and-publish.yml = .github\workflows\build-and-publish.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,6 +53,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{BB1E2A1A-5E43-E820-8D91-7CAAFE0184F5} = {70313767-1584-4AAD-8118-B1B85DE83A68}
 		{7CF5C16B-62D9-F1B1-E2FB-C05515F96CB2} = {C243CB31-C7CA-4C50-9C73-ECEE67881787}
+		{63943D00-F1D6-4390-A150-C9F0796C1752} = {A6FB494F-29B8-49EA-A7CE-FE26E828D00C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B2854F93-1DE8-4AA5-8B37-0EB331C30451}
