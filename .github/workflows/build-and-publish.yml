@@ -38,17 +38,21 @@ jobs:
       id: calculate_version
       run: |
         if [ "${GITHUB_REF_NAME}" = "main" ]; then
-          echo "version=${SEMVER}+${COMMIT}" >> $GITHUB_OUTPUT
+          echo "package_version=${SEMVER}" >> $GITHUB_OUTPUT
+          echo "informational_version=${SEMVER}+${COMMIT}" >> $GITHUB_OUTPUT
         else
           CLEAN_BRANCH=$(echo "${GITHUB_REF_NAME}" | sed 's|^[^/]*\/||' | tr '[:upper:]' '[:lower:]' | tr -c '0-9a-z.-' '-')
-          echo "version=${SEMVER}-${CLEAN_BRANCH}+${COMMIT}" >> $GITHUB_OUTPUT
+          echo "package_version=${SEMVER}-${CLEAN_BRANCH}" >> $GITHUB_OUTPUT
+          echo "informational_version=${SEMVER}-${CLEAN_BRANCH}+${COMMIT}" >> $GITHUB_OUTPUT
         fi
       env:
         SEMVER: ${{ steps.semantic_version.outputs.version }}
         COMMIT: ${{ steps.semantic_version.outputs.current_commit }}
 
     - name: Display calculated version
-      run: echo "${{ steps.calculate_version.outputs.version }}"
+      run: |
+        echo "Package version: ${{ steps.calculate_version.outputs.package_version }}"
+        echo "Informational version: ${{ steps.calculate_version.outputs.informational_version }}"
       shell: bash
 
     - name: Setup .NET 8
@@ -65,14 +69,14 @@ jobs:
       run: dotnet restore
 
     - name: Build
-      run: dotnet build --no-restore -p:Version=${{ steps.calculate_version.outputs.version }} --configuration Release --verbosity normal
+      run: dotnet build --no-restore -p:Version=${{ steps.calculate_version.outputs.package_version }} -p:InformationalVersion=${{ steps.calculate_version.outputs.informational_version }} --configuration Release --verbosity normal
 
     - name: Test
       run: dotnet test --no-build --configuration Release --verbosity normal
 
     - name: Generate NuGet package
       if: github.ref == 'refs/heads/main'
-      run: dotnet pack src/Maple.Result/Maple.Result.csproj --no-build -o ${{ env.ARTIFACTS_PATH }} -p:Version=${{ steps.calculate_version.outputs.version }} --configuration Release
+      run: dotnet pack src/Maple.Result/Maple.Result.csproj --no-build -o ${{ env.ARTIFACTS_PATH }} -p:Version=${{ steps.calculate_version.outputs.package_version }} -p:InformationalVersion=${{ steps.calculate_version.outputs.informational_version }} --configuration Release
 
     - name: NuGet login
       if: github.ref == 'refs/heads/main'
