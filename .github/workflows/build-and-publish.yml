@@ -41,7 +41,7 @@ jobs:
         SEMVER: ${{ steps.semantic_version.outputs.version }}
         COMMIT: ${{ steps.semantic_version.outputs.current_commit }}
 
-    - name: Display all outputs from the previous step
+    - name: Display calculated version
       run: echo "${{ steps.calculate_version.outputs.version }}"
       shell: bash
 
