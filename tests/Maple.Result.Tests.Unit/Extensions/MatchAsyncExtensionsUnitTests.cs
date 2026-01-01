@@ -17,7 +17,7 @@ namespace Maple.Result.Tests.Unit.Extensions;
 
 public class MatchAsyncExtensionsUnitTests
 {
-    #region MatchAsync (Result, Action, Action<Error>)
+    #region MatchAsync (Result, Func<Task>, Func<Error, Task>)
 
     [Fact]
     public async Task MatchAsync_NoResultWithActions_ThrowsException()
@@ -158,7 +158,7 @@ public class MatchAsyncExtensionsUnitTests
 
     #endregion
 
-    #region MatchAsync (Result, Func<Result>, Action<Error>)
+    #region MatchAsync (Result, Func<Task<Result>>, Func<Error, Task>)
 
     [Fact]
     public async Task MatchAsync_NoResultWithSuccessResultFunctionAndErrorAction_ThrowsException()
@@ -319,7 +319,7 @@ public class MatchAsyncExtensionsUnitTests
 
     #endregion
 
-    #region MatchAsync (Result, Func<Result>, Func<Error, Result>)
+    #region MatchAsync (Result, Func<Task<Result>>, Func<Error, Task<Result>>)
 
     [Fact]
     public async Task MatchAsync_NoResultWithSuccessAndErrorResultFunctions_ThrowsException()
@@ -471,7 +471,7 @@ public class MatchAsyncExtensionsUnitTests
 
     #endregion
 
-    #region MatchAsync (Result, Func<T>, Action<Error>)
+    #region MatchAsync (Result, Func<Task<T>>, Func<Error, Task>)
 
     [Fact]
     public async Task MatchAsync_NoResultWithGenericSuccessFunctionAndErrorAction_ThrowsException()
@@ -617,7 +617,7 @@ public class MatchAsyncExtensionsUnitTests
 
     #endregion
 
-    #region MatchAsync (Result, Func<T>, Func<Error, T>)
+    #region MatchAsync (Result, Func<Task<T>>, Func<Error, Task<T>>)
 
     [Fact]
     public async Task MatchAsync_NoResultWithGenericSuccessAndErrorFunctions_ThrowsException()
@@ -765,7 +765,7 @@ public class MatchAsyncExtensionsUnitTests
 
     #endregion
 
-    #region MatchAsync (Result, Func<Result<T>>, Action<Error>)
+    #region MatchAsync (Result, Func<Task<Result<T>>>, Func<Error, Task>)
 
     [Fact]
     public async Task MatchAsync_NoResultWithGenericResultSuccessFunctionAndErrorAction_ThrowsException()
@@ -912,7 +912,7 @@ public class MatchAsyncExtensionsUnitTests
 
     #endregion
 
-    #region MatchAsync (Result, Func<Result<T>>, Func<Error, Result<T>>)
+    #region MatchAsync (Result, Func<Task<Result<T>>>, Func<Error, Task<Result<T>>>)
 
     [Fact]
     public async Task MatchAsync_NoResultWithGenericResultSuccessAndErrorFunctions_ThrowsException()
@@ -1065,7 +1065,7 @@ public class MatchAsyncExtensionsUnitTests
 
     #endregion
 
-    #region MatchAsync (Result<T>, Action<T>, Action<Error>)
+    #region MatchAsync (Result<T>, Func<T, Task>, Func<Error, Task>)
 
     [Fact]
     public async Task MatchAsync_NoGenericResultWithSuccessAndErrorActions_ThrowsException()
@@ -1212,7 +1212,7 @@ public class MatchAsyncExtensionsUnitTests
 
     #endregion
 
-    #region MatchAsync (Result<T, TNext>, Func<T, TNext>, Action<Error>)
+    #region MatchAsync (Result<T, Func<T, Task<TNext>>, Func<Error, Task>)
 
     [Fact]
     public async Task MatchAsync_NoGenericResultWithGenericSuccessFunctionAndErrorAction_ThrowsException()
@@ -1359,7 +1359,7 @@ public class MatchAsyncExtensionsUnitTests
 
     #endregion
 
-    #region MatchAsync (Result<T>, Func<T, TNext>, Func<Error, TNext>)
+    #region MatchAsync (Result<T>, Func<T, Task<TNext>>, Func<Error, Task<TNext>>)
 
     [Fact]
     public async Task MatchAsync_NoGenericResultWithGenericSuccessAndErrorFunctions_ThrowsException()
@@ -1517,7 +1517,7 @@ public class MatchAsyncExtensionsUnitTests
 
     #endregion
 
-    #region MatchAsync (Result<T>, Func<T, Result<TNext>>, Action<Error>)
+    #region MatchAsync (Result<T>, Func<T, Task<Result<TNext>>>, Func<Error, Task>)
 
     [Fact]
     public async Task MatchAsync_NoGenericResultWithGenericResultSuccessFunctionAndErrorAction_ThrowsException()
@@ -1671,7 +1671,7 @@ public class MatchAsyncExtensionsUnitTests
 
     #endregion
 
-    #region MatchAsync (Result<T>, Func<T, Result<TNext>>, Func<Error, Result<TNext>>)
+    #region MatchAsync (Result<T>, Func<T, Task<Result<TNext>>>, Func<Error, Task<Result<TNext>>>)
 
     [Fact]
     public async Task MatchAsync_NoGenericResultWithGenericResultSuccessAndErrorFunctions_ThrowsException()
