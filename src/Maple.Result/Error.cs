@@ -350,7 +350,7 @@ public record Error
     }
 
     /// <summary>
-    ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.Forbidden" /> category.
+    ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.Unauthorized" /> category.
     /// </summary>
     /// <param name="typeUri">The text containing a URI reference that identifies the problem type.</param>
     /// <param name="title">The short, human-readable summary of the problem type.</param>
@@ -373,11 +373,11 @@ public record Error
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
     ///     that is not a valid HTTP/HTTP URI or a valid URI Tag.
     /// </exception>
-    public static Error Forbidden(ErrorUri typeUri, string title, string? detail = null,
+    public static Error Unauthorized(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
         params (string Key, object Value)[] detailNamedValues)
     {
-        return new Error(ErrorCategory.Forbidden,
+        return new Error(ErrorCategory.Unauthorized,
             typeUri.Value,
             title,
             detail,
@@ -388,7 +388,7 @@ public record Error
     }
 
     /// <summary>
-    ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.Forbidden" /> category.
+    ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.Unauthorized" /> category.
     /// </summary>
     /// <param name="typeUri">The text containing a URI reference that identifies the problem type.</param>
     /// <param name="title">The short, human-readable summary of the problem type.</param>
@@ -411,12 +411,12 @@ public record Error
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
     ///     that is not a valid HTTP/HTTPS URI or a valid URI Tag.
     /// </exception>
-    public static Error Forbidden(ErrorUri typeUri, string title, string? detail = null,
+    public static Error Unauthorized(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
         IEnumerable<KeyValuePair<string, object>>? detailNamedValues = null)
     {
         return new Error(
-            ErrorCategory.Forbidden,
+            ErrorCategory.Unauthorized,
             typeUri.Value,
             title,
             detail,
