@@ -108,9 +108,9 @@ public record Error
     ///     The human-readable explanation specific to this occurrence of the problem.
     /// </summary>
     /// <remarks>
-    ///     The "detail" string, if present, ought to focus on helping the client correct the problem, rather than giving
+    ///     The “detail” string, if present, ought to focus on helping the client correct the problem, rather than giving
     ///     debugging information.
-    ///     Consumers SHOULD NOT parse the "detail" member for information; extensions are more suitable and less error-prone
+    ///     Consumers SHOULD NOT parse the “detail” member for information; extensions are more suitable and less error-prone
     ///     ways to obtain such information.
     /// </remarks>
     public string? Detail { get; init; }
@@ -195,16 +195,16 @@ public record Error
     /// <summary>
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.Validation" /> category.
     /// </summary>
-    /// <param name="typeUri">The text containing a URI reference that identifies the problem type.</param>
-    /// <param name="title">The short, human-readable summary of the problem type.</param>
-    /// <param name="detail">The human-readable explanation specific to this occurrence of the problem.</param>
-    /// <param name="instanceUri">The URI reference that identifies the specific occurrence of the problem.</param>
+    /// <param name="typeUri">A record containing a URI reference that identifies the problem type.</param>
+    /// <param name="title">A short, human-readable summary of the problem.</param>
+    /// <param name="detail">A human-readable explanation specific to this occurrence of the problem.</param>
+    /// <param name="instanceUri">A URI reference that identifies the specific occurrence of the problem.</param>
     /// <param name="detailTemplateId">
-    ///     The message template identifier to generate a localized detail message
+    ///     A message template identifier to generate a localized detail message
     ///     (the human-readable explanation specific to this occurrence of the problem).
     /// </param>
     /// <param name="detailNamedValues">
-    ///     The optional collection of parameters (names and values) to generate a localized detail
+    ///     An optional collection of parameters (names and values) to generate a localized detail
     ///     message (the human-readable explanation specific to this occurrence of the problem).
     /// </param>
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
@@ -234,16 +234,16 @@ public record Error
     /// <summary>
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.Validation" /> category.
     /// </summary>
-    /// <param name="typeUri">The text containing a URI reference that identifies the problem type.</param>
-    /// <param name="title">The short, human-readable summary of the problem type.</param>
-    /// <param name="detail">The human-readable explanation specific to this occurrence of the problem.</param>
-    /// <param name="instanceUri">The URI reference that identifies the specific occurrence of the problem.</param>
+    /// <param name="typeUri">A record containing a URI reference that identifies the problem type.</param>
+    /// <param name="title">A short, human-readable summary of the problem.</param>
+    /// <param name="detail">A human-readable explanation specific to this occurrence of the problem.</param>
+    /// <param name="instanceUri">A URI reference that identifies the specific occurrence of the problem.</param>
     /// <param name="detailTemplateId">
-    ///     The message template identifier to generate a localized detail message
+    ///     A message template identifier to generate a localized detail message
     ///     (the human-readable explanation specific to this occurrence of the problem).
     /// </param>
     /// <param name="detailNamedValues">
-    ///     The optional collection of parameters (names and values) to generate a localized detail
+    ///     An optional collection of parameters (names and values) to generate a localized detail
     ///     message (the human-readable explanation specific to this occurrence of the problem).
     /// </param>
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
@@ -274,16 +274,16 @@ public record Error
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.Unauthenticated" />
     ///     category.
     /// </summary>
-    /// <param name="typeUri">The text containing a URI reference that identifies the problem type.</param>
-    /// <param name="title">The short, human-readable summary of the problem type.</param>
-    /// <param name="detail">The human-readable explanation specific to this occurrence of the problem.</param>
-    /// <param name="instanceUri">The URI reference that identifies the specific occurrence of the problem.</param>
+    /// <param name="typeUri">A record containing a URI reference that identifies the problem type.</param>
+    /// <param name="title">A short, human-readable summary of the problem.</param>
+    /// <param name="detail">A human-readable explanation specific to this occurrence of the problem.</param>
+    /// <param name="instanceUri">A URI reference that identifies the specific occurrence of the problem.</param>
     /// <param name="detailTemplateId">
-    ///     The message template identifier to generate a localized detail message
+    ///     A message template identifier to generate a localized detail message
     ///     (the human-readable explanation specific to this occurrence of the problem).
     /// </param>
     /// <param name="detailNamedValues">
-    ///     The optional collection of parameters (names and values) to generate a localized detail
+    ///     An optional collection of parameters (names and values) to generate a localized detail
     ///     message (the human-readable explanation specific to this occurrence of the problem).
     /// </param>
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
@@ -313,16 +313,16 @@ public record Error
     /// <summary>
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.Unauthenticated" /> category.
     /// </summary>
-    /// <param name="typeUri">The text containing a URI reference that identifies the problem type.</param>
-    /// <param name="title">The short, human-readable summary of the problem type.</param>
-    /// <param name="detail">The human-readable explanation specific to this occurrence of the problem.</param>
-    /// <param name="instanceUri">The URI reference that identifies the specific occurrence of the problem.</param>
+    /// <param name="typeUri">A record containing a URI reference that identifies the problem type.</param>
+    /// <param name="title">A short, human-readable summary of the problem.</param>
+    /// <param name="detail">A human-readable explanation specific to this occurrence of the problem.</param>
+    /// <param name="instanceUri">A URI reference that identifies the specific occurrence of the problem.</param>
     /// <param name="detailTemplateId">
-    ///     The message template identifier to generate a localized detail message
+    ///     A message template identifier to generate a localized detail message
     ///     (the human-readable explanation specific to this occurrence of the problem).
     /// </param>
     /// <param name="detailNamedValues">
-    ///     The optional collection of parameters (names and values) to generate a localized detail
+    ///     An optional sequence of parameters (names and values) to generate a localized detail
     ///     message (the human-readable explanation specific to this occurrence of the problem).
     /// </param>
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
@@ -352,16 +352,16 @@ public record Error
     /// <summary>
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.Unauthorized" /> category.
     /// </summary>
-    /// <param name="typeUri">The text containing a URI reference that identifies the problem type.</param>
-    /// <param name="title">The short, human-readable summary of the problem type.</param>
-    /// <param name="detail">The human-readable explanation specific to this occurrence of the problem.</param>
-    /// <param name="instanceUri">The URI reference that identifies the specific occurrence of the problem.</param>
+    /// <param name="typeUri">A record containing a URI reference that identifies the problem type.</param>
+    /// <param name="title">A short, human-readable summary of the problem.</param>
+    /// <param name="detail">A human-readable explanation specific to this occurrence of the problem.</param>
+    /// <param name="instanceUri">A URI reference that identifies the specific occurrence of the problem.</param>
     /// <param name="detailTemplateId">
-    ///     The message template identifier to generate a localized detail message
+    ///     A message template identifier to generate a localized detail message
     ///     (the human-readable explanation specific to this occurrence of the problem).
     /// </param>
     /// <param name="detailNamedValues">
-    ///     The optional collection of parameters (names and values) to generate a localized detail
+    ///     An optional collection of parameters (names and values) to generate a localized detail
     ///     message (the human-readable explanation specific to this occurrence of the problem).
     /// </param>
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
@@ -390,16 +390,16 @@ public record Error
     /// <summary>
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.Unauthorized" /> category.
     /// </summary>
-    /// <param name="typeUri">The text containing a URI reference that identifies the problem type.</param>
-    /// <param name="title">The short, human-readable summary of the problem type.</param>
-    /// <param name="detail">The human-readable explanation specific to this occurrence of the problem.</param>
-    /// <param name="instanceUri">The URI reference that identifies the specific occurrence of the problem.</param>
+    /// <param name="typeUri">A record containing a URI reference that identifies the problem type.</param>
+    /// <param name="title">A short, human-readable summary of the problem.</param>
+    /// <param name="detail">A human-readable explanation specific to this occurrence of the problem.</param>
+    /// <param name="instanceUri">A URI reference that identifies the specific occurrence of the problem.</param>
     /// <param name="detailTemplateId">
-    ///     The message template identifier to generate a localized detail message
+    ///     A message template identifier to generate a localized detail message
     ///     (the human-readable explanation specific to this occurrence of the problem).
     /// </param>
     /// <param name="detailNamedValues">
-    ///     The optional collection of parameters (names and values) to generate a localized detail
+    ///     An optional sequence of parameters (names and values) to generate a localized detail
     ///     message (the human-readable explanation specific to this occurrence of the problem).
     /// </param>
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
@@ -429,16 +429,16 @@ public record Error
     /// <summary>
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.NotFound" /> category.
     /// </summary>
-    /// <param name="typeUri">The text containing a URI reference that identifies the problem type.</param>
-    /// <param name="title">The short, human-readable summary of the problem type.</param>
-    /// <param name="detail">The human-readable explanation specific to this occurrence of the problem.</param>
-    /// <param name="instanceUri">The URI reference that identifies the specific occurrence of the problem.</param>
+    /// <param name="typeUri">A record containing a URI reference that identifies the problem type.</param>
+    /// <param name="title">A short, human-readable summary of the problem.</param>
+    /// <param name="detail">A human-readable explanation specific to this occurrence of the problem.</param>
+    /// <param name="instanceUri">A URI reference that identifies the specific occurrence of the problem.</param>
     /// <param name="detailTemplateId">
-    ///     The message template identifier to generate a localized detail message
+    ///     A message template identifier to generate a localized detail message
     ///     (the human-readable explanation specific to this occurrence of the problem).
     /// </param>
     /// <param name="detailNamedValues">
-    ///     The optional collection of parameters (names and values) to generate a localized detail
+    ///     An optional collection of parameters (names and values) to generate a localized detail
     ///     message (the human-readable explanation specific to this occurrence of the problem).
     /// </param>
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
@@ -468,16 +468,16 @@ public record Error
     /// <summary>
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.NotFound" /> category.
     /// </summary>
-    /// <param name="typeUri">The text containing a URI reference that identifies the problem type.</param>
-    /// <param name="title">The short, human-readable summary of the problem type.</param>
-    /// <param name="detail">The human-readable explanation specific to this occurrence of the problem.</param>
-    /// <param name="instanceUri">The URI reference that identifies the specific occurrence of the problem.</param>
+    /// <param name="typeUri">A record containing a URI reference that identifies the problem type.</param>
+    /// <param name="title">A short, human-readable summary of the problem.</param>
+    /// <param name="detail">A human-readable explanation specific to this occurrence of the problem.</param>
+    /// <param name="instanceUri">A URI reference that identifies the specific occurrence of the problem.</param>
     /// <param name="detailTemplateId">
-    ///     The message template identifier to generate a localized detail message
+    ///     A message template identifier to generate a localized detail message
     ///     (the human-readable explanation specific to this occurrence of the problem).
     /// </param>
     /// <param name="detailNamedValues">
-    ///     The optional collection of parameters (names and values) to generate a localized detail
+    ///     An optional sequence of parameters (names and values) to generate a localized detail
     ///     message (the human-readable explanation specific to this occurrence of the problem).
     /// </param>
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
@@ -507,16 +507,16 @@ public record Error
     /// <summary>
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.Timeout" /> category.
     /// </summary>
-    /// <param name="typeUri">The text containing a URI reference that identifies the problem type.</param>
-    /// <param name="title">The short, human-readable summary of the problem type.</param>
-    /// <param name="detail">The human-readable explanation specific to this occurrence of the problem.</param>
-    /// <param name="instanceUri">The URI reference that identifies the specific occurrence of the problem.</param>
+    /// <param name="typeUri">A record containing a URI reference that identifies the problem type.</param>
+    /// <param name="title">A short, human-readable summary of the problem.</param>
+    /// <param name="detail">A human-readable explanation specific to this occurrence of the problem.</param>
+    /// <param name="instanceUri">A URI reference that identifies the specific occurrence of the problem.</param>
     /// <param name="detailTemplateId">
-    ///     The message template identifier to generate a localized detail message
+    ///     A message template identifier to generate a localized detail message
     ///     (the human-readable explanation specific to this occurrence of the problem).
     /// </param>
     /// <param name="detailNamedValues">
-    ///     The optional collection of parameters (names and values) to generate a localized detail
+    ///     An optional collection of parameters (names and values) to generate a localized detail
     ///     message (the human-readable explanation specific to this occurrence of the problem).
     /// </param>
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
@@ -546,16 +546,16 @@ public record Error
     /// <summary>
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.Timeout" /> category.
     /// </summary>
-    /// <param name="typeUri">The text containing a URI reference that identifies the problem type.</param>
-    /// <param name="title">The short, human-readable summary of the problem type.</param>
-    /// <param name="detail">The human-readable explanation specific to this occurrence of the problem.</param>
-    /// <param name="instanceUri">The URI reference that identifies the specific occurrence of the problem.</param>
+    /// <param name="typeUri">A record containing a URI reference that identifies the problem type.</param>
+    /// <param name="title">A short, human-readable summary of the problem.</param>
+    /// <param name="detail">A human-readable explanation specific to this occurrence of the problem.</param>
+    /// <param name="instanceUri">A URI reference that identifies the specific occurrence of the problem.</param>
     /// <param name="detailTemplateId">
-    ///     The message template identifier to generate a localized detail message
+    ///     A message template identifier to generate a localized detail message
     ///     (the human-readable explanation specific to this occurrence of the problem).
     /// </param>
     /// <param name="detailNamedValues">
-    ///     The optional collection of parameters (names and values) to generate a localized detail
+    ///     An optional sequence of parameters (names and values) to generate a localized detail
     ///     message (the human-readable explanation specific to this occurrence of the problem).
     /// </param>
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
@@ -585,16 +585,16 @@ public record Error
     /// <summary>
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.Conflict" /> category.
     /// </summary>
-    /// <param name="typeUri">The text containing a URI reference that identifies the problem type.</param>
-    /// <param name="title">The short, human-readable summary of the problem type.</param>
-    /// <param name="detail">The human-readable explanation specific to this occurrence of the problem.</param>
-    /// <param name="instanceUri">The URI reference that identifies the specific occurrence of the problem.</param>
+    /// <param name="typeUri">A record containing a URI reference that identifies the problem type.</param>
+    /// <param name="title">A short, human-readable summary of the problem.</param>
+    /// <param name="detail">A human-readable explanation specific to this occurrence of the problem.</param>
+    /// <param name="instanceUri">A URI reference that identifies the specific occurrence of the problem.</param>
     /// <param name="detailTemplateId">
-    ///     The message template identifier to generate a localized detail message
+    ///     A message template identifier to generate a localized detail message
     ///     (the human-readable explanation specific to this occurrence of the problem).
     /// </param>
     /// <param name="detailNamedValues">
-    ///     The optional collection of parameters (names and values) to generate a localized detail
+    ///     An optional collection of parameters (names and values) to generate a localized detail
     ///     message (the human-readable explanation specific to this occurrence of the problem).
     /// </param>
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
@@ -624,16 +624,16 @@ public record Error
     /// <summary>
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.Conflict" /> category.
     /// </summary>
-    /// <param name="typeUri">The text containing a URI reference that identifies the problem type.</param>
-    /// <param name="title">The short, human-readable summary of the problem type.</param>
-    /// <param name="detail">The human-readable explanation specific to this occurrence of the problem.</param>
-    /// <param name="instanceUri">The URI reference that identifies the specific occurrence of the problem.</param>
+    /// <param name="typeUri">A record containing a URI reference that identifies the problem type.</param>
+    /// <param name="title">A short, human-readable summary of the problem.</param>
+    /// <param name="detail">A human-readable explanation specific to this occurrence of the problem.</param>
+    /// <param name="instanceUri">A URI reference that identifies the specific occurrence of the problem.</param>
     /// <param name="detailTemplateId">
-    ///     The message template identifier to generate a localized detail message
+    ///     A message template identifier to generate a localized detail message
     ///     (the human-readable explanation specific to this occurrence of the problem).
     /// </param>
     /// <param name="detailNamedValues">
-    ///     The optional collection of parameters (names and values) to generate a localized detail
+    ///     An optional sequence of parameters (names and values) to generate a localized detail
     ///     message (the human-readable explanation specific to this occurrence of the problem).
     /// </param>
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
@@ -663,16 +663,16 @@ public record Error
     /// <summary>
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.Failure" /> category.
     /// </summary>
-    /// <param name="typeUri">The text containing a URI reference that identifies the problem type.</param>
-    /// <param name="title">The short, human-readable summary of the problem type.</param>
-    /// <param name="detail">The human-readable explanation specific to this occurrence of the problem.</param>
-    /// <param name="instanceUri">The URI reference that identifies the specific occurrence of the problem.</param>
+    /// <param name="typeUri">A record containing a URI reference that identifies the problem type.</param>
+    /// <param name="title">A short, human-readable summary of the problem.</param>
+    /// <param name="detail">A human-readable explanation specific to this occurrence of the problem.</param>
+    /// <param name="instanceUri">A URI reference that identifies the specific occurrence of the problem.</param>
     /// <param name="detailTemplateId">
-    ///     The message template identifier to generate a localized detail message
+    ///     A message template identifier to generate a localized detail message
     ///     (the human-readable explanation specific to this occurrence of the problem).
     /// </param>
     /// <param name="detailNamedValues">
-    ///     The optional collection of parameters (names and values) to generate a localized detail
+    ///     An optional collection of parameters (names and values) to generate a localized detail
     ///     message (the human-readable explanation specific to this occurrence of the problem).
     /// </param>
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
@@ -702,16 +702,16 @@ public record Error
     /// <summary>
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.Failure" /> category.
     /// </summary>
-    /// <param name="typeUri">The text containing a URI reference that identifies the problem type.</param>
-    /// <param name="title">The short, human-readable summary of the problem type.</param>
-    /// <param name="detail">The human-readable explanation specific to this occurrence of the problem.</param>
-    /// <param name="instanceUri">The URI reference that identifies the specific occurrence of the problem.</param>
+    /// <param name="typeUri">A record containing a URI reference that identifies the problem type.</param>
+    /// <param name="title">A short, human-readable summary of the problem.</param>
+    /// <param name="detail">A human-readable explanation specific to this occurrence of the problem.</param>
+    /// <param name="instanceUri">A URI reference that identifies the specific occurrence of the problem.</param>
     /// <param name="detailTemplateId">
-    ///     The message template identifier to generate a localized detail message
+    ///     A message template identifier to generate a localized detail message
     ///     (the human-readable explanation specific to this occurrence of the problem).
     /// </param>
     /// <param name="detailNamedValues">
-    ///     The optional collection of parameters (names and values) to generate a localized detail
+    ///     An optional sequence of parameters (names and values) to generate a localized detail
     ///     message (the human-readable explanation specific to this occurrence of the problem).
     /// </param>
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
@@ -741,16 +741,16 @@ public record Error
     /// <summary>
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.CriticalError" /> category.
     /// </summary>
-    /// <param name="typeUri">The text containing a URI reference that identifies the problem type.</param>
-    /// <param name="title">The short, human-readable summary of the problem type.</param>
-    /// <param name="detail">The human-readable explanation specific to this occurrence of the problem.</param>
-    /// <param name="instanceUri">The URI reference that identifies the specific occurrence of the problem.</param>
+    /// <param name="typeUri">A record containing a URI reference that identifies the problem type.</param>
+    /// <param name="title">A short, human-readable summary of the problem.</param>
+    /// <param name="detail">A human-readable explanation specific to this occurrence of the problem.</param>
+    /// <param name="instanceUri">A URI reference that identifies the specific occurrence of the problem.</param>
     /// <param name="detailTemplateId">
-    ///     The message template identifier to generate a localized detail message
+    ///     A message template identifier to generate a localized detail message
     ///     (the human-readable explanation specific to this occurrence of the problem).
     /// </param>
     /// <param name="detailNamedValues">
-    ///     The optional collection of parameters (names and values) to generate a localized detail
+    ///     An optional collection of parameters (names and values) to generate a localized detail
     ///     message (the human-readable explanation specific to this occurrence of the problem).
     /// </param>
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
@@ -780,16 +780,16 @@ public record Error
     /// <summary>
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.CriticalError" /> category.
     /// </summary>
-    /// <param name="typeUri">The text containing a URI reference that identifies the problem type.</param>
-    /// <param name="title">The short, human-readable summary of the problem type.</param>
-    /// <param name="detail">The human-readable explanation specific to this occurrence of the problem.</param>
-    /// <param name="instanceUri">The URI reference that identifies the specific occurrence of the problem.</param>
+    /// <param name="typeUri">A record containing a URI reference that identifies the problem type.</param>
+    /// <param name="title">A short, human-readable summary of the problem.</param>
+    /// <param name="detail">A human-readable explanation specific to this occurrence of the problem.</param>
+    /// <param name="instanceUri">A URI reference that identifies the specific occurrence of the problem.</param>
     /// <param name="detailTemplateId">
-    ///     The message template identifier to generate a localized detail message
+    ///     A message template identifier to generate a localized detail message
     ///     (the human-readable explanation specific to this occurrence of the problem).
     /// </param>
     /// <param name="detailNamedValues">
-    ///     The optional collection of parameters (names and values) to generate a localized detail
+    ///     An optional sequence of parameters (names and values) to generate a localized detail
     ///     message (the human-readable explanation specific to this occurrence of the problem).
     /// </param>
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
@@ -819,16 +819,16 @@ public record Error
     /// <summary>
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.NotImplemented" /> category.
     /// </summary>
-    /// <param name="typeUri">The text containing a URI reference that identifies the problem type.</param>
-    /// <param name="title">The short, human-readable summary of the problem type.</param>
-    /// <param name="detail">The human-readable explanation specific to this occurrence of the problem.</param>
-    /// <param name="instanceUri">The URI reference that identifies the specific occurrence of the problem.</param>
+    /// <param name="typeUri">A record containing a URI reference that identifies the problem type.</param>
+    /// <param name="title">A short, human-readable summary of the problem.</param>
+    /// <param name="detail">A human-readable explanation specific to this occurrence of the problem.</param>
+    /// <param name="instanceUri">A URI reference that identifies the specific occurrence of the problem.</param>
     /// <param name="detailTemplateId">
-    ///     The message template identifier to generate a localized detail message
+    ///     A message template identifier to generate a localized detail message
     ///     (the human-readable explanation specific to this occurrence of the problem).
     /// </param>
     /// <param name="detailNamedValues">
-    ///     The optional collection of parameters (names and values) to generate a localized detail
+    ///     An optional collection of parameters (names and values) to generate a localized detail
     ///     message (the human-readable explanation specific to this occurrence of the problem).
     /// </param>
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
@@ -858,16 +858,16 @@ public record Error
     /// <summary>
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.NotImplemented" /> category.
     /// </summary>
-    /// <param name="typeUri">The text containing a URI reference that identifies the problem type.</param>
-    /// <param name="title">The short, human-readable summary of the problem type.</param>
-    /// <param name="detail">The human-readable explanation specific to this occurrence of the problem.</param>
-    /// <param name="instanceUri">The URI reference that identifies the specific occurrence of the problem.</param>
+    /// <param name="typeUri">A record containing a URI reference that identifies the problem type.</param>
+    /// <param name="title">A short, human-readable summary of the problem.</param>
+    /// <param name="detail">A human-readable explanation specific to this occurrence of the problem.</param>
+    /// <param name="instanceUri">A URI reference that identifies the specific occurrence of the problem.</param>
     /// <param name="detailTemplateId">
-    ///     The message template identifier to generate a localized detail message
+    ///     A message template identifier to generate a localized detail message
     ///     (the human-readable explanation specific to this occurrence of the problem).
     /// </param>
     /// <param name="detailNamedValues">
-    ///     The optional collection of parameters (names and values) to generate a localized detail
+    ///     An optional sequence of parameters (names and values) to generate a localized detail
     ///     message (the human-readable explanation specific to this occurrence of the problem).
     /// </param>
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
@@ -897,16 +897,16 @@ public record Error
     /// <summary>
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.Unavailable" /> category.
     /// </summary>
-    /// <param name="typeUri">The text containing a URI reference that identifies the problem type.</param>
-    /// <param name="title">The short, human-readable summary of the problem type.</param>
-    /// <param name="detail">The human-readable explanation specific to this occurrence of the problem.</param>
-    /// <param name="instanceUri">The URI reference that identifies the specific occurrence of the problem.</param>
+    /// <param name="typeUri">A record containing a URI reference that identifies the problem type.</param>
+    /// <param name="title">A short, human-readable summary of the problem.</param>
+    /// <param name="detail">A human-readable explanation specific to this occurrence of the problem.</param>
+    /// <param name="instanceUri">A URI reference that identifies the specific occurrence of the problem.</param>
     /// <param name="detailTemplateId">
-    ///     The message template identifier to generate a localized detail message
+    ///     A message template identifier to generate a localized detail message
     ///     (the human-readable explanation specific to this occurrence of the problem).
     /// </param>
     /// <param name="detailNamedValues">
-    ///     The optional collection of parameters (names and values) to generate a localized detail
+    ///     An optional collection of parameters (names and values) to generate a localized detail
     ///     message (the human-readable explanation specific to this occurrence of the problem).
     /// </param>
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
@@ -936,16 +936,16 @@ public record Error
     /// <summary>
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.Unavailable" /> category.
     /// </summary>
-    /// <param name="typeUri">The text containing a URI reference that identifies the problem type.</param>
-    /// <param name="title">The short, human-readable summary of the problem type.</param>
-    /// <param name="detail">The human-readable explanation specific to this occurrence of the problem.</param>
-    /// <param name="instanceUri">The URI reference that identifies the specific occurrence of the problem.</param>
+    /// <param name="typeUri">A record containing a URI reference that identifies the problem type.</param>
+    /// <param name="title">A short, human-readable summary of the problem.</param>
+    /// <param name="detail">A human-readable explanation specific to this occurrence of the problem.</param>
+    /// <param name="instanceUri">A URI reference that identifies the specific occurrence of the problem.</param>
     /// <param name="detailTemplateId">
-    ///     The message template identifier to generate a localized detail message
+    ///     A message template identifier to generate a localized detail message
     ///     (the human-readable explanation specific to this occurrence of the problem).
     /// </param>
     /// <param name="detailNamedValues">
-    ///     The optional collection of parameters (names and values) to generate a localized detail
+    ///     An optional sequence of parameters (names and values) to generate a localized detail
     ///     message (the human-readable explanation specific to this occurrence of the problem).
     /// </param>
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
