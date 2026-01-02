@@ -446,19 +446,19 @@ public class ErrorUnitTests
 
     #endregion
 
-    #region Forbidden
+    #region Unauthorized
 
     [Fact]
-    public void Forbidden_OnlyRequiredDetails_ReturnsError()
+    public void Unauthorized_OnlyRequiredDetails_ReturnsError()
     {
         // Arrange
-        const ErrorCategory ExpectedCategory = ErrorCategory.Forbidden;
+        const ErrorCategory ExpectedCategory = ErrorCategory.Unauthorized;
         const int ExpectedErrorDetailsCount = 0;
         const string ExpectedTitle = "Test title";
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
 
         // Act
-        var sut = Sut.Forbidden(
+        var sut = Sut.Unauthorized(
             ErrorUri.Tag("tag:test.com,2024:Test"),
             "Test title");
 
@@ -475,10 +475,10 @@ public class ErrorUnitTests
     }
 
     [Fact]
-    public void Forbidden_WithDetailsCollection_ReturnsError()
+    public void Unauthorized_WithDetailsCollection_ReturnsError()
     {
         // Arrange
-        const ErrorCategory ExpectedCategory = ErrorCategory.Forbidden;
+        const ErrorCategory ExpectedCategory = ErrorCategory.Unauthorized;
         const string ExpectedDetail = "Test description.";
         const string ExpectedDetailTemplateId = "message-id";
         const int ExpectedDetailParamsCount = 2;
@@ -492,7 +492,7 @@ public class ErrorUnitTests
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
 
         // Act
-        var sut = Sut.Forbidden(
+        var sut = Sut.Unauthorized(
             ErrorUri.Tag("tag:test.com,2024:Test"),
             "Test title",
             "Test description.",
@@ -520,10 +520,10 @@ public class ErrorUnitTests
     }
 
     [Fact]
-    public void Forbidden_WithDetailsDictionary_ReturnsError()
+    public void Unauthorized_WithDetailsDictionary_ReturnsError()
     {
         // Arrange
-        const ErrorCategory ExpectedCategory = ErrorCategory.Forbidden;
+        const ErrorCategory ExpectedCategory = ErrorCategory.Unauthorized;
         const string ExpectedDetail = "Test description.";
         const string ExpectedDetailTemplateId = "message-id";
         const int ExpectedDetailParamsCount = 2;
@@ -537,7 +537,7 @@ public class ErrorUnitTests
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
 
         // Act
-        var sut = Sut.Forbidden(
+        var sut = Sut.Unauthorized(
             ErrorUri.Tag("tag:test.com,2024:Test"),
             "Test title",
             "Test description.",

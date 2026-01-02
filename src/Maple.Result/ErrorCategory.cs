@@ -40,7 +40,7 @@ public enum ErrorCategory
     ///     The authentication might be valid, but the identity does not have the required permissions.<br />
     ///     Can be mapped to the 403 HTTP status code (Forbidden).
     /// </remarks>
-    Forbidden,
+    Unauthorized,
 
     /// <summary>
     ///     The resource was not found error.

@@ -1189,7 +1189,7 @@ public class MatchExtensionsUnitTests
 
     #endregion
 
-    #region Match (Result<T, TNext>, Func<T, TNext>, Action<Error>)
+    #region Match (Result<T>, Func<T, TNext>, Action<Error>)
 
     [Fact]
     public void Match_NoGenericResultWithGenericSuccessFunctionAndErrorAction_ThrowsException()
