@@ -1,4 +1,4 @@
-# Goals
+﻿# Goals
 1. Follow standards where possible:
     1. Industry standard for error responses: [RFC 9457](https://datatracker.ietf.org/doc/html/rfc9457) (which updates the [RFC 7807](https://datatracker.ietf.org/doc/html/rfc7807))
     1. Error types: existing *Result* implementations use the same or similar type of errors.
