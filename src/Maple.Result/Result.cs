@@ -23,13 +23,17 @@ namespace Maple.Result;
 public interface IResult
 {
     /// <summary>
-    ///     Returns an <see cref="Error" /> object if the operation failed; otherwise, returns <see langword="null" />.
+    ///     Returns an <see cref="Error" /> object if the operation failed;
+    ///     otherwise, returns <see langword="null" />.
     /// </summary>
     public Error? Error { get; }
 
     /// <summary>
-    ///     Returns an indication of whether the operation was successful.
+    ///     Returns an indicator of whether the operation was successful.
     /// </summary>
+    /// <returns>
+    ///     <see langword="true" /> if the operation was successful; otherwise, <see langword="false" />.
+    /// </returns>
     public bool IsSuccess();
 }
 
@@ -41,6 +45,19 @@ public record Result : IResult
 {
     #region constructors
 
+    /// <summary>
+    ///     Initializes a new instance of the successful <see cref="Result" /> class.
+    /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///         This constructor is intended only for deserialization purposes,
+    ///         and it should not be used directly in code.
+    ///     </para>
+    ///     <para>
+    ///         Use the static <see cref="Success" /> method to create a successful <see cref="Result" /> instance or
+    ///         <see cref="FromError" /> method or the implicit operator to create a failed instance.
+    ///     </para>
+    /// </remarks>
     public Result()
     {
     }
@@ -53,20 +70,38 @@ public record Result : IResult
     #endregion
 
     /// <summary>
-    ///     Returns a successful <see cref="Result" /> instance.
+    ///     Returns an <see cref="Error" /> object if the operation failed;
+    ///     otherwise, returns <see langword="null" />.
     /// </summary>
-    public static Result Success()
-        => new();
-
     public Error? Error { get; init; }
 
+    /// <summary>
+    ///     Returns an indicator of whether the operation was successful.
+    /// </summary>
+    /// <returns>
+    ///     <see langword="true" /> if the operation was successful; otherwise, <see langword="false" />.
+    /// </returns>
     public bool IsSuccess()
     {
         return Error == null;
     }
 
+    /// <summary>
+    ///     Creates a successful <see cref="Result" /> instance.
+    /// </summary>
+    /// <returns>A successful <see cref="Result" /> instance.</returns>
+    public static Result Success()
+    {
+        return new Result();
+    }
+
     #region implicit operators
 
+    /// <summary>
+    ///     Converts an <see cref="Error" /> to a failed <see cref="Result" /> with the specified error.
+    /// </summary>
+    /// <param name="error">The <see cref="Error" /> to convert.</param>
+    /// <returns>A failed <see cref="Result" /> instance with the provided error.</returns>
     public static implicit operator Result(Error error)
     {
         return new Result(error);
@@ -98,43 +133,12 @@ public record Result : IResult
 
 /// <summary>
 ///     Defines a result of an operation that can either be successful and contain a value
-///     of type <typeparamref name="T" />, or contain an error.
+///     of type <typeparamref name="T" />, or contain an <see cref="Error" />.
 /// </summary>
 /// <typeparam name="T">The type of the successful value.</typeparam>
 /// <inheritdoc cref="IResult" />
 public record Result<T> : IResult
 {
-    #region read-only fields
-
-    private readonly Error? _error;
-    private readonly T? _value;
-
-    #endregion
-
-    #region constructors
-
-    public Result()
-    {
-    }
-
-    internal Result(T value)
-    {
-        if (value is null)
-            throw new ArgumentNullException(nameof(value), "Value cannot be null!");
-
-        _value = value;
-    }
-
-    internal Result(Error error)
-    {
-        if (error is null)
-            throw new ArgumentNullException(nameof(error), "Error cannot be null!");
-
-        _error = error;
-    }
-
-    #endregion
-
     /// <summary>
     ///     Returns the value of type <typeparamref name="T" /> if the operation was successful;
     ///     otherwise, returns <see langword="null" />.
@@ -154,6 +158,10 @@ public record Result<T> : IResult
         }
     }
 
+    /// <summary>
+    ///     Returns an <see cref="Error" /> object if the operation failed;
+    ///     otherwise, returns <see langword="null" />.
+    /// </summary>
     public Error? Error
     {
         get => _error;
@@ -169,10 +177,59 @@ public record Result<T> : IResult
         }
     }
 
+    /// <summary>
+    ///     Returns an indicator of whether the operation was successful.
+    /// </summary>
+    /// <returns>
+    ///     <see langword="true" /> if the operation was successful; otherwise, <see langword="false" />.
+    /// </returns>
     public bool IsSuccess()
     {
         return Error == null;
     }
+
+    #region read-only fields
+
+    private readonly Error? _error;
+    private readonly T? _value;
+
+    #endregion
+
+    #region constructors
+
+    /// <summary>
+    ///     Initializes a new instance of the successful <see cref="Result{T}" /> class.
+    /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///         This constructor is intended only for deserialization purposes,
+    ///         and it should not be used directly in code.
+    ///     </para>
+    ///     <para>
+    ///         Use the static <see cref="FromValue" /> method to create a successful <see cref="Result" /> instance
+    ///         with provided value, or <see cref="FromError" /> method or the implicit operator
+    ///         to create a failed instance with provided <see cref="Error" />.
+    ///     </para>
+    /// </remarks>
+    public Result()
+    {
+    }
+
+    internal Result(T value)
+    {
+        if (value is null)
+            throw new ArgumentNullException(nameof(value), "Value cannot be null!");
+
+        _value = value;
+    }
+
+    internal Result(Error error)
+    {
+        _error = error
+                 ?? throw new ArgumentNullException(nameof(error), "Error cannot be null!");
+    }
+
+    #endregion
 
     #region implicit operators
 
