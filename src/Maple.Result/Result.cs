@@ -37,7 +37,7 @@ public interface IResult
 ///     Defines a result of an operation that can either be successful or contain an error.
 /// </summary>
 /// <inheritdoc cref="IResult" />
-public record Result : IResult
+public sealed record Result : IResult
 {
     #region constructors
 
@@ -102,7 +102,7 @@ public record Result : IResult
 /// </summary>
 /// <typeparam name="T">The type of the successful value.</typeparam>
 /// <inheritdoc cref="IResult" />
-public record Result<T> : IResult
+public sealed record Result<T> : IResult
 {
     #region read-only fields
 
