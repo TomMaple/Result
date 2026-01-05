@@ -53,16 +53,21 @@ public sealed record Result : IResult
     #endregion
 
     /// <summary>
-    ///     Returns a successful <see cref="Result" /> instance.
     /// </summary>
-    public static Result Success()
-        => new();
-
     public Error? Error { get; init; }
 
     public bool IsSuccess()
     {
         return Error == null;
+    }
+
+    /// <summary>
+    ///     Creates a successful <see cref="Result" /> instance.
+    /// </summary>
+    /// <returns>A successful <see cref="Result" /> instance.</returns>
+    public static Result Success()
+    {
+        return new Result();
     }
 
     #region implicit operators
