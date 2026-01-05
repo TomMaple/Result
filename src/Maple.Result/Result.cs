@@ -23,13 +23,17 @@ namespace Maple.Result;
 public interface IResult
 {
     /// <summary>
-    ///     Returns an <see cref="Error" /> object if the operation failed; otherwise, returns <see langword="null" />.
+    ///     Returns an <see cref="Error" /> object if the operation failed;
+    ///     otherwise, returns <see langword="null" />.
     /// </summary>
     public Error? Error { get; }
 
     /// <summary>
-    ///     Returns an indication of whether the operation was successful.
+    ///     Returns an indicator of whether the operation was successful.
     /// </summary>
+    /// <returns>
+    ///     <see langword="true" /> if the operation was successful; otherwise, <see langword="false" />.
+    /// </returns>
     public bool IsSuccess();
 }
 
@@ -41,6 +45,19 @@ public sealed record Result : IResult
 {
     #region constructors
 
+    /// <summary>
+    ///     Initializes a new instance of the successful <see cref="Result" /> class.
+    /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///         This constructor is intended only for deserialization purposes,
+    ///         and it should not be used directly in code.
+    ///     </para>
+    ///     <para>
+    ///         Use the static <see cref="Success" /> method to create a successful <see cref="Result" /> instance or
+    ///         <see cref="FromError" /> method or the implicit operator to create a failed instance.
+    ///     </para>
+    /// </remarks>
     public Result()
     {
     }
@@ -53,9 +70,17 @@ public sealed record Result : IResult
     #endregion
 
     /// <summary>
+    ///     Returns an <see cref="Error" /> object if the operation failed;
+    ///     otherwise, returns <see langword="null" />.
     /// </summary>
     public Error? Error { get; init; }
 
+    /// <summary>
+    ///     Returns an indicator of whether the operation was successful.
+    /// </summary>
+    /// <returns>
+    ///     <see langword="true" /> if the operation was successful; otherwise, <see langword="false" />.
+    /// </returns>
     public bool IsSuccess()
     {
         return Error == null;
@@ -72,6 +97,11 @@ public sealed record Result : IResult
 
     #region implicit operators
 
+    /// <summary>
+    ///     Converts an <see cref="Error" /> to a failed <see cref="Result" /> with the specified error.
+    /// </summary>
+    /// <param name="error">The <see cref="Error" /> to convert.</param>
+    /// <returns>A failed <see cref="Result" /> instance with the provided error.</returns>
     public static implicit operator Result(Error error)
     {
         return new Result(error);
@@ -103,7 +133,7 @@ public sealed record Result : IResult
 
 /// <summary>
 ///     Defines a result of an operation that can either be successful and contain a value
-///     of type <typeparamref name="T" />, or contain an error.
+///     of type <typeparamref name="T" />, or contain an <see cref="Error" />.
 /// </summary>
 /// <typeparam name="T">The type of the successful value.</typeparam>
 /// <inheritdoc cref="IResult" />
@@ -118,6 +148,20 @@ public sealed record Result<T> : IResult
 
     #region constructors
 
+    /// <summary>
+    ///     Initializes a new instance of the successful <see cref="Result{T}" /> class.
+    /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///         This constructor is intended only for deserialization purposes,
+    ///         and it should not be used directly in code.
+    ///     </para>
+    ///     <para>
+    ///         Use the static <see cref="FromValue" /> method to create a successful <see cref="Result" /> instance
+    ///         with provided value, or <see cref="FromError" /> method or the implicit operator
+    ///         to create a failed instance with provided <see cref="Error" />.
+    ///     </para>
+    /// </remarks>
     public Result()
     {
     }
@@ -157,6 +201,10 @@ public sealed record Result<T> : IResult
         }
     }
 
+    /// <summary>
+    ///     Returns an <see cref="Error" /> object if the operation failed;
+    ///     otherwise, returns <see langword="null" />.
+    /// </summary>
     public Error? Error
     {
         get => _error;
@@ -172,6 +220,12 @@ public sealed record Result<T> : IResult
         }
     }
 
+    /// <summary>
+    ///     Returns an indicator of whether the operation was successful.
+    /// </summary>
+    /// <returns>
+    ///     <see langword="true" /> if the operation was successful; otherwise, <see langword="false" />.
+    /// </returns>
     public bool IsSuccess()
     {
         return Error == null;
