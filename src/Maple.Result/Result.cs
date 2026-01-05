@@ -41,7 +41,7 @@ public interface IResult
 ///     Defines a result of an operation that can either be successful or contain an error.
 /// </summary>
 /// <inheritdoc cref="IResult" />
-public record Result : IResult
+public sealed record Result : IResult
 {
     #region constructors
 
@@ -137,8 +137,51 @@ public record Result : IResult
 /// </summary>
 /// <typeparam name="T">The type of the successful value.</typeparam>
 /// <inheritdoc cref="IResult" />
-public record Result<T> : IResult
+public sealed record Result<T> : IResult
 {
+    #region read-only fields
+
+    private readonly Error? _error;
+    private readonly T? _value;
+
+    #endregion
+
+    #region constructors
+
+    /// <summary>
+    ///     Initializes a new instance of the successful <see cref="Result{T}" /> class.
+    /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///         This constructor is intended only for deserialization purposes,
+    ///         and it should not be used directly in code.
+    ///     </para>
+    ///     <para>
+    ///         Use the static <see cref="FromValue" /> method to create a successful <see cref="Result" /> instance
+    ///         with provided value, or <see cref="FromError" /> method or the implicit operator
+    ///         to create a failed instance with provided <see cref="Error" />.
+    ///     </para>
+    /// </remarks>
+    public Result()
+    {
+    }
+
+    internal Result(T value)
+    {
+        if (value is null)
+            throw new ArgumentNullException(nameof(value), "Value cannot be null!");
+
+        _value = value;
+    }
+
+    internal Result(Error error)
+    {
+        _error = error
+                 ?? throw new ArgumentNullException(nameof(error), "Error cannot be null!");
+    }
+
+    #endregion
+
     /// <summary>
     ///     Returns the value of type <typeparamref name="T" /> if the operation was successful;
     ///     otherwise, returns <see langword="null" />.
@@ -187,49 +230,6 @@ public record Result<T> : IResult
     {
         return Error == null;
     }
-
-    #region read-only fields
-
-    private readonly Error? _error;
-    private readonly T? _value;
-
-    #endregion
-
-    #region constructors
-
-    /// <summary>
-    ///     Initializes a new instance of the successful <see cref="Result{T}" /> class.
-    /// </summary>
-    /// <remarks>
-    ///     <para>
-    ///         This constructor is intended only for deserialization purposes,
-    ///         and it should not be used directly in code.
-    ///     </para>
-    ///     <para>
-    ///         Use the static <see cref="FromValue" /> method to create a successful <see cref="Result" /> instance
-    ///         with provided value, or <see cref="FromError" /> method or the implicit operator
-    ///         to create a failed instance with provided <see cref="Error" />.
-    ///     </para>
-    /// </remarks>
-    public Result()
-    {
-    }
-
-    internal Result(T value)
-    {
-        if (value is null)
-            throw new ArgumentNullException(nameof(value), "Value cannot be null!");
-
-        _value = value;
-    }
-
-    internal Result(Error error)
-    {
-        _error = error
-                 ?? throw new ArgumentNullException(nameof(error), "Error cannot be null!");
-    }
-
-    #endregion
 
     #region implicit operators
 
