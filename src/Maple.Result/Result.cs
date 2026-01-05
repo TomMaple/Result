@@ -132,10 +132,8 @@ public sealed record Result<T> : IResult
 
     internal Result(Error error)
     {
-        if (error is null)
-            throw new ArgumentNullException(nameof(error), "Error cannot be null!");
-
-        _error = error;
+        _error = error
+                 ?? throw new ArgumentNullException(nameof(error), "Error cannot be null!");
     }
 
     #endregion
