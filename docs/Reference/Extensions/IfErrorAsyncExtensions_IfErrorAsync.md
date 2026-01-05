@@ -3,13 +3,13 @@
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>
 
-Runs a specific action or function if the instance of `TResult` represents a failed operation (i.e., contains an [Error](../Error/Error.md)).
+Runs a specific asynchronous action or function, if the instance of `TResult` represents a failed operation (i.e., contains an [Error](../Error/Error.md)), as an asynchronous operation.
 
 ## Overloads
 | Name                             | Description                                                |
 | -------------------------------- | ---------------------------------------------------------- |
-| [IfErrorAsync&lt;TResult&gt;(TResult, Func&lt;Error, Task&gt;)](#iferrorasynctresulttresult-actionerror)  | Executes the provided asynchronous action, if the `TResult` instance represents a failed operation, as an asynchronous operation. |
-| [IfErrorAsync&lt;TResult&gt;(TResult, Func&lt;Error, Task&lt;TResult&gt;&gt;)](#iferrorasynctresulttresult-funcerror-tresult) | Executes the provided asynchronous function, if the `TResult` instance represents a failed operation and returns its result, as an asynchronous operation. |
+| [IfErrorAsync&lt;TResult&gt;(TResult, Func&lt;Error, Task&gt;, Boolean)](#iferrorasynctresulttresult-funcerror-task)  | Executes the provided asynchronous action, if the `TResult` instance represents a failed operation, as an asynchronous operation. |
+| [IfErrorAsync&lt;TResult&gt;(TResult, Func&lt;Error, Task&lt;TResult&gt;&gt;, Boolean)](#iferrorasynctresulttresult-funcerror-tasktresult) | Executes the provided asynchronous function, if the `TResult` instance represents a failed operation and returns its result, as an asynchronous operation. |
 
 ## Remarks
 
@@ -18,7 +18,8 @@ Runs a specific action or function if the instance of `TResult` represents a fai
 > 
 > For more information, see <a href="https://devblogs.microsoft.com/dotnet/configureawait-faq/" target="_blank">ConfigureAwait FAQ</a>.
 
-# IfError&lt;TResult&gt;(TResult, Func&lt;Error, Task&gt;)
+
+## IfErrorAsync&lt;TResult&gt;(TResult, Func&lt;Error, Task&gt;, Boolean)
 Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/IfErrorAsyncExtensions.cs#L55" target="_blank">IfErrorAsyncExtensions.cs</a>
 
 Executes the provided asynchronous action, only if the instance of `TResult` represents a failed operation (i.e., contains an [Error](../Error/Error.md)), as an asynchronous operation.
@@ -28,17 +29,29 @@ public static async Task<TResult> IfErrorAsync<TResult>(this TResult result, Fun
     where TResult : IResult;
 ```
 
+### Type Parameters
+#### `TResult`
+The type of the `result` that implements the [IResult](../IResult/IResult.md) interface—[Result](../Result/Result.md) or [Result&lt;T&gt;](../ResultT/ResultT.md) record.
+
 ### Parameters
 #### `result` TResult
 The instance of `TResult` (that implements [IResult](../IResult/IResult.md) interface—[Result](../Result/Result.md) or [Result&lt;T&gt;](../ResultT/ResultT.md) record) that represents the result of the operation to be evaluated.
 
-#### `ifErrorAction` [Func](https://learn.microsoft.com/dotnet/api/system.action-1)&lt;[Error](../Error/Error.md), [Task](https://learn.microsoft.com/dotnet/api/system.threading.tasks.task)&gt;
-The asynchronous action to be executed only if the current instance of `TResult` represents a failed operation.
+#### `ifErrorAction` [Func](https://learn.microsoft.com/dotnet/api/system.func-2)&lt;[Error](../Error/Error.md), [Task](https://learn.microsoft.com/dotnet/api/system.threading.tasks.task)&gt;
+The asynchronous action to be executed only if the current instance of `TResult` represents a failed operation. The [Error](../Error/Error.md) instance contained in the `TResult` will be passed as a parameter to this action.
 
 #### `continueOnCapturedContext` [Boolean](https://learn.microsoft.com/dotnet/api/system.boolean)
 `true` to attempt to marshal the continuation back to the original context captured; otherwise, `false`.
 
 The default value is: `false`.
+
+### Returns
+#### [Task](https://learn.microsoft.com/dotnet/api/system.threading.tasks.task)&lt;TResult&gt;
+The task object representing the asynchronous operation.
+
+### Exceptions
+#### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
+The `result` parameter is `null` or `ifErrorAction` parameter is `null`.
 
 ## Examples
 ```csharp
@@ -51,27 +64,40 @@ await createUserResult.IfErrorAsync(async error =>
 });
 ```
 
-# IfError&lt;TResult&gt;(TResult, Func&lt;Error, Task&lt;TResult&gt;&gt;)
+
+## IfErrorAsync&lt;TResult&gt;(TResult, Func&lt;Error, Task&lt;TResult&gt;&gt;, Boolean)
 Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/IfErrorAsyncExtensions.cs#L97" target="_blank">IfErrorExtensions.cs</a>
 
 Executes the provided asynchronous function, only if the instance of `TResult` represents a failed operation (i.e., contains an [Error](../Error/Error.md)), as an asynchronous operation.
 
 ```csharp
-public static TResult IfError<TResult>(this TResult result, Func<Error, Task<TResult>> ifErrorFunction)
+public static async Task<TResult> IfErrorAsync<TResult>(this TResult result, Func<Error, Task<TResult>> ifErrorFunction, bool continueOnCapturedContext = false)
         where TResult : IResult;
 ```
+
+### Type Parameters
+#### `TResult`
+The type of the `result` that implements the [IResult](../IResult/IResult.md) interface—[Result](../Result/Result.md) or [Result&lt;T&gt;](../ResultT/ResultT.md) record.
 
 ### Parameters
 #### `result` TResult
 The instance of `TResult` (that implements [IResult](../IResult/IResult.md) interface—[Result](../Result/Result.md) or [Result&lt;T&gt;](../ResultT/ResultT.md) record) that represents the result of the operation to be evaluated.
 
 #### `ifErrorFunction` [Func](https://learn.microsoft.com/dotnet/api/system.func-2)&lt;[Error](../Error/Error.md), [Task](https://learn.microsoft.com/en-ca/dotnet/api/system.threading.tasks.task-1)&lt;TResult&gt;&gt;
-The asynchronous function to be executed, only if the current instance of `TResult` represents a failed operation, as an asynchronous operation.
+The asynchronous function to be executed, only if the current instance of `TResult` represents a failed operation, as an asynchronous operation. The [Error](../Error/Error.md) instance contained in the `TResult` will be passed as a parameter to this function.
 
 #### `continueOnCapturedContext` [Boolean](https://learn.microsoft.com/dotnet/api/system.boolean)
 `true` to attempt to marshal the continuation back to the original context captured; otherwise, `false`.
 
 The default value is: `false`.
+
+### Returns
+#### [Task](https://learn.microsoft.com/dotnet/api/system.threading.tasks.task)&lt;TResult&gt;
+The task object representing the asynchronous operation.
+
+### Exceptions
+#### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
+The `result` parameter is `null` or `ifErrorFunction` parameter is `null`.
 
 ## Examples
 ```csharp

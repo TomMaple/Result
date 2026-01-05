@@ -70,6 +70,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Result", "Result", "{906F16
 		docs\Reference\Result\Result_Success.md = docs\Reference\Result\Result_Success.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Extensions", "Extensions", "{BF50E537-E1F0-4889-887E-FB260398E32C}"
+	ProjectSection(SolutionItems) = preProject
+		docs\Reference\Extensions\IfErrorAsyncExtensions.md = docs\Reference\Extensions\IfErrorAsyncExtensions.md
+		docs\Reference\Extensions\IfErrorAsyncExtensions_IfErrorAsync.md = docs\Reference\Extensions\IfErrorAsyncExtensions_IfErrorAsync.md
+		docs\Reference\Extensions\IfErrorExtensions.md = docs\Reference\Extensions\IfErrorExtensions.md
+		docs\Reference\Extensions\IfErrorExtensions_IfError.md = docs\Reference\Extensions\IfErrorExtensions_IfError.md
+		docs\Reference\Extensions\IfSuccessAsyncExtensions.md = docs\Reference\Extensions\IfSuccessAsyncExtensions.md
+		docs\Reference\Extensions\IfSuccessAsyncExtensions_IfSuccessAsync.md = docs\Reference\Extensions\IfSuccessAsyncExtensions_IfSuccessAsync.md
+		docs\Reference\Extensions\IfSuccessExtensions.md = docs\Reference\Extensions\IfSuccessExtensions.md
+		docs\Reference\Extensions\IfSuccessExtensions_IfSuccess.md = docs\Reference\Extensions\IfSuccessExtensions_IfSuccess.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -95,6 +107,7 @@ Global
 		{E02A393C-BF22-4DBB-897C-B91B32E5E264} = {4BBCD0C7-0224-4C06-9A95-680021772CE8}
 		{4BBCD0C7-0224-4C06-9A95-680021772CE8} = {0F1DEF9C-233A-4FE7-850F-43556EF8EA77}
 		{906F16D6-F33A-45A2-A2C7-7E29FF65F538} = {4BBCD0C7-0224-4C06-9A95-680021772CE8}
+		{BF50E537-E1F0-4889-887E-FB260398E32C} = {4BBCD0C7-0224-4C06-9A95-680021772CE8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B2854F93-1DE8-4AA5-8B37-0EB331C30451}

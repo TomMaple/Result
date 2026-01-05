@@ -11,7 +11,8 @@ Runs a specific action or function if the instance of `TResult` represents a fai
 | [IfError&lt;TResult&gt;(TResult, Action&lt;Error&gt;)](#iferrortresulttresult-actionerror) | Executes the provided action if the `TResult` instance represents a failed operation. |
 | [IfError&lt;TResult&gt;(TResult, Func&lt;Error, TResult&gt;)](#iferrortresulttresult-funcerror-tresult) | Executes the provided function if the `TResult` instance represents a failed operation and returns its result. |
 
-# IfError&lt;TResult&gt;(TResult, Action&lt;Error&gt;)
+
+## IfError&lt;TResult&gt;(TResult, Action&lt;Error&gt;)
 Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/IfErrorExtensions.cs#L45" target="_blank">IfErrorExtensions.cs</a>
 
 Executes the provided action only if the instance of `TResult` represents a failed operation (i.e., contains an [Error](../Error/Error.md)).
@@ -21,13 +22,25 @@ public static void IfError<TResult>(this TResult result, Action<Error> errorActi
     where TResult : IResult;
 ```
 
+### Type Parameters
+#### `TResult`
+The type of the `result` that implements the [IResult](../IResult/IResult.md) interface—[Result](../Result/Result.md) or [Result&lt;T&gt;](../ResultT/ResultT.md) record.
+
 ### Parameters
 #### `result` TResult
 The instance of `TResult` (that implements [IResult](../IResult/IResult.md) interface—[Result](../Result/Result.md) or [Result&lt;T&gt;](../ResultT/ResultT.md) record) that represents the result of the operation to be evaluated.
 
 #### `ifErrorAction` [Action](https://learn.microsoft.com/dotnet/api/system.action-1)&lt;[Error](../Error/Error.md)&gt;
 
-The action to be executed only if the current instance of `TResult` represents a failed operation.
+The action to be executed only if the current instance of `TResult` represents a failed operation. The [Error](../Error/Error.md) instance contained in the `TResult` will be passed as a parameter to this action.
+
+### Returns
+#### TResult
+The original `TResult` instance passed as a `result` parameter.
+
+### Exceptions
+#### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
+The `result` parameter is `null` or `ifErrorAction` parameter is `null`.
 
 ## Examples
 ```csharp
@@ -40,7 +53,8 @@ createUserResult.IfError(error =>
 });
 ```
 
-# IfError&lt;TResult&gt;(TResult, Func&lt;Error, TResult&gt;)
+
+## IfError&lt;TResult&gt;(TResult, Func&lt;Error, TResult&gt;)
 Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/IfErrorExtensions.cs#L76" target="_blank">IfErrorExtensions.cs</a>
 
 Executes the provided function only if the instance of `TResult` represents a failed operation (i.e., contains an [Error](../Error/Error.md)).
@@ -50,13 +64,25 @@ public static TResult IfError<TResult>(this TResult result, Func<Error, TResult>
     where TResult : IResult;
 ```
 
+### Type Parameters
+#### `TResult`
+The type of the `result` that implements the [IResult](../IResult/IResult.md) interface—[Result](../Result/Result.md) or [Result&lt;T&gt;](../ResultT/ResultT.md) record.
+
 ### Parameters
 #### `result` TResult
 The instance of `TResult` (that implements [IResult](../IResult/IResult.md) interface—[Result](../Result/Result.md) or [Result&lt;T&gt;](../ResultT/ResultT.md) record) that represents the result of the operation to be evaluated.
 
 #### `ifErrorFunction` [Func](https://learn.microsoft.com/dotnet/api/system.func-2)&lt;[Error](../Error/Error.md), TResult&gt;
 
-The function to be executed only if the current instance of `TResult` represents a failed operation.
+The function to be executed only if the current instance of `TResult` represents a failed operation. The [Error](../Error/Error.md) instance contained in the `TResult` will be passed as a parameter to this function.
+
+### Returns
+#### TResult
+The original `TResult` instance passed as a `result` parameter.
+
+### Exceptions
+#### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
+The `result` parameter is `null` or `ifErrorFunction` parameter is `null`.
 
 ## Examples
 ```csharp
