@@ -72,8 +72,8 @@ public Result DeleteUser(int userId)
 ## Extension Methods
 | Name                                         | Description                                                       |
 | -------------------------------------------- | ----------------------------------------------------------------- |
-| [IfError&lt;TResult&gt;(TResult, Action&lt;Error&gt;)](../Extensions/IfErrorExtensions_IfError.md) | Executes the specified action, if the [Result](Result.md) represents a failure. |
-| [IfError&lt;TResult&gt;(TResult, Func&lt;Error, Result&gt;)](../Extensions/IfErrorExtensions_IfError.md) | Executes the specified function, if the [Result](Result.md) represents a failure. |
+| [IfError&lt;TResult&gt;(TResult, Action&lt;Error&gt;)](../Extensions/IfErrorExtensions_IfError.md#iferrortresulttresult-actionerror) | Executes the specified action, if the [Result](Result.md) represents a failure. |
+| [IfError&lt;TResult&gt;(TResult, Func&lt;Error, Result&gt;)](../Extensions/IfErrorExtensions_IfError.md#iferrortresulttresult-funcerror-tresult) | Executes the specified function, if the [Result](Result.md) represents a failure. |
 | [IfErrorAsync&lt;TResult&gt;(TResult, Func&lt;Error, Task&gt;, Boolean)](../Extensions/IfErrorAsyncExtensions_IfErrorAsync.md) | Executes the specified asynchronous function, if the [Result](Result.md) represents a failure, as an asynchronous operation. |
 | [IfErrorAsync&lt;TResult&gt;(TResult, Func&lt;Error, Task&lt;TResult&gt;&gt;, Boolean)](../Extensions/IfErrorAsyncExtensions_IfErrorAsync.md) | Executes the specified asynchronous function, if the [Result](Result.md) represents a failure, as an asynchronous operation. |
 | [IfSuccess(Result, Action)](../Extensions/IfSuccessExtensions_IfSuccess.md) | Executes the specified action, if the [Result](Result.md) represents a successful operation. |
