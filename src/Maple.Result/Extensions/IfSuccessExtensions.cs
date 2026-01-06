@@ -65,27 +65,27 @@ public static class IfSuccessExtensions
     ///     was successful. If <paramref name="result" /> is not successful, the provided function is not invoked.
     /// </remarks>
     /// <param name="result">The <see cref="Result" /> to evaluate for success. Must not be <see langword="null" />.</param>
-    /// <param name="ifSuccessFunc">
+    /// <param name="ifSuccessFunction">
     ///     The function to execute if <paramref name="result" /> is successful. The function must return
     ///     a <see cref="Result" /> and must not be <see langword="null" />.
     /// </param>
     /// <returns>
-    ///     A <see cref="Result" /> returned by <paramref name="ifSuccessFunc" /> if <paramref name="result" /> is successful;
+    ///     A <see cref="Result" /> returned by <paramref name="ifSuccessFunction" /> if <paramref name="result" /> is successful;
     ///     otherwise, the original error <paramref name="result" />.
     /// </returns>
     /// <exception cref="ArgumentNullException">
-    ///     If any of the <paramref name="result" /> or <paramref name="ifSuccessFunc" />
+    ///     If any of the <paramref name="result" /> or <paramref name="ifSuccessFunction" />
     ///     parameters are <see langword="null" />.
     /// </exception>
-    public static Result IfSuccess(this Result result, Func<Result> ifSuccessFunc)
+    public static Result IfSuccess(this Result result, Func<Result> ifSuccessFunction)
     {
         ArgumentNullException.ThrowIfNull(result);
-        ArgumentNullException.ThrowIfNull(ifSuccessFunc);
+        ArgumentNullException.ThrowIfNull(ifSuccessFunction);
 
         if (!result.IsSuccess())
             return result.Error!;
 
-        return ifSuccessFunc();
+        return ifSuccessFunction();
     }
 
     /// <summary>
@@ -99,28 +99,28 @@ public static class IfSuccessExtensions
     /// </remarks>
     /// <typeparam name="T">The type of the <see cref="Result{T}" /> value to return if the operation is successful.</typeparam>
     /// <param name="result">The <see cref="Result" /> to evaluate for success. Must not be <see langword="null" />.</param>
-    /// <param name="ifSuccessFunc">
+    /// <param name="ifSuccessFunction">
     ///     The function to execute if the <paramref name="result" /> is successful. The function’s return value is used
     ///     as the successful <see cref="Result{T}" />. Must not be <see langword="null" />.
     /// </param>
     /// <returns>
-    ///     A successful <see cref="Result{T}" /> containing the value returned by <paramref name="ifSuccessFunc" />
+    ///     A successful <see cref="Result{T}" /> containing the value returned by <paramref name="ifSuccessFunction" />
     ///     if <paramref name="result" /> is successful;
     ///     otherwise, a failed <see cref="Result{T}" /> with the original <see cref="Error" />.
     /// </returns>
     /// <exception cref="ArgumentNullException">
-    ///     If any of the <paramref name="result" /> or <paramref name="ifSuccessFunc" />
+    ///     If any of the <paramref name="result" /> or <paramref name="ifSuccessFunction" />
     ///     parameters are <see langword="null" />.
     /// </exception>
-    public static Result<T> IfSuccess<T>(this Result result, Func<T> ifSuccessFunc)
+    public static Result<T> IfSuccess<T>(this Result result, Func<T> ifSuccessFunction)
     {
         ArgumentNullException.ThrowIfNull(result);
-        ArgumentNullException.ThrowIfNull(ifSuccessFunc);
+        ArgumentNullException.ThrowIfNull(ifSuccessFunction);
 
         if (!result.IsSuccess())
             return result.Error!;
 
-        return ifSuccessFunc();
+        return ifSuccessFunction();
     }
 
     /// <summary>
@@ -134,28 +134,28 @@ public static class IfSuccessExtensions
     /// </remarks>
     /// <typeparam name="T">The type of the <see cref="Result{T}" /> value to return if the operation is successful.</typeparam>
     /// <param name="result">The <see cref="Result" /> to evaluate for success. Must not be <see langword="null" />.</param>
-    /// <param name="ifSuccessFunc">
+    /// <param name="ifSuccessFunction">
     ///     The function to execute if the <paramref name="result" /> is successful. The function’s return value is used
     ///     as the successful <see cref="Result{T}" />. Must not be <see langword="null" />.
     /// </param>
     /// <returns>
-    ///     A successful <see cref="Result{T}" /> returned by <paramref name="ifSuccessFunc" />
+    ///     A successful <see cref="Result{T}" /> returned by <paramref name="ifSuccessFunction" />
     ///     if <paramref name="result" /> is successful; otherwise, a failed <see cref="Result{T}" />
     ///     with the original <see cref="Error" />.
     /// </returns>
     /// <exception cref="ArgumentNullException">
-    ///     If any of the <paramref name="result" /> or <paramref name="ifSuccessFunc" />
+    ///     If any of the <paramref name="result" /> or <paramref name="ifSuccessFunction" />
     ///     parameters are <see langword="null" />.
     /// </exception>
-    public static Result<T> IfSuccess<T>(this Result result, Func<Result<T>> ifSuccessFunc)
+    public static Result<T> IfSuccess<T>(this Result result, Func<Result<T>> ifSuccessFunction)
     {
         ArgumentNullException.ThrowIfNull(result);
-        ArgumentNullException.ThrowIfNull(ifSuccessFunc);
+        ArgumentNullException.ThrowIfNull(ifSuccessFunction);
 
         if (!result.IsSuccess())
             return result.Error!;
 
-        return ifSuccessFunc();
+        return ifSuccessFunction();
     }
 
     #endregion
@@ -203,28 +203,28 @@ public static class IfSuccessExtensions
     ///     was successful. If <paramref name="result" /> is not successful, the provided function is not invoked.
     /// </remarks>
     /// <param name="result">The <see cref="Result{T}" /> to evaluate for success. Must not be <see langword="null" />.</param>
-    /// <param name="ifSuccessFunc">
+    /// <param name="ifSuccessFunction">
     ///     The function to execute if <paramref name="result" /> is successful. The value of the successful
     ///     <see cref="Result{T}" /> is passed as a parameter. The function must return
     ///     a <see cref="Result" /> and must not be <see langword="null" />.
     /// </param>
     /// <returns>
-    ///     A <see cref="Result" /> returned by <paramref name="ifSuccessFunc" /> if <paramref name="result" /> is successful;
+    ///     A <see cref="Result" /> returned by <paramref name="ifSuccessFunction" /> if <paramref name="result" /> is successful;
     ///     otherwise, a failed <see cref="Result" /> with the original <see cref="Error" />.
     /// </returns>
     /// <exception cref="ArgumentNullException">
-    ///     If any of the <paramref name="result" /> or <paramref name="ifSuccessFunc" />
+    ///     If any of the <paramref name="result" /> or <paramref name="ifSuccessFunction" />
     ///     parameters are <see langword="null" />.
     /// </exception>
-    public static Result IfSuccess<T>(this Result<T> result, Func<T, Result> ifSuccessFunc)
+    public static Result IfSuccess<T>(this Result<T> result, Func<T, Result> ifSuccessFunction)
     {
         ArgumentNullException.ThrowIfNull(result);
-        ArgumentNullException.ThrowIfNull(ifSuccessFunc);
+        ArgumentNullException.ThrowIfNull(ifSuccessFunction);
 
         if (!result.IsSuccess())
             return result.Error!;
 
-        return ifSuccessFunc(result.Value!);
+        return ifSuccessFunction(result.Value!);
     }
 
     /// <summary>
@@ -246,30 +246,30 @@ public static class IfSuccessExtensions
     ///     value to return.
     /// </typeparam>
     /// <param name="result">The <see cref="Result{T}" /> to evaluate for success. Must not be <see langword="null" />.</param>
-    /// <param name="ifSuccessFunc">
+    /// <param name="ifSuccessFunction">
     ///     The function to execute if the <paramref name="result" /> is successful.
     ///     The value of the successful <see cref="Result{T}" /> is passed as a parameter.
     ///     The function’s return value is used as the successful <see cref="Result{TNext}" />.
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <returns>
-    ///     A successful <see cref="Result{TNext}" /> containing the value returned by <paramref name="ifSuccessFunc" />
+    ///     A successful <see cref="Result{TNext}" /> containing the value returned by <paramref name="ifSuccessFunction" />
     ///     if <paramref name="result" /> is successful;
     ///     otherwise, a failed <see cref="Result{TNext}" /> with the original <see cref="Error" />.
     /// </returns>
     /// <exception cref="ArgumentNullException">
-    ///     If any of the <paramref name="result" /> or <paramref name="ifSuccessFunc" />
+    ///     If any of the <paramref name="result" /> or <paramref name="ifSuccessFunction" />
     ///     parameters are <see langword="null" />.
     /// </exception>
-    public static Result<TNext> IfSuccess<T, TNext>(this Result<T> result, Func<T, TNext> ifSuccessFunc)
+    public static Result<TNext> IfSuccess<T, TNext>(this Result<T> result, Func<T, TNext> ifSuccessFunction)
     {
         ArgumentNullException.ThrowIfNull(result);
-        ArgumentNullException.ThrowIfNull(ifSuccessFunc);
+        ArgumentNullException.ThrowIfNull(ifSuccessFunction);
 
         if (!result.IsSuccess())
             return result.Error!;
 
-        return ifSuccessFunc(result.Value!);
+        return ifSuccessFunction(result.Value!);
     }
 
     /// <summary>
@@ -291,30 +291,30 @@ public static class IfSuccessExtensions
     ///     of the passed function.
     /// </typeparam>
     /// <param name="result">The <see cref="Result{T}" /> to evaluate for success. Must not be <see langword="null" />.</param>
-    /// <param name="ifSuccessFunc">
+    /// <param name="ifSuccessFunction">
     ///     The function to execute if the <paramref name="result" /> is successful.
     ///     The value of the successful <see cref="Result{T}" /> is passed as a parameter.
     ///     The function’s must return <see cref="Result{TNext}" />.
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <returns>
-    ///     A successful <see cref="Result{TNext}" /> returned by <paramref name="ifSuccessFunc" />
+    ///     A successful <see cref="Result{TNext}" /> returned by <paramref name="ifSuccessFunction" />
     ///     if <paramref name="result" /> is successful; otherwise, a failed <see cref="Result{TNext}" />
     ///     with the original <see cref="Error" />.
     /// </returns>
     /// <exception cref="ArgumentNullException">
-    ///     If any of the <paramref name="result" /> or <paramref name="ifSuccessFunc" />
+    ///     If any of the <paramref name="result" /> or <paramref name="ifSuccessFunction" />
     ///     parameters are <see langword="null" />.
     /// </exception>
-    public static Result<TNext> IfSuccess<T, TNext>(this Result<T> result, Func<T, Result<TNext>> ifSuccessFunc)
+    public static Result<TNext> IfSuccess<T, TNext>(this Result<T> result, Func<T, Result<TNext>> ifSuccessFunction)
     {
         ArgumentNullException.ThrowIfNull(result);
-        ArgumentNullException.ThrowIfNull(ifSuccessFunc);
+        ArgumentNullException.ThrowIfNull(ifSuccessFunction);
 
         if (!result.IsSuccess())
             return result.Error!;
 
-        return ifSuccessFunc(result.Value!);
+        return ifSuccessFunction(result.Value!);
     }
 
     #endregion
