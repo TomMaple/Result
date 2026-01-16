@@ -88,7 +88,7 @@ public static class IfErrorAsyncExtensions
     /// <returns>
     ///     A <see cref="Task{IResult}" /> that represents the <see cref="IResult" /> outcome of the asynchronous operation.
     ///     The <see cref="Task{IResult}" /> is either the original <paramref name="result" /> if it indicates success, or
-    ///     the result returned by the <see cref="ifErrorFunction" /> if an <see cref="Error" /> is present.
+    ///     the result returned by the <paramref name="ifErrorFunction" /> if an <see cref="Error" /> is present.
     /// </returns>
     /// <exception cref="ArgumentNullException">
     ///     If any of the <paramref name="result" /> or <paramref name="ifErrorFunction" />

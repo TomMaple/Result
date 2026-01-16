@@ -41,6 +41,19 @@ public readonly record struct ErrorUri
 {
     #region constructors
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="ErrorUri" /> record with the provided value.
+    /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///         This constructor is intended only for deserialization purposes,
+    ///         and it should not be used directly in code.
+    ///     </para>
+    ///     <para>
+    ///         To create a new instance of the <see cref="ErrorUri" /> object, use one of the factory methods provided
+    ///         (<see cref="None"/>, <see cref="Locator"/> or <see cref="Tag"/>).
+    ///     </para>
+    /// </remarks>
     public ErrorUri(string value)
     {
         Value = value;

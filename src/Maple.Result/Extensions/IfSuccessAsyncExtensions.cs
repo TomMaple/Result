@@ -98,10 +98,10 @@ public static class IfSuccessAsyncExtensions
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
 
-        if (!result.IsSuccess())
-            return result.Error!;
+        if (result.IsSuccess())
+            return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext);
 
-        return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext);
+        return result;
     }
 
     /// <summary>
@@ -141,10 +141,10 @@ public static class IfSuccessAsyncExtensions
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
 
-        if (!result.IsSuccess())
-            return result.Error!;
+        if (result.IsSuccess())
+            return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext);
 
-        return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext);
+        return result.Error!;
     }
 
     /// <summary>
@@ -184,10 +184,10 @@ public static class IfSuccessAsyncExtensions
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
 
-        if (!result.IsSuccess())
-            return result.Error!;
+        if (result.IsSuccess())
+            return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext);
 
-        return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext);
+        return result.Error!;
     }
 
     #endregion
@@ -266,10 +266,10 @@ public static class IfSuccessAsyncExtensions
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
 
-        if (!result.IsSuccess())
-            return result.Error!;
+        if (result.IsSuccess())
+            return await ifSuccessFunction(result.Value!).ConfigureAwait(continueOnCapturedContext);
 
-        return await ifSuccessFunction(result.Value!).ConfigureAwait(continueOnCapturedContext);
+        return result.Error!;
     }
 
     /// <summary>
@@ -316,10 +316,10 @@ public static class IfSuccessAsyncExtensions
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
 
-        if (!result.IsSuccess())
-            return result.Error!;
+        if (result.IsSuccess())
+            return await ifSuccessFunction(result.Value!).ConfigureAwait(continueOnCapturedContext);
 
-        return await ifSuccessFunction(result.Value!).ConfigureAwait(continueOnCapturedContext);
+        return result.Error!;
     }
 
     /// <summary>
@@ -366,10 +366,10 @@ public static class IfSuccessAsyncExtensions
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
 
-        if (!result.IsSuccess())
-            return result.Error!;
-
-        return await ifSuccessFunction(result.Value!).ConfigureAwait(continueOnCapturedContext);
+        if (result.IsSuccess())
+            return await ifSuccessFunction(result.Value!).ConfigureAwait(continueOnCapturedContext);
+     
+        return result.Error!;
     }
 
     #endregion
