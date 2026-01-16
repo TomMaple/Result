@@ -63,7 +63,7 @@ public static class IfErrorExtensions
     /// <param name="ifErrorFunction">
     ///     The function to execute if the <paramref name="result" /> is an error. The <see cref="Error" /> associated with
     ///     the <paramref name="result" /> is passed to this function, and the function’s return value is used as the outcome.
-    ///     The function must return <see cref="TResult" />. Must not be <see langword="null" />.
+    ///     The function must return a value of the <typeparamref name="TResult" /> type. Must not be <see langword="null" />.
     /// </param>
     /// <returns>
     ///     The original <paramref name="result" /> if it represents success;

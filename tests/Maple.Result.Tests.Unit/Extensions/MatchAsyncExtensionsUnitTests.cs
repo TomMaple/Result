@@ -711,9 +711,7 @@ public class MatchAsyncExtensionsUnitTests
         var result = await sut.MatchAsync(() => Task.FromResult(ExpectedValue), _ => Task.FromResult(2));
 
         // Assert
-        result.ShouldNotBeNull();
-        result.IsSuccess().ShouldBeTrue();
-        result.Value.ShouldBe(ExpectedValue);
+        result.ShouldBe(ExpectedValue);
     }
 
     [Fact]
@@ -758,9 +756,7 @@ public class MatchAsyncExtensionsUnitTests
         var result = await sut.MatchAsync(() => Task.FromResult(1), _ => Task.FromResult(ExpectedValue));
 
         // Assert
-        result.ShouldNotBeNull();
-        result.IsSuccess().ShouldBeTrue();
-        result.Value.ShouldBe(ExpectedValue);
+        result.ShouldBe(ExpectedValue);
     }
 
     #endregion
@@ -1460,13 +1456,11 @@ public class MatchAsyncExtensionsUnitTests
         var result = await sut.MatchAsync(x => Task.FromResult((x + 1).ToString()), _ => Task.FromResult("error"));
 
         // Assert
-        result.ShouldNotBeNull();
-        result.IsSuccess().ShouldBeTrue();
-        result.Value.ShouldBe(ExpectedValue);
+        result.ShouldBe(ExpectedValue);
     }
 
     [Fact]
-    public async Task MatchAsync_ErrorGenericResultWithProjectionFunctions_DoesNotCallSuccessFunction()
+    public async Task MatchAsync_ErrorGenericResultWithWithGenericSuccessAndErrorFunctions_DoesNotCallSuccessFunction()
     {
         // Arrange
         var successFunctionMock = new Mock<Func<int, Task<string>>>();
@@ -1481,7 +1475,7 @@ public class MatchAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task MatchAsync_ErrorGenericResultWithProjectionFunctions_CallsErrorFunction()
+    public async Task MatchAsync_ErrorGenericResultWithGenericSuccessAndErrorFunctions_CallsErrorFunction()
     {
         // Arrange
         var errorFunctionMock = new Mock<Func<Error, Task<string>>>();
@@ -1499,7 +1493,7 @@ public class MatchAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task MatchAsync_ErrorGenericResultWithProjectionFunctions_ReturnsErrorFunctionValue()
+    public async Task MatchAsync_ErrorGenericResultWithGenericSuccessAndErrorFunctions_ReturnsErrorFunctionValue()
     {
         // Arrange
         const string ExpectedValue = "Error function value";
@@ -1510,9 +1504,7 @@ public class MatchAsyncExtensionsUnitTests
         var result = await sut.MatchAsync(x => Task.FromResult(x.ToString()), _ => Task.FromResult(ExpectedValue));
 
         // Assert
-        result.ShouldNotBeNull();
-        result.IsSuccess().ShouldBeTrue();
-        result.Value.ShouldBe(ExpectedValue);
+        result.ShouldBe(ExpectedValue);
     }
 
     #endregion

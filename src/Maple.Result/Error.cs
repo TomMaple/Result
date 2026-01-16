@@ -27,6 +27,19 @@ public record Error
 
     #region constructors
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="Error" /> class with default values.
+    /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///         This constructor is intended only for deserialization purposes,
+    ///         and it should not be used directly in code.
+    ///     </para>
+    ///     <para>
+    ///         To create a new instance of the <see cref="Error" /> object, use one of the factory methods provided
+    ///         (e.g., <c>Validation</c>, <c>Unauthenticated</c>, <c>NotFound</c>).
+    ///     </para>
+    /// </remarks>
     public Error()
     {
         Category = ErrorCategory.CriticalError;
