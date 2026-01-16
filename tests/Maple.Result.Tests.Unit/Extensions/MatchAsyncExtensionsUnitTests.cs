@@ -1460,7 +1460,7 @@ public class MatchAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task MatchAsync_ErrorGenericResultWithProjectionFunctions_DoesNotCallSuccessFunction()
+    public async Task MatchAsync_ErrorGenericResultWithWithGenericSuccessAndErrorFunctions_DoesNotCallSuccessFunction()
     {
         // Arrange
         var successFunctionMock = new Mock<Func<int, Task<string>>>();
@@ -1475,7 +1475,7 @@ public class MatchAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task MatchAsync_ErrorGenericResultWithProjectionFunctions_CallsErrorFunction()
+    public async Task MatchAsync_ErrorGenericResultWithGenericSuccessAndErrorFunctions_CallsErrorFunction()
     {
         // Arrange
         var errorFunctionMock = new Mock<Func<Error, Task<string>>>();
@@ -1493,7 +1493,7 @@ public class MatchAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task MatchAsync_ErrorGenericResultWithProjectionFunctions_ReturnsErrorFunctionValue()
+    public async Task MatchAsync_ErrorGenericResultWithGenericSuccessAndErrorFunctions_ReturnsErrorFunctionValue()
     {
         // Arrange
         const string ExpectedValue = "Error function value";
