@@ -82,10 +82,10 @@ public static class IfSuccessExtensions
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
 
-        if (!result.IsSuccess())
-            return result.Error!;
+        if (result.IsSuccess())
+            return ifSuccessFunction();
 
-        return ifSuccessFunction();
+        return result;
     }
 
     /// <summary>
@@ -117,10 +117,10 @@ public static class IfSuccessExtensions
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
 
-        if (!result.IsSuccess())
-            return result.Error!;
+        if (result.IsSuccess())
+            return ifSuccessFunction();
 
-        return ifSuccessFunction();
+        return result.Error!;
     }
 
     /// <summary>
@@ -152,10 +152,10 @@ public static class IfSuccessExtensions
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
 
-        if (!result.IsSuccess())
-            return result.Error!;
+        if (result.IsSuccess())
+            return ifSuccessFunction();
 
-        return ifSuccessFunction();
+        return result.Error!;
     }
 
     #endregion
@@ -221,10 +221,10 @@ public static class IfSuccessExtensions
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
 
-        if (!result.IsSuccess())
-            return result.Error!;
+        if (result.IsSuccess())
+            return ifSuccessFunction(result.Value!);
 
-        return ifSuccessFunction(result.Value!);
+        return result.Error!;
     }
 
     /// <summary>
@@ -266,10 +266,10 @@ public static class IfSuccessExtensions
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
 
-        if (!result.IsSuccess())
-            return result.Error!;
+        if (result.IsSuccess())
+            return ifSuccessFunction(result.Value!);
 
-        return ifSuccessFunction(result.Value!);
+        return result.Error!;
     }
 
     /// <summary>
@@ -311,10 +311,10 @@ public static class IfSuccessExtensions
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
 
-        if (!result.IsSuccess())
-            return result.Error!;
+        if (result.IsSuccess())
+            return ifSuccessFunction(result.Value!);
 
-        return ifSuccessFunction(result.Value!);
+        return result.Error!;
     }
 
     #endregion
