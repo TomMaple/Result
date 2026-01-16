@@ -18,11 +18,22 @@ using System.Text.Json.Serialization;
 namespace Maple.Result.Converters;
 
 /// <summary>
-/// 
+///     A JSON converter that can serialize and deserialize objects as their primitive types.
 /// </summary>
 /// <remarks>Based on the implementation from: https://stackoverflow.com/a/65974452</remarks>
 public class ObjectAsPrimitiveConverter : JsonConverter<object>
 {
+    /// <summary>
+    ///     Reads the JSON value and converts it to the primitive type, if possible.
+    /// </summary>
+    /// <param name="reader">A <see cref="Utf8JsonReader" /> to read the JSON value from.</param>
+    /// <param name="typeToConvert">A type to convert the JSON value to.</param>
+    /// <param name="options">A <see cref="JsonSerializerOptions" /> to use for serialization.</param>
+    /// <returns>
+    ///     A primitive object or an array or a map (can be recursive) of primitive objects, if possible;
+    ///     otherwise a <see cref="JsonElement" /> representing the original JSON value.
+    /// </returns>
+    /// <exception cref="JsonException"></exception>
     public override object? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         switch (reader.TokenType)
@@ -104,6 +115,12 @@ public class ObjectAsPrimitiveConverter : JsonConverter<object>
         }
     }
 
+    /// <summary>
+    ///     Writes the JSON representation of the specified value.
+    /// </summary>
+    /// <param name="writer">A <see cref="Utf8JsonWriter" /> to write the JSON value to.</param>
+    /// <param name="value">The value to write.</param>
+    /// <param name="options">A <see cref="JsonSerializerOptions" /> to use for serialization.</param>
     public override void Write(Utf8JsonWriter writer, object value, JsonSerializerOptions options)
     {
         if (value.GetType() == typeof(object))
