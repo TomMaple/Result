@@ -711,9 +711,7 @@ public class MatchAsyncExtensionsUnitTests
         var result = await sut.MatchAsync(() => Task.FromResult(ExpectedValue), _ => Task.FromResult(2));
 
         // Assert
-        result.ShouldNotBeNull();
-        result.IsSuccess().ShouldBeTrue();
-        result.Value.ShouldBe(ExpectedValue);
+        result.ShouldBe(ExpectedValue);
     }
 
     [Fact]
@@ -758,9 +756,7 @@ public class MatchAsyncExtensionsUnitTests
         var result = await sut.MatchAsync(() => Task.FromResult(1), _ => Task.FromResult(ExpectedValue));
 
         // Assert
-        result.ShouldNotBeNull();
-        result.IsSuccess().ShouldBeTrue();
-        result.Value.ShouldBe(ExpectedValue);
+        result.ShouldBe(ExpectedValue);
     }
 
     #endregion
@@ -1460,9 +1456,7 @@ public class MatchAsyncExtensionsUnitTests
         var result = await sut.MatchAsync(x => Task.FromResult((x + 1).ToString()), _ => Task.FromResult("error"));
 
         // Assert
-        result.ShouldNotBeNull();
-        result.IsSuccess().ShouldBeTrue();
-        result.Value.ShouldBe(ExpectedValue);
+        result.ShouldBe(ExpectedValue);
     }
 
     [Fact]
@@ -1510,9 +1504,7 @@ public class MatchAsyncExtensionsUnitTests
         var result = await sut.MatchAsync(x => Task.FromResult(x.ToString()), _ => Task.FromResult(ExpectedValue));
 
         // Assert
-        result.ShouldNotBeNull();
-        result.IsSuccess().ShouldBeTrue();
-        result.Value.ShouldBe(ExpectedValue);
+        result.ShouldBe(ExpectedValue);
     }
 
     #endregion
