@@ -226,14 +226,14 @@ public static class MatchAsyncExtensions
     ///     the original context captured; otherwise, <see langword="false" />.
     /// </param>
     /// <returns>
-    ///     The <see cref="Task{TResult}" /> that represents the <see cref="Result{T}" /> with the value produced by
-    ///     either <paramref name="ifSuccessFunction" /> or <paramref name="ifErrorFunction" />.
+    ///     The <see cref="Task{T}" /> that represents the value of type<typeparamref name="T"/>
+    ///     produced by either <paramref name="ifSuccessFunction" /> or <paramref name="ifErrorFunction" />.
     /// </returns>
     /// <exception cref="ArgumentNullException">
     ///     If any of the <paramref name="result" />, <paramref name="ifSuccessFunction" />,
     ///     or <paramref name="ifErrorFunction" /> parameters are <see langword="null" />.
     /// </exception>
-    public static async Task<Result<T>> MatchAsync<T>(this Result result, Func<Task<T>> ifSuccessFunction,
+    public static async Task<T> MatchAsync<T>(this Result result, Func<Task<T>> ifSuccessFunction,
         Func<Error, Task<T>> ifErrorFunction, bool continueOnCapturedContext = false)
     {
         ArgumentNullException.ThrowIfNull(result);
@@ -467,14 +467,14 @@ public static class MatchAsyncExtensions
     ///     the original context captured; otherwise, <see langword="false" />.
     /// </param>
     /// <returns>
-    ///     The <see cref="Task{TResult}" /> that represents the <see cref="Result{TNext}" /> with the value returned by
-    ///     either <paramref name="ifSuccessFunction" /> or <paramref name="ifErrorFunction" />.
+    ///     The <see cref="Task{TNext}" /> that represents the value of the <typeparamref name="TNext"/> type
+    ///     returned by either <paramref name="ifSuccessFunction" /> or <paramref name="ifErrorFunction" />.
     /// </returns>
     /// <exception cref="ArgumentNullException">
     ///     If any of the <paramref name="result" />, <paramref name="ifSuccessFunction" />,
     ///     or <paramref name="ifErrorFunction" /> parameters are <see langword="null" />.
     /// </exception>
-    public static async Task<Result<TNext>> MatchAsync<T, TNext>(
+    public static async Task<TNext> MatchAsync<T, TNext>(
         this Result<T> result,
         Func<T, Task<TNext>> ifSuccessFunction,
         Func<Error, Task<TNext>> ifErrorFunction,
