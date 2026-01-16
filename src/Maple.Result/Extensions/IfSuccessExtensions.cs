@@ -71,7 +71,7 @@ public static class IfSuccessExtensions
     /// </param>
     /// <returns>
     ///     A <see cref="Result" /> returned by <paramref name="ifSuccessFunction" /> if <paramref name="result" /> is successful;
-    ///     otherwise, the original error <paramref name="result" />.
+    ///     otherwise, the original <paramref name="result" />.
     /// </returns>
     /// <exception cref="ArgumentNullException">
     ///     If any of the <paramref name="result" /> or <paramref name="ifSuccessFunction" />
