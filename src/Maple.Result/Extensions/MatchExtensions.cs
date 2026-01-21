@@ -198,7 +198,7 @@ public static class MatchExtensions
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <returns>
-    ///     The <see cref="Result{T}" /> with the value produced by either <paramref name="ifSuccessFunction" />
+    ///     The value of the <typeparamref name="T"/> produced by either <paramref name="ifSuccessFunction" />
     ///     or <paramref name="ifErrorFunction" />.
     /// </returns>
     /// <exception cref="ArgumentNullException">
@@ -410,7 +410,7 @@ public static class MatchExtensions
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <returns>
-    ///     The <see cref="Result{TNext}" /> with the value returned by
+    ///     The value of the <typeparamref name="TNext"/> type returned by
     ///     either <paramref name="ifSuccessFunction" /> or <paramref name="ifErrorFunction" />.
     /// </returns>
     /// <exception cref="ArgumentNullException">
