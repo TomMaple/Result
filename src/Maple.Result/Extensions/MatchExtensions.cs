@@ -207,7 +207,7 @@ public static class MatchExtensions
     ///     If any of the <paramref name="result" />, <paramref name="ifSuccessFunction" />,
     ///     or <paramref name="ifErrorFunction" /> parameters are <see langword="null" />.
     /// </exception>
-    public static Result<T> Match<T>(this Result result, Func<T> ifSuccessFunction, Func<Error, T> ifErrorFunction)
+    public static T Match<T>(this Result result, Func<T> ifSuccessFunction, Func<Error, T> ifErrorFunction)
     {
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
@@ -419,7 +419,7 @@ public static class MatchExtensions
     ///     If any of the <paramref name="result" />, <paramref name="ifSuccessFunction" />,
     ///     or <paramref name="ifErrorFunction" /> parameters are <see langword="null" />.
     /// </exception>
-    public static Result<TNext> Match<T, TNext>(this Result<T> result, Func<T, TNext> ifSuccessFunction,
+    public static TNext Match<T, TNext>(this Result<T> result, Func<T, TNext> ifSuccessFunction,
         Func<Error, TNext> ifErrorFunction)
     {
         ArgumentNullException.ThrowIfNull(result);

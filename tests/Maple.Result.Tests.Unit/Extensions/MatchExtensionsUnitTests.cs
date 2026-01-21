@@ -698,9 +698,7 @@ public class MatchExtensionsUnitTests
         var result = sut.Match(() => ExpectedValue, _ => 2);
 
         // Assert
-        result.ShouldNotBeNull();
-        result.IsSuccess().ShouldBeTrue();
-        result.Value.ShouldBe(ExpectedValue);
+        result.ShouldBe(ExpectedValue);
     }
 
     [Fact]
@@ -745,9 +743,7 @@ public class MatchExtensionsUnitTests
         var result = sut.Match(() => 1, _ => ExpectedValue);
 
         // Assert
-        result.ShouldNotBeNull();
-        result.IsSuccess().ShouldBeTrue();
-        result.Value.ShouldBe(ExpectedValue);
+        result.ShouldBe(ExpectedValue);
     }
 
     #endregion
@@ -1434,9 +1430,7 @@ public class MatchExtensionsUnitTests
         var result = sut.Match(x => (x + 1).ToString(), _ => "error");
 
         // Assert
-        result.ShouldNotBeNull();
-        result.IsSuccess().ShouldBeTrue();
-        result.Value.ShouldBe(ExpectedValue);
+        result.ShouldBe(ExpectedValue);
     }
 
     [Fact]
@@ -1484,9 +1478,7 @@ public class MatchExtensionsUnitTests
         var result = sut.Match(x => x.ToString(), _ => ExpectedValue);
 
         // Assert
-        result.ShouldNotBeNull();
-        result.IsSuccess().ShouldBeTrue();
-        result.Value.ShouldBe(ExpectedValue);
+        result.ShouldBe(ExpectedValue);
     }
 
     #endregion
