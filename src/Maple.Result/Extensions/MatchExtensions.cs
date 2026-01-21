@@ -170,13 +170,11 @@ public static class MatchExtensions
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
         ArgumentNullException.ThrowIfNull(ifErrorAction);
 
-        if (!result.IsSuccess())
-        {
-            ifErrorAction(result.Error!);
-            return result.Error!;
-        }
+        if (result.IsSuccess())
+            return ifSuccessFunction();
 
-        return ifSuccessFunction();
+        ifErrorAction(result.Error!);
+        return result.Error!;
     }
 
     /// <summary>
@@ -251,13 +249,11 @@ public static class MatchExtensions
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
         ArgumentNullException.ThrowIfNull(ifErrorAction);
 
-        if (!result.IsSuccess())
-        {
-            ifErrorAction(result.Error!);
-            return result.Error!;
-        }
+        if (result.IsSuccess())
+            return ifSuccessFunction();
 
-        return ifSuccessFunction();
+        ifErrorAction(result.Error!);
+        return result.Error!;
     }
 
     /// <summary>
