@@ -16,6 +16,7 @@ This error category represents validation errors that prevent the underlying ser
 
 It relates to `400` HTTP status code (Bad Request), but can also be used in other contexts where validation errors need to be reported.
 
+
 ## Validation(ErrorUri, String, String, ErrorUri, String, (String, Object)[])
 Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Error.cs#L219" target="_blank">Error.cs</a>
 
@@ -87,7 +88,8 @@ error.AddDetail(
     ("email", ""));
 ```
 
-## Validation(ErrorUri, String, String, ErrorUri, String, IEnumerable<KeyValuePair<String, Object>>)
+
+## Validation(ErrorUri, String, String, ErrorUri, String, IEnumerable&lt;KeyValuePair&lt;String, Object&gt;&gt;)
 Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Error.cs#L258" target="_blank">Error.cs</a>
 
 Creates a new instance of the [Error](Error.md) object of the *Validation* category with specified parameters.

@@ -16,6 +16,7 @@ This error category represents expected errors that are not critical to the oper
 
 It relates to `422` HTTP status code (Unprocessable Content), but can also be used in other contexts where the error was expected and needs to be reported.
 
+
 ## Failure(ErrorUri, String, String, ErrorUri, String, (String, Object)[])
 Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Error.cs#L687" target="_blank">Error.cs</a>
 
@@ -75,7 +76,8 @@ var error = Error.Failure(
                 ("paymentId", "GVX235346"));
 ```
 
-## Failure(ErrorUri, String, String, ErrorUri, String, IEnumerable<KeyValuePair<String, Object>>)
+
+## Failure(ErrorUri, String, String, ErrorUri, String, IEnumerable&lt;KeyValuePair&lt;String, Object&gt;&gt;)
 Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Error.cs#L726" target="_blank">Error.cs</a>
 
 Creates a new instance of the [Error](Error.md) object of the *Failure* category with specified parameters.

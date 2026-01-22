@@ -16,6 +16,7 @@ This error category represents unexpected, critical errors.
 
 It relates to `500` HTTP status code (Internal Server Error), but can also be used in other contexts where the error was unexpected, it cannot be properly handled and needs to be reported.
 
+
 ## Failure(ErrorUri, String, String, ErrorUri, String, (String, Object)[])
 Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Error.cs#L765" target="_blank">Error.cs</a>
 
@@ -75,7 +76,8 @@ var error = Error.Failure(
                 ("paymentId", "GVX235346"));
 ```
 
-## Failure(ErrorUri, String, String, ErrorUri, String, IEnumerable<KeyValuePair<String, Object>>)
+
+## Failure(ErrorUri, String, String, ErrorUri, String, IEnumerable&lt;KeyValuePair&lt;String, Object&gt;&gt;)
 Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Error.cs#L804" target="_blank">Error.cs</a>
 
 Creates a new instance of the [Error](Error.md) object of the *Failure* category with specified parameters.

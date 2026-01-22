@@ -82,6 +82,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Extensions", "Extensions", 
 		docs\Reference\Extensions\IfSuccessExtensions_IfSuccess.md = docs\Reference\Extensions\IfSuccessExtensions_IfSuccess.md
 		docs\Reference\Extensions\MatchAsyncExtensions.md = docs\Reference\Extensions\MatchAsyncExtensions.md
 		docs\Reference\Extensions\MatchAsyncExtensions_MatchAsync.md = docs\Reference\Extensions\MatchAsyncExtensions_MatchAsync.md
+		docs\Reference\Extensions\MatchExtensions.md = docs\Reference\Extensions\MatchExtensions.md
+		docs\Reference\Extensions\MatchExtensions_Match.md = docs\Reference\Extensions\MatchExtensions_Match.md
 	EndProjectSection
 EndProject
 Global

@@ -16,6 +16,7 @@ This error category represents authentication errors. To be used, e.g. if the au
 
 It relates to `401` HTTP status code (Unauthorized), but can also be used in other contexts where authentication errors need to be reported.
 
+
 ## Unauthenticated(ErrorUri, String, String, ErrorUri, String, (String, Object)[])
 Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Error.cs#L298" target="_blank">Error.cs</a>
 
@@ -75,7 +76,8 @@ var error = Error.Unauthenticated(
                 ("accountId", "12345"), ("action", "account:update"));
 ```
 
-## Unauthenticated(ErrorUri, String, String, ErrorUri, String, IEnumerable<KeyValuePair<String, Object>>)
+
+## Unauthenticated(ErrorUri, String, String, ErrorUri, String, IEnumerable&lt;KeyValuePair&lt;String, Object&gt;&gt;)
 Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Error.cs#L337" target="_blank">Error.cs</a>
 
 Creates a new instance of the [Error](Error.md) object of the *Unauthenticated* category with specified parameters.

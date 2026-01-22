@@ -509,7 +509,7 @@ The type of the [Result&lt;TNext&gt;](../ResultT/ResultT.md) value returned by t
 #### `result` [Result&lt;T&gt;](../ResultT/ResultT.md)
 The instance of [Result&lt;T&gt;](../ResultT/ResultT.md) record that represents the result of the operation to be evaluated.
 
-#### `ifSuccessFunction` [Func](https://learn.microsoft.com/dotnet/api/system.func-1)&lt;T, [Result](../ResultT/ResultT.md)&lt;TNext&gt;&gt;
+#### `ifSuccessFunction` [Func](https://learn.microsoft.com/dotnet/api/system.func-2)&lt;T, [Result](../ResultT/ResultT.md)&lt;TNext&gt;&gt;
 The function to be executed, only if the current instance of [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation. The value of type `T` contained in the [Result&lt;T&gt;](../ResultT/ResultT.md) instance will be passed as a parameter to this function.
 
 #### `ifErrorFunction` [Func](https://learn.microsoft.com/dotnet/api/system.func-2)&lt;[Error](../Error/Error.md), [Result](../ResultT/ResultT.md)&lt;TNext&gt;&gt;

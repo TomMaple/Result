@@ -16,6 +16,7 @@ This error category is used when the operation fails due to the data or state co
 
 It relates to `409` HTTP status code (Conflict), but can also be used in other conflicts.
 
+
 ## Conflict(ErrorUri, String, String, ErrorUri, String, (String, Object)[])
 Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Error.cs#L609" target="_blank">Error.cs</a>
 
@@ -75,7 +76,8 @@ var error = Error.Conflict(
                 ("accountId", "D12345"), ("action", "account:update"));
 ```
 
-## Conflict(ErrorUri, String, String, ErrorUri, String, IEnumerable<KeyValuePair<String, Object>>)
+
+## Conflict(ErrorUri, String, String, ErrorUri, String, IEnumerable&lt;KeyValuePair&lt;String, Object&gt;&gt;)
 Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Error.cs#L648" target="_blank">Error.cs</a>
 
 Creates a new instance of the [Error](Error.md) object of the *Conflict* category with specified parameters.

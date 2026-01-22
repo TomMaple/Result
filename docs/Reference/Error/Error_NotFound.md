@@ -16,6 +16,7 @@ This error category is used when the specific resource was not found.
 
 It relates to `404` HTTP status code (Not Found), but can also be used in other contexts where not found errors need to be reported.
 
+
 ## NotFound(ErrorUri, String, String, ErrorUri, String, (String, Object)[])
 Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Error.cs#L453" target="_blank">Error.cs</a>
 
@@ -81,7 +82,8 @@ error.AddDetail(
     ("deletedDate", "2025-03-08T18:33:58+00:00"));
 ```
 
-## NotFound(ErrorUri, String, String, ErrorUri, String, IEnumerable<KeyValuePair<String, Object>>)
+
+## NotFound(ErrorUri, String, String, ErrorUri, String, IEnumerable&lt;KeyValuePair&lt;String, Object&gt;&gt;)
 Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Error.cs#L492" target="_blank">Error.cs</a>
 
 Creates a new instance of the [Error](Error.md) object of the *NotFound* category with specified parameters.

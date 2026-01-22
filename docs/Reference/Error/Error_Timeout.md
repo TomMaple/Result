@@ -16,6 +16,7 @@ This error category is used when the operation times out before completion.
 
 It relates to `408` HTTP status code (Request Timeout), but can also be used in other contexts where operation did not finish within the expected time frame.
 
+
 ## Timeout(ErrorUri, String, String, ErrorUri, String, (String, Object)[])
 Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Error.cs#L531" target="_blank">Error.cs</a>
 
@@ -75,7 +76,8 @@ var error = Error.Timeout(
                 ("accountId", "D12345"), ("action", "account:update"));
 ```
 
-## Timeout(ErrorUri, String, String, ErrorUri, String, IEnumerable<KeyValuePair<String, Object>>)
+
+## Timeout(ErrorUri, String, String, ErrorUri, String, IEnumerable&lt;KeyValuePair&lt;String, Object&gt;&gt;)
 Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Error.cs#L570" target="_blank">Error.cs</a>
 
 Creates a new instance of the [Error](Error.md) object of the *Timeout* category with specified parameters.

@@ -16,6 +16,7 @@ This error category is used when one or more resources to complete the operation
 
 It relates to `503` HTTP status code (Service Unavailable), but can also be used in other contexts where a resource was unavailable and needs to be reported.
 
+
 ## Unavailable(ErrorUri, String, String, ErrorUri, String, (String, Object)[])
 Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Error.cs#L921" target="_blank">Error.cs</a>
 
@@ -75,7 +76,8 @@ var error = Error.Unavailable(
                 ("accountId", "D12345"), ("action", "account:update"));
 ```
 
-## Unavailable(ErrorUri, String, String, ErrorUri, String, IEnumerable<KeyValuePair<String, Object>>)
+
+## Unavailable(ErrorUri, String, String, ErrorUri, String, IEnumerable&lt;KeyValuePair&lt;String, Object&gt;&gt;)
 Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Error.cs#L960" target="_blank">Error.cs</a>
 
 Creates a new instance of the [Error](Error.md) object of the *Unavailable* category with specified parameters.
