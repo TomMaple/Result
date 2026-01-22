@@ -44,7 +44,7 @@ The `result` parameter is `null` or `ifErrorAction` parameter is `null`.
 
 ## Examples
 ```csharp
-var createUserResult = await _userService.CreateUserAsync(userData);
+var createUserResult = _userService.CreateUser(userData);
 
 createUserResult.IfError(error =>
 {
@@ -86,7 +86,7 @@ The `result` parameter is `null` or `ifErrorFunction` parameter is `null`.
 
 ## Examples
 ```csharp
-var userResult = await _userService.GetUserAsync(userData);
+var userResult = _userService.GetUser(userData);
 
 userResult.IfError(error =>
 {
