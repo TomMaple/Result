@@ -57,6 +57,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Error", "Error", "{E02A393C
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Reference", "Reference", "{4BBCD0C7-0224-4C06-9A95-680021772CE8}"
+	ProjectSection(SolutionItems) = preProject
+		docs\Reference\ErrorCategory.md = docs\Reference\ErrorCategory.md
+		docs\Reference\namespace.md = docs\Reference\namespace.md
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Result", "Result", "{906F16D6-F33A-45A2-A2C7-7E29FF65F538}"
 	ProjectSection(SolutionItems) = preProject
