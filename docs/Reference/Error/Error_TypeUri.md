@@ -13,20 +13,20 @@ public string TypeUri { get; init; }
 ### Property Value
 [string](https://learn.microsoft.com/dotnet/api/system.string)
 
-A text value of a URI that identifies the type of the problem.
+A text value of a *URI* that identifies the type of the problem.
 
 ## Remarks
-This is a mandatory property that contains a text value of a URI that identifies the type of the problem.
+This is a mandatory property that contains a text value of a *URI* that identifies the type of the problem.
 
 > [!NOTE]
 > It should not be assigned directly (i.e., via the property setter) but rather through the factory methods of the [Error](Error.md) class, which use [ErrorUri](../ErrorUri/ErrorUri.md) to validate and provide the value. For deserialization, the setter is marked as `init` to allow assignment during object initialization.
 
 The value of this property should be:
 * `about:blank`,
-* a URI Locator, or
-* a URI Tag.
+* a *URI Locator*, or
+* a *URI Tag*.
 
-If the value is a *URI Locator*, it is a *URL* (with an “http” or “https” scheme) that, when dereferenced, provides human-readable documentation about the problem type. The locator should use absolute URIs to avoid confusion and malfunctions. However, consumers **should not** automatically dereference the type *URI*, unless they do so when providing information to developers (e.g., when a debugging tool is in use).
+If the value is a *URI Locator*, it is a *URL* (with an “http” or “https” scheme) that, when dereferenced, provides human-readable documentation about the problem type. The locator should use absolute *URI*s to avoid confusion and malfunctions. However, consumers **should not** automatically dereference the type *URI*, unless they do so when providing information to developers (e.g., when a debugging tool is in use).
 
 If the value is a *URI Tag*, it is not dereferenceable and uniquely represents the different types of problems.
 

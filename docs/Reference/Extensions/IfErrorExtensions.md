@@ -1,6 +1,6 @@
 ﻿# IfErrorExtensions Class
 ## Definition
-Namespace: [Maple.Result](../namespace.md)<br>
+Namespace: [Maple.Result.Extensions](namespace.md)<br>
 Assembly: Maple.Result.dll<br>
 Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/IfErrorExtensions.cs" target="_blank">IfErrorExtensions.cs</a>
 

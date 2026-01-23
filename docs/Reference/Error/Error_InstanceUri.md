@@ -13,17 +13,17 @@ public string? InstanceUri { get; init; }
 ### Property Value
 [string](https://learn.microsoft.com/dotnet/api/system.string)
 
-A text value of a URI that identifies the specific occurrence of the problem.
+A text value of a *URI* that identifies the specific occurrence of the problem.
 
 ## Remarks
-This is an optional property that contains a text value of a URI that identifies the type of the problem.
+This is an optional property that contains a text value of a *URI* that identifies the type of the problem.
 
 > [!NOTE]
 > It should not be assigned directly (i.e., via the property setter) but rather through the factory methods of the [Error](Error.md) class, which use [ErrorUri](../ErrorUri/ErrorUri.md) to validate and provide the value. For deserialization, the setter is marked as `init` to allow assignment during object initialization.
 
 The value of this property should be:
-* a URI Locator, or
-* a URI Tag.
+* a *URI Locator*, or
+* a *URI Tag*.
 
 If the value is a *URI Locator*, it is a *URL* (with an “http” or “https” scheme) that, when dereferenced, the problem details object can be fetched from it. It might also return information about the problem occurrence in other formats through use of proactive content negotiation.
 

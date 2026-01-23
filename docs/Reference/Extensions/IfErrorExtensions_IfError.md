@@ -1,6 +1,6 @@
 ﻿# IfErrorExtensions.IfError Methods
 ## Definition
-Namespace: [Maple.Result](../namespace.md)<br>
+Namespace: [Maple.Result.Extensions](namespace.md)<br>
 Assembly: Maple.Result.dll<br>
 
 Runs a specific action or function if the instance of `TResult` represents a failed operation (i.e., contains an [Error](../Error/Error.md)).

@@ -75,7 +75,7 @@ public record Error
     public ErrorCategory Category { get; init; }
 
     /// <summary>
-    ///     The text containing a URI reference that identifies the problem type.
+    ///     The text containing a <i>URI</i> reference that identifies the problem type.
     /// </summary>
     /// <remarks>
     ///     <para>This is a mandatory property according to the RFC 9457 specification.</para>
@@ -88,21 +88,21 @@ public record Error
     ///             <term>URI Locator</term>
     ///             <description>
     ///                 dereferencing it SHOULD provide human-readable documentation for the problem type;
-    ///                 however, consumers SHOULD NOT automatically dereference the type URI,
+    ///                 however, consumers SHOULD NOT automatically dereference the type <i>URI</i>,
     ///                 unless they do so when providing information to developers (e.g., when a debugging tool is in use);
-    ///                 it is recommended to use absolute rather than relative URIs to avoid confusion and malfunctions;
+    ///                 it is recommended to use absolute rather than relative <i>URI</i>s to avoid confusion and malfunctions;
     ///             </description>
     ///         </item>
     ///         <item>
     ///             <term>URI Tag</term>
     ///             <description>
     ///                 it is not dereferenceable and uniquely represents the different types of problems;
-    ///                 for more information about URI Tags, see:
+    ///                 for more information about <i>URI Tags</i>, see:
     ///                 <seealso href="https://datatracker.ietf.org/doc/html/rfc4151" />.
     ///             </description>
     ///         </item>
     ///     </list>
-    ///     Using a URI to have a unique ID is not recommended especially from the point of view of integration and
+    ///     Using a <i>URI</i> to have a unique ID is not recommended especially from the point of view of integration and
     ///     use of tools for which providing further information at the Developer Experience level is a fundamental objective.
     /// </remarks>
     public string TypeUri { get; init; }
@@ -113,7 +113,7 @@ public record Error
     /// <remarks>
     ///     It SHOULD NOT change from occurrence to occurrence of the problem, except for localization.
     ///     The “title” string is advisory and is included only for users who are unaware of and
-    ///     cannot discover the semantics of the type URI (e.g., during offline log analysis).
+    ///     cannot discover the semantics of the type <i>URI</i> (e.g., during offline log analysis).
     /// </remarks>
     public string Title { get; init; }
 
@@ -138,7 +138,7 @@ public record Error
     public TemplatedMessage? DetailTemplated { get; init; }
 
     /// <summary>
-    ///     The URI reference that identifies the specific occurrence of the problem.
+    ///     The <i>URI</i> reference that identifies the specific occurrence of the problem.
     /// </summary>
     /// <remarks>
     ///     The value of this attribute can be:
@@ -148,7 +148,7 @@ public record Error
     ///             <description>
     ///                 dereferencing it SHOULD provide the problem details object or
     ///                 information about the problem occurence in other formats through use of proactive content negotiation;
-    ///                 it is recommended to use absolute rather than relative URIs to avoid confusion and malfunctions;
+    ///                 it is recommended to use absolute rather than relative <i>URI</i>s to avoid confusion and malfunctions;
     ///             </description>
     ///         </item>
     ///         <item>
@@ -156,7 +156,7 @@ public record Error
     ///             <description>
     ///                 it serves as a unique identifier for the problem occurrence which may be meaningful to the server but
     ///                 is opaque to the client;
-    ///                 for more information about URI Tags, see:
+    ///                 for more information about <i>URI Tags</i>, see:
     ///                 <seealso href="https://datatracker.ietf.org/doc/html/rfc4151" />.
     ///             </description>
     ///         </item>
@@ -208,10 +208,10 @@ public record Error
     /// <summary>
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.Validation" /> category.
     /// </summary>
-    /// <param name="typeUri">A record containing a URI reference that identifies the problem type.</param>
+    /// <param name="typeUri">A record containing a <i>URI</i> reference that identifies the problem type.</param>
     /// <param name="title">A short, human-readable summary of the problem.</param>
     /// <param name="detail">A human-readable explanation specific to this occurrence of the problem.</param>
-    /// <param name="instanceUri">A URI reference that identifies the specific occurrence of the problem.</param>
+    /// <param name="instanceUri">A <i>URI</i> reference that identifies the specific occurrence of the problem.</param>
     /// <param name="detailTemplateId">
     ///     A message template identifier to generate a localized detail message
     ///     (the human-readable explanation specific to this occurrence of the problem).
@@ -227,7 +227,7 @@ public record Error
     /// </remarks>
     /// <exception cref="ArgumentException">
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
-    ///     that is not a valid HTTP/HTTPS URI or a valid URI Tag.
+    ///     that is not a valid HTTP/HTTPS <i>URI</i> or a valid <i>URI Tag</i>.
     /// </exception>
     public static Error Validation(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
@@ -247,10 +247,10 @@ public record Error
     /// <summary>
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.Validation" /> category.
     /// </summary>
-    /// <param name="typeUri">A record containing a URI reference that identifies the problem type.</param>
+    /// <param name="typeUri">A record containing a <i>URI</i> reference that identifies the problem type.</param>
     /// <param name="title">A short, human-readable summary of the problem.</param>
     /// <param name="detail">A human-readable explanation specific to this occurrence of the problem.</param>
-    /// <param name="instanceUri">A URI reference that identifies the specific occurrence of the problem.</param>
+    /// <param name="instanceUri">A <i>URI</i> reference that identifies the specific occurrence of the problem.</param>
     /// <param name="detailTemplateId">
     ///     A message template identifier to generate a localized detail message
     ///     (the human-readable explanation specific to this occurrence of the problem).
@@ -266,7 +266,7 @@ public record Error
     /// </remarks>
     /// <exception cref="ArgumentException">
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
-    ///     that is not a valid HTTP/HTTPS URI or a valid URI Tag.
+    ///     that is not a valid HTTP/HTTPS <i>URI</i> or a valid <i>URI Tag</i>.
     /// </exception>
     public static Error Validation(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
@@ -287,10 +287,10 @@ public record Error
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.Unauthenticated" />
     ///     category.
     /// </summary>
-    /// <param name="typeUri">A record containing a URI reference that identifies the problem type.</param>
+    /// <param name="typeUri">A record containing a <i>URI</i> reference that identifies the problem type.</param>
     /// <param name="title">A short, human-readable summary of the problem.</param>
     /// <param name="detail">A human-readable explanation specific to this occurrence of the problem.</param>
-    /// <param name="instanceUri">A URI reference that identifies the specific occurrence of the problem.</param>
+    /// <param name="instanceUri">A <i>URI</i> reference that identifies the specific occurrence of the problem.</param>
     /// <param name="detailTemplateId">
     ///     A message template identifier to generate a localized detail message
     ///     (the human-readable explanation specific to this occurrence of the problem).
@@ -306,7 +306,7 @@ public record Error
     /// </remarks>
     /// <exception cref="ArgumentException">
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
-    ///     that is not a valid HTTP/HTTP URI or a valid URI Tag.
+    ///     that is not a valid HTTP/HTTP <i>URI</i> or a valid <i>URI Tag</i>.
     /// </exception>
     public static Error Unauthenticated(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
@@ -326,10 +326,10 @@ public record Error
     /// <summary>
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.Unauthenticated" /> category.
     /// </summary>
-    /// <param name="typeUri">A record containing a URI reference that identifies the problem type.</param>
+    /// <param name="typeUri">A record containing a <i>URI</i> reference that identifies the problem type.</param>
     /// <param name="title">A short, human-readable summary of the problem.</param>
     /// <param name="detail">A human-readable explanation specific to this occurrence of the problem.</param>
-    /// <param name="instanceUri">A URI reference that identifies the specific occurrence of the problem.</param>
+    /// <param name="instanceUri">A <i>URI</i> reference that identifies the specific occurrence of the problem.</param>
     /// <param name="detailTemplateId">
     ///     A message template identifier to generate a localized detail message
     ///     (the human-readable explanation specific to this occurrence of the problem).
@@ -345,7 +345,7 @@ public record Error
     /// </remarks>
     /// <exception cref="ArgumentException">
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
-    ///     that is not a valid HTTP/HTTPS URI or a valid URI Tag.
+    ///     that is not a valid HTTP/HTTPS <i>URI</i> or a valid <i>URI Tag</i>.
     /// </exception>
     public static Error Unauthenticated(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
@@ -365,10 +365,10 @@ public record Error
     /// <summary>
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.Unauthorized" /> category.
     /// </summary>
-    /// <param name="typeUri">A record containing a URI reference that identifies the problem type.</param>
+    /// <param name="typeUri">A record containing a <i>URI</i> reference that identifies the problem type.</param>
     /// <param name="title">A short, human-readable summary of the problem.</param>
     /// <param name="detail">A human-readable explanation specific to this occurrence of the problem.</param>
-    /// <param name="instanceUri">A URI reference that identifies the specific occurrence of the problem.</param>
+    /// <param name="instanceUri">A <i>URI</i> reference that identifies the specific occurrence of the problem.</param>
     /// <param name="detailTemplateId">
     ///     A message template identifier to generate a localized detail message
     ///     (the human-readable explanation specific to this occurrence of the problem).
@@ -384,7 +384,7 @@ public record Error
     /// </remarks>
     /// <exception cref="ArgumentException">
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
-    ///     that is not a valid HTTP/HTTP URI or a valid URI Tag.
+    ///     that is not a valid HTTP/HTTP <i>URI</i> or a valid <i>URI Tag</i>.
     /// </exception>
     public static Error Unauthorized(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
@@ -403,10 +403,10 @@ public record Error
     /// <summary>
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.Unauthorized" /> category.
     /// </summary>
-    /// <param name="typeUri">A record containing a URI reference that identifies the problem type.</param>
+    /// <param name="typeUri">A record containing a <i>URI</i> reference that identifies the problem type.</param>
     /// <param name="title">A short, human-readable summary of the problem.</param>
     /// <param name="detail">A human-readable explanation specific to this occurrence of the problem.</param>
-    /// <param name="instanceUri">A URI reference that identifies the specific occurrence of the problem.</param>
+    /// <param name="instanceUri">A <i>URI</i> reference that identifies the specific occurrence of the problem.</param>
     /// <param name="detailTemplateId">
     ///     A message template identifier to generate a localized detail message
     ///     (the human-readable explanation specific to this occurrence of the problem).
@@ -422,7 +422,7 @@ public record Error
     /// </remarks>
     /// <exception cref="ArgumentException">
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
-    ///     that is not a valid HTTP/HTTPS URI or a valid URI Tag.
+    ///     that is not a valid HTTP/HTTPS <i>URI</i> or a valid <i>URI Tag</i>.
     /// </exception>
     public static Error Unauthorized(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
@@ -442,10 +442,10 @@ public record Error
     /// <summary>
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.NotFound" /> category.
     /// </summary>
-    /// <param name="typeUri">A record containing a URI reference that identifies the problem type.</param>
+    /// <param name="typeUri">A record containing a <i>URI</i> reference that identifies the problem type.</param>
     /// <param name="title">A short, human-readable summary of the problem.</param>
     /// <param name="detail">A human-readable explanation specific to this occurrence of the problem.</param>
-    /// <param name="instanceUri">A URI reference that identifies the specific occurrence of the problem.</param>
+    /// <param name="instanceUri">A <i>URI</i> reference that identifies the specific occurrence of the problem.</param>
     /// <param name="detailTemplateId">
     ///     A message template identifier to generate a localized detail message
     ///     (the human-readable explanation specific to this occurrence of the problem).
@@ -461,7 +461,7 @@ public record Error
     /// </remarks>
     /// <exception cref="ArgumentException">
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
-    ///     that is not a valid HTTP/HTTP URI or a valid URI Tag.
+    ///     that is not a valid HTTP/HTTP <i>URI</i> or a valid <i>URI Tag</i>.
     /// </exception>
     public static Error NotFound(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
@@ -481,10 +481,10 @@ public record Error
     /// <summary>
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.NotFound" /> category.
     /// </summary>
-    /// <param name="typeUri">A record containing a URI reference that identifies the problem type.</param>
+    /// <param name="typeUri">A record containing a <i>URI</i> reference that identifies the problem type.</param>
     /// <param name="title">A short, human-readable summary of the problem.</param>
     /// <param name="detail">A human-readable explanation specific to this occurrence of the problem.</param>
-    /// <param name="instanceUri">A URI reference that identifies the specific occurrence of the problem.</param>
+    /// <param name="instanceUri">A <i>URI</i> reference that identifies the specific occurrence of the problem.</param>
     /// <param name="detailTemplateId">
     ///     A message template identifier to generate a localized detail message
     ///     (the human-readable explanation specific to this occurrence of the problem).
@@ -500,7 +500,7 @@ public record Error
     /// </remarks>
     /// <exception cref="ArgumentException">
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
-    ///     that is not a valid HTTP/HTTPS URI or a valid URI Tag.
+    ///     that is not a valid HTTP/HTTPS <i>URI</i> or a valid <i>URI Tag</i>.
     /// </exception>
     public static Error NotFound(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
@@ -520,10 +520,10 @@ public record Error
     /// <summary>
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.Timeout" /> category.
     /// </summary>
-    /// <param name="typeUri">A record containing a URI reference that identifies the problem type.</param>
+    /// <param name="typeUri">A record containing a <i>URI</i> reference that identifies the problem type.</param>
     /// <param name="title">A short, human-readable summary of the problem.</param>
     /// <param name="detail">A human-readable explanation specific to this occurrence of the problem.</param>
-    /// <param name="instanceUri">A URI reference that identifies the specific occurrence of the problem.</param>
+    /// <param name="instanceUri">A <i>URI</i> reference that identifies the specific occurrence of the problem.</param>
     /// <param name="detailTemplateId">
     ///     A message template identifier to generate a localized detail message
     ///     (the human-readable explanation specific to this occurrence of the problem).
@@ -539,7 +539,7 @@ public record Error
     /// </remarks>
     /// <exception cref="ArgumentException">
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
-    ///     that is not a valid HTTP/HTTP URI or a valid URI Tag.
+    ///     that is not a valid HTTP/HTTP <i>URI</i> or a valid <i>URI Tag</i>.
     /// </exception>
     public static Error Timeout(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
@@ -559,10 +559,10 @@ public record Error
     /// <summary>
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.Timeout" /> category.
     /// </summary>
-    /// <param name="typeUri">A record containing a URI reference that identifies the problem type.</param>
+    /// <param name="typeUri">A record containing a <i>URI</i> reference that identifies the problem type.</param>
     /// <param name="title">A short, human-readable summary of the problem.</param>
     /// <param name="detail">A human-readable explanation specific to this occurrence of the problem.</param>
-    /// <param name="instanceUri">A URI reference that identifies the specific occurrence of the problem.</param>
+    /// <param name="instanceUri">A <i>URI</i> reference that identifies the specific occurrence of the problem.</param>
     /// <param name="detailTemplateId">
     ///     A message template identifier to generate a localized detail message
     ///     (the human-readable explanation specific to this occurrence of the problem).
@@ -578,7 +578,7 @@ public record Error
     /// </remarks>
     /// <exception cref="ArgumentException">
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
-    ///     that is not a valid HTTP/HTTPS URI or a valid URI Tag.
+    ///     that is not a valid HTTP/HTTPS <i>URI</i> or a valid <i>URI Tag</i>.
     /// </exception>
     public static Error Timeout(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
@@ -598,10 +598,10 @@ public record Error
     /// <summary>
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.Conflict" /> category.
     /// </summary>
-    /// <param name="typeUri">A record containing a URI reference that identifies the problem type.</param>
+    /// <param name="typeUri">A record containing a <i>URI</i> reference that identifies the problem type.</param>
     /// <param name="title">A short, human-readable summary of the problem.</param>
     /// <param name="detail">A human-readable explanation specific to this occurrence of the problem.</param>
-    /// <param name="instanceUri">A URI reference that identifies the specific occurrence of the problem.</param>
+    /// <param name="instanceUri">A <i>URI</i> reference that identifies the specific occurrence of the problem.</param>
     /// <param name="detailTemplateId">
     ///     A message template identifier to generate a localized detail message
     ///     (the human-readable explanation specific to this occurrence of the problem).
@@ -617,7 +617,7 @@ public record Error
     /// </remarks>
     /// <exception cref="ArgumentException">
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
-    ///     that is not a valid HTTP/HTTP URI or a valid URI Tag.
+    ///     that is not a valid HTTP/HTTP <i>URI</i> or a valid <i>URI Tag</i>.
     /// </exception>
     public static Error Conflict(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
@@ -637,10 +637,10 @@ public record Error
     /// <summary>
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.Conflict" /> category.
     /// </summary>
-    /// <param name="typeUri">A record containing a URI reference that identifies the problem type.</param>
+    /// <param name="typeUri">A record containing a <i>URI</i> reference that identifies the problem type.</param>
     /// <param name="title">A short, human-readable summary of the problem.</param>
     /// <param name="detail">A human-readable explanation specific to this occurrence of the problem.</param>
-    /// <param name="instanceUri">A URI reference that identifies the specific occurrence of the problem.</param>
+    /// <param name="instanceUri">A <i>URI</i> reference that identifies the specific occurrence of the problem.</param>
     /// <param name="detailTemplateId">
     ///     A message template identifier to generate a localized detail message
     ///     (the human-readable explanation specific to this occurrence of the problem).
@@ -656,7 +656,7 @@ public record Error
     /// </remarks>
     /// <exception cref="ArgumentException">
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
-    ///     that is not a valid HTTP/HTTPS URI or a valid URI Tag.
+    ///     that is not a valid HTTP/HTTPS <i>URI</i> or a valid <i>URI Tag</i>.
     /// </exception>
     public static Error Conflict(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
@@ -676,10 +676,10 @@ public record Error
     /// <summary>
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.Failure" /> category.
     /// </summary>
-    /// <param name="typeUri">A record containing a URI reference that identifies the problem type.</param>
+    /// <param name="typeUri">A record containing a <i>URI</i> reference that identifies the problem type.</param>
     /// <param name="title">A short, human-readable summary of the problem.</param>
     /// <param name="detail">A human-readable explanation specific to this occurrence of the problem.</param>
-    /// <param name="instanceUri">A URI reference that identifies the specific occurrence of the problem.</param>
+    /// <param name="instanceUri">A <i>URI</i> reference that identifies the specific occurrence of the problem.</param>
     /// <param name="detailTemplateId">
     ///     A message template identifier to generate a localized detail message
     ///     (the human-readable explanation specific to this occurrence of the problem).
@@ -695,7 +695,7 @@ public record Error
     /// </remarks>
     /// <exception cref="ArgumentException">
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
-    ///     that is not a valid HTTP/HTTP URI or a valid URI Tag.
+    ///     that is not a valid HTTP/HTTP <i>URI</i> or a valid <i>URI Tag</i>.
     /// </exception>
     public static Error Failure(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
@@ -715,10 +715,10 @@ public record Error
     /// <summary>
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.Failure" /> category.
     /// </summary>
-    /// <param name="typeUri">A record containing a URI reference that identifies the problem type.</param>
+    /// <param name="typeUri">A record containing a <i>URI</i> reference that identifies the problem type.</param>
     /// <param name="title">A short, human-readable summary of the problem.</param>
     /// <param name="detail">A human-readable explanation specific to this occurrence of the problem.</param>
-    /// <param name="instanceUri">A URI reference that identifies the specific occurrence of the problem.</param>
+    /// <param name="instanceUri">A <i>URI</i> reference that identifies the specific occurrence of the problem.</param>
     /// <param name="detailTemplateId">
     ///     A message template identifier to generate a localized detail message
     ///     (the human-readable explanation specific to this occurrence of the problem).
@@ -734,7 +734,7 @@ public record Error
     /// </remarks>
     /// <exception cref="ArgumentException">
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
-    ///     that is not a valid HTTP/HTTPS URI or a valid URI Tag.
+    ///     that is not a valid HTTP/HTTPS <i>URI</i> or a valid <i>URI Tag</i>.
     /// </exception>
     public static Error Failure(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
@@ -754,10 +754,10 @@ public record Error
     /// <summary>
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.CriticalError" /> category.
     /// </summary>
-    /// <param name="typeUri">A record containing a URI reference that identifies the problem type.</param>
+    /// <param name="typeUri">A record containing a <i>URI</i> reference that identifies the problem type.</param>
     /// <param name="title">A short, human-readable summary of the problem.</param>
     /// <param name="detail">A human-readable explanation specific to this occurrence of the problem.</param>
-    /// <param name="instanceUri">A URI reference that identifies the specific occurrence of the problem.</param>
+    /// <param name="instanceUri">A <i>URI</i> reference that identifies the specific occurrence of the problem.</param>
     /// <param name="detailTemplateId">
     ///     A message template identifier to generate a localized detail message
     ///     (the human-readable explanation specific to this occurrence of the problem).
@@ -773,7 +773,7 @@ public record Error
     /// </remarks>
     /// <exception cref="ArgumentException">
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
-    ///     that is not a valid HTTP/HTTP URI or a valid URI Tag.
+    ///     that is not a valid HTTP/HTTP <i>URI</i> or a valid <i>URI Tag</i>.
     /// </exception>
     public static Error CriticalError(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
@@ -793,10 +793,10 @@ public record Error
     /// <summary>
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.CriticalError" /> category.
     /// </summary>
-    /// <param name="typeUri">A record containing a URI reference that identifies the problem type.</param>
+    /// <param name="typeUri">A record containing a <i>URI</i> reference that identifies the problem type.</param>
     /// <param name="title">A short, human-readable summary of the problem.</param>
     /// <param name="detail">A human-readable explanation specific to this occurrence of the problem.</param>
-    /// <param name="instanceUri">A URI reference that identifies the specific occurrence of the problem.</param>
+    /// <param name="instanceUri">A <i>URI</i> reference that identifies the specific occurrence of the problem.</param>
     /// <param name="detailTemplateId">
     ///     A message template identifier to generate a localized detail message
     ///     (the human-readable explanation specific to this occurrence of the problem).
@@ -812,7 +812,7 @@ public record Error
     /// </remarks>
     /// <exception cref="ArgumentException">
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
-    ///     that is not a valid HTTP/HTTPS URI or a valid URI Tag.
+    ///     that is not a valid HTTP/HTTPS <i>URI</i> or a valid <i>URI Tag</i>.
     /// </exception>
     public static Error CriticalError(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
@@ -832,10 +832,10 @@ public record Error
     /// <summary>
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.NotImplemented" /> category.
     /// </summary>
-    /// <param name="typeUri">A record containing a URI reference that identifies the problem type.</param>
+    /// <param name="typeUri">A record containing a <i>URI</i> reference that identifies the problem type.</param>
     /// <param name="title">A short, human-readable summary of the problem.</param>
     /// <param name="detail">A human-readable explanation specific to this occurrence of the problem.</param>
-    /// <param name="instanceUri">A URI reference that identifies the specific occurrence of the problem.</param>
+    /// <param name="instanceUri">A <i>URI</i> reference that identifies the specific occurrence of the problem.</param>
     /// <param name="detailTemplateId">
     ///     A message template identifier to generate a localized detail message
     ///     (the human-readable explanation specific to this occurrence of the problem).
@@ -851,7 +851,7 @@ public record Error
     /// </remarks>
     /// <exception cref="ArgumentException">
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
-    ///     that is not a valid HTTP/HTTP URI or a valid URI Tag.
+    ///     that is not a valid HTTP/HTTP <i>URI</i> or a valid <i>URI Tag</i>.
     /// </exception>
     public static Error NotImplemented(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
@@ -871,10 +871,10 @@ public record Error
     /// <summary>
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.NotImplemented" /> category.
     /// </summary>
-    /// <param name="typeUri">A record containing a URI reference that identifies the problem type.</param>
+    /// <param name="typeUri">A record containing a <i>URI</i> reference that identifies the problem type.</param>
     /// <param name="title">A short, human-readable summary of the problem.</param>
     /// <param name="detail">A human-readable explanation specific to this occurrence of the problem.</param>
-    /// <param name="instanceUri">A URI reference that identifies the specific occurrence of the problem.</param>
+    /// <param name="instanceUri">A <i>URI</i> reference that identifies the specific occurrence of the problem.</param>
     /// <param name="detailTemplateId">
     ///     A message template identifier to generate a localized detail message
     ///     (the human-readable explanation specific to this occurrence of the problem).
@@ -890,7 +890,7 @@ public record Error
     /// </remarks>
     /// <exception cref="ArgumentException">
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
-    ///     that is not a valid HTTP/HTTPS URI or a valid URI Tag.
+    ///     that is not a valid HTTP/HTTPS <i>URI</i> or a valid <i>URI Tag</i>.
     /// </exception>
     public static Error NotImplemented(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
@@ -910,10 +910,10 @@ public record Error
     /// <summary>
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.Unavailable" /> category.
     /// </summary>
-    /// <param name="typeUri">A record containing a URI reference that identifies the problem type.</param>
+    /// <param name="typeUri">A record containing a <i>URI</i> reference that identifies the problem type.</param>
     /// <param name="title">A short, human-readable summary of the problem.</param>
     /// <param name="detail">A human-readable explanation specific to this occurrence of the problem.</param>
-    /// <param name="instanceUri">A URI reference that identifies the specific occurrence of the problem.</param>
+    /// <param name="instanceUri">A <i>URI</i> reference that identifies the specific occurrence of the problem.</param>
     /// <param name="detailTemplateId">
     ///     A message template identifier to generate a localized detail message
     ///     (the human-readable explanation specific to this occurrence of the problem).
@@ -929,7 +929,7 @@ public record Error
     /// </remarks>
     /// <exception cref="ArgumentException">
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
-    ///     that is not a valid HTTP/HTTP URI or a valid URI Tag.
+    ///     that is not a valid HTTP/HTTP <i>URI</i> or a valid <i>URI Tag</i>.
     /// </exception>
     public static Error Unavailable(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
@@ -949,10 +949,10 @@ public record Error
     /// <summary>
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.Unavailable" /> category.
     /// </summary>
-    /// <param name="typeUri">A record containing a URI reference that identifies the problem type.</param>
+    /// <param name="typeUri">A record containing a <i>URI</i> reference that identifies the problem type.</param>
     /// <param name="title">A short, human-readable summary of the problem.</param>
     /// <param name="detail">A human-readable explanation specific to this occurrence of the problem.</param>
-    /// <param name="instanceUri">A URI reference that identifies the specific occurrence of the problem.</param>
+    /// <param name="instanceUri">A <i>URI</i> reference that identifies the specific occurrence of the problem.</param>
     /// <param name="detailTemplateId">
     ///     A message template identifier to generate a localized detail message
     ///     (the human-readable explanation specific to this occurrence of the problem).
@@ -968,7 +968,7 @@ public record Error
     /// </remarks>
     /// <exception cref="ArgumentException">
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
-    ///     that is not a valid HTTP/HTTPS URI or a valid URI Tag.
+    ///     that is not a valid HTTP/HTTPS <i>URI</i> or a valid <i>URI Tag</i>.
     /// </exception>
     public static Error Unavailable(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
