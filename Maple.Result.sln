@@ -109,6 +109,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ErrorDetail", "ErrorDetail"
 		docs\Reference\ErrorDetail\ErrorDetail_PropertyPointer.md = docs\Reference\ErrorDetail\ErrorDetail_PropertyPointer.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TemplatedMessage", "TemplatedMessage", "{DE76917C-82A8-491F-A8E7-8734B20B0CEA}"
+	ProjectSection(SolutionItems) = preProject
+		docs\Reference\TemplatedMessage\TemplatedMessage.md = docs\Reference\TemplatedMessage\TemplatedMessage.md
+		docs\Reference\TemplatedMessage\TemplatedMessage_constructors.md = docs\Reference\TemplatedMessage\TemplatedMessage_constructors.md
+		docs\Reference\TemplatedMessage\TemplatedMessage_Params.md = docs\Reference\TemplatedMessage\TemplatedMessage_Params.md
+		docs\Reference\TemplatedMessage\TemplatedMessage_TemplateId.md = docs\Reference\TemplatedMessage\TemplatedMessage_TemplateId.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -137,6 +145,7 @@ Global
 		{906F16D6-F33A-45A2-A2C7-7E29FF65F538} = {4BBCD0C7-0224-4C06-9A95-680021772CE8}
 		{BF50E537-E1F0-4889-887E-FB260398E32C} = {4BBCD0C7-0224-4C06-9A95-680021772CE8}
 		{4165C202-7A49-4AF3-9A7B-A9B22B7190AA} = {4BBCD0C7-0224-4C06-9A95-680021772CE8}
+		{DE76917C-82A8-491F-A8E7-8734B20B0CEA} = {4BBCD0C7-0224-4C06-9A95-680021772CE8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B2854F93-1DE8-4AA5-8B37-0EB331C30451}
