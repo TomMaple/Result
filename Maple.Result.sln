@@ -117,6 +117,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TemplatedMessage", "Templat
 		docs\Reference\TemplatedMessage\TemplatedMessage_TemplateId.md = docs\Reference\TemplatedMessage\TemplatedMessage_TemplateId.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ResultT", "ResultT", "{7E02FB74-633C-4353-8435-DDB2A7EA1FD2}"
+	ProjectSection(SolutionItems) = preProject
+		docs\Reference\ResultT\ResultT.md = docs\Reference\ResultT\ResultT.md
+		docs\Reference\ResultT\ResultT_constructors.md = docs\Reference\ResultT\ResultT_constructors.md
+		docs\Reference\ResultT\ResultT_Error.md = docs\Reference\ResultT\ResultT_Error.md
+		docs\Reference\ResultT\ResultT_FromError.md = docs\Reference\ResultT\ResultT_FromError.md
+		docs\Reference\ResultT\ResultT_FromValue.md = docs\Reference\ResultT\ResultT_FromValue.md
+		docs\Reference\ResultT\ResultT_implicit_Error_to_ResultT.md = docs\Reference\ResultT\ResultT_implicit_Error_to_ResultT.md
+		docs\Reference\ResultT\ResultT_implicit_T_to_ResultT.md = docs\Reference\ResultT\ResultT_implicit_T_to_ResultT.md
+		docs\Reference\ResultT\ResultT_IsSuccess.md = docs\Reference\ResultT\ResultT_IsSuccess.md
+		docs\Reference\ResultT\ResultT_Value.md = docs\Reference\ResultT\ResultT_Value.md
+	EndProjectSection
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IResult", "IResult", "{695B0CA7-A3E6-4163-A275-F0B34EADFB32}"
 	ProjectSection(SolutionItems) = preProject
 		docs\Reference\IResult\IResult.md = docs\Reference\IResult\IResult.md
@@ -153,6 +166,7 @@ Global
 		{BF50E537-E1F0-4889-887E-FB260398E32C} = {4BBCD0C7-0224-4C06-9A95-680021772CE8}
 		{4165C202-7A49-4AF3-9A7B-A9B22B7190AA} = {4BBCD0C7-0224-4C06-9A95-680021772CE8}
 		{DE76917C-82A8-491F-A8E7-8734B20B0CEA} = {4BBCD0C7-0224-4C06-9A95-680021772CE8}
+		{7E02FB74-633C-4353-8435-DDB2A7EA1FD2} = {4BBCD0C7-0224-4C06-9A95-680021772CE8}
 		{695B0CA7-A3E6-4163-A275-F0B34EADFB32} = {4BBCD0C7-0224-4C06-9A95-680021772CE8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
