@@ -117,6 +117,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TemplatedMessage", "Templat
 		docs\Reference\TemplatedMessage\TemplatedMessage_TemplateId.md = docs\Reference\TemplatedMessage\TemplatedMessage_TemplateId.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IResult", "IResult", "{695B0CA7-A3E6-4163-A275-F0B34EADFB32}"
+	ProjectSection(SolutionItems) = preProject
+		docs\Reference\IResult\IResult.md = docs\Reference\IResult\IResult.md
+		docs\Reference\IResult\IResult_Error.md = docs\Reference\IResult\IResult_Error.md
+		docs\Reference\IResult\IResult_IsSuccess.md = docs\Reference\IResult\IResult_IsSuccess.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -146,6 +153,7 @@ Global
 		{BF50E537-E1F0-4889-887E-FB260398E32C} = {4BBCD0C7-0224-4C06-9A95-680021772CE8}
 		{4165C202-7A49-4AF3-9A7B-A9B22B7190AA} = {4BBCD0C7-0224-4C06-9A95-680021772CE8}
 		{DE76917C-82A8-491F-A8E7-8734B20B0CEA} = {4BBCD0C7-0224-4C06-9A95-680021772CE8}
+		{695B0CA7-A3E6-4163-A275-F0B34EADFB32} = {4BBCD0C7-0224-4C06-9A95-680021772CE8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B2854F93-1DE8-4AA5-8B37-0EB331C30451}
