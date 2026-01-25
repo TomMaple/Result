@@ -62,6 +62,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Reference", "Reference", "{
 		docs\Reference\namespace.md = docs\Reference\namespace.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ErrorUri", "ErrorUri", "{1677CC2E-7348-426A-83CD-F112E39A3226}"
+	ProjectSection(SolutionItems) = preProject
+		docs\Reference\ErrorUri\ErrorUri.md = docs\Reference\ErrorUri\ErrorUri.md
+		docs\Reference\ErrorUri\ErrorUri_constructors.md = docs\Reference\ErrorUri\ErrorUri_constructors.md
+		docs\Reference\ErrorUri\ErrorUri_Locator.md = docs\Reference\ErrorUri\ErrorUri_Locator.md
+		docs\Reference\ErrorUri\ErrorUri_None.md = docs\Reference\ErrorUri\ErrorUri_None.md
+		docs\Reference\ErrorUri\ErrorUri_Tag.md = docs\Reference\ErrorUri\ErrorUri_Tag.md
+		docs\Reference\ErrorUri\ErrorUri_Value.md = docs\Reference\ErrorUri\ErrorUri_Value.md
+	EndProjectSection
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Result", "Result", "{906F16D6-F33A-45A2-A2C7-7E29FF65F538}"
 	ProjectSection(SolutionItems) = preProject
 		docs\Reference\Result\Result.md = docs\Reference\Result\Result.md
@@ -123,6 +133,7 @@ Global
 		{63943D00-F1D6-4390-A150-C9F0796C1752} = {A6FB494F-29B8-49EA-A7CE-FE26E828D00C}
 		{E02A393C-BF22-4DBB-897C-B91B32E5E264} = {4BBCD0C7-0224-4C06-9A95-680021772CE8}
 		{4BBCD0C7-0224-4C06-9A95-680021772CE8} = {0F1DEF9C-233A-4FE7-850F-43556EF8EA77}
+		{1677CC2E-7348-426A-83CD-F112E39A3226} = {4BBCD0C7-0224-4C06-9A95-680021772CE8}
 		{906F16D6-F33A-45A2-A2C7-7E29FF65F538} = {4BBCD0C7-0224-4C06-9A95-680021772CE8}
 		{BF50E537-E1F0-4889-887E-FB260398E32C} = {4BBCD0C7-0224-4C06-9A95-680021772CE8}
 		{4165C202-7A49-4AF3-9A7B-A9B22B7190AA} = {4BBCD0C7-0224-4C06-9A95-680021772CE8}
