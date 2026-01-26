@@ -7,14 +7,14 @@ Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/E
 Provides extension methods for the [IResult](../IResult/IResult.md) interface implementations to handle error scenarios.
 
 ```csharp
-public static class IfErrorAsyncExtensions;
+public static class IfErrorAsyncExtensions
 ```
 
 Inheritance [Object](https://learn.microsoft.com/dotnet/api/system.object) → IfErrorAsyncExtensions
 
 ## Methods
-| Name                             | Description                                                |
-| -------------------------------- | ---------------------------------------------------------- |
+| Name | Description |
+| ---- | ----------- |
 | [IfErrorAsync&lt;TResult&gt;(TResult, Func&lt;Error, Task&gt;, Boolean)](IfErrorAsyncExtensions_IfError.md#iferrorasynctresulttresult-actionerror)  | Executes the provided asynchronous action, if the `TResult` instance represents a failed operation, as an asynchronous operation. |
 | [IfErrorAsync&lt;TResult&gt;(TResult, Func&lt;Error, Task&lt;TResult&gt;&gt;, Boolean)](IfErrorExtensions_IfError.md#iferrorasynctresulttresult-funcerror-tresult) | Executes the provided asynchronous function, if the `TResult` instance represents a failed operation and returns its result, as an asynchronous operation. |
 

@@ -11,7 +11,7 @@ public Result();
 ```
 
 ## Remarks
-> [!NOTE]
+> [!CAUTION]
 > The constructor is not to be used directly—it is required for deserialization.
 > 
 > Instead, use one of the static methods such as [Success()](Result_Success.md) or [FromError(Error)](Result_FromError.md), or the [Implicit(Error to Result)](Result_implicit_Error_to_Result.md) operator to create an instance of the [Result](Result.md) record with appropriate properties.

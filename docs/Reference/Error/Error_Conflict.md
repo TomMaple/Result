@@ -6,8 +6,8 @@ Assembly: Maple.Result.dll<br>
 Creates a new instance of the [Error](Error.md) object of the *Conflict* category.
 
 ## Overloads
-| Name                             | Description                                                |
-| -------------------------------- | ---------------------------------------------------------- |
+| Name | Description |
+| ---- | ----------- |
 | [Conflict(ErrorUri, String, String, ErrorUri, String, (String, Object)[])](#conflicterroruri-string-string-erroruri-string-string-object) | Creates a new conflict error with specified parameters. |
 | [Conflict(ErrorUri, String, String, ErrorUri, String, IEnumerable<KeyValuePair<String, Object>>)](#conflicterroruri-string-string-erroruri-string-ienumerablekeyvaluepairstring-object) | Creates a new conflict error with specified parameters. |
 
@@ -54,7 +54,7 @@ An optional array of named values to be used when rendering the templated messag
 ### Returns
 [Error](Error.md)
 
-A new instance of the [Error](Error.md) class of the *Conflict* [ErrorCategory](../ErrorCategory.md) initialized with provided parameters.
+A new instance of the [Error](Error.md) record of the *Conflict* [ErrorCategory](../ErrorCategory.md) initialized with provided parameters.
 
 ### Exceptions
 [ArgumentException](https://learn.microsoft.com/dotnet/api/system.argumentexception)
@@ -114,7 +114,7 @@ An optional sequence of key-value pairs to be used when rendering the templated 
 ### Returns
 [Error](Error.md)
 
-A new instance of the [Error](Error.md) class of the *Conflict* [ErrorCategory](../ErrorCategory.md) initialized with provided parameters.
+A new instance of the [Error](Error.md) record of the *Conflict* [ErrorCategory](../ErrorCategory.md) initialized with provided parameters.
 
 ### Exceptions
 [ArgumentException](https://learn.microsoft.com/dotnet/api/system.argumentexception)

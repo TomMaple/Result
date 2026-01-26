@@ -20,7 +20,7 @@ This is an optional property.
 
 If present, it should focus on helping the client correct the problem, rather than giving debugging information.
 
-> [!NOTE]
+> [!WARNING]
 > Consumers SHOULD NOT parse the property value for information; the [DetailTemplated](Error_DetailTemplated.md) property is more suitable and less error-prone to obtain such information.
 
 ## Examples

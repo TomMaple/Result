@@ -6,8 +6,8 @@ Assembly: Maple.Result.dll<br>
 Runs a specific asynchronous action or function, if the instance of `TResult` represents a failed operation (i.e., contains an [Error](../Error/Error.md)), as an asynchronous operation.
 
 ## Overloads
-| Name                             | Description                                                |
-| -------------------------------- | ---------------------------------------------------------- |
+| Name | Description |
+| ---- | ----------- |
 | [IfErrorAsync&lt;TResult&gt;(TResult, Func&lt;Error, Task&gt;, Boolean)](#iferrorasynctresulttresult-funcerror-task)  | Executes the provided asynchronous action, if the `TResult` instance represents a failed operation, as an asynchronous operation. |
 | [IfErrorAsync&lt;TResult&gt;(TResult, Func&lt;Error, Task&lt;TResult&gt;&gt;, Boolean)](#iferrorasynctresulttresult-funcerror-tasktresult) | Executes the provided asynchronous function, if the `TResult` instance represents a failed operation and returns its result, as an asynchronous operation. |
 

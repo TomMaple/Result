@@ -9,7 +9,7 @@ Gets or sets the category of the error.
 public ErrorCategory Category { get; init; }
 ```
 
-### PropertyValue
+### Property Value
 [ErrorCategory](../ErrorCategory.md)
 
 The category of the error.

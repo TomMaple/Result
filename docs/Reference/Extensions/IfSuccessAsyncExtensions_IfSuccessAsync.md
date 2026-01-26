@@ -6,8 +6,8 @@ Assembly: Maple.Result.dll<br>
 Runs a specific asynchronous action or function, if the instance of [Result](../Result/Result.md) and [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)), as an asynchronous operation.
 
 ## Overloads
-| Name                             | Description                                                |
-| -------------------------------- | ---------------------------------------------------------- |
+| Name | Description |
+| ---- | ----------- |
 | [IfSuccessAsync(Result, Func&lt;Task&gt;, Boolean)](#ifsuccessasyncresult-functask-boolean) | Executes the specified asynchronous action, if the [Result](../Result/Result.md) represents a successful operation, as an asynchronous operation. |
 | [IfSuccessAsync(Result, Func&lt;Task&lt;Result&gt;&gt;, Boolean)](#ifsuccessasyncresult-functaskresult-boolean) | Executes the specified asynchronous function, if the [Result](../Result/Result.md) represents a successful operation, as an asynchronous operation. |
 | [IfSuccessAsync&lt;T&gt;(Result, Func&lt;Task&lt;T&gt;&gt;, Boolean)](#ifsuccessasynctresult-functaskt-boolean) | Executes the specified asynchronous function, if the [Result](../Result/Result.md) represents a successful operation, as an asynchronous operation. |

@@ -7,7 +7,7 @@ Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/E
 Represents an individual error occurence that contains a problem detail in a [Error](../Error/Error.md) record with optional properties for localization and property pointer.
 
 ```csharp
-public record ErrorDetail(string? PropertyPointer, string Detail, TemplatedMessage? DetailTemplated = null);
+public record ErrorDetail
 ```
 
 Inheritance [Object](https://learn.microsoft.com/dotnet/api/system.object) → [ValueType](https://learn.microsoft.com/dotnet/api/system.valuetype) → [Record](https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/record) → ErrorDetail
@@ -21,16 +21,16 @@ error.AddDetail("#/email", "Email is invalid", "errors-email-invalid",
 ```
 
 ## Constructors
-| Name                             | Description                                                |
-| -------------------------------- | ---------------------------------------------------------- |
-| [ErrorDetail(String, String, TemplatedMessage)](ErrorDetail_constructors.md) | Initializes a new instance of the [ErrorDetail](ErrorDetail.md) class. |
+| Name | Description |
+| ---- | ----------- |
+| [ErrorDetail(String, String, TemplatedMessage)](ErrorDetail_constructors.md) | Initializes a new instance of the [ErrorDetail](ErrorDetail.md) record. |
 
 ## Properties
-| Name                | Description                                                                                             |
-| ------------------- | ------------------------------------------------------------------------------------------------------- |
-| [Detail](ErrorDetail_Detail.md)     | Gets or sets a human-readable explanation of the specific problem detail.          |
+| Name | Description |
+| ---- | ----------- |
+| [Detail](ErrorDetail_Detail.md) | Gets or sets a human-readable explanation of the specific problem detail. |
 | [DetailTemplated](ErrorDetail_DetailTemplated.md) | Gets or sets a templated explanation of the specific problem detail. |
-| [PropertyPointer](ErrorDetail_PropertyPointer.md) | Gets or sets a JSON Pointer which identifies invalid value in the input data.                                           |
+| [PropertyPointer](ErrorDetail_PropertyPointer.md) | Gets or sets a JSON Pointer which identifies invalid value in the input data. |
 
 
 ## See Also

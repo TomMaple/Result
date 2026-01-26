@@ -3,6 +3,7 @@
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>
 Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/ErrorDetail.cs#L22" target="_blank">ErrorDetail.cs</a>
+
 Initializes a new instance of the [ErrorDetail](ErrorDetail.md) record.
 
 ```csharp

@@ -6,8 +6,8 @@ Assembly: Maple.Result.dll<br>
 Runs a specific action or function if the instance of `TResult` represents a failed operation (i.e., contains an [Error](../Error/Error.md)).
 
 ## Overloads
-| Name                             | Description                                                |
-| -------------------------------- | ---------------------------------------------------------- |
+| Name | Description |
+| ---- | ----------- |
 | [IfError&lt;TResult&gt;(TResult, Action&lt;Error&gt;)](#iferrortresulttresult-actionerror) | Executes the provided action if the `TResult` instance represents a failed operation. |
 | [IfError&lt;TResult&gt;(TResult, Func&lt;Error, TResult&gt;)](#iferrortresulttresult-funcerror-tresult) | Executes the provided function if the `TResult` instance represents a failed operation and returns its result. |
 

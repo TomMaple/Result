@@ -1,4 +1,4 @@
-﻿# Result class
+﻿# Result Record
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>
@@ -18,12 +18,12 @@ Implements [IResult](../IResult/IResult.md)
 > [!NOTE]
 > This type is used to represent the result of an operation that does not return a value.
 > 
-> For operations that return a value, consider using the generic [Result&lt;T&gt;](Result_T.md) class.
+> For operations that return a value, consider using the generic [Result&lt;T&gt;](../ResultT/ResultT.md) record.
 
-If the operation is successful, the [IsSuccess](Result_IsSuccess.md) property will be `true`, and if it fails, the [IsFailure](Result_IsFailure.md) property will be `true`, and the [Error](Result_Error.md) property will contain details about the failure.
+If the operation is successful, the [IsSuccess](Result_IsSuccess.md) property will be `true`, otherwise, it will be `false`, and the [Error](Result_Error.md) property will contain details about the failure.
 
-> [!NOTE]
-> Use static factory methods to create instances of this class, such as [Result.Success()](Result_Success.md) and [Result.FromError(Error)](Result_FromError.md), or the [Implicit(Error to Result)](Result_implicit_Error_to_Result.md) operator rather than using the constructor directly.
+> [!CAUTION]
+> Use static factory methods to create instances of this record, such as [Result.Success()](Result_Success.md) and [Result.FromError(Error)](Result_FromError.md), or the [Implicit(Error to Result)](Result_implicit_Error_to_Result.md) operator rather than using the constructor directly.
 
 ## Examples
 ```csharp
@@ -47,31 +47,31 @@ public Result DeleteUser(int userId)
 ```
 
 ## Constructors
-| Name                               | Description                                                  |
-| ---------------------------------- | ------------------------------------------------------------ |
-| [Result()](Result_constructors.md) | Initializes a new instance of the [Result](Result.md) class. |
+| Name | Description |
+| ---- | ----------- |
+| [Result()](Result_constructors.md) | Initializes a new instance of the [Result](Result.md) record. |
 
 ## Properties
-| Name                     | Description                                                        |
-| ------------------------ | ------------------------------------------------------------------ |
+| Name | Description |
+| ---- | ----------- |
 | [Error](Result_Error.md) | Gets or sets the error details if the result represents a failure. |
 
 ## Methods
-| Name                                           | Description                                               |
-| ---------------------------------------------- | --------------------------------------------------------- |
-| [FromError(Error)](Result_FromError.md)        | Creates a new failure [Result](Result.md) from the specified [Error](../Error/Error.md). |
-| [FromValue&lt;T&gt;(T)](Result_FromValue_T.md) | Creates a new successful [Result&lt;T&gt;](Result_T.md) containing the specified value. |
-| [IsSuccess()](Result_IsSuccess.md)             | Returns an indicator whether the result represents a successful operation. |
-| [Success()](Result_Success.md)                 | Creates a new instance of successful [Result](Result.md). |
+| Name | Description |
+| ---- | ----------- |
+| [FromError(Error)](Result_FromError.md) | Creates a new failure [Result](Result.md) from the specified [Error](../Error/Error.md). |
+| [FromValue&lt;T&gt;(T)](Result_FromValue_T.md) | Creates a new successful [Result&lt;T&gt;](../ResultT/ResultT.md) containing the specified value. |
+| [IsSuccess()](Result_IsSuccess.md) | Returns an indicator whether the result represents a successful operation. |
+| [Success()](Result_Success.md) | Creates a new instance of successful [Result](Result.md). |
 
 ## Operators
-| Name                                 | Description                                               |
-| ------------------------------------ | --------------------------------------------------------- |
+| Name | Description |
+| ---- | ----------- |
 | [Implicit(Error to Result)](Result_implicit_Error_to_Result.md) | Defines an implicit conversion of a given [Error](../Error/Error.md) to a failure [Result](Result.md). |
 
 ## Extension Methods
-| Name                                         | Description                                                       |
-| -------------------------------------------- | ----------------------------------------------------------------- |
+| Name | Description |
+| ---- | ----------- |
 | [IfError&lt;TResult&gt;(TResult, Action&lt;Error&gt;)](../Extensions/IfErrorExtensions_IfError.md#iferrortresulttresult-actionerror) | Executes the specified action, if the [Result](Result.md) represents a failure. |
 | [IfError&lt;TResult&gt;(TResult, Func&lt;Error, Result&gt;)](../Extensions/IfErrorExtensions_IfError.md#iferrortresulttresult-funcerror-tresult) | Executes the specified function, if the [Result](Result.md) represents a failure. |
 | [IfErrorAsync&lt;TResult&gt;(TResult, Func&lt;Error, Task&gt;, Boolean)](../Extensions/IfErrorAsyncExtensions_IfErrorAsync.md#iferrorasynctresulttresult-funcerror-task) | Executes the specified asynchronous function, if the [Result](Result.md) represents a failure, as an asynchronous operation. |
@@ -98,3 +98,7 @@ public Result DeleteUser(int userId)
 | [MatchAsync&lt;T&gt;(Result, Func&lt;Task&lt;T&gt;&gt;, Func&lt;Error, Task&lt;T&gt;&gt;, Boolean)](../Extensions/MatchAsyncExtensions_MatchAsync.md#matchasynctresult-functaskt-funcerror-taskt-boolean) | Executes one of the specified asynchronous functions as an asynchronous operation depending on whether the [Result](../Result/Result.md) represents a success or a failure. |
 | [MatchAsync&lt;T&gt;(Result, Func&lt;Task&lt;Result&lt;T&gt;&gt;&gt;, Func&lt;Error, Task&gt;, Boolean)](../Extensions/MatchAsyncExtensions_MatchAsync.md#matchasynctresult-functaskresultt-funcerror-task-boolean) | Executes the specified asynchronous function or action as an asynchronous operation depending on whether the [Result](../Result/Result.md) represents a success or a failure. |
 | [MatchAsync&lt;T&gt;(Result, Func&lt;Task&lt;Result&lt;T&gt;&gt;&gt;, Func&lt;Error, Task&lt;Result&lt;T&gt;&gt;&gt;, Boolean)](../Extensions/MatchAsyncExtensions_MatchAsync.md#matchasynctresult-functaskresultt-funcerror-taskresultt-boolean) | Executes one of the specified asynchronous functions as an asynchronous operation depending on whether the [Result](../Result/Result.md) represents a success or a failure. |
+
+## See Also
+* [IResult](../IResult/IResult.md)
+* [Result&lt;T&gt;](../ResultT/ResultT.md)

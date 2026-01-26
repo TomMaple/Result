@@ -5,17 +5,19 @@ Assembly: Maple.Result.dll<br>
 Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Result.cs#L76" target="_blank">Result.cs</a>
 
 Gets or sets the error that caused the operation to fail.
+
 ```csharp
 public Error? Error { get; init; }
 ```
 
-### PropertyValue
-[Error](../Error.md)
+### Property Value
+[Error](../Error/Error.md)
 
 The error, if the result represents a failure; otherwise, `null`.
 
 ## Remarks
-If this property has a value (other than `null`), it indicates that the operation has failed.
+> [!CAUTION]
+> Use the [IsSuccess()](IResult_IsSuccess.md) method to check whether the result represents a success or a failure before accessing this property.
 
 ## See Also
-* [Error](../Error.md)
+* [Error](../Error/Error.md)

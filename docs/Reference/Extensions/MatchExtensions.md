@@ -7,14 +7,14 @@ Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/E
 Provides extension methods for the [Result](../Result/Result.md) and [Result&lt;T&gt;](../ResultT/ResultT.md) records to handle both successful and failure scenarios.
 
 ```csharp
-public static class MatchExtensions;
+public static class MatchExtensions
 ```
 
 Inheritance [Object](https://learn.microsoft.com/dotnet/api/system.object) → MatchExtensions
 
 ## Methods
-| Name                             | Description                                                |
-| -------------------------------- | ---------------------------------------------------------- |
+| Name | Description |
+| ---- | ----------- |
 | [Match(Result, Action, Action&lt;Error&gt;)](MatchExtensions_Match.md#matchresult-func-funcerror-boolean) | Executes one of the specified actions depending on whether the [Result](../Result/Result.md) represents a success or a failure. |
 | [Match(Result, Func&lt;Result&gt;, Action&lt;Error&gt;)](MatchExtensions_Match.md#matchresult-funcresult-funcerror-boolean) | Executes the specified function or action depending on whether the [Result](../Result/Result.md) represents a success or a failure. |
 | [Match(Result, Func&lt;Result&gt;, Func&lt;Error, Result&gt;)](MatchExtensions_Match.md#matchresult-funcresult-funcerror-result-boolean) | Executes one of the specified functions depending on whether the [Result](../Result/Result.md) represents a success or a failure. |

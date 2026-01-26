@@ -30,7 +30,7 @@ An optional array of named values to be used when rendering the templated messag
 ### Returns
 [Error](Error.md)
 
-The current instance of the [Error](Error.md) class with the new error detail added.
+The current instance of the [Error](Error.md) record with the new error detail added.
 
 ## Remarks
 > [!NOTE]
@@ -40,7 +40,7 @@ This is a collection of individual error occurrences found, or an empty collecti
 
 Each item is a [ErrorDetail](../ErrorDetail/ErrorDetail.md) object that describes a specific aspect of the overall error condition. It contains properties that provide a human-readable message, and optionally a templated message (so than the client can localize it) and a property path indicating the specific part of the request that caused the error.
 
-It should not be assigned directly (i.e., via the property setter) but rather through the [AddDetail(String, String, String, (String, Object)[])](Error_AddDetail.md) method of the [Error](Error.md) class, which uses [TemplatedMessage](../TemplatedMessage/TemplatedMessage.md) to validate and provide the value. For deserialization, the setter is marked as `init` to allow assignment during object initialization.
+It should not be assigned directly (i.e., via the property setter) but rather through the [AddDetail(String, String, String, (String, Object)[])](Error_AddDetail.md) method of the [Error](Error.md) record, which uses [TemplatedMessage](../TemplatedMessage/TemplatedMessage.md) to validate and provide the value. For deserialization, the setter is marked as `init` to allow assignment during object initialization.
 
 ## Examples
 ```csharp

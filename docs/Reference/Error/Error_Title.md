@@ -23,8 +23,8 @@ This is a mandatory property.
 
 The value is advisory and is included only for users who are unaware of and cannot discover the semantics of the type *URI* (e.g., during offline log analysis).
 
-> [!NOTE]
-> It should not be assigned directly (i.e., via the property setter) but rather through the factory methods of the [Error](Error.md) class, which use [ErrorUri](../ErrorUri/ErrorUri.md) to validate and provide the value. For deserialization, the setter is marked as `init` to allow assignment during object initialization.
+> [!CAUTION]
+> It should not be assigned directly (i.e., via the property setter) but rather through the factory methods of the [Error](Error.md) record, which use [ErrorUri](../ErrorUri/ErrorUri.md) to validate and provide the value. For deserialization, the setter is marked as `init` to allow assignment during object initialization.
 
 ## Examples
 ```csharp

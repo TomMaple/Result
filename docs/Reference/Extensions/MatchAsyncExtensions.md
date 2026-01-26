@@ -7,14 +7,14 @@ Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/E
 Provides extension methods for the [Result](../Result/Result.md) and [Result&lt;T&gt;](../ResultT/ResultT.md) records to handle both successful and failure scenarios.
 
 ```csharp
-public static class MatchAsyncExtensions;
+public static class MatchAsyncExtensions
 ```
 
 Inheritance [Object](https://learn.microsoft.com/dotnet/api/system.object) → MatchAsyncExtensions
 
 ## Methods
-| Name                             | Description                                                |
-| -------------------------------- | ---------------------------------------------------------- |
+| Name | Description |
+| ---- | ----------- |
 | [MatchAsync(Result, Func&lt;Task&gt;, Func&lt;Error, Task&gt;, Boolean)](MatchAsyncExtensions_MatchAsync.md#matchasyncresult-functask-funcerror-task-boolean) | Executes one of the specified asynchronous actions as an asynchronous operation depending on whether the [Result](../Result/Result.md) represents a success or a failure. |
 | [MatchAsync(Result, Func&lt;Task&lt;Result&gt;&gt;, Func&lt;Error, Task&gt;, Boolean)](MatchAsyncExtensions_MatchAsync.md#matchasyncresult-functaskresult-funcerror-task-boolean) | Executes the specified asynchronous function or action as an asynchronous operation depending on whether the [Result](../Result/Result.md) represents a success or a failure. |
 | [MatchAsync(Result, Func&lt;Task&lt;Result&gt;&gt;, Func&lt;Error, Task&lt;Result&gt;&gt;, Boolean)](MatchAsyncExtensions_MatchAsync.md#matchasyncresult-functaskresult-funcerror-taskresult-boolean) | Executes one of the specified asynchronous functions as an asynchronous operation depending on whether the [Result](../Result/Result.md) represents a success or a failure. |

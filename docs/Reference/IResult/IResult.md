@@ -13,13 +13,13 @@ public interface IResult
 Derived [Maple.Result.Result](../Result/Result.md), [Maple.Result.Result&lt;T&gt;](../ResultT/ResultT.md)
 
 ## Properties
-| Name                      | Description                                                        |
-| ------------------------- | ------------------------------------------------------------------ |
+| Name | Description |
+| ---- | ----------- |
 | [Error](IResult_Error.md) | Gets or sets the error details if the result represents a failure. |
 
 ## Methods
-| Name                                | Description                                               |
-| ----------------------------------- | --------------------------------------------------------- |
+| Name | Description |
+| ---- | ----------- |
 | [IsSuccess()](IResult_IsSuccess.md) | Returns an indicator whether the result represents a successful operation. |
 
 ## See also

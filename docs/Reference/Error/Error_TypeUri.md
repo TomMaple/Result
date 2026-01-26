@@ -18,8 +18,8 @@ A text value of a *URI* that identifies the type of the problem.
 ## Remarks
 This is a mandatory property that contains a text value of a *URI* that identifies the type of the problem.
 
-> [!NOTE]
-> It should not be assigned directly (i.e., via the property setter) but rather through the factory methods of the [Error](Error.md) class, which use [ErrorUri](../ErrorUri/ErrorUri.md) to validate and provide the value. For deserialization, the setter is marked as `init` to allow assignment during object initialization.
+> [!CAUTION]
+> It should not be assigned directly (i.e., via the property setter) but rather through the factory methods of the [Error](Error.md) record, which use [ErrorUri](../ErrorUri/ErrorUri.md) to validate and provide the value. For deserialization, the setter is marked as `init` to allow assignment during object initialization.
 
 The value of this property should be:
 * `about:blank`,
@@ -33,7 +33,7 @@ If the value is a *URI Tag*, it is not dereferenceable and uniquely represents t
 ## Examples
 ```csharp
 var error = Error.NotFound(
-                // uses the ErrorUri class to provide value for the TypeUri property
+                // uses the ErrorUri record to provide value for the TypeUri property
                 ErrorUri.Tag("tag:exampleapp.com,2026:errors:user:not-found"),
                 "User has not been found.");
 ```

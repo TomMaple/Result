@@ -11,8 +11,10 @@ public Error();
 ```
 
 ## Remarks
-> [!NOTE]
-> The constructor is not to be used directly—it is required for deserialization.
+> [!CAUTION]
+> Do not use this constructor directly, as it does NOT validate the values, which may also cause unwanted side effects.
+>
+> This constructor is required for deserialization.
 > 
 > Instead, use one of the static methods such as [Conflict(ErrorUri, String, String, ErrorUri, String, (String, Object)[])](Error_Conflict.md), [Failure(ErrorUri, String, String, ErrorUri, String, (String, Object)[])](Error_Failure.md), [NotFound(ErrorUri, String, String, ErrorUri, String, (String, Object)[])](Error_NotFound.md), [Unauthorized(ErrorUri, String, String, ErrorUri, String, (String, Object)[])](Error_Unauthorized.md) or others to create an instance of the [Error](Error.md) record with appropriate properties.
 

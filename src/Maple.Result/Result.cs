@@ -46,7 +46,7 @@ public sealed record Result : IResult
     #region constructors
 
     /// <summary>
-    ///     Initializes a new instance of the successful <see cref="Result" /> class.
+    ///     Initializes a new instance of the successful <see cref="Result" /> record.
     /// </summary>
     /// <remarks>
     ///     <para>
@@ -149,7 +149,7 @@ public sealed record Result<T> : IResult
     #region constructors
 
     /// <summary>
-    ///     Initializes a new instance of the successful <see cref="Result{T}" /> class.
+    ///     Initializes a new instance of the successful <see cref="Result{T}" /> record.
     /// </summary>
     /// <remarks>
     ///     <para>

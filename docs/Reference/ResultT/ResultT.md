@@ -94,9 +94,9 @@ public Result<User> GetUser(int userId)
 ## Methods
 | Name | Description |
 | ---- | ----------- |
-| [FromError(Error)](Result_FromError.md)        | Creates a new failure [Result](Result.md) from the specified [Error](../Error/Error.md). |
-| [FromValue(T)](Result_FromValue_T.md) | Creates a new successful [Result&lt;T&gt;](Result_T.md) containing the specified value. |
-| [IsSuccess()](Result_IsSuccess.md)             | Returns an indicator whether the result represents a successful operation. |
+| [FromError(Error)](Result_FromError.md) | Creates a new failure [Result&lt;T&gt;](ResultT.md) from the specified [Error](../Error/Error.md). |
+| [FromValue(T)](Result_FromValue_T.md) | Creates a new successful [Result&lt;T&gt;](ResultT.md) containing the specified value. |
+| [IsSuccess()](Result_IsSuccess.md) | Returns an indicator whether the result represents a successful operation. |
 
 ## Operators
 | Name | Description |
@@ -107,10 +107,10 @@ public Result<User> GetUser(int userId)
 ## Extension Methods
 | Name | Description |
 | ---- | ----------- |
-| [IfError&lt;TResult&gt;(TResult, Action&lt;Error&gt;)](../Extensions/IfErrorExtensions_IfError.md#iferrortresulttresult-actionerror) | Executes the specified action, if the [Result](Result.md) represents a failure. |
-| [IfError&lt;TResult&gt;(TResult, Func&lt;Error, Result&gt;)](../Extensions/IfErrorExtensions_IfError.md#iferrortresulttresult-funcerror-tresult) | Executes the specified function, if the [Result](Result.md) represents a failure. |
-| [IfErrorAsync&lt;TResult&gt;(TResult, Func&lt;Error, Task&gt;, Boolean)](../Extensions/IfErrorAsyncExtensions_IfErrorAsync.md#iferrorasynctresulttresult-funcerror-task) | Executes the specified asynchronous function, if the [Result](Result.md) represents a failure, as an asynchronous operation. |
-| [IfErrorAsync&lt;TResult&gt;(TResult, Func&lt;Error, Task&lt;TResult&gt;&gt;, Boolean)](../Extensions/IfErrorAsyncExtensions_IfErrorAsync.md#iferrorasynctresulttresult-funcerror-tasktresult) | Executes the specified asynchronous function, if the [Result](Result.md) represents a failure, as an asynchronous operation. |
+| [IfError&lt;TResult&gt;(TResult, Action&lt;Error&gt;)](../Extensions/IfErrorExtensions_IfError.md#iferrortresulttresult-actionerror) | Executes the specified action, if the [Result&lt;T&gt;](ResultT.md) represents a failure. |
+| [IfError&lt;TResult&gt;(TResult, Func&lt;Error, Result&gt;)](../Extensions/IfErrorExtensions_IfError.md#iferrortresulttresult-funcerror-tresult) | Executes the specified function, if the [Result&lt;T&gt;](ResultT.md) represents a failure. |
+| [IfErrorAsync&lt;TResult&gt;(TResult, Func&lt;Error, Task&gt;, Boolean)](../Extensions/IfErrorAsyncExtensions_IfErrorAsync.md#iferrorasynctresulttresult-funcerror-task) | Executes the specified asynchronous function, if the [Result&lt;T&gt;](ResultT.md) represents a failure, as an asynchronous operation. |
+| [IfErrorAsync&lt;TResult&gt;(TResult, Func&lt;Error, Task&lt;TResult&gt;&gt;, Boolean)](../Extensions/IfErrorAsyncExtensions_IfErrorAsync.md#iferrorasynctresulttresult-funcerror-tasktresult) | Executes the specified asynchronous function, if the [Result&lt;T&gt;](ResultT.md) represents a failure, as an asynchronous operation. |
 | [IfSuccess&lt;T&gt;(Result&lt;T&gt;, Action&lt;T&gt;)](../Extensions/IfSuccessExtensions_IfSuccess.md#ifsuccesstresultt-funct-) | Executes the specified action, if the [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation. |
 | [IfSuccess&lt;T&gt;(Result&lt;T&gt;, Func&lt;T, Result&gt;)](../Extensions/IfSuccessExtensions_IfSuccess.md#ifsuccesstresultt-funct-result) | Executes the specified function, if the [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation. |
 | [IfSuccess&lt;T, TNext&gt;(Result&lt;T&gt;, Func&lt;T, TNext&gt;)](../Extensions/IfSuccessExtensions_IfSuccess.md#ifsuccesst-tnextresultt-funct-tnext) | Executes the specified function, if the [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation. |

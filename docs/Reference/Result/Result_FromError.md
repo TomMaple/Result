@@ -4,19 +4,20 @@ Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>
 Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Result.cs#L117" target="_blank">Result.cs</a>
 
-Creates a new instance of the [Result](Result.md) record (without value) that represents a failed operation with the specified [Error](Error.md).
+Creates a new instance of the [Result](Result.md) record (without value) that represents a failed operation with the specified [Error](../Error/Error.md).
+
 ```csharp
 public static Result FromError(Error error);
 ```
 
 ### Parameters
-#### `error` [Error](Error.md)
-The [Error](Error.md) instance that represents the error that occurred. This error will be associated with the created [Result](Result.md) instance.
+#### `error` [Error](../Error/Error.md)
+The [Error](../Error/Error.md) instance that represents the error that occurred. This error will be associated with the created [Result](Result.md) instance.
 
 ### Returns
-[Error](Error.md)
+[Result](Result.md)
 
-A new instance of the [Result](Result.md) current instance of the [Error](Error.md) class with the new error detail added.
+A new instance of the failure [Result](Result.md) instance with the provided instance of the [Error](../Error/Error.md) record.
 
 ## Remarks
 > [!NOTE]

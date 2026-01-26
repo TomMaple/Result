@@ -7,14 +7,14 @@ Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/E
 Provides extension methods for the [Result](../Result/Result.md) and [Result&lt;T&gt;](../ResultT/ResultT.md) records to handle successful scenarios.
 
 ```csharp
-public static class IfSuccessAsyncExtensions;
+public static class IfSuccessAsyncExtensions
 ```
 
 Inheritance [Object](https://learn.microsoft.com/dotnet/api/system.object) → IfSuccessAsyncExtensions
 
 ## Methods
-| Name                             | Description                                                |
-| -------------------------------- | ---------------------------------------------------------- |
+| Name | Description |
+| ---- | ----------- |
 | [IfSuccessAsync(Result, Func&lt;Task&gt;, Boolean)](IfSuccessAsyncExtensions_IfSuccessAsync.md#ifsuccessasyncresult-functask-boolean) | Executes the specified asynchronous action, if the [Result](../Result/Result.md) represents a successful operation, as an asynchronous operation. |
 | [IfSuccessAsync(Result, Func&lt;Task&lt;Result&gt;&gt;, Boolean)](IfSuccessAsyncExtensions_IfSuccessAsync.md#ifsuccessasyncresult-functaskresult-boolean) | Executes the specified asynchronous function, if the [Result](../Result/Result.md) represents a successful operation, as an asynchronous operation. |
 | [IfSuccessAsync&lt;T&gt;(Result, Func&lt;Task&lt;T&gt;&gt;, Boolean)](IfSuccessAsyncExtensions_IfSuccessAsync.md#ifsuccessasynctresult-functaskt-boolean) | Executes the specified asynchronous function, if the [Result](../Result/Result.md) represents a successful operation, as an asynchronous operation. |

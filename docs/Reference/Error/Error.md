@@ -1,10 +1,10 @@
-﻿# Error class
+﻿# Error record
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>
 Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Error.cs" target="_blank">Error.cs</a>
 
-Represents an error in a [Result](../Result.md) with optional properties for localization and multiple error details.
+Represents an error in a [Result](../Result/Result.md) with optional properties for localization and multiple error details.
 
 ```csharp
 public record Error
@@ -35,24 +35,24 @@ public Result DeleteUser(int userId)
 It follows the [RFC 9457](https://datatracker.ietf.org/doc/html/rfc9457) standard for error responses.
 
 ## Constructors
-| Name                             | Description                                                |
-| -------------------------------- | ---------------------------------------------------------- |
-| [Error()](Error_constructors.md) | Initializes a new instance of the [Error](Error.md) class. |
+| Name | Description |
+| ---- | ----------- |
+| [Error()](Error_constructors.md) | Initializes a new instance of the [Error](Error.md) record. |
 
 ## Properties
-| Name                | Description                                                                                             |
-| ------------------- | ------------------------------------------------------------------------------------------------------- |
-| [Category](Error_Category.md) | Gets or sets the category of the error.                                                       |
-| [Detail](Error_Detail.md)     | Gets or sets a human-readable explanation of the specific occurrence of the problem.          |
+| Name | Description |
+| ---- | ----------- |
+| [Category](Error_Category.md) | Gets or sets the category of the error. |
+| [Detail](Error_Detail.md) | Gets or sets a human-readable explanation of the specific occurrence of the problem. |
 | [DetailTemplated](Error_DetailTemplated.md) | Gets or sets a templated explanation of the specific occurrence of the problem. |
-| [ErrorDetails](Error_ErrorDetails.md) | Gets or sets a collection of error details.                                           |
-| [InstanceUri](Error_InstanceUri.md) | Gets or sets a *URI* that identifies the specific occurrence of the problem.              |
-| [Title](Error_Title.md)       | Gets or sets a short, human-readable summary of the problem type.                             |
-| [TypeUri](Error_TypeUri.md)   | Gets or sets a *URI* that identifies the type of the problem.                                   |
+| [ErrorDetails](Error_ErrorDetails.md) | Gets or sets a collection of error details. |
+| [InstanceUri](Error_InstanceUri.md) | Gets or sets a *URI* that identifies the specific occurrence of the problem. |
+| [Title](Error_Title.md) | Gets or sets a short, human-readable summary of the problem type. |
+| [TypeUri](Error_TypeUri.md) | Gets or sets a *URI* that identifies the type of the problem. |
 
 ## Methods
-| Name                             | Description                                                |
-| -------------------------------- | ---------------------------------------------------------- |
+| Name | Description |
+| ---- | ----------- |
 | [AddDetail(String, String, String, (String, Object)[])](Error_AddDetail.md) | Adds a new set of error details to the current error and returns the current instance. |
 | [Conflict(ErrorUri, String, String, ErrorUri, String, (String, Object)[])](Error_Conflict.md#conflicterroruri-string-string-erroruri-string-string-object) | Creates a new conflict error with specified parameters. |
 | [Conflict(ErrorUri, String, String, ErrorUri, String, IEnumerable<KeyValuePair<String, Object>>)](Error_Conflict.md#conflicterroruri-string-string-erroruri-string-ienumerablekeyvaluepairstring-object) | Creates a new conflict error with specified parameters. |

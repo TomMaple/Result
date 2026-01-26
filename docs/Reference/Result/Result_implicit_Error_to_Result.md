@@ -10,10 +10,14 @@ Defines an implicit conversion of a given [Error](../Error/Error.md) to a failur
 public static implicit operator Result(Error error);
 ```
 
+### Parameters
+#### `error` [Error](../Error/Error.md)
+An [Error](../Error/Error.md) to implicitly convert.
+
 ### Returns
 [Result](Result.md)
 
-A new instance of the [Result](Result.md) record (without a value) that represents a failed operation with provided [Error](../Error/Error.md).
+A new instance of the [Result](Result.md) record (without a value) that represents a failed operation with the provided [Error](../Error/Error.md).
 
 ## Remarks
 > [!NOTE]

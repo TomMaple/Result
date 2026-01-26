@@ -7,14 +7,14 @@ Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/E
 Provides extension methods for the [IResult](../IResult/IResult.md) interface implementations to handle error scenarios.
 
 ```csharp
-public static class IfErrorExtensions;
+public static class IfErrorExtensions
 ```
 
 Inheritance [Object](https://learn.microsoft.com/dotnet/api/system.object) → IfErrorExtensions
 
 ## Methods
-| Name                             | Description                                                |
-| -------------------------------- | ---------------------------------------------------------- |
+| Name | Description |
+| ---- | ----------- |
 | [IfError&lt;TResult&gt;(TResult, Action&lt;Error&gt;)](IfErrorExtensions_IfError.md#iferrortresulttresult-actionerror) | Executes the provided action if the `TResult` instance represents a failed operation. |
 | [IfError&lt;TResult&gt;(TResult, Func&lt;Error, TResult&gt;)](IfErrorExtensions_IfError.md#iferrortresulttresult-funcerror-tresult) | Executes the provided function if the `TResult` instance represents a failed operation and returns its result. |
 

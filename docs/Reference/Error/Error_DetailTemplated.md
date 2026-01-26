@@ -24,8 +24,8 @@ It allows clients to localize the error detail message based on the user’s loc
 
 It should contain equivalent information to the [Detail](Error_Detail.md) property but in a structured format suitable for localization and dynamic content generation.
 
-> [!NOTE]
-> It should not be assigned directly (i.e., via the property setter) but rather through the factory methods of the [Error](Error.md) class, which use [TemplatedMessage](../TemplatedMessage/TemplatedMessage.md) to validate and build the value. For deserialization, the setter is marked as `init` to allow assignment during object initialization.
+> [!CAUTION]
+> It should not be assigned directly (i.e., via the property setter) but through the factory methods of the [Error](Error.md) record, which use [TemplatedMessage](../TemplatedMessage/TemplatedMessage.md) to validate and build the value. For deserialization, the setter is marked as `init` to allow assignment during object initialization.
 
 ## Examples
 ```csharp

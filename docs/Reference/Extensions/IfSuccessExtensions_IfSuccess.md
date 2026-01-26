@@ -6,8 +6,8 @@ Assembly: Maple.Result.dll<br>
 Runs a specific action or function, if the instance of [Result](../Result/Result.md) and [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)).
 
 ## Overloads
-| Name                             | Description                                                |
-| -------------------------------- | ---------------------------------------------------------- |
+| Name | Description |
+| ---- | ----------- |
 | [IfSuccess(Result, Action)](#ifsuccessresult-func) | Executes the specified action, if the [Result](../Result/Result.md) represents a successful operation. |
 | [IfSuccess(Result, Func&lt;Result&gt;)](#ifsuccessresult-funcresult) | Executes the specified function, if the [Result](../Result/Result.md) represents a successful operation. |
 | [IfSuccess&lt;T&gt;(Result, Func&lt;T&gt;)](#ifsuccesstresult-funct) | Executes the specified function, if the [Result](../Result/Result.md) represents a successful operation. |

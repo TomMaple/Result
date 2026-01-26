@@ -28,7 +28,7 @@ public record Error
     #region constructors
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="Error" /> class with default values.
+    ///     Initializes a new instance of the <see cref="Error" /> record with default values.
     /// </summary>
     /// <remarks>
     ///     <para>

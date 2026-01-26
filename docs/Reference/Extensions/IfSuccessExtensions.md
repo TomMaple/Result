@@ -7,14 +7,14 @@ Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/E
 Provides extension methods for the [Result](../Result/Result.md) and [Result&lt;T&gt;](../ResultT/ResultT.md) records to handle successful scenarios.
 
 ```csharp
-public static class IfSuccessExtensions;
+public static class IfSuccessExtensions
 ```
 
 Inheritance [Object](https://learn.microsoft.com/dotnet/api/system.object) → IfSuccessExtensions
 
 ## Methods
-| Name                             | Description                                                |
-| -------------------------------- | ---------------------------------------------------------- |
+| Name | Description |
+| ---- | ----------- |
 | [IfSuccess(Result, Action)](IfSuccessExtensions_IfSuccess.md#ifsuccessresult-func) | Executes the specified action, if the [Result](../Result/Result.md) represents a successful operation. |
 | [IfSuccess(Result, Func&lt;Result&gt;)](IfSuccessExtensions_IfSuccess.md#ifsuccessresult-funcresult) | Executes the specified function, if the [Result](../Result/Result.md) represents a successful operation. |
 | [IfSuccess&lt;T&gt;(Result, Func&lt;T&gt;)](IfSuccessExtensions_IfSuccess.md#ifsuccesstresult-funct) | Executes the specified function, if the [Result](../Result/Result.md) represents a successful operation. |
