@@ -22,6 +22,14 @@ Derived [Maple.Result.Result](../Result/Result.md), [Maple.Result.Result&lt;T&gt
 | ---- | ----------- |
 | [IsSuccess()](IResult_IsSuccess.md) | Returns an indicator whether the result represents a successful operation. |
 
+## Extension Methods
+| Name | Description |
+| ---- | ----------- |
+| [IfError&lt;TResult&gt;(TResult, Action&lt;Error&gt;)](../Extensions/IfErrorExtensions_IfError.md#iferrortresulttresult-actionerror) | Executes the specified action, if the [IResult](IResult.md) represents a failure. |
+| [IfError&lt;TResult&gt;(TResult, Func&lt;Error, Result&gt;)](../Extensions/IfErrorExtensions_IfError.md#iferrortresulttresult-funcerror-tresult) | Executes the specified function, if the [IResult](IResult.md) represents a failure. |
+| [IfErrorAsync&lt;TResult&gt;(TResult, Func&lt;Error, Task&gt;, Boolean)](../Extensions/IfErrorAsyncExtensions_IfErrorAsync.md#iferrorasynctresulttresult-funcerror-task) | Executes the specified asynchronous function, if the [IResult](IResult.md) represents a failure, as an asynchronous operation. |
+| [IfErrorAsync&lt;TResult&gt;(TResult, Func&lt;Error, Task&lt;TResult&gt;&gt;, Boolean)](../Extensions/IfErrorAsyncExtensions_IfErrorAsync.md#iferrorasynctresulttresult-funcerror-tasktresult) | Executes the specified asynchronous function, if the [IResult](IResult.md) represents a failure, as an asynchronous operation. |
+
 ## See also
 * [Result](../Result/Result.md)
 * [Result&lt;T&gt;](../ResultT/ResultT.md)

@@ -4,7 +4,7 @@ Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>
 Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/ErrorDetail.cs" target="_blank">ErrorDetail.cs</a>
 
-Represents an individual error occurence that contains a problem detail in a [Error](../Error/Error.md) record with optional properties for localization and property pointer.
+Represents an individual error occurrence that contains a problem detail in a [Error](../Error/Error.md) record with optional properties for localization and property pointer.
 
 ```csharp
 public record ErrorDetail

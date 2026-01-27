@@ -147,7 +147,7 @@ public record Error
     ///             <term>URI Locator</term>
     ///             <description>
     ///                 dereferencing it SHOULD provide the problem details object or
-    ///                 information about the problem occurence in other formats through use of proactive content negotiation;
+    ///                 information about the problem occurrence in other formats through use of proactive content negotiation;
     ///                 it is recommended to use absolute rather than relative <i>URI</i>s to avoid confusion and malfunctions;
     ///             </description>
     ///         </item>
@@ -175,7 +175,7 @@ public record Error
     }
 
     /// <summary>
-    ///     Adds details of an individual error occurence found.
+    ///     Adds details of an individual error occurrence found.
     /// </summary>
     /// <param name="propertyPointer">The JSON Pointer which identifies the invalid value in the input data.</param>
     /// <param name="detail">The human-readable explanation specific to this individual error occurrence.</param>
