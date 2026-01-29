@@ -13,7 +13,7 @@ using Maple.Result.Validators;
 namespace Maple.Result;
 
 /// <summary>
-///     Represents a URI that identifies or describes the type or category of an error in a standardized format.
+///     Represents a <i>URI</i> that identifies or describes the type or category of an error in a standardized format.
 /// </summary>
 /// <remarks>
 ///     It can be
@@ -24,7 +24,7 @@ namespace Maple.Result;
 ///         </item>
 ///         <item>
 ///             <term>URI locator</term>
-///             <description>the URI of the human-readable documentation for the type of problem,</description>
+///             <description>the <i>URI</i> of the human-readable documentation for the type of problem,</description>
 ///         </item>
 ///         <item>
 ///             <term>URI tag</term>
@@ -34,8 +34,8 @@ namespace Maple.Result;
 ///             </description>
 ///         </item>
 ///     </list>
-///     For URI locator specification, see also: <seealso href="https://datatracker.ietf.org/doc/html/rfc3986" />.<br />
-///     For URI tag specification, see also: <seealso href="https://datatracker.ietf.org/doc/html/rfc4151" />
+///     For <i>URI Locator</i> specification, see also: <seealso href="https://datatracker.ietf.org/doc/html/rfc3986" />.<br />
+///     For <i>URI Tag</i> specification, see also: <seealso href="https://datatracker.ietf.org/doc/html/rfc4151" />
 /// </remarks>
 public readonly record struct ErrorUri
 {
@@ -62,7 +62,7 @@ public readonly record struct ErrorUri
     #endregion
 
     /// <summary>
-    ///     The URI value representing the error type or category.
+    ///     The <i>URI</i> value representing the error type or category.
     /// </summary>
     public string Value { get; }
 
@@ -75,7 +75,7 @@ public readonly record struct ErrorUri
     }
 
     /// <summary>
-    ///     Returns a new instance of the <see cref="ErrorUri" /> with a valid URI locator.
+    ///     Returns a new instance of the <see cref="ErrorUri" /> with a valid <i>URI Locator</i>.
     /// </summary>
     public static ErrorUri Locator(string uriLocator)
     {
@@ -85,7 +85,7 @@ public readonly record struct ErrorUri
     }
 
     /// <summary>
-    ///     Returns a new instance of the <see cref="ErrorUri" /> with a valid URI tag.
+    ///     Returns a new instance of the <see cref="ErrorUri" /> with a valid <i>URI Tag</i>.
     /// </summary>
     public static ErrorUri Tag(string uriTag)
     {

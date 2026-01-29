@@ -32,6 +32,112 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 		.github\workflows\build-and-publish.yml = .github\workflows\build-and-publish.yml
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Error", "Error", "{E02A393C-BF22-4DBB-897C-B91B32E5E264}"
+	ProjectSection(SolutionItems) = preProject
+		docs\Reference\Error\Error.md = docs\Reference\Error\Error.md
+		docs\Reference\Error\Error_AddDetail.md = docs\Reference\Error\Error_AddDetail.md
+		docs\Reference\Error\Error_Category.md = docs\Reference\Error\Error_Category.md
+		docs\Reference\Error\Error_Conflict.md = docs\Reference\Error\Error_Conflict.md
+		docs\Reference\Error\Error_constructors.md = docs\Reference\Error\Error_constructors.md
+		docs\Reference\Error\Error_CriticalError.md = docs\Reference\Error\Error_CriticalError.md
+		docs\Reference\Error\Error_Detail.md = docs\Reference\Error\Error_Detail.md
+		docs\Reference\Error\Error_DetailTemplated.md = docs\Reference\Error\Error_DetailTemplated.md
+		docs\Reference\Error\Error_ErrorDetails.md = docs\Reference\Error\Error_ErrorDetails.md
+		docs\Reference\Error\Error_Failure.md = docs\Reference\Error\Error_Failure.md
+		docs\Reference\Error\Error_InstanceUri.md = docs\Reference\Error\Error_InstanceUri.md
+		docs\Reference\Error\Error_NotFound.md = docs\Reference\Error\Error_NotFound.md
+		docs\Reference\Error\Error_NotImplemented.md = docs\Reference\Error\Error_NotImplemented.md
+		docs\Reference\Error\Error_Timeout.md = docs\Reference\Error\Error_Timeout.md
+		docs\Reference\Error\Error_Title.md = docs\Reference\Error\Error_Title.md
+		docs\Reference\Error\Error_TypeUri.md = docs\Reference\Error\Error_TypeUri.md
+		docs\Reference\Error\Error_Unauthenticated.md = docs\Reference\Error\Error_Unauthenticated.md
+		docs\Reference\Error\Error_Unauthorized.md = docs\Reference\Error\Error_Unauthorized.md
+		docs\Reference\Error\Error_Unavailable.md = docs\Reference\Error\Error_Unavailable.md
+		docs\Reference\Error\Error_Validation.md = docs\Reference\Error\Error_Validation.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Reference", "Reference", "{4BBCD0C7-0224-4C06-9A95-680021772CE8}"
+	ProjectSection(SolutionItems) = preProject
+		docs\Reference\ErrorCategory.md = docs\Reference\ErrorCategory.md
+		docs\Reference\namespace.md = docs\Reference\namespace.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ErrorUri", "ErrorUri", "{1677CC2E-7348-426A-83CD-F112E39A3226}"
+	ProjectSection(SolutionItems) = preProject
+		docs\Reference\ErrorUri\ErrorUri.md = docs\Reference\ErrorUri\ErrorUri.md
+		docs\Reference\ErrorUri\ErrorUri_constructors.md = docs\Reference\ErrorUri\ErrorUri_constructors.md
+		docs\Reference\ErrorUri\ErrorUri_Locator.md = docs\Reference\ErrorUri\ErrorUri_Locator.md
+		docs\Reference\ErrorUri\ErrorUri_None.md = docs\Reference\ErrorUri\ErrorUri_None.md
+		docs\Reference\ErrorUri\ErrorUri_Tag.md = docs\Reference\ErrorUri\ErrorUri_Tag.md
+		docs\Reference\ErrorUri\ErrorUri_Value.md = docs\Reference\ErrorUri\ErrorUri_Value.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Result", "Result", "{906F16D6-F33A-45A2-A2C7-7E29FF65F538}"
+	ProjectSection(SolutionItems) = preProject
+		docs\Reference\Result\Result.md = docs\Reference\Result\Result.md
+		docs\Reference\Result\Result_constructors.md = docs\Reference\Result\Result_constructors.md
+		docs\Reference\Result\Result_Error.md = docs\Reference\Result\Result_Error.md
+		docs\Reference\Result\Result_FromError.md = docs\Reference\Result\Result_FromError.md
+		docs\Reference\Result\Result_FromValue.md = docs\Reference\Result\Result_FromValue.md
+		docs\Reference\Result\Result_implicit_Error_to_Result.md = docs\Reference\Result\Result_implicit_Error_to_Result.md
+		docs\Reference\Result\Result_IsSuccess.md = docs\Reference\Result\Result_IsSuccess.md
+		docs\Reference\Result\Result_Success.md = docs\Reference\Result\Result_Success.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Extensions", "Extensions", "{BF50E537-E1F0-4889-887E-FB260398E32C}"
+	ProjectSection(SolutionItems) = preProject
+		docs\Reference\Extensions\IfErrorAsyncExtensions.md = docs\Reference\Extensions\IfErrorAsyncExtensions.md
+		docs\Reference\Extensions\IfErrorAsyncExtensions_IfErrorAsync.md = docs\Reference\Extensions\IfErrorAsyncExtensions_IfErrorAsync.md
+		docs\Reference\Extensions\IfErrorExtensions.md = docs\Reference\Extensions\IfErrorExtensions.md
+		docs\Reference\Extensions\IfErrorExtensions_IfError.md = docs\Reference\Extensions\IfErrorExtensions_IfError.md
+		docs\Reference\Extensions\IfSuccessAsyncExtensions.md = docs\Reference\Extensions\IfSuccessAsyncExtensions.md
+		docs\Reference\Extensions\IfSuccessAsyncExtensions_IfSuccessAsync.md = docs\Reference\Extensions\IfSuccessAsyncExtensions_IfSuccessAsync.md
+		docs\Reference\Extensions\IfSuccessExtensions.md = docs\Reference\Extensions\IfSuccessExtensions.md
+		docs\Reference\Extensions\IfSuccessExtensions_IfSuccess.md = docs\Reference\Extensions\IfSuccessExtensions_IfSuccess.md
+		docs\Reference\Extensions\MatchAsyncExtensions.md = docs\Reference\Extensions\MatchAsyncExtensions.md
+		docs\Reference\Extensions\MatchAsyncExtensions_MatchAsync.md = docs\Reference\Extensions\MatchAsyncExtensions_MatchAsync.md
+		docs\Reference\Extensions\MatchExtensions.md = docs\Reference\Extensions\MatchExtensions.md
+		docs\Reference\Extensions\MatchExtensions_Match.md = docs\Reference\Extensions\MatchExtensions_Match.md
+		docs\Reference\Extensions\namespace.md = docs\Reference\Extensions\namespace.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ErrorDetail", "ErrorDetail", "{4165C202-7A49-4AF3-9A7B-A9B22B7190AA}"
+	ProjectSection(SolutionItems) = preProject
+		docs\Reference\ErrorDetail\ErrorDetail.md = docs\Reference\ErrorDetail\ErrorDetail.md
+		docs\Reference\ErrorDetail\ErrorDetail_constructors.md = docs\Reference\ErrorDetail\ErrorDetail_constructors.md
+		docs\Reference\ErrorDetail\ErrorDetail_Detail.md = docs\Reference\ErrorDetail\ErrorDetail_Detail.md
+		docs\Reference\ErrorDetail\ErrorDetail_DetailTemplated.md = docs\Reference\ErrorDetail\ErrorDetail_DetailTemplated.md
+		docs\Reference\ErrorDetail\ErrorDetail_PropertyPointer.md = docs\Reference\ErrorDetail\ErrorDetail_PropertyPointer.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TemplatedMessage", "TemplatedMessage", "{DE76917C-82A8-491F-A8E7-8734B20B0CEA}"
+	ProjectSection(SolutionItems) = preProject
+		docs\Reference\TemplatedMessage\TemplatedMessage.md = docs\Reference\TemplatedMessage\TemplatedMessage.md
+		docs\Reference\TemplatedMessage\TemplatedMessage_constructors.md = docs\Reference\TemplatedMessage\TemplatedMessage_constructors.md
+		docs\Reference\TemplatedMessage\TemplatedMessage_Params.md = docs\Reference\TemplatedMessage\TemplatedMessage_Params.md
+		docs\Reference\TemplatedMessage\TemplatedMessage_TemplateId.md = docs\Reference\TemplatedMessage\TemplatedMessage_TemplateId.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ResultT", "ResultT", "{7E02FB74-633C-4353-8435-DDB2A7EA1FD2}"
+	ProjectSection(SolutionItems) = preProject
+		docs\Reference\ResultT\ResultT.md = docs\Reference\ResultT\ResultT.md
+		docs\Reference\ResultT\ResultT_constructors.md = docs\Reference\ResultT\ResultT_constructors.md
+		docs\Reference\ResultT\ResultT_Error.md = docs\Reference\ResultT\ResultT_Error.md
+		docs\Reference\ResultT\ResultT_FromError.md = docs\Reference\ResultT\ResultT_FromError.md
+		docs\Reference\ResultT\ResultT_FromValue.md = docs\Reference\ResultT\ResultT_FromValue.md
+		docs\Reference\ResultT\ResultT_implicit_Error_to_ResultT.md = docs\Reference\ResultT\ResultT_implicit_Error_to_ResultT.md
+		docs\Reference\ResultT\ResultT_implicit_T_to_ResultT.md = docs\Reference\ResultT\ResultT_implicit_T_to_ResultT.md
+		docs\Reference\ResultT\ResultT_IsSuccess.md = docs\Reference\ResultT\ResultT_IsSuccess.md
+		docs\Reference\ResultT\ResultT_Value.md = docs\Reference\ResultT\ResultT_Value.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IResult", "IResult", "{695B0CA7-A3E6-4163-A275-F0B34EADFB32}"
+	ProjectSection(SolutionItems) = preProject
+		docs\Reference\IResult\IResult.md = docs\Reference\IResult\IResult.md
+		docs\Reference\IResult\IResult_Error.md = docs\Reference\IResult\IResult_Error.md
+		docs\Reference\IResult\IResult_IsSuccess.md = docs\Reference\IResult\IResult_IsSuccess.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,6 +160,15 @@ Global
 		{BB1E2A1A-5E43-E820-8D91-7CAAFE0184F5} = {70313767-1584-4AAD-8118-B1B85DE83A68}
 		{7CF5C16B-62D9-F1B1-E2FB-C05515F96CB2} = {C243CB31-C7CA-4C50-9C73-ECEE67881787}
 		{63943D00-F1D6-4390-A150-C9F0796C1752} = {A6FB494F-29B8-49EA-A7CE-FE26E828D00C}
+		{E02A393C-BF22-4DBB-897C-B91B32E5E264} = {4BBCD0C7-0224-4C06-9A95-680021772CE8}
+		{4BBCD0C7-0224-4C06-9A95-680021772CE8} = {0F1DEF9C-233A-4FE7-850F-43556EF8EA77}
+		{1677CC2E-7348-426A-83CD-F112E39A3226} = {4BBCD0C7-0224-4C06-9A95-680021772CE8}
+		{906F16D6-F33A-45A2-A2C7-7E29FF65F538} = {4BBCD0C7-0224-4C06-9A95-680021772CE8}
+		{BF50E537-E1F0-4889-887E-FB260398E32C} = {4BBCD0C7-0224-4C06-9A95-680021772CE8}
+		{4165C202-7A49-4AF3-9A7B-A9B22B7190AA} = {4BBCD0C7-0224-4C06-9A95-680021772CE8}
+		{DE76917C-82A8-491F-A8E7-8734B20B0CEA} = {4BBCD0C7-0224-4C06-9A95-680021772CE8}
+		{7E02FB74-633C-4353-8435-DDB2A7EA1FD2} = {4BBCD0C7-0224-4C06-9A95-680021772CE8}
+		{695B0CA7-A3E6-4163-A275-F0B34EADFB32} = {4BBCD0C7-0224-4C06-9A95-680021772CE8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B2854F93-1DE8-4AA5-8B37-0EB331C30451}

@@ -11,7 +11,7 @@
 namespace Maple.Result;
 
 /// <summary>
-///     An enumeration representing the different categories of errors that can be returned by the Result class.
+///     An enumeration representing the different categories of errors that can be returned by the Result record.
 /// </summary>
 public enum ErrorCategory
 {

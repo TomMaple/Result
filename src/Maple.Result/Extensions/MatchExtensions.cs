@@ -465,7 +465,6 @@ public static class MatchExtensions
 
         ifErrorAction(result.Error!);
         return result.Error!;
-
     }
 
     /// <summary>
