@@ -98,7 +98,7 @@ var companyResult = createUserResult
         error => _mapper.Map(error));
 ```
 
-See more: [Maple.Result.Extensions](docs/Reference/Extensions/namespace.md)
+See more: [Maple.Result.Extensions](https://github.com/TomMaple/Result/blob/main/docs/Reference/Extensions/namespace.md)
 
 # The Result Pattern
 ## Key Benefits
@@ -148,7 +148,7 @@ return Result.Success();
 
 to return successful `Result` without a value.
 
-See more: [Result](docs/Reference/Result/Result.md)
+See more: [Result](https://github.com/TomMaple/Result/blob/main/docs/Reference/Result/Result.md)
 
 ### Result\<T>
 Use
@@ -202,7 +202,7 @@ public async Task<Result<User>> GetUserAsync(int userId)
 }
 ```
 
-See more: [Result&lt;T&gt;](docs/Reference/ResultT/ResultT.md)
+See more: [Result&lt;T&gt;](https://github.com/TomMaple/Result/blob/main/docs/Reference/ResultT/ResultT.md)
 
 ## Error
 Use proper static methods to create an `Error` instance, e.g.
@@ -325,7 +325,7 @@ It uses:
 | Template | `The ‘{requiredPermission}’ permission is required to delete a contact.` | `L'autorisation «{requiredPermission}`»` est requise pour supprimer un contact.` | `Se requiere el permiso `«`{requiredPermission}`»` para eliminar un contacto.` | `删除联系人需要“{requiredPermission}”权限。` |
 | Localized message | `The ‘contact_delete’ permission is required to delete a contact.` | `L'autorisation `«`contact_delete`»` est requise pour supprimer un contact.` | `Se requiere el permiso `«`contact_delete`»` para eliminar un contacto.` | `删除联系人需要“contact_delete”权限。` |
 
-See more: [Error](docs/Reference/Error/Error.md)
+See more: [Error](https://github.com/TomMaple/Result/blob/main/docs/Reference/Error/Error.md)
 
 ## Controlling the execution flow
 You can use:
@@ -348,7 +348,7 @@ var userTokenResult = await userAddedResult.MatchAsync(
     async (error) => await _auditService.LogErrorAsync(error));
 ```
 
-See more: [Maple.Result.Extensions](docs/Reference/Extensions/namespace.md)
+See more: [Maple.Result.Extensions](https://github.com/TomMaple/Result/blob/main/docs/Reference/Extensions/namespace.md)
 
 # Mapping to HTTP responses
 Mapping to HTTP responses is not part of this library.
@@ -381,12 +381,13 @@ This library minimizes the amount of extension methods:
 * `Bind()`can be replaced with e.g., `IfSuccess<T, TNext>(Result<T>, Func<T, TNext>)`,
 * `Else()` can be replaced with e.g., `IfError<T>(Result, Func<Error, T>)`,
 * `Map()` can be replaced with e.g., `IfSuccess<T, TNext>(Result<T>, Func<T, TNext>)`,
-* `Switch()` can be replaced with e.g., `Match<T>(Result<T>, Action<T>, Action<Errror>)`.
+* `Switch()` can be replaced with e.g., `Match<T>(Result<T>, Action<T>, Action<Errror>)`,
+* `Then()` can be replaces with e.g., `IfSuccess<T, TNext>(Result<T>, Func<T, TNext>)`.
 
 # Learn More
 ## Documentation
-* [Maple.Result](docs/Reference/namespace.md) — `Result`, `Error`, and other types
-* [Maple.Result.Extensions](docs/Reference/Extensions/namespace.md) — extension methods
+* [Maple.Result](https://github.com/TomMaple/Result/blob/main/docs/Reference/namespace.md) — `Result`, `Error`, and other types
+* [Maple.Result.Extensions](https://github.com/TomMaple/Result/blob/main/docs/Reference/Extensions/namespace.md) — extension methods
 
 ## See also
 * [Problem Details for HTTP APIs - RFC 7807 is dead, long live RFC 9457](https://blog.frankel.ch/problem-details-http-apis/)
