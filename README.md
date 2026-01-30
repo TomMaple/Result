@@ -375,8 +375,8 @@ This library minimizes the amount of extension methods:
 
 # Learn More
 ## Documentation
-* [Maple.Result](namespace.md) — `Result`, `Error`, and other types
-* [Maple.Result.Extensions](Extensions/namespace.md) — extension methods
+* [Maple.Result](docs/Reference/namespace.md) — `Result`, `Error`, and other types
+* [Maple.Result.Extensions](docs/Reference/Extensions/namespace.md) — extension methods
 
 ## See also
 * [Problem Details for HTTP APIs - RFC 7807 is dead, long live RFC 9457](https://blog.frankel.ch/problem-details-http-apis/)
