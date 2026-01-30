@@ -12,6 +12,7 @@
     <Description>An abstraction which contains the value or the error of the operation. It can be mapped to the HTTP reponse if needed.</Description>
     <Authors>Tom Maple</Authors>
     <PublisherName>Tom Maple</PublisherName>
+    <PackageIcon>icon.png</PackageIcon>
     <PackageTags>Result;Error;RFC-9457;RFC-7807</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -31,6 +32,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include=".icon\icon.png" Pack="true" PackagePath="" />
+  </ItemGroup>
+
+    <ItemGroup>
     <None Include="..\..\LICENSE">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>

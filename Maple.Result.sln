@@ -138,6 +138,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IResult", "IResult", "{695B
 		docs\Reference\IResult\IResult_IsSuccess.md = docs\Reference\IResult\IResult_IsSuccess.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".icon", ".icon", "{222B7094-2272-4496-8C56-8E9F3F7E08D5}"
+	ProjectSection(SolutionItems) = preProject
+		.icon\icon.png = .icon\icon.png
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
