@@ -98,6 +98,8 @@ var companyResult = createUserResult
         error => _mapper.Map(error));
 ```
 
+See more: [Maple.Result.Extensions](docs/Reference/Extensions/namespace.md)
+
 # The Result Pattern
 ## Key Benefits
 * **Explicitness** —  clearly communicates (e.g., via the function signature) that the operation may fail; it forces developer to handle both scenarios: a success and a failure.
@@ -145,6 +147,8 @@ return Result.Success();
 ```
 
 to return successful `Result` without a value.
+
+See more: [Result](docs/Reference/Result/Result.md)
 
 ### Result\<T>
 Use
@@ -197,6 +201,8 @@ public async Task<Result<User>> GetUserAsync(int userId)
     }
 }
 ```
+
+See more: [Result&lt;T&gt;](docs/Reference/ResultT/ResultT.md)
 
 ## Error
 Use proper static methods to create an `Error` instance, e.g.
@@ -319,6 +325,8 @@ It uses:
 | Template | `The ‘{requiredPermission}’ permission is required to delete a contact.` | `L'autorisation «{requiredPermission}`»` est requise pour supprimer un contact.` | `Se requiere el permiso `«`{requiredPermission}`»` para eliminar un contacto.` | `删除联系人需要“{requiredPermission}”权限。` |
 | Localized message | `The ‘contact_delete’ permission is required to delete a contact.` | `L'autorisation `«`contact_delete`»` est requise pour supprimer un contact.` | `Se requiere el permiso `«`contact_delete`»` para eliminar un contacto.` | `删除联系人需要“contact_delete”权限。` |
 
+See more: [Error](docs/Reference/Error/Error.md)
+
 ## Controlling the execution flow
 You can use:
 * `IsSuccess()` method of the `Result`,
@@ -339,6 +347,8 @@ var userTokenResult = await userAddedResult.MatchAsync(
     async (user) => await _loginService.GetUserTokenAsync(user),
     async (error) => await _auditService.LogErrorAsync(error));
 ```
+
+See more: [Maple.Result.Extensions](docs/Reference/Extensions/namespace.md)
 
 # Mapping to HTTP responses
 Mapping to HTTP responses is not part of this library.
