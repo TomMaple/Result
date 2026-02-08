@@ -225,7 +225,7 @@ var error = Error.Validation(
         ErrorUri.Tag("tag:exampleapp.com,2026:errors:signup:form"),
         "Invalid data to create a user.",
         "The user cannot be created because of missing or invalid data. Address the validation errors and try again.",
-        ErrorUri.Locator("http://exampleapp.com/errors/7894375839"),
+        ErrorUri.Locator("https://exampleapp.com/errors/7894375839"),
         "errors.signup.validation"
     )
     .AddDetail("#/email", "Email is required.", "errors.signup.validation.email.required")
@@ -364,7 +364,7 @@ In some cases, a missing file is just a resource *Not Found* error (e.g., users 
 
 My suggestion is:
 * use **exceptions** for cases that require someone’s attention (e.g., database unavailable, connection string to a crucial resource is `null`, unexpected case that indicates a bug, expired API keys that require manual update),
-* use **Result** for cases that you won’t to be bothered with (e.g., user input validation, user authentication/authorization errors, handling transient errors that will be recovered by retry, etc.).
+* use **Result** for cases that you want to be bothered with (e.g., user input validation, user authentication/authorization errors, handling transient errors that will be recovered by retry, etc.).
 
 ## Why `Unauthenticated` corresponds to the `401` (Unauthorized) HTTP status code?
 By the *HTTP* reference from *Mozilla*:
