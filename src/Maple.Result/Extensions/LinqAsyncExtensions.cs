@@ -18,7 +18,7 @@ public static class LinqAsyncExtensions
     ///     Returns a new instance of the <see cref="Task{TResult}" /> that represents the result of applying
     ///     the provided collection selector and a result selector functions if the current <see cref="Result{T}" />
     ///     is successful, or the new <see cref="Task{TResult}" /> that represents a new <see cref="Result{TNext}" /> instance
-    ///     with the same error if it is not successful.
+    ///     with the same error otherwise.
     /// </summary>
     /// <typeparam name="T">
     ///     The type of the <see cref="Result{T}" /> value used to determine whether to execute
@@ -66,7 +66,7 @@ public static class LinqAsyncExtensions
         return await resultValue.IfSuccessAsync(async x =>
         {
             var collectionResult = await collectionSelector(x);
-            return collectionResult.Select(y => resultSelector(x, y));
+            return collectionResult.IfSuccess(y => resultSelector(x, y));
         });
     }
 }

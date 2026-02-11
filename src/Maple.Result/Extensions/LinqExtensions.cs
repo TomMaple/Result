@@ -23,51 +23,9 @@ namespace Maple.Result.Extensions;
 public static class LinqExtensions
 {
     /// <summary>
-    ///     Returns a new <see cref="Result{TNext}" /> instance by applying the provided selector function to the value
-    ///     if the current <see cref="Result{T}" /> if it is successful,
-    ///     or a new <see cref="Result{TNext}" /> instance with the same error if it is not successful.
-    /// </summary>
-    /// <typeparam name="T">
-    ///     The type of the <see cref="Result{T}" /> value used to determine whether to execute the passed
-    ///     <paramref name="selector" /> function.
-    ///     If successful, this is also the type of the parameter passed to that function.
-    /// </typeparam>
-    /// <typeparam name="TNext">
-    ///     The output type of the passed function and the type of the <see cref="Result{TNext}" />
-    ///     value to return.
-    /// </typeparam>
-    /// <param name="result">The <see cref="Result{T}" /> to evaluate for success. Must not be <see langword="null" />.</param>
-    /// <param name="selector">
-    ///     The function to execute if the <paramref name="result" /> is successful.
-    ///     The value of the successful <see cref="Result{T}" /> is passed as a parameter.
-    ///     The function’s return value is used as the successful <see cref="Result{TNext}" />.
-    ///     Must not be <see langword="null" />.
-    /// </param>
-    /// <returns>
-    ///     A successful <see cref="Result{TNext}" /> containing the value returned by <paramref name="selector" />
-    ///     if <paramref name="result" /> is successful;
-    ///     otherwise, a failed <see cref="Result{TNext}" /> with the original <see cref="Error" />.
-    /// </returns>
-    /// <exception cref="ArgumentNullException">
-    ///     If any of the <paramref name="result" /> or <paramref name="selector" />
-    ///     parameters are <see langword="null" />.
-    /// </exception>
-    /// <remarks>
-    ///     This method enables chaining of operations on successful results while propagating errors in LINQ query syntax
-    ///     without additional boilerplate code.
-    /// </remarks>
-    public static Result<TNext> Select<T, TNext>(this Result<T> result, Func<T, TNext> selector)
-    {
-        ArgumentNullException.ThrowIfNull(result);
-        ArgumentNullException.ThrowIfNull(selector);
-
-        return result.IfSuccess(selector);
-    }
-
-    /// <summary>
     ///     Returns a new <see cref="Result{TNext}" /> instance by applying the provided collection selector and
-    ///     a result selector functions if the current <see cref="Result{T}" /> if it is successful, or
-    ///     a new <see cref="Result{TNext}" /> instance with the same error if it is not successful.
+    ///     a result selector functions, if the current <see cref="Result{T}" /> is successful; or
+    ///     a new <see cref="Result{TNext}" /> instance with the same error, otherwise.
     /// </summary>
     /// <typeparam name="T">
     ///     The type of the <see cref="Result{T}" /> value used to determine whether to execute
@@ -79,7 +37,7 @@ public static class LinqExtensions
     ///     function and the type of one of the parameters passed to the <paramref name="resultSelector" /> function.
     /// </typeparam>
     /// <typeparam name="TNext">
-    ///     The output type of the <see cref="Result{TNext}" /> value to return.
+    ///     The type of the <see cref="Result{TNext}" /> value to return.
     /// </typeparam>
     /// <param name="result">The initial result to transform if it is successful.</param>
     /// <param name="collectionSelector">
