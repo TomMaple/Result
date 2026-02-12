@@ -135,7 +135,7 @@ See more: [Maple.Result.Extensions](https://github.com/TomMaple/Result/blob/main
 
 # How To Use Result library
 ## Result
-### Result vs Result\<T>
+### Result vs Result&lt;T&gt;
 Use:
 * `Result` for operations that does not return a value if successful (e.g., `DeleteBook(id)`),
 * `Result<T>` for operations that return a value if successful (e.g., `GetUser(id)`).
@@ -150,7 +150,7 @@ to return successful `Result` without a value.
 
 See more: [Result](https://github.com/TomMaple/Result/blob/main/docs/Reference/Result/Result.md)
 
-### Result\<T>
+### Result&lt;T&gt;
 Use
 ```csharp
 public Result<User> GetUserById(int userId)
@@ -225,7 +225,7 @@ var error = Error.Validation(
         ErrorUri.Tag("tag:exampleapp.com,2026:errors:signup:form"),
         "Invalid data to create a user.",
         "The user cannot be created because of missing or invalid data. Address the validation errors and try again.",
-        ErrorUri.Locator("http://exampleapp.com/errors/7894375839"),
+        ErrorUri.Locator("https://exampleapp.com/errors/7894375839"),
         "errors.signup.validation"
     )
     .AddDetail("#/email", "Email is required.", "errors.signup.validation.email.required")
@@ -320,8 +320,8 @@ It uses:
 * and named values:
   * `requiredPermission`: `contact_delete`
 
-| | en\_ca | fr\_ca | es | zh\_cn |
-| | ------ | ------ | -- | ------ |
+|   | en\_ca | fr\_ca | es | zh\_cn |
+| - | ------ | ------ | -- | ------ |
 | Template | `The ‘{requiredPermission}’ permission is required to delete a contact.` | `L'autorisation «{requiredPermission}`»` est requise pour supprimer un contact.` | `Se requiere el permiso `«`{requiredPermission}`»` para eliminar un contacto.` | `删除联系人需要“{requiredPermission}”权限。` |
 | Localized message | `The ‘contact_delete’ permission is required to delete a contact.` | `L'autorisation `«`contact_delete`»` est requise pour supprimer un contact.` | `Se requiere el permiso `«`contact_delete`»` para eliminar un contacto.` | `删除联系人需要“contact_delete”权限。` |
 
@@ -348,6 +348,15 @@ var userTokenResult = await userAddedResult.MatchAsync(
     async (error) => await _auditService.LogErrorAsync(error));
 ```
 
+There is also available a query syntax for chaining multiple synchronous and asynchronous operations that return `Result<T>`:
+```csharp
+var userTokenResult =
+    await from userData in _validationService.ValidateUserDataAsync(addUserRequest)
+    from user in _userService.GetUserAsync(userData)
+    from token in _loginService.GetUserTokenAsync(user)
+    select token;
+```
+
 See more: [Maple.Result.Extensions](https://github.com/TomMaple/Result/blob/main/docs/Reference/Extensions/namespace.md)
 
 # Mapping to HTTP responses
@@ -364,7 +373,7 @@ In some cases, a missing file is just a resource *Not Found* error (e.g., users 
 
 My suggestion is:
 * use **exceptions** for cases that require someone’s attention (e.g., database unavailable, connection string to a crucial resource is `null`, unexpected case that indicates a bug, expired API keys that require manual update),
-* use **Result** for cases that you won’t to be bothered with (e.g., user input validation, user authentication/authorization errors, handling transient errors that will be recovered by retry, etc.).
+* use **Result** for cases that you want to be bothered with (e.g., user input validation, user authentication/authorization errors, handling transient errors that will be recovered by retry, etc.).
 
 ## Why `Unauthenticated` corresponds to the `401` (Unauthorized) HTTP status code?
 By the *HTTP* reference from *Mozilla*:
