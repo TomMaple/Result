@@ -517,6 +517,379 @@ public class IfErrorAsyncExtensionsUnitTests
 
     #endregion
 
+    #region IfErrorAsync (Task<Result>, Func<Error, Task>)
+
+    [Fact]
+    public async Task IfErrorAsync_NoResultTaskWithAction_ThrowsException()
+    {
+        // Arrange
+        const Task<Result>? Sut = null;
+
+        // Act
+        var exception = await Record.ExceptionAsync(() => Sut!.IfErrorAsync(_ => Task.CompletedTask));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentNullException>();
+        exception.Message.ShouldStartWith("Value cannot be null.");
+    }
+
+    [Fact]
+    public async Task IfErrorAsync_SuccessfulResultTaskWithNoAction_ThrowsException()
+    {
+        // Arrange
+        const Func<Error, Task>? AsyncAction = null;
+
+        var sut = Task.FromResult(Result.Success());
+
+        // Act
+        var exception = await Record.ExceptionAsync(() => sut.IfErrorAsync(AsyncAction!));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentNullException>();
+        exception.Message.ShouldStartWith("Value cannot be null.");
+    }
+
+    [Fact]
+    public async Task IfErrorAsync_ErrorResultTaskWithNoAction_ThrowsException()
+    {
+        // Arrange
+        const Func<Error, Task>? AsyncAction = null;
+
+        var sut = Task.FromResult(GetErrorResult());
+
+        // Act
+        var exception = await Record.ExceptionAsync(() => sut.IfErrorAsync(AsyncAction!));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentNullException>();
+        exception.Message.ShouldStartWith("Value cannot be null.");
+    }
+
+    [Fact]
+    public async Task IfErrorAsync_SuccessfulResultTaskWithAction_DoesNotCallAction()
+    {
+        // Arrange
+        var actionMock = new Mock<Func<Error, Task>>();
+
+        var sut = Task.FromResult(Result.Success());
+
+        // Act
+        await sut.IfErrorAsync(actionMock.Object);
+
+        // Assert
+        actionMock.Verify(x => x.Invoke(It.IsAny<Error>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task IfErrorAsync_SuccessfulResultTaskWithAction_ReturnsOriginalResult()
+    {
+        // Arrange
+        var successResult = Result.Success();
+        var sut = Task.FromResult(successResult);
+
+        // Act
+        var result = await sut.IfErrorAsync(_ => Task.CompletedTask);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeSameAs(successResult);
+        result.IsSuccess().ShouldBeTrue();
+    }
+
+    [Fact]
+    public async Task IfErrorAsync_ErrorResultTaskWithAction_CallsAction()
+    {
+        // Arrange
+        var actionMock = new Mock<Func<Error, Task>>();
+
+        var errorResult = GetErrorResult();
+        var sut = Task.FromResult(errorResult);
+
+        // Act
+        await sut.IfErrorAsync(actionMock.Object);
+
+        // Assert
+        actionMock.Verify(x => x.Invoke(errorResult.Error!), Times.Once);
+    }
+
+    [Fact]
+    public async Task IfErrorAsync_ErrorResultTaskWithAction_ReturnsOriginalResult()
+    {
+        // Arrange
+        var errorResult = GetErrorResult();
+        var sut = Task.FromResult(errorResult);
+
+        // Act
+        var result = await sut.IfErrorAsync(_ => Task.CompletedTask);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeSameAs(errorResult);
+        result.IsSuccess().ShouldBeFalse();
+        result.Error.ShouldBe(errorResult.Error);
+    }
+
+    #endregion
+
+    #region IfErrorAsync (Task<Result>, Func<Error, Task<Result>>)
+
+    [Fact]
+    public async Task IfErrorAsync_NoResultTaskWithResultFunction_ThrowsException()
+    {
+        // Arrange
+        const Task<Result>? Sut = null;
+
+        // Act
+        var exception = await Record.ExceptionAsync(() => Sut!.IfErrorAsync(_ => Task.FromResult(Result.Success())));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentNullException>();
+        exception.Message.ShouldStartWith("Value cannot be null.");
+    }
+
+    [Fact]
+    public async Task IfErrorAsync_SuccessfulResultTaskWithNoResultFunction_ThrowsException()
+    {
+        // Arrange
+        const Func<Error, Task<Result>>? Function = null;
+
+        var sut = Task.FromResult(Result.Success());
+
+        // Act
+        var exception = await Record.ExceptionAsync(() => sut.IfErrorAsync(Function!));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentNullException>();
+        exception.Message.ShouldStartWith("Value cannot be null.");
+    }
+
+    [Fact]
+    public async Task IfErrorAsync_ErrorResultTaskWithNoResultFunction_ThrowsException()
+    {
+        // Arrange
+        const Func<Error, Task<Result>>? Function = null;
+
+        var sut = Task.FromResult(GetErrorResult());
+
+        // Act
+        var exception = await Record.ExceptionAsync(() => sut.IfErrorAsync(Function!));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentNullException>();
+        exception.Message.ShouldStartWith("Value cannot be null.");
+    }
+
+    [Fact]
+    public async Task IfErrorAsync_SuccessfulResultTaskWithResultFunction_DoesNotCallFunction()
+    {
+        // Arrange
+        var functionMock = new Mock<Func<Error, Task<Result>>>();
+
+        var sut = Task.FromResult(Result.Success());
+
+        // Act
+        await sut.IfErrorAsync(functionMock.Object);
+
+        // Assert
+        functionMock.Verify(x => x.Invoke(It.IsAny<Error>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task IfErrorAsync_SuccessfulResultTaskWithResultFunction_ReturnsOriginalResult()
+    {
+        // Arrange
+        var successResult = Result.Success();
+        var sut = Task.FromResult(successResult);
+
+        // Act
+        var result = await sut.IfErrorAsync(_ => Task.FromResult(Result.Success()));
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeSameAs(successResult);
+        result.IsSuccess().ShouldBeTrue();
+    }
+
+    [Fact]
+    public async Task IfErrorAsync_ErrorResultTaskWithResultFunction_CallsFunction()
+    {
+        // Arrange
+        var functionMock = new Mock<Func<Error, Task<Result>>>();
+
+        var errorResult = GetErrorResult();
+        var sut = Task.FromResult(errorResult);
+
+        // Act
+        await sut.IfErrorAsync(functionMock.Object);
+
+        // Assert
+        functionMock.Verify(x => x.Invoke(errorResult.Error!), Times.Once);
+    }
+
+    [Fact]
+    public async Task IfErrorAsync_ErrorResultTaskWithSuccessResultFunction_ReturnsFunctionResult()
+    {
+        // Arrange
+        var asyncFuncResult = Result.Success();
+
+        var errorResult = GetErrorResult();
+        var sut = Task.FromResult(errorResult);
+
+        // Act
+        var result = await sut.IfErrorAsync(_ => Task.FromResult(asyncFuncResult));
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeSameAs(asyncFuncResult);
+    }
+
+    [Fact]
+    public async Task IfErrorAsync_ErrorResultTaskWithErrorResultFunction_ReturnsFunctionResult()
+    {
+        // Arrange
+        var asyncFuncError = GetReplacementError();
+
+        var sut = Task.FromResult(GetErrorResult());
+
+        // Act
+        var result = await sut.IfErrorAsync(_ => Task.FromResult(Result.FromError(asyncFuncError)));
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.IsSuccess().ShouldBeFalse();
+        result.Error.ShouldBe(asyncFuncError);
+    }
+
+    #endregion
+
+    #region IfErrorAsync (Task<Result<T>>, Func<Error, Task>)
+
+    [Fact]
+    public async Task IfErrorAsync_NoGenericResultTaskWithAction_ThrowsException()
+    {
+        // Arrange
+        const Task<Result<int>>? Sut = null;
+
+        // Act
+        var exception = await Record.ExceptionAsync(() => Sut!.IfErrorAsync(_ => Task.CompletedTask));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentNullException>();
+        exception.Message.ShouldStartWith("Value cannot be null.");
+    }
+
+    [Fact]
+    public async Task IfErrorAsync_SuccessfulGenericResultTaskWithNoAction_ThrowsException()
+    {
+        // Arrange
+        const int InitialValue = 24;
+        const Func<Error, Task>? AsyncAction = null;
+
+        var sut = Task.FromResult(Result.FromValue(InitialValue));
+
+        // Act
+        var exception = await Record.ExceptionAsync(() => sut.IfErrorAsync(AsyncAction!));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentNullException>();
+        exception.Message.ShouldStartWith("Value cannot be null.");
+    }
+
+    [Fact]
+    public async Task IfErrorAsync_ErrorGenericResultTaskWithNoAction_ThrowsException()
+    {
+        // Arrange
+        const Func<Error, Task>? AsyncAction = null;
+
+        var sut = Task.FromResult(GetErrorResult<int>());
+
+        // Act
+        var exception = await Record.ExceptionAsync(() => sut.IfErrorAsync(AsyncAction!));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentNullException>();
+        exception.Message.ShouldStartWith("Value cannot be null.");
+    }
+
+    [Fact]
+    public async Task IfErrorAsync_SuccessfulGenericResultTaskWithAction_DoesNotCallAction()
+    {
+        // Arrange
+        const int InitialValue = 29;
+        var actionMock = new Mock<Func<Error, Task>>();
+
+        var sut = Task.FromResult(Result.FromValue(InitialValue));
+
+        // Act
+        await sut.IfErrorAsync(actionMock.Object);
+
+        // Assert
+        actionMock.Verify(x => x.Invoke(It.IsAny<Error>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task IfErrorAsync_SuccessfulGenericResultTaskWithAction_ReturnsOriginalValueResult()
+    {
+        // Arrange
+        const int InitialValue = 38;
+
+        var resultValue = Result.FromValue(InitialValue);
+        var sut = Task.FromResult(resultValue);
+
+        // Act
+        var result = await sut.IfErrorAsync(_ => Task.CompletedTask);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeSameAs(resultValue);
+        result.IsSuccess().ShouldBeTrue();
+        result.Value.ShouldBe(InitialValue);
+    }
+
+    [Fact]
+    public async Task IfErrorAsync_ErrorGenericResultTaskWithAction_CallsAction()
+    {
+        // Arrange
+        var actionMock = new Mock<Func<Error, Task>>();
+
+        var errorResult = GetErrorResult<int>();
+        var sut = Task.FromResult(errorResult);
+
+        // Act
+        await sut.IfErrorAsync(actionMock.Object);
+
+        // Assert
+        actionMock.Verify(x => x.Invoke(errorResult.Error!), Times.Once);
+    }
+
+    [Fact]
+    public async Task IfErrorAsync_ErrorGenericResultTaskWithAction_ReturnsOriginalValueResultWithError()
+    {
+        // Arrange
+        var errorResult = GetErrorResult<int>();
+        var sut = Task.FromResult(errorResult);
+
+        // Act
+        var result = await sut.IfErrorAsync(_ => Task.CompletedTask);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeSameAs(errorResult);
+        result.IsSuccess().ShouldBeFalse();
+        result.Error.ShouldBe(errorResult.Error);
+    }
+
+    #endregion
+
     #region helper methods
 
     private static Result GetErrorResult()
