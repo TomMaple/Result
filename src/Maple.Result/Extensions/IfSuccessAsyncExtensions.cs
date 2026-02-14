@@ -106,7 +106,7 @@ public static class IfSuccessAsyncExtensions
 
     /// <summary>
     ///     Invokes the specified asynchronous function as an asynchronous operation, and returns its output
-    ///     as a <see cref="Result{T}" />, if the operation represented by the <paramref name="result" /> is successful;
+    ///     as a <see cref="Task{TResult}" />, if the operation represented by the <paramref name="result" /> is successful;
     ///     otherwise, returns a failed <see cref="Result{T}" /> with the original <see cref="Error" />.
     /// </summary>
     /// <remarks>
@@ -202,6 +202,11 @@ public static class IfSuccessAsyncExtensions
     ///     the provided asynchronous action only when the <paramref name="result" /> indicates success.
     ///     The action is not invoked if the <paramref name="result" /> is not successful.
     /// </remarks>
+    /// <typeparam name="T">
+    ///     The type of the <see cref="Result{T}" /> value used to determine whether to execute the passed
+    ///     function. If successful, this is also the type of the parameter passed to that function.
+    ///     Also, the type of the <see cref="Result{T}" /> value to return if the operation is successful.
+    /// </typeparam>
     /// <param name="result">The <see cref="Result{T}" /> to evaluate for success. Must not be <see langword="null" />.</param>
     /// <param name="ifSuccessAction">
     ///     The asynchronous action to execute if the <paramref name="result" /> is successful.
@@ -241,6 +246,10 @@ public static class IfSuccessAsyncExtensions
     ///     if the previous <see cref="Result" /> was successful. If <paramref name="result" /> is not successful,
     ///     the provided asynchronous function is not invoked.
     /// </remarks>
+    /// <typeparam name="T">
+    ///     The type of the <see cref="Result{T}" /> value used to determine whether to execute the passed
+    ///     function. If successful, this is also the type of the parameter passed to that function.
+    /// </typeparam>
     /// <param name="result">The <see cref="Result{T}" /> to evaluate for success. Must not be <see langword="null" />.</param>
     /// <param name="ifSuccessFunction">
     ///     The asynchronous function to execute if <paramref name="result" /> is successful. The value of the successful
@@ -368,7 +377,456 @@ public static class IfSuccessAsyncExtensions
 
         if (result.IsSuccess())
             return await ifSuccessFunction(result.Value!).ConfigureAwait(continueOnCapturedContext);
-     
+
+        return result.Error!;
+    }
+
+    #endregion
+
+    #region Task<Result> extensions
+
+    /// <summary>
+    ///     Invokes the specified asynchronous action as an asynchronous operation,
+    ///     if the asynchronous <paramref name="resultTask" /> operation represents a successful outcome.
+    /// </summary>
+    /// <remarks>
+    ///     This method enables fluent handling of asynchronous operations that return a <see cref="Result" />
+    ///     by executing the provided asynchronous action only when the <paramref name="resultTask" /> indicates
+    ///     a successful asynchronous operation.
+    ///     The action is not invoked if the outcome of the <paramref name="resultTask" /> is not successful.
+    /// </remarks>
+    /// <param name="resultTask">
+    ///     The asynchronous operation which result is to be inspected.
+    ///     Must not be <see langword="null" />.
+    /// </param>
+    /// <param name="ifSuccessAction">
+    ///     The asynchronous action to execute if the <paramref name="resultTask" /> is a successful asynchronous operation.
+    ///     Cannot be <see langword="null" />.
+    /// </param>
+    /// <param name="continueOnCapturedContext">
+    ///     <see langword="true" /> to attempt to marshal the continuation back to
+    ///     the original context captured; otherwise, <see langword="false" />.
+    /// </param>
+    /// <returns>
+    ///     A <see cref="Task{TResult}" /> that represents the outcome of the original <paramref name="resultTask" />
+    ///     asynchronous operation, allowing for method chaining.
+    /// </returns>
+    /// <exception cref="ArgumentNullException">
+    ///     If any of the <paramref name="resultTask" /> or <paramref name="ifSuccessAction" />
+    ///     parameters are <see langword="null" />.
+    /// </exception>
+    /// <exception cref="InvalidOperationException">
+    ///     If the asynchronous operation represented by <paramref name="resultTask" /> returns <see langword="null" />.
+    /// </exception>
+    public static async Task<Result> IfSuccessAsync(this Task<Result> resultTask, Func<Task> ifSuccessAction,
+        bool continueOnCapturedContext = false)
+    {
+        ArgumentNullException.ThrowIfNull(resultTask);
+        ArgumentNullException.ThrowIfNull(ifSuccessAction);
+
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+
+        if (result is null)
+            throw new InvalidOperationException("The asynchronous operation returned null.");
+
+        if (result.IsSuccess())
+            await ifSuccessAction().ConfigureAwait(continueOnCapturedContext);
+
+        return result;
+    }
+
+    /// <summary>
+    ///     Invokes the specified asynchronous function as an asynchronous operation,
+    ///     if the asynchronous <paramref name="resultTask" /> operation represents a successful outcome;
+    ///     otherwise, returns an asynchronous operation that represents the original <see cref="Error" />.
+    /// </summary>
+    /// <remarks>
+    ///     This method enables chaining additional asynchronous operations that should only execute
+    ///     if the previous asynchronous operation was successful; otherwise the provided function is not invoked.
+    /// </remarks>
+    /// <param name="resultTask">
+    ///     The asynchronous operation which result is to be inspected.
+    ///     Must not be <see langword="null" />.
+    /// </param>
+    /// <param name="ifSuccessFunction">
+    ///     An asynchronous function to execute if <paramref name="resultTask" /> is successful asynchronous operation.
+    ///     The function must return a <see cref="Task{TResult}" /> and must not be <see langword="null" />.
+    /// </param>
+    /// <param name="continueOnCapturedContext">
+    ///     <see langword="true" /> to attempt to marshal the continuation back to
+    ///     the original context captured; otherwise, <see langword="false" />.
+    /// </param>
+    /// <returns>
+    ///     A <see cref="Task{TResult}" /> returned by <paramref name="ifSuccessFunction" />
+    ///     if a <paramref name="resultTask" /> operation is successful;
+    ///     otherwise, a <see cref="Task{TResult}" /> that represents the original error.
+    /// </returns>
+    /// <exception cref="ArgumentNullException">
+    ///     If any of the <paramref name="resultTask" /> or <paramref name="ifSuccessFunction" />
+    ///     parameters are <see langword="null" />.
+    /// </exception>
+    /// <exception cref="InvalidOperationException">
+    ///     If the asynchronous operation represented by <paramref name="resultTask" /> returns <see langword="null" />.
+    /// </exception>
+    public static async Task<Result> IfSuccessAsync(this Task<Result> resultTask, Func<Task<Result>> ifSuccessFunction,
+        bool continueOnCapturedContext = false)
+    {
+        ArgumentNullException.ThrowIfNull(resultTask);
+        ArgumentNullException.ThrowIfNull(ifSuccessFunction);
+
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+
+        if (result is null)
+            throw new InvalidOperationException("The asynchronous operation returned null.");
+
+        if (result.IsSuccess())
+            return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext);
+
+        return result;
+    }
+
+    /// <summary>
+    ///     Invokes the specified asynchronous function as an asynchronous operation, and returns its output
+    ///     as a <see cref="Task{TResult}" />, if the operation represented by the <paramref name="resultTask" /> is successful;
+    ///     otherwise, returns a failed <see cref="Task{TResult}" /> with the original <see cref="Error" />.
+    /// </summary>
+    /// <remarks>
+    ///     This method enables chaining additional asynchronous operations that should only execute
+    ///     if the previous was successful.
+    ///     If <paramref name="resultTask" /> is not a successful operation, the provided function is not invoked.
+    /// </remarks>
+    /// <typeparam name="T">The type of the <see cref="Result{T}" /> value to return if the operation is successful.</typeparam>
+    /// <param name="resultTask">
+    ///     The asynchronous operation which result is to be inspected.
+    ///     Must not be <see langword="null" />.
+    /// </param>
+    /// <param name="ifSuccessFunction">
+    ///     An asynchronous function to execute if <paramref name="resultTask" /> is successful asynchronous operation.
+    ///     The function must return a <see cref="Task{TResult}" /> and must not be <see langword="null" />.
+    /// </param>
+    /// <param name="continueOnCapturedContext">
+    ///     <see langword="true" /> to attempt to marshal the continuation back to
+    ///     the original context captured; otherwise, <see langword="false" />.
+    /// </param>
+    /// <returns>
+    ///     A <see cref="Task{TResult}" /> that represents the successful <see cref="Result{T}" />
+    ///     containing the value returned by <paramref name="ifSuccessFunction" />
+    ///     if <paramref name="resultTask" /> operation is successful;
+    ///     otherwise, a <see cref="Task{TResult}" /> that represents the failed <see cref="Result{T}" />
+    ///     with the original <see cref="Error" />.
+    /// </returns>
+    /// <exception cref="ArgumentNullException">
+    ///     If any of the <paramref name="resultTask" /> or <paramref name="ifSuccessFunction" />
+    ///     parameters are <see langword="null" />.
+    /// </exception>
+    /// <exception cref="InvalidOperationException">
+    ///     If the asynchronous operation represented by <paramref name="resultTask" /> returns <see langword="null" />.
+    /// </exception>
+    public static async Task<Result<T>> IfSuccessAsync<T>(this Task<Result> resultTask, Func<Task<T>> ifSuccessFunction,
+        bool continueOnCapturedContext = false)
+    {
+        ArgumentNullException.ThrowIfNull(resultTask);
+        ArgumentNullException.ThrowIfNull(ifSuccessFunction);
+
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+
+        if (result is null)
+            throw new InvalidOperationException("The asynchronous operation returned null.");
+
+        if (result.IsSuccess())
+            return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext);
+
+        return result.Error!;
+    }
+
+    /// <summary>
+    ///     Invokes the specified asynchronous function as an asynchronous operation,
+    ///     and returns its output as a <see cref="Task{TResult}" />, if the operation represented
+    ///     by the <paramref name="resultTask" /> is successful; otherwise, returns a failed <see cref="Task{TResult}" />
+    ///     with the original <see cref="Error" />.
+    /// </summary>
+    /// <remarks>
+    ///     This method enables chaining additional asynchronous operations that should only execute
+    ///     if the previous was successful.
+    ///     If <paramref name="resultTask" /> is not successful operation, the provided function is not invoked.
+    /// </remarks>
+    /// <typeparam name="T">The type of the <see cref="Result{T}" /> value to return if the operation is successful.</typeparam>
+    /// <param name="resultTask">
+    ///     The asynchronous operation which result is to be inspected.
+    ///     Must not be <see langword="null" />.
+    /// </param>
+    /// <param name="ifSuccessFunction">
+    ///     An asynchronous function to execute if <paramref name="resultTask" /> is successful asynchronous operation.
+    ///     The function must return a <see cref="Task{TResult}" /> and must not be <see langword="null" />.
+    /// </param>
+    /// <param name="continueOnCapturedContext">
+    ///     <see langword="true" /> to attempt to marshal the continuation back to
+    ///     the original context captured; otherwise, <see langword="false" />.
+    /// </param>
+    /// <returns>
+    ///     A <see cref="Task{TResult}" /> that represents the successful <see cref="Result{T}" />
+    ///     containing the value returned by <paramref name="ifSuccessFunction" />
+    ///     if <paramref name="resultTask" /> operation is successful;
+    ///     otherwise, a <see cref="Task{TResult}" /> that represents the failed <see cref="Result{T}" />
+    ///     with the original <see cref="Error" />.
+    /// </returns>
+    /// <exception cref="ArgumentNullException">
+    ///     If any of the <paramref name="resultTask" /> or <paramref name="ifSuccessFunction" />
+    ///     parameters are <see langword="null" />.
+    /// </exception>
+    /// <exception cref="InvalidOperationException">
+    ///     If the asynchronous operation represented by <paramref name="resultTask" /> returns <see langword="null" />.
+    /// </exception>
+    public static async Task<Result<T>> IfSuccessAsync<T>(this Task<Result> resultTask, Func<Task<Result<T>>> ifSuccessFunction,
+        bool continueOnCapturedContext = false)
+    {
+        ArgumentNullException.ThrowIfNull(resultTask);
+        ArgumentNullException.ThrowIfNull(ifSuccessFunction);
+
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+
+        if (result is null)
+            throw new InvalidOperationException("The asynchronous operation returned null.");
+
+        if (result.IsSuccess())
+            return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext);
+
+        return result.Error!;
+    }
+
+    #endregion
+
+    #region Task<Result<T>> extensions
+
+    /// <summary>
+    ///     Invokes the specified asynchronous action as an asynchronous operation,
+    ///     if the asynchronous <paramref name="resultTask" /> operation represents a successful outcome.
+    /// </summary>
+    /// <remarks>
+    ///     This method enables fluent handling of asynchronous operations that return a <see cref="Result{T}" />
+    ///     by executing the provided asynchronous action only when the <paramref name="resultTask" /> indicates
+    ///     a successful asynchronous operation.
+    ///     The action is not invoked if the outcome of the <paramref name="resultTask" /> is not successful.
+    /// </remarks>
+    /// <typeparam name="T">
+    ///     The type of the <see cref="Result{T}" /> value used to determine whether to execute the passed
+    ///     function. If successful, this is also the type of the parameter passed to that function.
+    ///     Also, the type of the <see cref="Result{T}" /> value to return if the operation is successful.
+    /// </typeparam>
+    /// <param name="resultTask">
+    ///     The asynchronous operation which result is to be inspected.
+    ///     Must not be <see langword="null" />.
+    /// </param>
+    /// <param name="ifSuccessAction">
+    ///     The asynchronous action to execute if the <paramref name="resultTask" /> is a successful asynchronous operation.
+    ///     The value of the successful <see cref="Result{T}" /> is passed as a parameter.
+    ///     Must not be <see langword="null" />.
+    /// </param>
+    /// <param name="continueOnCapturedContext">
+    ///     <see langword="true" /> to attempt to marshal the continuation back to
+    ///     the original context captured; otherwise, <see langword="false" />.
+    /// </param>
+    /// <returns>
+    ///     A <see cref="Task{TResult}" /> that represents the outcome of the original <paramref name="resultTask" />
+    ///     asynchronous operation, allowing for method chaining.
+    /// </returns>
+    /// <exception cref="ArgumentNullException">
+    ///     If any of the <paramref name="resultTask" /> or <paramref name="ifSuccessAction" />
+    ///     parameters are <see langword="null" />.
+    /// </exception>
+    /// <exception cref="InvalidOperationException">
+    ///     If the asynchronous operation represented by <paramref name="resultTask" /> returns <see langword="null" />.
+    /// </exception>
+    public static async Task<Result<T>> IfSuccessAsync<T>(this Task<Result<T>> resultTask, Func<T, Task> ifSuccessAction,
+        bool continueOnCapturedContext = false)
+    {
+        ArgumentNullException.ThrowIfNull(resultTask);
+        ArgumentNullException.ThrowIfNull(ifSuccessAction);
+
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+
+        if (result is null)
+            throw new InvalidOperationException("The asynchronous operation returned null.");
+
+        if (result.IsSuccess())
+            await ifSuccessAction(result.Value!).ConfigureAwait(continueOnCapturedContext);
+
+        return result;
+    }
+
+    /// <summary>
+    ///     Invokes the specified asynchronous function as an asynchronous operation,
+    ///     if the <paramref name="resultTask" /> represents a successful outcome;
+    ///     otherwise, returns an asynchronous operation that represents the original <see cref="Error" />.
+    /// </summary>
+    /// <remarks>
+    ///     This method enables chaining additional asynchronous operations that should only execute
+    ///     if the previous asynchronous operation was successful; otherwise the provided function is not invoked.
+    /// </remarks>
+    /// <typeparam name="T">
+    ///     The type of the <see cref="Result{T}" /> value used to determine whether to execute the passed
+    ///     function. If successful, this is also the type of the parameter passed to that function.
+    /// </typeparam>
+    /// <param name="resultTask">
+    ///     The asynchronous operation which result is to be inspected.
+    ///     Must not be <see langword="null" />.
+    /// </param>
+    /// <param name="ifSuccessFunction">
+    ///     The asynchronous function to execute if <paramref name="resultTask" /> is successful asynchronous operation.
+    ///     The value of the successful <see cref="Result{T}" /> is passed as a parameter. The function must return
+    ///     a <see cref="Task{Result}" /> and must not be <see langword="null" />.
+    /// </param>
+    /// <param name="continueOnCapturedContext">
+    ///     <see langword="true" /> to attempt to marshal the continuation back to
+    ///     the original context captured; otherwise, <see langword="false" />.
+    /// </param>
+    /// <returns>
+    ///     A <see cref="Task{Result}" /> that is returned by <paramref name="ifSuccessFunction" />
+    ///     if <paramref name="resultTask" /> is successful;
+    ///     otherwise, a failed <see cref="Result" /> with the original <see cref="Error" />.
+    /// </returns>
+    /// <exception cref="ArgumentNullException">
+    ///     If any of the <paramref name="resultTask" /> or <paramref name="ifSuccessFunction" />
+    ///     parameters are <see langword="null" />.
+    /// </exception>
+    /// <exception cref="InvalidOperationException">
+    ///     If the asynchronous operation represented by <paramref name="resultTask" /> returns <see langword="null" />.
+    /// </exception>
+    public static async Task<Result> IfSuccessAsync<T>(this Task<Result<T>> resultTask, Func<T, Task<Result>> ifSuccessFunction,
+        bool continueOnCapturedContext = false)
+    {
+        ArgumentNullException.ThrowIfNull(resultTask);
+        ArgumentNullException.ThrowIfNull(ifSuccessFunction);
+
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+
+        if (result is null)
+            throw new InvalidOperationException("The asynchronous operation returned null.");
+
+        if (result.IsSuccess())
+            return await ifSuccessFunction(result.Value!).ConfigureAwait(continueOnCapturedContext);
+
+        return result.Error!;
+    }
+
+    /// <summary>
+    ///     Invokes the specified asynchronous function as an asynchronous operation
+    ///     and returns its output as an asynchronous operation that returns <see cref="Result{TNext}" />,
+    ///     if the asynchronous <paramref name="resultTask" /> operation represents a successful outcome;
+    ///     otherwise, returns an asynchronous operation that represents the original <see cref="Error" />.
+    /// </summary>
+    /// <remarks>
+    ///     This method enables chaining additional asynchronous operations that should only execute
+    ///     if the previous asynchronous operation was successful; otherwise the provided function is not invoked.
+    /// </remarks>
+    /// <typeparam name="T">
+    ///     The type of the <see cref="Result{T}" /> value used to determine whether to execute the passed
+    ///     function. If successful, this is also the type of the parameter passed to that function.
+    /// </typeparam>
+    /// <typeparam name="TNext">
+    ///     The output type of the passed function and the type of the <see cref="Result{TNext}" />
+    ///     value to return.
+    /// </typeparam>
+    /// <param name="resultTask">
+    ///     The asynchronous operation which result is to be inspected.
+    ///     Must not be <see langword="null" />.
+    /// </param>
+    /// <param name="ifSuccessFunction">
+    ///     The asynchronous function to execute if <paramref name="resultTask" /> is successful asynchronous operation.
+    ///     The value of the successful <see cref="Result{T}" /> is passed as a parameter. The function must return
+    ///     a <see cref="Task{Result}" /> and must not be <see langword="null" />.
+    /// </param>
+    /// <param name="continueOnCapturedContext">
+    ///     <see langword="true" /> to attempt to marshal the continuation back to
+    ///     the original context captured; otherwise, <see langword="false" />.
+    /// </param>
+    /// <returns>
+    ///     A <see cref="Task{TResult}" /> that represents the successful <see cref="Result{TNext}" /> containing
+    ///     the value returned by <paramref name="ifSuccessFunction" /> if <paramref name="resultTask" /> is successful;
+    ///     otherwise, a failed <see cref="Result{TNext}" /> with the original <see cref="Error" />.
+    /// </returns>
+    /// <exception cref="ArgumentNullException">
+    ///     If any of the <paramref name="resultTask" /> or <paramref name="ifSuccessFunction" />
+    ///     parameters are <see langword="null" />.
+    /// </exception>
+    /// <exception cref="InvalidOperationException">
+    ///     If the asynchronous operation represented by <paramref name="resultTask" /> returns <see langword="null" />.
+    /// </exception>
+    public static async Task<Result<TNext>> IfSuccessAsync<T, TNext>(this Task<Result<T>> resultTask,
+        Func<T, Task<TNext>> ifSuccessFunction, bool continueOnCapturedContext = false)
+    {
+        ArgumentNullException.ThrowIfNull(resultTask);
+        ArgumentNullException.ThrowIfNull(ifSuccessFunction);
+
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+
+        if (result is null)
+            throw new InvalidOperationException("The asynchronous operation returned null.");
+
+        if (result.IsSuccess())
+            return await ifSuccessFunction(result.Value!).ConfigureAwait(continueOnCapturedContext);
+
+        return result.Error!;
+    }
+
+    /// <summary>
+    ///     Invokes the specified asynchronous function as an asynchronous operation
+    ///     and returns its output as an asynchronous operation that returns <see cref="Result{TNext}" />,
+    ///     if the asynchronous <paramref name="resultTask" /> operation represents a successful outcome;
+    ///     otherwise, returns an asynchronous operation that represents the original <see cref="Error" />.
+    /// </summary>
+    /// <remarks>
+    ///     This method enables chaining additional asynchronous operations that should only execute
+    ///     if the previous asynchronous operation was successful; otherwise the provided function is not invoked.
+    /// </remarks>
+    /// <typeparam name="T">
+    ///     The type of the <see cref="Result{T}" /> value used to determine whether to execute the passed
+    ///     function. If successful, this is also the type of the parameter passed to that function.
+    /// </typeparam>
+    /// <typeparam name="TNext">
+    ///     The type of the <see cref="Result{TNext}" /> value to return and of the output
+    ///     of the passed function.
+    /// </typeparam>
+    /// <param name="resultTask">
+    ///     The asynchronous operation which result is to be inspected.
+    ///     Must not be <see langword="null" />.
+    /// </param>
+    /// <param name="ifSuccessFunction">
+    ///     An asynchronous function to execute if <paramref name="resultTask" /> is successful asynchronous operation.
+    ///     The value of the successful <see cref="Result{T}" /> is passed as a parameter.
+    ///     The function’s must return <see cref="Task{Result}" /> that represents <see cref="Result{TNext}" />.
+    ///     Must not be <see langword="null" />.
+    /// </param>
+    /// <param name="continueOnCapturedContext">
+    ///     <see langword="true" /> to attempt to marshal the continuation back to
+    ///     the original context captured; otherwise, <see langword="false" />.
+    /// </param>
+    /// <returns>
+    ///     A <see cref="Task{TResult}" /> that represents the successful <see cref="Result{TNext}" /> returned by
+    ///     <paramref name="ifSuccessFunction" /> if <paramref name="resultTask" /> is successful;
+    ///     otherwise, a failed <see cref="Result{TNext}" /> with the original <see cref="Error" />.
+    /// </returns>
+    /// <exception cref="ArgumentNullException">
+    ///     If any of the <paramref name="resultTask" /> or <paramref name="ifSuccessFunction" />
+    ///     parameters are <see langword="null" />.
+    /// </exception>
+    /// <exception cref="InvalidOperationException">
+    ///     If the asynchronous operation represented by <paramref name="resultTask" /> returns <see langword="null" />.
+    /// </exception>
+    public static async Task<Result<TNext>> IfSuccessAsync<T, TNext>(this Task<Result<T>> resultTask,
+        Func<T, Task<Result<TNext>>> ifSuccessFunction, bool continueOnCapturedContext = false)
+    {
+        ArgumentNullException.ThrowIfNull(resultTask);
+        ArgumentNullException.ThrowIfNull(ifSuccessFunction);
+
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+
+        if (result is null)
+            throw new InvalidOperationException("The asynchronous operation returned null.");
+
+        if (result.IsSuccess())
+            return await ifSuccessFunction(result.Value!).ConfigureAwait(continueOnCapturedContext);
+
         return result.Error!;
     }
 
