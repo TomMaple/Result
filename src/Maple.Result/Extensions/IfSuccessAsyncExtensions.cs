@@ -390,13 +390,18 @@ public static class IfSuccessAsyncExtensions
     ///     if the asynchronous <paramref name="resultTask" /> operation represents a successful outcome.
     /// </summary>
     /// <remarks>
-    ///     This method enables fluent handling of asynchronous operations that return a <see cref="Result" />
-    ///     by executing the provided asynchronous action only when the <paramref name="resultTask" /> indicates
-    ///     a successful asynchronous operation.
-    ///     The action is not invoked if the outcome of the <paramref name="resultTask" /> is not successful.
+    ///     <para>
+    ///         This method enables fluent handling of asynchronous operations that return a <see cref="Result" />
+    ///         by executing the provided asynchronous action only when the <paramref name="resultTask" /> indicates
+    ///         a successful asynchronous operation.
+    ///         The action is not invoked if the outcome of the <paramref name="resultTask" /> is not successful.
+    ///     </para>
+    ///     <para>
+    ///         The method executes passed <paramref name="resultTask" /> asynchronous operation, does not modify its result.
+    ///     </para>
     /// </remarks>
     /// <param name="resultTask">
-    ///     The asynchronous operation which result is to be inspected.
+    ///     The asynchronous operation to be executed and which result is to be inspected.
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="ifSuccessAction">
@@ -441,11 +446,16 @@ public static class IfSuccessAsyncExtensions
     ///     otherwise, returns an asynchronous operation that represents the original <see cref="Error" />.
     /// </summary>
     /// <remarks>
-    ///     This method enables chaining additional asynchronous operations that should only execute
-    ///     if the previous asynchronous operation was successful; otherwise the provided function is not invoked.
+    ///     <para>
+    ///         This method enables chaining additional asynchronous operations that should only execute
+    ///         if the previous asynchronous operation was successful; otherwise the provided function is not invoked.
+    ///     </para>
+    ///     <para>
+    ///         The method executes passed <paramref name="resultTask" /> asynchronous operation, does not modify its result.
+    ///     </para>
     /// </remarks>
     /// <param name="resultTask">
-    ///     The asynchronous operation which result is to be inspected.
+    ///     The asynchronous operation to be executed and which result is to be inspected.
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="ifSuccessFunction">
@@ -487,17 +497,23 @@ public static class IfSuccessAsyncExtensions
 
     /// <summary>
     ///     Invokes the specified asynchronous function as an asynchronous operation, and returns its output
-    ///     as a <see cref="Task{TResult}" />, if the operation represented by the <paramref name="resultTask" /> is successful;
+    ///     as a <see cref="Task{TResult}" />, if the operation represented by the <paramref name="resultTask" />
+    ///     is successful;
     ///     otherwise, returns a failed <see cref="Task{TResult}" /> with the original <see cref="Error" />.
     /// </summary>
     /// <remarks>
-    ///     This method enables chaining additional asynchronous operations that should only execute
-    ///     if the previous was successful.
-    ///     If <paramref name="resultTask" /> is not a successful operation, the provided function is not invoked.
+    ///     <para>
+    ///         This method enables chaining additional asynchronous operations that should only execute
+    ///         if the previous was successful.
+    ///         If <paramref name="resultTask" /> is not a successful operation, the provided function is not invoked.
+    ///     </para>
+    ///     <para>
+    ///         The method executes passed <paramref name="resultTask" /> asynchronous operation, does not modify its result.
+    ///     </para>
     /// </remarks>
     /// <typeparam name="T">The type of the <see cref="Result{T}" /> value to return if the operation is successful.</typeparam>
     /// <param name="resultTask">
-    ///     The asynchronous operation which result is to be inspected.
+    ///     The asynchronous operation to be executed and which result is to be inspected.
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="ifSuccessFunction">
@@ -546,13 +562,18 @@ public static class IfSuccessAsyncExtensions
     ///     with the original <see cref="Error" />.
     /// </summary>
     /// <remarks>
-    ///     This method enables chaining additional asynchronous operations that should only execute
-    ///     if the previous was successful.
-    ///     If <paramref name="resultTask" /> is not successful operation, the provided function is not invoked.
+    ///     <para>
+    ///         This method enables chaining additional asynchronous operations that should only execute
+    ///         if the previous was successful.
+    ///         If <paramref name="resultTask" /> is not successful operation, the provided function is not invoked.
+    ///     </para>
+    ///     <para>
+    ///         The method executes passed <paramref name="resultTask" /> asynchronous operation, does not modify its result.
+    ///     </para>
     /// </remarks>
     /// <typeparam name="T">The type of the <see cref="Result{T}" /> value to return if the operation is successful.</typeparam>
     /// <param name="resultTask">
-    ///     The asynchronous operation which result is to be inspected.
+    ///     The asynchronous operation to be executed and which result is to be inspected.
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="ifSuccessFunction">
@@ -577,7 +598,8 @@ public static class IfSuccessAsyncExtensions
     /// <exception cref="InvalidOperationException">
     ///     If the asynchronous operation represented by <paramref name="resultTask" /> returns <see langword="null" />.
     /// </exception>
-    public static async Task<Result<T>> IfSuccessAsync<T>(this Task<Result> resultTask, Func<Task<Result<T>>> ifSuccessFunction,
+    public static async Task<Result<T>> IfSuccessAsync<T>(this Task<Result> resultTask,
+        Func<Task<Result<T>>> ifSuccessFunction,
         bool continueOnCapturedContext = false)
     {
         ArgumentNullException.ThrowIfNull(resultTask);
@@ -603,10 +625,15 @@ public static class IfSuccessAsyncExtensions
     ///     if the asynchronous <paramref name="resultTask" /> operation represents a successful outcome.
     /// </summary>
     /// <remarks>
-    ///     This method enables fluent handling of asynchronous operations that return a <see cref="Result{T}" />
-    ///     by executing the provided asynchronous action only when the <paramref name="resultTask" /> indicates
-    ///     a successful asynchronous operation.
-    ///     The action is not invoked if the outcome of the <paramref name="resultTask" /> is not successful.
+    ///     <para>
+    ///         This method enables fluent handling of asynchronous operations that return a <see cref="Result{T}" />
+    ///         by executing the provided asynchronous action only when the <paramref name="resultTask" /> indicates
+    ///         a successful asynchronous operation.
+    ///         The action is not invoked if the outcome of the <paramref name="resultTask" /> is not successful.
+    ///     </para>
+    ///     <para>
+    ///         The method executes passed <paramref name="resultTask" /> asynchronous operation, does not modify its result.
+    ///     </para>
     /// </remarks>
     /// <typeparam name="T">
     ///     The type of the <see cref="Result{T}" /> value used to determine whether to execute the passed
@@ -614,7 +641,7 @@ public static class IfSuccessAsyncExtensions
     ///     Also, the type of the <see cref="Result{T}" /> value to return if the operation is successful.
     /// </typeparam>
     /// <param name="resultTask">
-    ///     The asynchronous operation which result is to be inspected.
+    ///     The asynchronous operation to be executed and which result is to be inspected.
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="ifSuccessAction">
@@ -637,8 +664,8 @@ public static class IfSuccessAsyncExtensions
     /// <exception cref="InvalidOperationException">
     ///     If the asynchronous operation represented by <paramref name="resultTask" /> returns <see langword="null" />.
     /// </exception>
-    public static async Task<Result<T>> IfSuccessAsync<T>(this Task<Result<T>> resultTask, Func<T, Task> ifSuccessAction,
-        bool continueOnCapturedContext = false)
+    public static async Task<Result<T>> IfSuccessAsync<T>(this Task<Result<T>> resultTask,
+        Func<T, Task> ifSuccessAction, bool continueOnCapturedContext = false)
     {
         ArgumentNullException.ThrowIfNull(resultTask);
         ArgumentNullException.ThrowIfNull(ifSuccessAction);
@@ -660,15 +687,20 @@ public static class IfSuccessAsyncExtensions
     ///     otherwise, returns an asynchronous operation that represents the original <see cref="Error" />.
     /// </summary>
     /// <remarks>
-    ///     This method enables chaining additional asynchronous operations that should only execute
-    ///     if the previous asynchronous operation was successful; otherwise the provided function is not invoked.
+    ///     <para>
+    ///         This method enables chaining additional asynchronous operations that should only execute
+    ///         if the previous asynchronous operation was successful; otherwise the provided function is not invoked.
+    ///     </para>
+    ///     <para>
+    ///         The method executes passed <paramref name="resultTask" /> asynchronous operation, does not modify its result.
+    ///     </para>
     /// </remarks>
     /// <typeparam name="T">
     ///     The type of the <see cref="Result{T}" /> value used to determine whether to execute the passed
     ///     function. If successful, this is also the type of the parameter passed to that function.
     /// </typeparam>
     /// <param name="resultTask">
-    ///     The asynchronous operation which result is to be inspected.
+    ///     The asynchronous operation to be executed and which result is to be inspected.
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="ifSuccessFunction">
@@ -692,8 +724,8 @@ public static class IfSuccessAsyncExtensions
     /// <exception cref="InvalidOperationException">
     ///     If the asynchronous operation represented by <paramref name="resultTask" /> returns <see langword="null" />.
     /// </exception>
-    public static async Task<Result> IfSuccessAsync<T>(this Task<Result<T>> resultTask, Func<T, Task<Result>> ifSuccessFunction,
-        bool continueOnCapturedContext = false)
+    public static async Task<Result> IfSuccessAsync<T>(this Task<Result<T>> resultTask,
+        Func<T, Task<Result>> ifSuccessFunction, bool continueOnCapturedContext = false)
     {
         ArgumentNullException.ThrowIfNull(resultTask);
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
@@ -716,8 +748,13 @@ public static class IfSuccessAsyncExtensions
     ///     otherwise, returns an asynchronous operation that represents the original <see cref="Error" />.
     /// </summary>
     /// <remarks>
-    ///     This method enables chaining additional asynchronous operations that should only execute
-    ///     if the previous asynchronous operation was successful; otherwise the provided function is not invoked.
+    ///     <para>
+    ///         This method enables chaining additional asynchronous operations that should only execute
+    ///         if the previous asynchronous operation was successful; otherwise the provided function is not invoked.
+    ///     </para>
+    ///     <para>
+    ///         The method executes passed <paramref name="resultTask" /> asynchronous operation, does not modify its result.
+    ///     </para>
     /// </remarks>
     /// <typeparam name="T">
     ///     The type of the <see cref="Result{T}" /> value used to determine whether to execute the passed
@@ -728,7 +765,7 @@ public static class IfSuccessAsyncExtensions
     ///     value to return.
     /// </typeparam>
     /// <param name="resultTask">
-    ///     The asynchronous operation which result is to be inspected.
+    ///     The asynchronous operation to be executed and which result is to be inspected.
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="ifSuccessFunction">
@@ -776,8 +813,13 @@ public static class IfSuccessAsyncExtensions
     ///     otherwise, returns an asynchronous operation that represents the original <see cref="Error" />.
     /// </summary>
     /// <remarks>
-    ///     This method enables chaining additional asynchronous operations that should only execute
-    ///     if the previous asynchronous operation was successful; otherwise the provided function is not invoked.
+    ///     <para>
+    ///         This method enables chaining additional asynchronous operations that should only execute
+    ///         if the previous asynchronous operation was successful; otherwise the provided function is not invoked.
+    ///     </para>
+    ///     <para>
+    ///         The method executes passed <paramref name="resultTask" /> asynchronous operation, does not modify its result.
+    ///     </para>
     /// </remarks>
     /// <typeparam name="T">
     ///     The type of the <see cref="Result{T}" /> value used to determine whether to execute the passed
@@ -788,7 +830,7 @@ public static class IfSuccessAsyncExtensions
     ///     of the passed function.
     /// </typeparam>
     /// <param name="resultTask">
-    ///     The asynchronous operation which result is to be inspected.
+    ///     The asynchronous operation to be executed and which result is to be inspected.
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="ifSuccessFunction">

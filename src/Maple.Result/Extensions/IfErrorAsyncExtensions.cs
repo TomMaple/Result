@@ -112,15 +112,20 @@ public static class IfErrorAsyncExtensions
     ///     and returns its <typeparamref name="TResult" />.
     /// </summary>
     /// <remarks>
-    ///     Use this method to perform side effects, such as logging or error handling, when a <paramref name="resultTask" />
-    ///     indicates an asynchronous error operation, without altering the operation result. The method executes
-    ///     passed <paramref name="resultTask" /> asynchronous operation, does not modify its result.
+    ///     <para>
+    ///         Use this method to perform side effects, such as logging or error handling,
+    ///         when a <paramref name="resultTask" /> indicates an asynchronous error operation,
+    ///         without altering the operation result.
+    ///     </para>
+    ///     <para>
+    ///         The method executes passed <paramref name="resultTask" /> asynchronous operation, does not modify its result.
+    ///     </para>
     /// </remarks>
     /// <typeparam name="TResult">
     ///     The type of the operation result object, which must implement the <see cref="IResult" /> interface.
     /// </typeparam>
     /// <param name="resultTask">
-    ///     The asynchronous operation which result is to be inspected.
+    ///     The asynchronous operation to be executed and which result is to be inspected.
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="ifErrorAction">
@@ -170,16 +175,20 @@ public static class IfErrorAsyncExtensions
     ///     operation.
     /// </summary>
     /// <remarks>
-    ///     Use this method to handle error cases in a fluent, asynchronous manner without affecting successful results.
-    ///     The <paramref name="ifErrorFunction" /> is only invoked if the outcome of the <paramref name="resultTask" />
-    ///     asynchronous operation indicates an error.
-    ///     The method executes passed <paramref name="resultTask" /> asynchronous operation.
+    ///     <para>
+    ///         Use this method to handle error cases in a fluent, asynchronous manner without affecting successful results.
+    ///         The <paramref name="ifErrorFunction" /> is only invoked if the outcome of the <paramref name="resultTask" />
+    ///         asynchronous operation indicates an error.
+    ///     </para>
+    ///     <para>
+    ///         The method executes passed <paramref name="resultTask" /> asynchronous operation, does not modify its result.
+    ///     </para>
     /// </remarks>
     /// <typeparam name="TResult">
     ///     The type of the operation result object, which must implement the <see cref="IResult" /> interface.
     /// </typeparam>
     /// <param name="resultTask">
-    ///     The asynchronous operation which result is to be inspected.
+    ///     The asynchronous operation to be executed and which result is to be inspected.
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="ifErrorFunction">
@@ -192,7 +201,8 @@ public static class IfErrorAsyncExtensions
     /// </param>
     /// <returns>
     ///     A <see cref="Task{IResult}" /> that represents the <see cref="IResult" /> outcome of the asynchronous operation.
-    ///     The <see cref="Task{IResult}" /> is either the outcome of the original <paramref name="resultTask" /> if it indicates success, or
+    ///     The <see cref="Task{IResult}" /> is either the outcome of the original <paramref name="resultTask" /> if it
+    ///     indicates success, or
     ///     the result returned by the <paramref name="ifErrorFunction" /> if an <see cref="Error" /> is present.
     /// </returns>
     /// <exception cref="ArgumentNullException">
