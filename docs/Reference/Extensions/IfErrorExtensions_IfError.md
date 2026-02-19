@@ -42,7 +42,7 @@ The original `TResult` instance passed as a `result` parameter.
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` parameter is `null` or `ifErrorAction` parameter is `null`.
 
-## Examples
+### Examples
 ```csharp
 var createUserResult = _userService.CreateUser(userData);
 
@@ -84,7 +84,7 @@ The original `TResult` instance passed as a `result` parameter.
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` parameter is `null` or `ifErrorFunction` parameter is `null`.
 
-## Examples
+### Examples
 ```csharp
 var userResult = _userService.GetUser(userData);
 

@@ -42,10 +42,10 @@ A task object representing the asynchronous operation.
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 If any of the `result` or `collectionSelector` or `resultSelector` parameters are `null`.
 
-## Remarks
+### Remarks
 This method is used to enable LINQ query syntax for [Task](https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1)&lt;[Result&lt;T&gt;](../ResultT/ResultT.md)&gt; records. It allows chaining multiple asynchronous operations that return [Task](https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1)&lt;[Result&lt;T&gt;](../ResultT/ResultT.md)&gt; while maintaining the error state, if any of the operations fail.
 
-## Examples
+### Examples
 ```csharp
 var emailResult =
     await from addUser in _validationService.ValidateUserDataAsync(addUserRequest)

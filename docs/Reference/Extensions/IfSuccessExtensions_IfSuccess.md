@@ -44,7 +44,7 @@ The original `result` passed as a parameter. Can be used for method chaining.
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` parameter is `null` or `ifSuccessAction` parameter is `null`.
 
-## Examples
+### Examples
 ```csharp
 var createUserResult = _userService.CreateUser(userData);
 
@@ -79,7 +79,7 @@ The original `result` passed as a parameter. Can be used for method chaining.
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` parameter is `null` or `ifSuccessFunction` parameter is `null`.
 
-## Examples
+### Examples
 ```csharp
 var createUserResult = _userService.CreateUser(userData);
 
@@ -118,7 +118,7 @@ If the `result` is successful, the [Result](../ResultT/ResultT.md)&lt;T&gt; reco
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` parameter is `null` or `ifSuccessFunction` parameter is `null`.
 
-## Examples
+### Examples
 ```csharp
 var createUserResult = _userService.CreateUser(userData);
 
@@ -157,7 +157,7 @@ If the `result` is successful, the [Result](../ResultT/ResultT.md)&lt;T&gt; reco
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` parameter is `null` or `ifSuccessFunction` parameter is `null`.
 
-## Examples
+### Examples
 ```csharp
 var createUserResult = _userService.CreateUser(userData);
 
@@ -196,7 +196,7 @@ The original `result` passed as a parameter. Can be used for method chaining.
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` parameter is `null` or `ifSuccessAction` parameter is `null`.
 
-## Examples
+### Examples
 ```csharp
 var userResult = _userService.CreateUser(userData);
 
@@ -235,7 +235,7 @@ If the `result` is successful, the [Result](../Result/Result.md) returned by the
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` parameter is `null` or `ifSuccessFunction` parameter is `null`.
 
-## Examples
+### Examples
 ```csharp
 var createUserResult = _userService.CreateUser(userData);
 
@@ -277,7 +277,7 @@ If the `result` is successful, the [Result&lt;TNext&gt;](../ResultT/ResultT.md) 
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` parameter is `null` or `ifSuccessFunction` parameter is `null`.
 
-## Examples
+### Examples
 ```csharp
 var createUserResult = _userService.CreateUser(userData);
 
@@ -319,7 +319,7 @@ If the `result` is successful, the [Result&lt;TNext&gt;](../ResultT/ResultT.md) 
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` parameter is `null` or `ifSuccessFunction` parameter is `null`.
 
-## Examples
+### Examples
 ```csharp
 var createUserResult = _userService.CreateUser(userData);
 

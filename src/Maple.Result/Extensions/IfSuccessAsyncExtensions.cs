@@ -451,7 +451,7 @@ public static class IfSuccessAsyncExtensions
     ///         if the previous asynchronous operation was successful; otherwise the provided function is not invoked.
     ///     </para>
     ///     <para>
-    ///         The method executes passed <paramref name="resultTask" /> asynchronous operation, does not modify its result.
+    ///         The method executes passed <paramref name="resultTask" /> asynchronous operation.
     ///     </para>
     /// </remarks>
     /// <param name="resultTask">
@@ -508,7 +508,7 @@ public static class IfSuccessAsyncExtensions
     ///         If <paramref name="resultTask" /> is not a successful operation, the provided function is not invoked.
     ///     </para>
     ///     <para>
-    ///         The method executes passed <paramref name="resultTask" /> asynchronous operation, does not modify its result.
+    ///         The method executes passed <paramref name="resultTask" /> asynchronous operation.
     ///     </para>
     /// </remarks>
     /// <typeparam name="T">The type of the <see cref="Result{T}" /> value to return if the operation is successful.</typeparam>
@@ -568,7 +568,7 @@ public static class IfSuccessAsyncExtensions
     ///         If <paramref name="resultTask" /> is not successful operation, the provided function is not invoked.
     ///     </para>
     ///     <para>
-    ///         The method executes passed <paramref name="resultTask" /> asynchronous operation, does not modify its result.
+    ///         The method executes passed <paramref name="resultTask" /> asynchronous operation.
     ///     </para>
     /// </remarks>
     /// <typeparam name="T">The type of the <see cref="Result{T}" /> value to return if the operation is successful.</typeparam>
@@ -692,7 +692,7 @@ public static class IfSuccessAsyncExtensions
     ///         if the previous asynchronous operation was successful; otherwise the provided function is not invoked.
     ///     </para>
     ///     <para>
-    ///         The method executes passed <paramref name="resultTask" /> asynchronous operation, does not modify its result.
+    ///         The method executes passed <paramref name="resultTask" /> asynchronous operation.
     ///     </para>
     /// </remarks>
     /// <typeparam name="T">
@@ -753,7 +753,7 @@ public static class IfSuccessAsyncExtensions
     ///         if the previous asynchronous operation was successful; otherwise the provided function is not invoked.
     ///     </para>
     ///     <para>
-    ///         The method executes passed <paramref name="resultTask" /> asynchronous operation, does not modify its result.
+    ///         The method executes passed <paramref name="resultTask" /> asynchronous operation.
     ///     </para>
     /// </remarks>
     /// <typeparam name="T">
@@ -818,7 +818,7 @@ public static class IfSuccessAsyncExtensions
     ///         if the previous asynchronous operation was successful; otherwise the provided function is not invoked.
     ///     </para>
     ///     <para>
-    ///         The method executes passed <paramref name="resultTask" /> asynchronous operation, does not modify its result.
+    ///         The method executes passed <paramref name="resultTask" /> asynchronous operation.
     ///     </para>
     /// </remarks>
     /// <typeparam name="T">

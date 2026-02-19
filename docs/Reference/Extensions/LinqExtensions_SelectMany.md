@@ -44,10 +44,10 @@ A [Result&lt;T&gt;](../ResultT/ResultT.md) instance created by applying the prov
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 If any of the `result` or `collectionSelector` or `resultSelector` parameters are `null`.
 
-## Remarks
+### Remarks
 This method is used to enable LINQ query syntax for [Result&lt;T&gt;](../ResultT/ResultT.md) records. It allows chaining multiple operations that return [Result&lt;T&gt;](../ResultT/ResultT.md) instances while maintaining the error state, if any of the operations fail.
 
-## Examples
+### Examples
 ```csharp
 var emailResult =
     from addUser in _validationService.ValidateUserData(addUserRequest)

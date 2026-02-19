@@ -75,7 +75,7 @@ The task object representing the asynchronous operation.
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` or `ifSuccessAction` or `ifErrorAction` parameter is `null`.
 
-## Examples
+### Examples
 ```csharp
 var createUserResult = await _userService.CreateUserAsync(userData);
 
@@ -118,7 +118,7 @@ The task object representing the asynchronous operation.
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` or `ifSuccessFunction` or `ifErrorAction` parameter is `null`.
 
-## Examples
+### Examples
 ```csharp
 var createUserResult = await _userService.CreateUserAsync(userData);
 
@@ -161,7 +161,7 @@ The task object representing the asynchronous operation.
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` or `ifSuccessFunction` or `ifErrorFunction` parameter is `null`.
 
-## Examples
+### Examples
 ```csharp
 var authenticationResult = await _loginService.AuthenticateAsync(loginData);
 
@@ -212,7 +212,7 @@ The task object representing the asynchronous operation.
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` or `ifSuccessFunction` or `ifErrorAction` parameter is `null`.
 
-## Examples
+### Examples
 ```csharp
 var createUserResult = await _userService.CreateUserAsync(userData);
 
@@ -259,7 +259,7 @@ The task object representing the asynchronous operation.
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` or `ifSuccessFunction` or `ifErrorFunction` parameter is `null`.
 
-## Examples
+### Examples
 ```csharp
 var createUserResult = await _userService.CreateUserAsync(userData);
 
@@ -310,7 +310,7 @@ The task object representing the asynchronous operation.
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` or `ifSuccessFunction` or `ifErrorAction` parameter is `null`.
 
-## Examples
+### Examples
 ```csharp
 var createUserResult = await _userService.CreateUserAsync(userData);
 
@@ -357,7 +357,7 @@ The task object representing the asynchronous operation.
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` or `ifSuccessFunction` or `ifErrorFunction` parameter is `null`.
 
-## Examples
+### Examples
 ```csharp
 var createUserResult = await _userService.CreateUserAsync(userData);
 
@@ -404,7 +404,7 @@ The task object representing the asynchronous operation.
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` or `ifSuccessAction` or `ifErrorAction` parameter is `null`.
 
-## Examples
+### Examples
 ```csharp
 var userResult = await _userService.CreateUserAsync(userData);
 
@@ -457,7 +457,7 @@ The task object representing the asynchronous operation.
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` or `ifSuccessFunction` or `ifErrorAction` parameter is `null`.
 
-## Examples
+### Examples
 ```csharp
 var createUserResult = await _userService.CreateUserAsync(userData);
 
@@ -510,7 +510,7 @@ The task object representing the asynchronous operation.
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` or `ifSuccessFunction` or `ifErrorFunction` parameter is `null`.
 
-## Examples
+### Examples
 ```csharp
 var createUserResult = await _userService.CreateUserAsync(userData);
 
@@ -567,7 +567,7 @@ The task object representing the asynchronous operation.
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` or `ifSuccessFunction` or `ifErrorAction` parameter is `null`.
 
-## Examples
+### Examples
 ```csharp
 var createUserResult = await _userService.CreateUserAsync(userData);
 
@@ -620,7 +620,7 @@ The task object representing the asynchronous operation.
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` or `ifSuccessFunction` or `ifErrorAction` parameter is `null`.
 
-## Examples
+### Examples
 ```csharp
 var createUserResult = await _userService.CreateUserAsync(userData);
 
@@ -670,7 +670,10 @@ The `result` or `ifSuccessAction` or `ifErrorAction` parameter is `null`.
 #### [InvalidOperationException](https://learn.microsoft.com/dotnet/api/system.invalidoperationexception)
 The asynchronous operation represented by `resultTask` returns `null`.
 
-## Examples
+### Remarks
+The `MatchAsync` method executes the provided asynchronous operation represented by `resultTask` to evaluate its result. This enables chaining multiple asynchronous operations that return `Task<TResult>`.
+
+### Examples
 ```csharp
 var createUserResult = await _userService.CreateUserAsync(userData)
     .MatchAsync(
@@ -715,7 +718,10 @@ The `result` or `ifSuccessFunction` or `ifErrorAction` parameter is `null`.
 #### [InvalidOperationException](https://learn.microsoft.com/dotnet/api/system.invalidoperationexception)
 The asynchronous operation represented by `resultTask` returns `null`.
 
-## Examples
+### Remarks
+The `MatchAsync` method executes the provided asynchronous operation represented by `resultTask` to evaluate its result. This enables chaining multiple asynchronous operations that return `Task<TResult>`.
+
+### Examples
 ```csharp
 var createUserResult = await _userService.CreateUserAsync(userData)
     .MatchAsync(
@@ -760,7 +766,10 @@ The `result` or `ifSuccessFunction` or `ifErrorFunction` parameter is `null`.
 #### [InvalidOperationException](https://learn.microsoft.com/dotnet/api/system.invalidoperationexception)
 The asynchronous operation represented by `resultTask` returns `null`.
 
-## Examples
+### Remarks
+The `MatchAsync` method executes the provided asynchronous operation represented by `resultTask` to evaluate its result. This enables chaining multiple asynchronous operations that return `Task<TResult>`.
+
+### Examples
 ```csharp
 var authenticationResult = await _loginService.AuthenticateAsync(loginData)
     .MatchAsync(
@@ -813,7 +822,10 @@ The `result` or `ifSuccessFunction` or `ifErrorAction` parameter is `null`.
 #### [InvalidOperationException](https://learn.microsoft.com/dotnet/api/system.invalidoperationexception)
 The asynchronous operation represented by `resultTask` returns `null`.
 
-## Examples
+### Remarks
+The `MatchAsync` method executes the provided asynchronous operation represented by `resultTask` to evaluate its result. This enables chaining multiple asynchronous operations that return `Task<TResult>`.
+
+### Examples
 ```csharp
 var createUserResult = await _userService.CreateUserAsync(userData)
     .MatchAsync(
@@ -862,7 +874,10 @@ The `result` or `ifSuccessFunction` or `ifErrorAction` parameter is `null`.
 #### [InvalidOperationException](https://learn.microsoft.com/dotnet/api/system.invalidoperationexception)
 The asynchronous operation represented by `resultTask` returns `null`.
 
-## Examples
+### Remarks
+The `MatchAsync` method executes the provided asynchronous operation represented by `resultTask` to evaluate its result. This enables chaining multiple asynchronous operations that return `Task<TResult>`.
+
+### Examples
 ```csharp
 var createUserResult = await _userService.CreateUserAsync(userData)
     .MatchAsync(
@@ -916,7 +931,10 @@ The `result` or `ifSuccessFunction` or `ifErrorAction` parameter is `null`.
 #### [InvalidOperationException](https://learn.microsoft.com/dotnet/api/system.invalidoperationexception)
 The asynchronous operation represented by `resultTask` returns `null`.
 
-## Examples
+### Remarks
+The `MatchAsync` method executes the provided asynchronous operation represented by `resultTask` to evaluate its result. This enables chaining multiple asynchronous operations that return `Task<TResult>`.
+
+### Examples
 ```csharp
 var createUserResult = await _userService.CreateUserAsync(userData)
     .MatchAsync(
@@ -966,7 +984,10 @@ The `result` or `ifSuccessFunction` or `ifErrorFunction` parameter is `null`.
 #### [InvalidOperationException](https://learn.microsoft.com/dotnet/api/system.invalidoperationexception)
 The asynchronous operation represented by `resultTask` returns `null`.
 
-## Examples
+### Remarks
+The `MatchAsync` method executes the provided asynchronous operation represented by `resultTask` to evaluate its result. This enables chaining multiple asynchronous operations that return `Task<TResult>`.
+
+### Examples
 ```csharp
 var createUserResult = await _userService.CreateUserAsync(userData)
     .MatchAsync(
@@ -1016,7 +1037,10 @@ The `result` or `ifSuccessAction` or `ifErrorAction` parameter is `null`.
 #### [InvalidOperationException](https://learn.microsoft.com/dotnet/api/system.invalidoperationexception)
 The asynchronous operation represented by `resultTask` returns `null`.
 
-## Examples
+### Remarks
+The `MatchAsync` method executes the provided asynchronous operation represented by `resultTask` to evaluate its result. This enables chaining multiple asynchronous operations that return `Task<TResult>`.
+
+### Examples
 ```csharp
 var userResult = await _userService.CreateUserAsync(userData)
     .MatchAsync(
@@ -1072,7 +1096,10 @@ The `result` or `ifSuccessAction` or `ifErrorAction` parameter is `null`.
 #### [InvalidOperationException](https://learn.microsoft.com/dotnet/api/system.invalidoperationexception)
 The asynchronous operation represented by `resultTask` returns `null`.
 
-## Examples
+### Remarks
+The `MatchAsync` method executes the provided asynchronous operation represented by `resultTask` to evaluate its result. This enables chaining multiple asynchronous operations that return `Task<TResult>`.
+
+### Examples
 ```csharp
 var createUserResult = await _userService.CreateUserAsync(userData)
     .MatchAsync(
@@ -1128,7 +1155,10 @@ The `result` or `ifSuccessAction` or `ifErrorAction` parameter is `null`.
 #### [InvalidOperationException](https://learn.microsoft.com/dotnet/api/system.invalidoperationexception)
 The asynchronous operation represented by `resultTask` returns `null`.
 
-## Examples
+### Remarks
+The `MatchAsync` method executes the provided asynchronous operation represented by `resultTask` to evaluate its result. This enables chaining multiple asynchronous operations that return `Task<TResult>`.
+
+### Examples
 ```csharp
 var createUserResult = await _userService.CreateUserAsync(userData)
     .MatchAsync(
@@ -1188,7 +1218,10 @@ The `result` or `ifSuccessAction` or `ifErrorAction` parameter is `null`.
 #### [InvalidOperationException](https://learn.microsoft.com/dotnet/api/system.invalidoperationexception)
 The asynchronous operation represented by `resultTask` returns `null`.
 
-## Examples
+### Remarks
+The `MatchAsync` method executes the provided asynchronous operation represented by `resultTask` to evaluate its result. This enables chaining multiple asynchronous operations that return `Task<TResult>`.
+
+### Examples
 ```csharp
 var createUserResult = await _userService.CreateUserAsync(userData)
     .MatchAsync(
@@ -1244,7 +1277,10 @@ The `result` or `ifSuccessAction` or `ifErrorAction` parameter is `null`.
 #### [InvalidOperationException](https://learn.microsoft.com/dotnet/api/system.invalidoperationexception)
 The asynchronous operation represented by `resultTask` returns `null`.
 
-## Examples
+### Remarks
+The `MatchAsync` method executes the provided asynchronous operation represented by `resultTask` to evaluate its result. This enables chaining multiple asynchronous operations that return `Task<TResult>`.
+
+### Examples
 ```csharp
 var createUserResult = await _userService.CreateUserAsync(userData)
     .MatchAsync(

@@ -55,7 +55,7 @@ The task object representing the asynchronous operation.
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` parameter is `null` or `ifErrorAction` parameter is `null`.
 
-## Examples
+### Examples
 ```csharp
 var createUserResult = await _userService.CreateUserAsync(userData);
 
@@ -101,7 +101,7 @@ The task object representing the asynchronous operation.
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` parameter is `null` or `ifErrorFunction` parameter is `null`.
 
-## Examples
+### Examples
 ```csharp
 var userResult = await _userService.GetUserAsync(userData);
 
@@ -161,7 +161,10 @@ The `result` parameter is `null` or `ifErrorAction` parameter is `null`.
 #### [InvalidOperationException](https://learn.microsoft.com/dotnet/api/system.invalidoperationexception)
 The asynchronous operation represented by `resultTask` returns `null`.
 
-## Examples
+### Remarks
+The `IfErrorAsync` method executes the provided asynchronous operation represented by `resultTask` to evaluate its result. This enables chaining multiple asynchronous operations that return `Task<TResult>`.
+
+### Examples
 ```csharp
 var createUserResult = await _userService.CreateUserAsync(userData)
     .IfErrorAsync(async error =>
@@ -210,7 +213,10 @@ The `result` parameter is `null` or `ifErrorFunction` parameter is `null`.
 #### [InvalidOperationException](https://learn.microsoft.com/dotnet/api/system.invalidoperationexception)
 The asynchronous operation represented by `resultTask` returns `null`.
 
-## Examples
+### Remarks
+The `IfErrorAsync` method executes the provided asynchronous operation represented by `resultTask` to evaluate its result. This enables chaining multiple asynchronous operations that return `Task<TResult>`.
+
+### Examples
 ```csharp
 var userResult = await _userService.GetUserAsync(userData)
     .IfErrorAsync(async error =>
