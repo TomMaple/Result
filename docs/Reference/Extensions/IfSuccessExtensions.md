@@ -15,11 +15,11 @@ Inheritance [Object](https://learn.microsoft.com/dotnet/api/system.object) → I
 ## Methods
 | Name | Description |
 | ---- | ----------- |
-| [IfSuccess(Result, Action)](IfSuccessExtensions_IfSuccess.md#ifsuccessresult-func) | Executes the specified action, if the [Result](../Result/Result.md) represents a successful operation. |
+| [IfSuccess(Result, Action)](IfSuccessExtensions_IfSuccess.md#ifsuccessresult-action) | Executes the specified action, if the [Result](../Result/Result.md) represents a successful operation. |
 | [IfSuccess(Result, Func&lt;Result&gt;)](IfSuccessExtensions_IfSuccess.md#ifsuccessresult-funcresult) | Executes the specified function, if the [Result](../Result/Result.md) represents a successful operation. |
 | [IfSuccess&lt;T&gt;(Result, Func&lt;T&gt;)](IfSuccessExtensions_IfSuccess.md#ifsuccesstresult-funct) | Executes the specified function, if the [Result](../Result/Result.md) represents a successful operation. |
 | [IfSuccess&lt;T&gt;(Result, Func&lt;Result&lt;T&gt;&gt;)](IfSuccessExtensions_IfSuccess.md#ifsuccesstresult-funcresultt) | Executes the specified function, if the [Result](../Result/Result.md) represents a successful operation. |
-| [IfSuccess&lt;T&gt;(Result&lt;T&gt;, Action&lt;T&gt;)](IfSuccessExtensions_IfSuccess.md#ifsuccesstresultt-funct-) | Executes the specified action, if the [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation. |
+| [IfSuccess&lt;T&gt;(Result&lt;T&gt;, Action&lt;T&gt;)](IfSuccessExtensions_IfSuccess.md#ifsuccesstresultt-actiont) | Executes the specified action, if the [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation. |
 | [IfSuccess&lt;T&gt;(Result&lt;T&gt;, Func&lt;T, Result&gt;)](IfSuccessExtensions_IfSuccess.md#ifsuccesstresultt-funct-result) | Executes the specified function, if the [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation. |
 | [IfSuccess&lt;T, TNext&gt;(Result&lt;T&gt;, Func&lt;T, TNext&gt;)](IfSuccessExtensions_IfSuccess.md#ifsuccesst-tnextresultt-funct-tnext) | Executes the specified function, if the [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation. |
 | [IfSuccess&lt;T, TNext&gt;(Result&lt;T&gt;, Func&lt;T, Result&lt;TNext&gt;&gt;)](IfSuccessExtensions_IfSuccess.md#ifsuccesst-tnextresultt-funct-resulttnext) | Executes the specified function, if the [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation. |

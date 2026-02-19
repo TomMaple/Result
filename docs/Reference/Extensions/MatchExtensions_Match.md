@@ -8,18 +8,18 @@ Runs a specific action or function depending on whether the instance of [Result]
 ## Overloads
 | Name | Description |
 | ---- | ----------- |
-| [Match(Result, Action, Action&lt;Error&gt;)](#matchresult-func-funcerror-boolean) | Executes one of the specified actions depending on whether the [Result](../Result/Result.md) represents a success or a failure. |
-| [Match(Result, Func&lt;Result&gt;, Action&lt;Error&gt;)](#matchresult-funcresult-funcerror-boolean) | Executes the specified function or action depending on whether the [Result](../Result/Result.md) represents a success or a failure. |
-| [Match(Result, Func&lt;Result&gt;, Func&lt;Error, Result&gt;)](#matchresult-funcresult-funcerror-result-boolean) | Executes one of the specified functions depending on whether the [Result](../Result/Result.md) represents a success or a failure. |
-| [Match&lt;T&gt;(Result, Func&lt;T&gt;, Action&lt;Error&gt;)](#matchtresult-funct-funcerror-boolean) | Executes the specified function or action depending on whether the [Result](../Result/Result.md) represents a success or a failure. |
-| [Match&lt;T&gt;(Result, Func&lt;T&gt;, Func&lt;Error, T&gt;)](#matchtresult-funct-funcerror-t-boolean) | Executes one of the specified functions depending on whether the [Result](../Result/Result.md) represents a success or a failure. |
-| [Match&lt;T&gt;(Result, Func&lt;Result&lt;T&gt;&gt;, Action&lt;Error&gt;)](#matchtresult-funcresultt-funcerror-boolean) | Executes the specified function or action depending on whether the [Result](../Result/Result.md) represents a success or a failure. |
-| [Match&lt;T&gt;(Result, Func&lt;Result&lt;T&gt;&gt;, Func&lt;Error, Result&lt;T&gt;&gt;)](#matchtresult-funcresultt-funcerror-resultt-boolean) | Executes one of the specified functions depending on whether the [Result](../Result/Result.md) represents a success or a failure. |
-| [Match&lt;T&gt;(Result&lt;T&gt;, Action&lt;T&gt;, Action&lt;Error&gt;)](#matchtresultt-result-funct-funcerror-boolean) |  Executes one of the specified actions depending on whether the [Result&lt;T&gt;](../ResultT/ResultT.md) represents a success or a failure. |
-| [Match&lt;T, TNext&gt;(Result&lt;T&gt;, Func&lt;T, TNext&gt;, Action&lt;Error&gt;)](#matcht-tnextresultt-result-funct-tnext-funcerror-boolean) |  Executes the specified function or action depending on whether the [Result&lt;T&gt;](../ResultT/ResultT.md) represents a success or a failure. |
-| [Match&lt;T, TNext&gt;(Result&lt;T&gt;, Func&lt;T, TNext&gt;, Func&lt;Error, TNext&gt;)](#matcht-tnextresultt-result-funct-tnext-funcerror-tnext-boolean) |  Executes one of the specified functions depending on whether the [Result&lt;T&gt;](../ResultT/ResultT.md) represents a success or a failure. |
-| [Match&lt;T, TNext&gt;(Result&lt;T&gt;, Func&lt;T, Result&lt;TNext&gt;&gt;, Action&lt;Error&gt;)](#matcht-tnextresultt-result-funct-resulttnext-funcerror-boolean) |  Executes the specified function or action depending on whether the [Result&lt;T&gt;](../ResultT/ResultT.md) represents a success or a failure. |
-| [Match&lt;T, TNext&gt;(Result&lt;T&gt;, Func&lt;T, Result&lt;TNext&gt;&gt;, Func&lt;Error, Result&lt;TNext&gt;&gt;)](#matcht-tnextresultt-result-funct-resulttnext-funcerror-resulttnext-boolean) |  Executes one of the specified functions depending on whether the [Result&lt;T&gt;](../ResultT/ResultT.md) represents a success or a failure. |
+| [Match(Result, Action, Action&lt;Error&gt;)](#matchresult-action-actionerror) | Executes one of the specified actions depending on whether the [Result](../Result/Result.md) represents a success or a failure. |
+| [Match(Result, Func&lt;Result&gt;, Action&lt;Error&gt;)](#matchresult-actionresult-actionerror) | Executes the specified function or action depending on whether the [Result](../Result/Result.md) represents a success or a failure. |
+| [Match(Result, Func&lt;Result&gt;, Func&lt;Error, Result&gt;)](#matchresult-funcresult-funcerror-result) | Executes one of the specified functions depending on whether the [Result](../Result/Result.md) represents a success or a failure. |
+| [Match&lt;T&gt;(Result, Func&lt;T&gt;, Action&lt;Error&gt;)](#matchtresult-funct-actionerror) | Executes the specified function or action depending on whether the [Result](../Result/Result.md) represents a success or a failure. |
+| [Match&lt;T&gt;(Result, Func&lt;T&gt;, Func&lt;Error, T&gt;)](#matchtresult-funct-funcerror-t) | Executes one of the specified functions depending on whether the [Result](../Result/Result.md) represents a success or a failure. |
+| [Match&lt;T&gt;(Result, Func&lt;Result&lt;T&gt;&gt;, Action&lt;Error&gt;)](#matchtresult-funcresultt-actionerror) | Executes the specified function or action depending on whether the [Result](../Result/Result.md) represents a success or a failure. |
+| [Match&lt;T&gt;(Result, Func&lt;Result&lt;T&gt;&gt;, Func&lt;Error, Result&lt;T&gt;&gt;)](#matchtresult-funcresultt-funcerror-resultt) | Executes one of the specified functions depending on whether the [Result](../Result/Result.md) represents a success or a failure. |
+| [Match&lt;T&gt;(Result&lt;T&gt;, Action&lt;T&gt;, Action&lt;Error&gt;)](#matchtresultt-actiont-actionerror) |  Executes one of the specified actions depending on whether the [Result&lt;T&gt;](../ResultT/ResultT.md) represents a success or a failure. |
+| [Match&lt;T, TNext&gt;(Result&lt;T&gt;, Func&lt;T, TNext&gt;, Action&lt;Error&gt;)](#matcht-tnextresultt-funct-tnext-actionerror) |  Executes the specified function or action depending on whether the [Result&lt;T&gt;](../ResultT/ResultT.md) represents a success or a failure. |
+| [Match&lt;T, TNext&gt;(Result&lt;T&gt;, Func&lt;T, TNext&gt;, Func&lt;Error, TNext&gt;)](#matcht-tnextresultt-funct-tnext-funcerror-tnext) |  Executes one of the specified functions depending on whether the [Result&lt;T&gt;](../ResultT/ResultT.md) represents a success or a failure. |
+| [Match&lt;T, TNext&gt;(Result&lt;T&gt;, Func&lt;T, Result&lt;TNext&gt;&gt;, Action&lt;Error&gt;)](#matcht-tnextresultt-funct-resulttnext-actionerror) |  Executes the specified function or action depending on whether the [Result&lt;T&gt;](../ResultT/ResultT.md) represents a success or a failure. |
+| [Match&lt;T, TNext&gt;(Result&lt;T&gt;, Func&lt;T, Result&lt;TNext&gt;&gt;, Func&lt;Error, Result&lt;TNext&gt;&gt;)](#matcht-tnextresultt-result-funct-resulttnext-funcerror-resulttnext) |  Executes one of the specified functions depending on whether the [Result&lt;T&gt;](../ResultT/ResultT.md) represents a success or a failure. |
 
 ## Match(Result, Action, Action&lt;Error&gt;)
 Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchExtensions.cs#L53" target="_blank">MatchExtensions.cs</a>
@@ -48,7 +48,7 @@ The original `result` passed as a parameter. Can be used for method chaining.
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` or `ifSuccessAction` or `ifErrorAction` parameter is `null`.
 
-## Examples
+### Examples
 ```csharp
 var createUserResult = _userService.CreateUser(userData);
 
@@ -86,7 +86,7 @@ If the `result` is successful, the [Result](../Result/Result.md) record returned
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` or `ifSuccessFunction` or `ifErrorAction` parameter is `null`.
 
-## Examples
+### Examples
 ```csharp
 var createUserResult = _userService.CreateUser(userData);
 
@@ -124,7 +124,7 @@ The [Result](../Result/Result.md) returned by either the `ifSuccessFunction`, if
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` or `ifSuccessFunction` or `ifErrorFunction` parameter is `null`.
 
-## Examples
+### Examples
 ```csharp
 var authenticationResult = _loginService.Authenticate(loginData);
 
@@ -169,7 +169,7 @@ The [Result](../ResultT/ResultT.md) with the value returned by the `ifSuccessFun
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` or `ifSuccessFunction` or `ifErrorAction` parameter is `null`.
 
-## Examples
+### Examples
 ```csharp
 var createUserResult = _userService.CreateUser(userData);
 
@@ -210,7 +210,7 @@ The value returned by either the `ifSuccessFunction` if the `result` is successf
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` or `ifSuccessFunction` or `ifErrorFunction` parameter is `null`.
 
-## Examples
+### Examples
 ```csharp
 var createUserResult = _userService.CreateUser(userData);
 
@@ -256,7 +256,7 @@ The value returned by the `ifSuccessFunction`, if the `result` is successful, or
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` or `ifSuccessFunction` or `ifErrorAction` parameter is `null`.
 
-## Examples
+### Examples
 ```csharp
 var createUserResult = _userService.CreateUser(userData);
 
@@ -298,7 +298,7 @@ The [Result](../ResultT/ResultT.md) with the value of type `T` returned by the `
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` or `ifSuccessFunction` or `ifErrorFunction` parameter is `null`.
 
-## Examples
+### Examples
 ```csharp
 var createUserResult = _userService.CreateUser(userData);
 
@@ -339,7 +339,7 @@ The original `result` passed as a parameter. Can be used for method chaining.
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` or `ifSuccessAction` or `ifErrorAction` parameter is `null`.
 
-## Examples
+### Examples
 ```csharp
 var userResult = _userService.CreateUser(userData);
 
@@ -384,7 +384,7 @@ The [Result](../Result/Result.md)&lt;TNext&gt; with the value returned by the `i
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` or `ifSuccessFunction` or `ifErrorAction` parameter is `null`.
 
-## Examples
+### Examples
 ```csharp
 var createUserResult = _userService.CreateUser(userData);
 
@@ -429,7 +429,7 @@ The value of the `TNext` type returned by either the `ifSuccessFunction`, if the
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` or `ifSuccessFunction` or `ifErrorFunction` parameter is `null`.
 
-## Examples
+### Examples
 ```csharp
 var createUserResult = _userService.CreateUser(userData);
 
@@ -478,7 +478,7 @@ The [Result](../ResultT/ResultT.md)&lt;TNext&gt; with the value returned by the 
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` or `ifSuccessFunction` or `ifErrorAction` parameter is `null`.
 
-## Examples
+### Examples
 ```csharp
 var createUserResult = _userService.CreateUser(userData);
 
@@ -523,7 +523,7 @@ The [Result](../ResultT/ResultT.md)&lt;TNext&gt; with the value of type `TNext` 
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` or `ifSuccessFunction` or `ifErrorAction` parameter is `null`.
 
-## Examples
+### Examples
 ```csharp
 var createUserResult = _userService.CreateUser(userData);
 

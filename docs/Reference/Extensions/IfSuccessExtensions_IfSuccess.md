@@ -8,11 +8,11 @@ Runs a specific action or function, if the instance of [Result](../Result/Result
 ## Overloads
 | Name | Description |
 | ---- | ----------- |
-| [IfSuccess(Result, Action)](#ifsuccessresult-func) | Executes the specified action, if the [Result](../Result/Result.md) represents a successful operation. |
+| [IfSuccess(Result, Action)](#ifsuccessresult-action) | Executes the specified action, if the [Result](../Result/Result.md) represents a successful operation. |
 | [IfSuccess(Result, Func&lt;Result&gt;)](#ifsuccessresult-funcresult) | Executes the specified function, if the [Result](../Result/Result.md) represents a successful operation. |
 | [IfSuccess&lt;T&gt;(Result, Func&lt;T&gt;)](#ifsuccesstresult-funct) | Executes the specified function, if the [Result](../Result/Result.md) represents a successful operation. |
 | [IfSuccess&lt;T&gt;(Result, Func&lt;Result&lt;T&gt;&gt;)](#ifsuccesstresult-funcresultt) | Executes the specified function, if the [Result](../Result/Result.md) represents a successful operation. |
-| [IfSuccess&lt;T&gt;(Result&lt;T&gt;, Action&lt;T&gt;)](#ifsuccesstresultt-funct-) | Executes the specified action, if the [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation. |
+| [IfSuccess&lt;T&gt;(Result&lt;T&gt;, Action&lt;T&gt;)](#ifsuccesstresultt-actiont) | Executes the specified action, if the [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation. |
 | [IfSuccess&lt;T&gt;(Result&lt;T&gt;, Func&lt;T, Result&gt;)](#ifsuccesstresultt-funct-result) | Executes the specified function, if the [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation. |
 | [IfSuccess&lt;T, TNext&gt;(Result&lt;T&gt;, Func&lt;T, TNext&gt;)](#ifsuccesst-tnextresultt-funct-tnext) | Executes the specified function, if the [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation. |
 | [IfSuccess&lt;T, TNext&gt;(Result&lt;T&gt;, Func&lt;T, Result&lt;TNext&gt;&gt;)](#ifsuccesst-tnextresultt-funct-resulttnext) | Executes the specified function, if the [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation. |
@@ -44,7 +44,7 @@ The original `result` passed as a parameter. Can be used for method chaining.
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` parameter is `null` or `ifSuccessAction` parameter is `null`.
 
-## Examples
+### Examples
 ```csharp
 var createUserResult = _userService.CreateUser(userData);
 
@@ -79,7 +79,7 @@ The original `result` passed as a parameter. Can be used for method chaining.
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` parameter is `null` or `ifSuccessFunction` parameter is `null`.
 
-## Examples
+### Examples
 ```csharp
 var createUserResult = _userService.CreateUser(userData);
 
@@ -118,7 +118,7 @@ If the `result` is successful, the [Result](../ResultT/ResultT.md)&lt;T&gt; reco
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` parameter is `null` or `ifSuccessFunction` parameter is `null`.
 
-## Examples
+### Examples
 ```csharp
 var createUserResult = _userService.CreateUser(userData);
 
@@ -157,7 +157,7 @@ If the `result` is successful, the [Result](../ResultT/ResultT.md)&lt;T&gt; reco
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` parameter is `null` or `ifSuccessFunction` parameter is `null`.
 
-## Examples
+### Examples
 ```csharp
 var createUserResult = _userService.CreateUser(userData);
 
@@ -196,7 +196,7 @@ The original `result` passed as a parameter. Can be used for method chaining.
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` parameter is `null` or `ifSuccessAction` parameter is `null`.
 
-## Examples
+### Examples
 ```csharp
 var userResult = _userService.CreateUser(userData);
 
@@ -235,7 +235,7 @@ If the `result` is successful, the [Result](../Result/Result.md) returned by the
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` parameter is `null` or `ifSuccessFunction` parameter is `null`.
 
-## Examples
+### Examples
 ```csharp
 var createUserResult = _userService.CreateUser(userData);
 
@@ -277,7 +277,7 @@ If the `result` is successful, the [Result&lt;TNext&gt;](../ResultT/ResultT.md) 
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` parameter is `null` or `ifSuccessFunction` parameter is `null`.
 
-## Examples
+### Examples
 ```csharp
 var createUserResult = _userService.CreateUser(userData);
 
@@ -319,7 +319,7 @@ If the `result` is successful, the [Result&lt;TNext&gt;](../ResultT/ResultT.md) 
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` parameter is `null` or `ifSuccessFunction` parameter is `null`.
 
-## Examples
+### Examples
 ```csharp
 var createUserResult = _userService.CreateUser(userData);
 

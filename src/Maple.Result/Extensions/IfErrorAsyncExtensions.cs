@@ -106,4 +106,127 @@ public static class IfErrorAsyncExtensions
 
         return await ifErrorFunction(result.Error!).ConfigureAwait(continueOnCapturedContext);
     }
+
+    /// <summary>
+    ///     Invokes the specified asynchronous action if the <paramref name="resultTask" /> represents an error operation,
+    ///     and returns its <typeparamref name="TResult" />.
+    /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///         Use this method to perform side effects, such as logging or error handling,
+    ///         when a <paramref name="resultTask" /> indicates an asynchronous error operation,
+    ///         without altering the operation result.
+    ///     </para>
+    ///     <para>
+    ///         The method executes passed <paramref name="resultTask" /> asynchronous operation, does not modify its result.
+    ///     </para>
+    /// </remarks>
+    /// <typeparam name="TResult">
+    ///     The type of the operation result object, which must implement the <see cref="IResult" /> interface.
+    /// </typeparam>
+    /// <param name="resultTask">
+    ///     The asynchronous operation to be executed and which result is to be inspected.
+    ///     Must not be <see langword="null" />.
+    /// </param>
+    /// <param name="ifErrorAction">
+    ///     The asynchronous action to execute if the <paramref name="resultTask" /> returns an error.
+    ///     The <see cref="Error" /> associated with the <paramref name="resultTask" /> result is passed to
+    ///     this asynchronous action.
+    ///     Must not be <see langword="null" />.
+    /// </param>
+    /// <param name="continueOnCapturedContext">
+    ///     <see langword="true" /> to attempt to marshal the continuation back to
+    ///     the original context captured; otherwise, <see langword="false" />.
+    /// </param>
+    /// <returns>
+    ///     A <see cref="Task{IResult}" /> that represents the outcome of the <paramref name="resultTask" /> asynchronous
+    ///     operation,
+    ///     regardless of whether the action was invoked.
+    /// </returns>
+    /// <exception cref="ArgumentNullException">
+    ///     If any of the <paramref name="resultTask" /> or <paramref name="ifErrorAction" />
+    ///     parameters are <see langword="null" />.
+    /// </exception>
+    /// <exception cref="InvalidOperationException">
+    ///     If the asynchronous operation represented by <paramref name="resultTask" /> returns <see langword="null" />.
+    /// </exception>
+    public static async Task<TResult> IfErrorAsync<TResult>(this Task<TResult> resultTask,
+        Func<Error, Task> ifErrorAction,
+        bool continueOnCapturedContext = false)
+        where TResult : IResult
+    {
+        ArgumentNullException.ThrowIfNull(resultTask);
+        ArgumentNullException.ThrowIfNull(ifErrorAction);
+
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+
+        if (result is null)
+            throw new InvalidOperationException("The asynchronous operation returned null.");
+
+        if (!result.IsSuccess())
+            await ifErrorAction(result.Error!).ConfigureAwait(continueOnCapturedContext);
+
+        return result;
+    }
+
+    /// <summary>
+    ///     Invokes the specified asynchronous function if the <paramref name="resultTask" /> represents an error operation
+    ///     and returns its outcome; otherwise, returns the outcome of the <paramref name="resultTask" /> asynchronous
+    ///     operation.
+    /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///         Use this method to handle error cases in a fluent, asynchronous manner without affecting successful results.
+    ///         The <paramref name="ifErrorFunction" /> is only invoked if the outcome of the <paramref name="resultTask" />
+    ///         asynchronous operation indicates an error.
+    ///     </para>
+    ///     <para>
+    ///         The method executes passed <paramref name="resultTask" /> asynchronous operation, does not modify its result.
+    ///     </para>
+    /// </remarks>
+    /// <typeparam name="TResult">
+    ///     The type of the operation result object, which must implement the <see cref="IResult" /> interface.
+    /// </typeparam>
+    /// <param name="resultTask">
+    ///     The asynchronous operation to be executed and which result is to be inspected.
+    ///     Must not be <see langword="null" />.
+    /// </param>
+    /// <param name="ifErrorFunction">
+    ///     The asynchronous function to invoke asynchronously if the <paramref name="resultTask" /> returns an error.
+    ///     The function receives the error and returns a new result. Must not be <see langword="null" />.
+    /// </param>
+    /// <param name="continueOnCapturedContext">
+    ///     <see langword="true" /> to attempt to marshal the continuation back to
+    ///     the original context captured; otherwise, <see langword="false" />.
+    /// </param>
+    /// <returns>
+    ///     A <see cref="Task{IResult}" /> that represents the <see cref="IResult" /> outcome of the asynchronous operation.
+    ///     The <see cref="Task{IResult}" /> is either the outcome of the original <paramref name="resultTask" /> if it
+    ///     indicates success, or
+    ///     the result returned by the <paramref name="ifErrorFunction" /> if an <see cref="Error" /> is present.
+    /// </returns>
+    /// <exception cref="ArgumentNullException">
+    ///     If any of the <paramref name="resultTask" /> or <paramref name="ifErrorFunction" />
+    ///     parameters are <see langword="null" />.
+    /// </exception>
+    /// <exception cref="InvalidOperationException">
+    ///     If the asynchronous operation represented by <paramref name="resultTask" /> returns <see langword="null" />.
+    /// </exception>
+    public static async Task<TResult> IfErrorAsync<TResult>(this Task<TResult> resultTask,
+        Func<Error, Task<TResult>> ifErrorFunction, bool continueOnCapturedContext = false)
+        where TResult : IResult
+    {
+        ArgumentNullException.ThrowIfNull(resultTask);
+        ArgumentNullException.ThrowIfNull(ifErrorFunction);
+
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+
+        if (result is null)
+            throw new InvalidOperationException("The asynchronous operation returned null.");
+
+        if (result.IsSuccess())
+            return result;
+
+        return await ifErrorFunction(result.Error!).ConfigureAwait(continueOnCapturedContext);
+    }
 }
