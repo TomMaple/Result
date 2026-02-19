@@ -30,12 +30,12 @@ Although, there are many existing implementation of the *Result* pattern in C#, 
 * following standards ([RFC 9457](https://datatracker.ietf.org/doc/html/rfc9457)).
 
 # Quick Links
-* [Quick Start](#quick-start)
-* [The Result Pattern](#the-result-pattern)
-* [How To Use Result library](#how-to-use-result-library)
-* [Mapping to HTTP responses](#mapping-to-http-responses)
-* [FAQ](#faq)
-* [Learn More](#learn-more)
+* [Quick Start](https://github.com/TomMaple/Result#quick-start)
+* [The Result Pattern](https://github.com/TomMaple/Result#the-result-pattern)
+* [How To Use Result library](https://github.com/TomMaple/Result#how-to-use-result-library)
+* [Mapping to HTTP responses](https://github.com/TomMaple/Result#mapping-to-http-responses)
+* [FAQ](https://github.com/TomMaple/Result#faq)
+* [Learn More & Documentation](https://github.com/TomMaple/Result#learn-more)
 
 # Quick Start 
 ## Adding the *NuGet* Package
@@ -84,7 +84,7 @@ public async Task<Result> DeleteContactAsync(Guid id)
 * `Match()`
 * `MatchAsync()`
 
-#### Example
+#### Examples
 ```csharp
 var createUserResult = _userService.CreateUser(userData);
 await createUserResult.MatchAsync(
@@ -97,12 +97,28 @@ var companyResult = createUserResult
         company => _mapper.Map(company),
         error => _mapper.Map(error));
 ```
+or chaining multiple asynchronous operations:
+```csharp
+var userTokenResult =
+    await _validationService.ValidateUserDataAsync(userRequest)
+        .IfSuccessAsync(userData => _userService.GetUserAsync(userData))
+        .IfSuccessAsync(user => _loginService.GetUserTokenAsync(user));
+```
+
+or chaining multiple asynchronous operations using the query syntax:
+```csharp
+var userTokenResult =
+    await from userData in _validationService.ValidateUserDataAsync(userRequest)
+    from user in _userService.GetUserAsync(userData)
+    from token in _loginService.GetUserTokenAsync(user)
+    select token;
+```
 
 See more: [Maple.Result.Extensions](https://github.com/TomMaple/Result/blob/main/docs/Reference/Extensions/namespace.md)
 
 # The Result Pattern
 ## Key Benefits
-* **Explicitness** —  clearly communicates (e.g., via the function signature) that the operation may fail; it forces developer to handle both scenarios: a success and a failure.
+* **Explicitness** — clearly communicates (e.g., via the function signature) that the operation may fail; it forces developer to handle both scenarios: a success and a failure.
 * **Consistency** — offers consistent type of error and consistent structure of responses.
 * **Composability** — allows easier chaining of operations with extension methods, instead of multi-nested `if` blocks.
 * **Predictable Error Handling** — clearly defines categories of errors, making it easier to properly handle expected failures (e.g., validation errors, availability problems, a not-found resource).
@@ -322,8 +338,8 @@ It uses:
 
 |   | en\_ca | fr\_ca | es | zh\_cn |
 | - | ------ | ------ | -- | ------ |
-| Template | `The ‘{requiredPermission}’ permission is required to delete a contact.` | `L'autorisation «{requiredPermission}`»` est requise pour supprimer un contact.` | `Se requiere el permiso `«`{requiredPermission}`»` para eliminar un contacto.` | `删除联系人需要“{requiredPermission}”权限。` |
-| Localized message | `The ‘contact_delete’ permission is required to delete a contact.` | `L'autorisation `«`contact_delete`»` est requise pour supprimer un contact.` | `Se requiere el permiso `«`contact_delete`»` para eliminar un contacto.` | `删除联系人需要“contact_delete”权限。` |
+| Template | `The ‘{requiredPermission}’ permission is required to delete a contact.` | `L’autorisation «{requiredPermission}`»` est requise pour supprimer un contact.` | `Se requiere el permiso `«`{requiredPermission}`»` para eliminar un contacto.` | `删除联系人需要“{requiredPermission}”权限。` |
+| Localized message | `The ‘contact_delete’ permission is required to delete a contact.` | `L’autorisation `«`contact_delete`»` est requise pour supprimer un contact.` | `Se requiere el permiso `«`contact_delete`»` para eliminar un contacto.` | `删除联系人需要“contact_delete”权限。` |
 
 See more: [Error](https://github.com/TomMaple/Result/blob/main/docs/Reference/Error/Error.md)
 
@@ -344,8 +360,16 @@ var userAddedResult = await userResult.IfSuccessAsync(async (user) =>
 });
 
 var userTokenResult = await userAddedResult.MatchAsync(
-    async (user) => await _loginService.GetUserTokenAsync(user),
-    async (error) => await _auditService.LogErrorAsync(error));
+    user => _loginService.GetUserTokenAsync(user),
+    error => _auditService.LogErrorAsync(error));
+```
+or chaining multiple asynchronous operations:
+```csharp
+var userTokenResult = await _userService.GetUserAsync(userData)
+    .IfSuccessAsync(user => _companyService.AddUserAsync(user))
+    .MatchAsync(
+        user => _loginService.GetUserTokenAsync(user),
+        error => _auditService.LogErrorAsync(error));
 ```
 
 There is also available a query syntax for chaining multiple synchronous and asynchronous operations that return `Result<T>`:
@@ -371,14 +395,18 @@ It is up to you where to draw the line between expected failure and unexpected e
 
 In some cases, a missing file is just a resource *Not Found* error (e.g., users tries to open a non-existing document); in others, it might be an unexpected exception (e.g., a DLL file or expected configuration is missing).
 
+Sometimes, the detailed information is not required. Then, a simple enum or a boolean value can be used instead of the `Result` type.
+
 My suggestion is:
 * use **exceptions** for cases that require someone’s attention (e.g., database unavailable, connection string to a crucial resource is `null`, unexpected case that indicates a bug, expired API keys that require manual update),
-* use **Result** for cases that you want to be bothered with (e.g., user input validation, user authentication/authorization errors, handling transient errors that will be recovered by retry, etc.).
+* use **Result** for cases that you either want to handle in the normal program flow or return in the API (e.g., user input validation, user authentication/authorization errors, handling transient errors that will be recovered by retry, etc.),
+* use **enum** or a **boolean** value if you want to handle multiple cases in the normal program flow, but you don’t need additional information (e.g., folder not exists, so it should be created; token is missing, invalid, valid or expired); most likely **NOT** for API responses.
 
 ## Why `Unauthenticated` corresponds to the `401` (Unauthorized) HTTP status code?
-By the *HTTP* reference from *Mozilla*:
+By the *HTTP* reference from *Mozilla* [[link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status)]:
+> Although the HTTP standard specifies "unauthorized", semantically this response means "unauthenticated". That is, the client must authenticate itself to get the requested response.
 
-> The HTTP **`401 Unauthorized`****&#x20;**[client error response](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status#client_error_responses) status code indicates that a request was not successful because it lacks valid authentication credentials for the requested resource.
+> The HTTP **`401 Unauthorized`** [client error response](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status#client_error_responses) status code indicates that a request was not successful because it lacks valid authentication credentials for the requested resource.
 
 > A 401 Unauthorized is similar to the 403 Forbidden response, except that a 403 is returned when a request contains valid credentials, but the client does not have permissions to perform a certain action.
 
@@ -410,6 +438,7 @@ This library minimizes the amount of extension methods:
 ### Articles
 * [Exception Vs Result Pattern. The Exception vs Result Pattern… | by Shreyans Padmani | Medium](https://medium.com/@shreyans_padmani/exception-vs-result-pattern-114f2e389153)
 * [The Result Pattern: Simplifying Error Handling in Your Code | by Adam Hancock | Medium](https://medium.com/@dev-hancock/the-result-pattern-simplifying-error-handling-in-your-code-fc31bb50a244)
+* [Working with the result pattern | by Andrew Lock](https://andrewlock.net/series/working-with-the-result-pattern/)
 * [Exceptions for flow control in C# · Enterprise Craftsmanship](https://enterprisecraftsmanship.com/posts/exceptions-for-flow-control/)
 * [language agnostic - Why not use exceptions as regular flow of control? - Stack Overflow](https://stackoverflow.com/questions/729379/why-not-use-exceptions-as-regular-flow-of-control)
 
