@@ -12,6 +12,8 @@ Provides classes with extension methods for the [Result](../Result/Result.md) an
 | [LinqAsyncExtensions](LinqAsyncExtensions.md) | Provides extension methods for the Task&lt;[Result&lt;T&gt;](../ResultT/ResultT.md)&gt; to allow using them with LINQ query syntax. |
 | [MatchExtensions](MatchExtensions.md) | Provides extension methods for the [Result](../Result/Result.md) and [Result&lt;T&gt;](../ResultT/ResultT.md) records to handle both success and error scenarios. |
 | [MatchAsyncExtensions](MatchAsyncExtensions.md) | Provides asynchronous extension methods for the [Result](../Result/Result.md) and [Result&lt;T&gt;](../ResultT/ResultT.md) records to handle both success and error scenarios. |
+| [ResultExtensions](ResultExtensions.md) | Provides extension methods for the [Result&lt;T&gt;](../ResultT/ResultT.md) records. |
+| [ResultAsyncExtensions](MatchAsyncExtensions.md) | Provides asynchronous extension methods for the [Result&lt;T&gt;](../ResultT/ResultT.md) records. |
 
 ## See Also
 * [Maple.Result namespace](../namespace.md)
