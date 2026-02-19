@@ -136,7 +136,7 @@ public static async Task<TResult> IfErrorAsync<TResult>(
 
 ### Type Parameters
 #### `TResult`
-The type of the `result` that implements the [IResult](../IResult/IResult.md) interface—[Result](../Result/Result.md) or [Result&lt;T&gt;](../ResultT/ResultT.md) record.
+The type of the `resultTask` that implements the [IResult](../IResult/IResult.md) interface—[Result](../Result/Result.md) or [Result&lt;T&gt;](../ResultT/ResultT.md) record.
 
 ### Parameters
 #### `resultTask` TResult
@@ -156,7 +156,7 @@ The task object representing the asynchronous operation.
 
 ### Exceptions
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
-The `result` parameter is `null` or `ifErrorAction` parameter is `null`.
+The `resultTask` parameter is `null` or `ifErrorAction` parameter is `null`.
 
 #### [InvalidOperationException](https://learn.microsoft.com/dotnet/api/system.invalidoperationexception)
 The asynchronous operation represented by `resultTask` returns `null`.
@@ -188,7 +188,7 @@ public static async Task<TResult> IfErrorAsync<TResult>(this Task<TResult> resul
 
 ### Type Parameters
 #### `TResult`
-The type of the `result` that implements the [IResult](../IResult/IResult.md) interface—[Result](../Result/Result.md) or [Result&lt;T&gt;](../ResultT/ResultT.md) record.
+The type of the `resultTask` that implements the [IResult](../IResult/IResult.md) interface—[Result](../Result/Result.md) or [Result&lt;T&gt;](../ResultT/ResultT.md) record.
 
 ### Parameters
 #### `resultTask` TResult
@@ -208,7 +208,7 @@ The task object representing the asynchronous operation.
 
 ### Exceptions
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
-The `result` parameter is `null` or `ifErrorFunction` parameter is `null`.
+The `resultTask` parameter is `null` or `ifErrorFunction` parameter is `null`.
 
 #### [InvalidOperationException](https://learn.microsoft.com/dotnet/api/system.invalidoperationexception)
 The asynchronous operation represented by `resultTask` returns `null`.

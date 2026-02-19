@@ -103,6 +103,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Extensions", "Extensions", 
 		docs\Reference\Extensions\MatchExtensions.md = docs\Reference\Extensions\MatchExtensions.md
 		docs\Reference\Extensions\MatchExtensions_Match.md = docs\Reference\Extensions\MatchExtensions_Match.md
 		docs\Reference\Extensions\namespace.md = docs\Reference\Extensions\namespace.md
+		docs\Reference\Extensions\ResultAsyncExtensions.md = docs\Reference\Extensions\ResultAsyncExtensions.md
+		docs\Reference\Extensions\ResultAsyncExtensions_ToResultAsync.md = docs\Reference\Extensions\ResultAsyncExtensions_ToResultAsync.md
+		docs\Reference\Extensions\ResultExtensions.md = docs\Reference\Extensions\ResultExtensions.md
+		docs\Reference\Extensions\ResultExtensions_ToResult.md = docs\Reference\Extensions\ResultExtensions_ToResult.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ErrorDetail", "ErrorDetail", "{4165C202-7A49-4AF3-9A7B-A9B22B7190AA}"

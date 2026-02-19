@@ -181,6 +181,12 @@ return Result.FromValue(user);
 ```
 to explicitly create a `Result<T>` with a value.
 
+Use
+```csharp
+var result = userResult.ToResult();
+```
+to convert `Result<T>` to `Result` if you need to return a non-generic result without a value.
+
 ### Example
 ```csharp
 public async Task<Result<User>> GetUserAsync(int userId)
