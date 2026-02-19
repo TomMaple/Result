@@ -665,7 +665,7 @@ The task object representing the asynchronous operation.
 
 ### Exceptions
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
-The `result` or `ifSuccessAction` or `ifErrorAction` parameter is `null`.
+The `resultTask` or `ifSuccessAction` or `ifErrorAction` parameter is `null`.
 
 #### [InvalidOperationException](https://learn.microsoft.com/dotnet/api/system.invalidoperationexception)
 The asynchronous operation represented by `resultTask` returns `null`.
@@ -713,7 +713,7 @@ The task object representing the asynchronous operation.
 
 ### Exceptions
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
-The `result` or `ifSuccessFunction` or `ifErrorAction` parameter is `null`.
+The `resultTask` or `ifSuccessFunction` or `ifErrorAction` parameter is `null`.
 
 #### [InvalidOperationException](https://learn.microsoft.com/dotnet/api/system.invalidoperationexception)
 The asynchronous operation represented by `resultTask` returns `null`.
@@ -761,7 +761,7 @@ The task object representing the asynchronous operation.
 
 ### Exceptions
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
-The `result` or `ifSuccessFunction` or `ifErrorFunction` parameter is `null`.
+The `resultTask` or `ifSuccessFunction` or `ifErrorFunction` parameter is `null`.
 
 #### [InvalidOperationException](https://learn.microsoft.com/dotnet/api/system.invalidoperationexception)
 The asynchronous operation represented by `resultTask` returns `null`.
@@ -817,7 +817,7 @@ The task object representing the asynchronous operation.
 
 ### Exceptions
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
-The `result` or `ifSuccessFunction` or `ifErrorAction` parameter is `null`.
+The `resultTask` or `ifSuccessFunction` or `ifErrorAction` parameter is `null`.
 
 #### [InvalidOperationException](https://learn.microsoft.com/dotnet/api/system.invalidoperationexception)
 The asynchronous operation represented by `resultTask` returns `null`.
@@ -869,7 +869,7 @@ The task object representing the asynchronous operation.
 
 ### Exceptions
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
-The `result` or `ifSuccessFunction` or `ifErrorAction` parameter is `null`.
+The `resultTask` or `ifSuccessFunction` or `ifErrorAction` parameter is `null`.
 
 #### [InvalidOperationException](https://learn.microsoft.com/dotnet/api/system.invalidoperationexception)
 The asynchronous operation represented by `resultTask` returns `null`.
@@ -926,7 +926,7 @@ The task object representing the asynchronous operation.
 
 ### Exceptions
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
-The `result` or `ifSuccessFunction` or `ifErrorAction` parameter is `null`.
+The `resultTask` or `ifSuccessFunction` or `ifErrorAction` parameter is `null`.
 
 #### [InvalidOperationException](https://learn.microsoft.com/dotnet/api/system.invalidoperationexception)
 The asynchronous operation represented by `resultTask` returns `null`.
@@ -979,7 +979,7 @@ The task object representing the asynchronous operation.
 
 ### Exceptions
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
-The `result` or `ifSuccessFunction` or `ifErrorFunction` parameter is `null`.
+The `resultTask` or `ifSuccessFunction` or `ifErrorFunction` parameter is `null`.
 
 #### [InvalidOperationException](https://learn.microsoft.com/dotnet/api/system.invalidoperationexception)
 The asynchronous operation represented by `resultTask` returns `null`.
@@ -1032,7 +1032,7 @@ The task object representing the asynchronous operation.
 
 ### Exceptions
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
-The `result` or `ifSuccessAction` or `ifErrorAction` parameter is `null`.
+The `resultTask` or `ifSuccessAction` or `ifErrorAction` parameter is `null`.
 
 #### [InvalidOperationException](https://learn.microsoft.com/dotnet/api/system.invalidoperationexception)
 The asynchronous operation represented by `resultTask` returns `null`.
@@ -1091,7 +1091,7 @@ The task object representing the asynchronous operation.
 
 ### Exceptions
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
-The `result` or `ifSuccessAction` or `ifErrorAction` parameter is `null`.
+The `resultTask` or `ifSuccessAction` or `ifErrorAction` parameter is `null`.
 
 #### [InvalidOperationException](https://learn.microsoft.com/dotnet/api/system.invalidoperationexception)
 The asynchronous operation represented by `resultTask` returns `null`.
@@ -1150,7 +1150,7 @@ The task object representing the asynchronous operation.
 
 ### Exceptions
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
-The `result` or `ifSuccessAction` or `ifErrorAction` parameter is `null`.
+The `resultTask` or `ifSuccessAction` or `ifErrorAction` parameter is `null`.
 
 #### [InvalidOperationException](https://learn.microsoft.com/dotnet/api/system.invalidoperationexception)
 The asynchronous operation represented by `resultTask` returns `null`.
@@ -1213,7 +1213,7 @@ The task object representing the asynchronous operation.
 
 ### Exceptions
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
-The `result` or `ifSuccessAction` or `ifErrorAction` parameter is `null`.
+The `resultTask` or `ifSuccessAction` or `ifErrorAction` parameter is `null`.
 
 #### [InvalidOperationException](https://learn.microsoft.com/dotnet/api/system.invalidoperationexception)
 The asynchronous operation represented by `resultTask` returns `null`.
@@ -1272,7 +1272,7 @@ The task object representing the asynchronous operation.
 
 ### Exceptions
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
-The `result` or `ifSuccessAction` or `ifErrorAction` parameter is `null`.
+The `resultTask` or `ifSuccessAction` or `ifErrorAction` parameter is `null`.
 
 #### [InvalidOperationException](https://learn.microsoft.com/dotnet/api/system.invalidoperationexception)
 The asynchronous operation represented by `resultTask` returns `null`.
