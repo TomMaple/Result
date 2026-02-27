@@ -2,7 +2,7 @@
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Result.cs#L105" target="_blank">Result.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Result.cs#L107" target="_blank">Result.cs</a>
 
 Defines an implicit conversion of a given [Error](../Error/Error.md) to a failure [Result](Result.md) (without a value), with a provided error.
 
