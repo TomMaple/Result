@@ -1072,7 +1072,7 @@ public class ErrorUnitTests
     public void CriticalError_OnlyRequiredDetails_ReturnsError()
     {
         // Arrange
-        const ErrorCategory ExpectedCategory = ErrorCategory.CriticalError;
+        const ErrorCategory ExpectedCategory = ErrorCategory.Critical;
         const int ExpectedErrorDetailsCount = 0;
         const string ExpectedTitle = "Test title";
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
@@ -1098,7 +1098,7 @@ public class ErrorUnitTests
     public void CriticalError_WithDetailsCollection_ReturnsError()
     {
         // Arrange
-        const ErrorCategory ExpectedCategory = ErrorCategory.CriticalError;
+        const ErrorCategory ExpectedCategory = ErrorCategory.Critical;
         const string ExpectedDetail = "Test description.";
         const string ExpectedDetailTemplateId = "message-id";
         const int ExpectedDetailParamsCount = 2;
@@ -1143,7 +1143,7 @@ public class ErrorUnitTests
     public void CriticalError_WithDetailsDictionary_ReturnsError()
     {
         // Arrange
-        const ErrorCategory ExpectedCategory = ErrorCategory.CriticalError;
+        const ErrorCategory ExpectedCategory = ErrorCategory.Critical;
         const string ExpectedDetail = "Test description.";
         const string ExpectedDetailTemplateId = "message-id";
         const int ExpectedDetailParamsCount = 2;

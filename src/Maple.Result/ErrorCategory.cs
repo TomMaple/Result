@@ -83,7 +83,7 @@ public enum ErrorCategory
     /// <remarks>
     ///     Can be mapped to the 500 HTTP status code (Internal Server Error).
     /// </remarks>
-    CriticalError,
+    Critical,
 
     /// <summary>
     ///     The not implemented error.
