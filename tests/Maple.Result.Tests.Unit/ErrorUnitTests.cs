@@ -1066,19 +1066,19 @@ public class ErrorUnitTests
 
     #endregion
 
-    #region CriticalError
+    #region Critical
 
     [Fact]
-    public void CriticalError_OnlyRequiredDetails_ReturnsError()
+    public void Critical_OnlyRequiredDetails_ReturnsError()
     {
         // Arrange
-        const ErrorCategory ExpectedCategory = ErrorCategory.CriticalError;
+        const ErrorCategory ExpectedCategory = ErrorCategory.Critical;
         const int ExpectedErrorDetailsCount = 0;
         const string ExpectedTitle = "Test title";
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
 
         // Act
-        var sut = Sut.CriticalError(
+        var sut = Sut.Critical(
             ErrorUri.Tag("tag:test.com,2024:Test"),
             "Test title");
 
@@ -1095,10 +1095,10 @@ public class ErrorUnitTests
     }
 
     [Fact]
-    public void CriticalError_WithDetailsCollection_ReturnsError()
+    public void Critical_WithDetailsCollection_ReturnsError()
     {
         // Arrange
-        const ErrorCategory ExpectedCategory = ErrorCategory.CriticalError;
+        const ErrorCategory ExpectedCategory = ErrorCategory.Critical;
         const string ExpectedDetail = "Test description.";
         const string ExpectedDetailTemplateId = "message-id";
         const int ExpectedDetailParamsCount = 2;
@@ -1112,7 +1112,7 @@ public class ErrorUnitTests
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
 
         // Act
-        var sut = Sut.CriticalError(
+        var sut = Sut.Critical(
             ErrorUri.Tag("tag:test.com,2024:Test"),
             "Test title",
             "Test description.",
@@ -1140,10 +1140,10 @@ public class ErrorUnitTests
     }
 
     [Fact]
-    public void CriticalError_WithDetailsDictionary_ReturnsError()
+    public void Critical_WithDetailsDictionary_ReturnsError()
     {
         // Arrange
-        const ErrorCategory ExpectedCategory = ErrorCategory.CriticalError;
+        const ErrorCategory ExpectedCategory = ErrorCategory.Critical;
         const string ExpectedDetail = "Test description.";
         const string ExpectedDetailTemplateId = "message-id";
         const int ExpectedDetailParamsCount = 2;
@@ -1157,7 +1157,7 @@ public class ErrorUnitTests
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
 
         // Act
-        var sut = Sut.CriticalError(
+        var sut = Sut.Critical(
             ErrorUri.Tag("tag:test.com,2024:Test"),
             "Test title",
             "Test description.",

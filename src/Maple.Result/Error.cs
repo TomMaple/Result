@@ -42,7 +42,7 @@ public record Error
     /// </remarks>
     public Error()
     {
-        Category = ErrorCategory.CriticalError;
+        Category = ErrorCategory.Critical;
         TypeUri = "about:blank";
         Title = "Unknown error";
         Detail = null;
@@ -752,7 +752,7 @@ public record Error
     }
 
     /// <summary>
-    ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.CriticalError" /> category.
+    ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.Critical" /> category.
     /// </summary>
     /// <param name="typeUri">A record containing a <i>URI</i> reference that identifies the problem type.</param>
     /// <param name="title">A short, human-readable summary of the problem.</param>
@@ -775,12 +775,12 @@ public record Error
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
     ///     that is not a valid HTTP/HTTP <i>URI</i> or a valid <i>URI Tag</i>.
     /// </exception>
-    public static Error CriticalError(ErrorUri typeUri, string title, string? detail = null,
+    public static Error Critical(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
         params (string Key, object Value)[] detailNamedValues)
     {
         return new Error(
-            ErrorCategory.CriticalError,
+            ErrorCategory.Critical,
             typeUri.Value,
             title,
             detail,
@@ -791,7 +791,7 @@ public record Error
     }
 
     /// <summary>
-    ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.CriticalError" /> category.
+    ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.Critical" /> category.
     /// </summary>
     /// <param name="typeUri">A record containing a <i>URI</i> reference that identifies the problem type.</param>
     /// <param name="title">A short, human-readable summary of the problem.</param>
@@ -814,12 +814,12 @@ public record Error
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
     ///     that is not a valid HTTP/HTTPS <i>URI</i> or a valid <i>URI Tag</i>.
     /// </exception>
-    public static Error CriticalError(ErrorUri typeUri, string title, string? detail = null,
+    public static Error Critical(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
         IEnumerable<KeyValuePair<string, object>>? detailNamedValues = null)
     {
         return new Error(
-            ErrorCategory.CriticalError,
+            ErrorCategory.Critical,
             typeUri.Value,
             title,
             detail,
