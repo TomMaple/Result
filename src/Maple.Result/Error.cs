@@ -171,7 +171,7 @@ public record Error
     public IReadOnlyList<ErrorDetail> ErrorDetails
     {
         get => _errorDetails;
-        init => _errorDetails = value.ToList();
+        init => _errorDetails = [.. value];
     }
 
     /// <summary>

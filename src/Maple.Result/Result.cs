@@ -9,6 +9,7 @@
  */
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Maple.Result;
 
@@ -81,9 +82,10 @@ public sealed record Result : IResult
     /// <returns>
     ///     <see langword="true" /> if the operation was successful; otherwise, <see langword="false" />.
     /// </returns>
+    [MemberNotNullWhen(false, nameof(Error))]
     public bool IsSuccess()
     {
-        return Error == null;
+        return Error is null;
     }
 
     /// <summary>
@@ -226,9 +228,11 @@ public sealed record Result<T> : IResult
     /// <returns>
     ///     <see langword="true" /> if the operation was successful; otherwise, <see langword="false" />.
     /// </returns>
+    [MemberNotNullWhen(false, nameof(Error))]
+    [MemberNotNullWhen(true, nameof(Value))]
     public bool IsSuccess()
     {
-        return Error == null;
+        return Error is null;
     }
 
     #region implicit operators

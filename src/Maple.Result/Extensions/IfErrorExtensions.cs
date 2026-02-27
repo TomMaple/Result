@@ -9,6 +9,7 @@
  */
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Maple.Result.Extensions;
 
@@ -42,7 +43,7 @@ public static class IfErrorExtensions
     ///     If any of the <paramref name="result" /> or <paramref name="ifErrorAction" />
     ///     parameters are <see langword="null" />.
     /// </exception>
-    public static TResult IfError<TResult>(this TResult result, Action<Error> ifErrorAction)
+    public static TResult IfError<TResult>([DisallowNull] this TResult result, Action<Error> ifErrorAction)
         where TResult : IResult
     {
         ArgumentNullException.ThrowIfNull(result);
@@ -73,7 +74,7 @@ public static class IfErrorExtensions
     ///     If any of the <paramref name="result" /> or <paramref name="ifErrorFunction" />
     ///     parameters are <see langword="null" />.
     /// </exception>
-    public static TResult IfError<TResult>(this TResult result, Func<Error, TResult> ifErrorFunction)
+    public static TResult IfError<TResult>([DisallowNull] this TResult result, Func<Error, TResult> ifErrorFunction)
         where TResult : IResult
     {
         ArgumentNullException.ThrowIfNull(result);

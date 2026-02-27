@@ -1123,8 +1123,8 @@ public class ResultUnitTests
 
     private class TestClass
     {
-        public string? Text { get; set; }
-        public int Number { get; set; }
+        public string? Text { get; init; }
+        public int Number { get; init; }
     }
 
     #endregion
