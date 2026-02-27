@@ -85,7 +85,7 @@ public sealed record Result : IResult
     [MemberNotNullWhen(false, nameof(Error))]
     public bool IsSuccess()
     {
-        return Error == null;
+        return Error is null;
     }
 
     /// <summary>
@@ -232,7 +232,7 @@ public sealed record Result<T> : IResult
     [MemberNotNullWhen(true, nameof(Value))]
     public bool IsSuccess()
     {
-        return Error == null;
+        return Error is null;
     }
 
     #region implicit operators

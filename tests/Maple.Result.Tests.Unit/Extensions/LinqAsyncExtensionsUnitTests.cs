@@ -7,6 +7,8 @@ namespace Maple.Result.Tests.Unit.Extensions;
 
 public class LinqAsyncExtensionsUnitTests
 {
+#pragma warning disable CS8848 // Operator cannot be used here due to precedence.
+
     #region SelectMany(Task<Result<T>>, Func<T, Task<Result<TMiddle>>>, Func<T, TMiddle, TNext>)
 
     [Fact]
@@ -213,14 +215,14 @@ public class LinqAsyncExtensionsUnitTests
 
         var sut = Task.FromResult(Result.FromValue(90));
 
-        var function1 = (int value) => Task.FromResult(Result.FromValue(value + 10));
-        var function2 = (int value) => Task.FromResult(Result.FromValue(value.ToString()));
+        static Task<Result<int>> Function1(int value) => Task.FromResult(Result.FromValue(value + 10));
+        static Task<Result<string>> Function2(int value) => Task.FromResult(Result.FromValue(value.ToString()));
 
         // Act
         var result = await
             from initialValue in sut
-            from function1Result in function1(initialValue)
-            from function2Result in function2(function1Result)
+            from function1Result in Function1(initialValue)
+            from function2Result in Function2(function1Result)
             select function2Result;
 
         // Assert
@@ -400,6 +402,8 @@ public class LinqAsyncExtensionsUnitTests
     }
 
     #endregion
+
+#pragma warning restore CS8848 // Operator cannot be used here due to precedence.
 
     #region helper methods
 
