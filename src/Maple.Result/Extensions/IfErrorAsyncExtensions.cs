@@ -9,6 +9,7 @@
  */
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace Maple.Result.Extensions;
@@ -52,8 +53,11 @@ public static class IfErrorAsyncExtensions
     ///     If any of the <paramref name="result" /> or <paramref name="ifErrorAction" />
     ///     parameters are <see langword="null" />.
     /// </exception>
-    public static async Task<TResult> IfErrorAsync<TResult>(this TResult result, Func<Error, Task> ifErrorAction,
-        bool continueOnCapturedContext = false)
+    public static async Task<TResult> IfErrorAsync<TResult>(
+        [DisallowNull] this TResult result,
+        Func<Error, Task> ifErrorAction,
+        bool continueOnCapturedContext = false
+    )
         where TResult : IResult
     {
         ArgumentNullException.ThrowIfNull(result);
@@ -94,8 +98,11 @@ public static class IfErrorAsyncExtensions
     ///     If any of the <paramref name="result" /> or <paramref name="ifErrorFunction" />
     ///     parameters are <see langword="null" />.
     /// </exception>
-    public static async Task<TResult> IfErrorAsync<TResult>(this TResult result,
-        Func<Error, Task<TResult>> ifErrorFunction, bool continueOnCapturedContext = false)
+    public static async Task<TResult> IfErrorAsync<TResult>(
+        [DisallowNull] this TResult result,
+        Func<Error, Task<TResult>> ifErrorFunction,
+        bool continueOnCapturedContext = false
+    )
         where TResult : IResult
     {
         ArgumentNullException.ThrowIfNull(result);
@@ -150,9 +157,11 @@ public static class IfErrorAsyncExtensions
     /// <exception cref="InvalidOperationException">
     ///     If the asynchronous operation represented by <paramref name="resultTask" /> returns <see langword="null" />.
     /// </exception>
-    public static async Task<TResult> IfErrorAsync<TResult>(this Task<TResult> resultTask,
+    public static async Task<TResult> IfErrorAsync<TResult>(
+        [DisallowNull] this Task<TResult> resultTask,
         Func<Error, Task> ifErrorAction,
-        bool continueOnCapturedContext = false)
+        bool continueOnCapturedContext = false
+    )
         where TResult : IResult
     {
         ArgumentNullException.ThrowIfNull(resultTask);
@@ -212,8 +221,11 @@ public static class IfErrorAsyncExtensions
     /// <exception cref="InvalidOperationException">
     ///     If the asynchronous operation represented by <paramref name="resultTask" /> returns <see langword="null" />.
     /// </exception>
-    public static async Task<TResult> IfErrorAsync<TResult>(this Task<TResult> resultTask,
-        Func<Error, Task<TResult>> ifErrorFunction, bool continueOnCapturedContext = false)
+    public static async Task<TResult> IfErrorAsync<TResult>(
+        [DisallowNull] this Task<TResult> resultTask,
+        Func<Error, Task<TResult>> ifErrorFunction,
+        bool continueOnCapturedContext = false
+    )
         where TResult : IResult
     {
         ArgumentNullException.ThrowIfNull(resultTask);
