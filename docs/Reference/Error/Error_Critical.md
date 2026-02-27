@@ -1,4 +1,4 @@
-﻿# Error.CriticalError Method
+﻿# Error.Critical Method
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>
@@ -8,8 +8,8 @@ Creates a new instance of the [Error](Error.md) object with the [ErrorCategory](
 ## Overloads
 | Name | Description |
 | ---- | ----------- |
-| [CriticalError(ErrorUri, String, String, ErrorUri, String, (String, Object)[])](#criticalerrorerroruri-string-string-erroruri-string-string-object) | Creates a new critical error with specified parameters. |
-| [CriticalError(ErrorUri, String, String, ErrorUri, String, IEnumerable<KeyValuePair<String, Object>>)](#criticalerrorerroruri-string-string-erroruri-string-ienumerablekeyvaluepairstring-object) | Creates a new critical error with specified parameters. |
+| [Critical(ErrorUri, String, String, ErrorUri, String, (String, Object)[])](#criticalerroruri-string-string-erroruri-string-string-object) | Creates a new critical error with specified parameters. |
+| [Critical(ErrorUri, String, String, ErrorUri, String, IEnumerable<KeyValuePair<String, Object>>)](#criticalerroruri-string-string-erroruri-string-ienumerablekeyvaluepairstring-object) | Creates a new critical error with specified parameters. |
 
 ## Remarks
 This error category represents unexpected, critical errors.
@@ -17,13 +17,13 @@ This error category represents unexpected, critical errors.
 It relates to `500` HTTP status code (Internal Server Error), but can also be used in other contexts where the error was unexpected, it cannot be properly handled and needs to be reported.
 
 
-## Failure(ErrorUri, String, String, ErrorUri, String, (String, Object)[])
+## Critical(ErrorUri, String, String, ErrorUri, String, (String, Object)[])
 Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Error.cs#L765" target="_blank">Error.cs</a>
 
-Creates a new instance of the [Error](Error.md) object of the *Failure* category with specified parameters.
+Creates a new instance of the [Error](Error.md) object of the *Critical* category with specified parameters.
 
 ```csharp
-public static Error Failure(
+public static Error Critical(
         ErrorUri typeUri,
         string title,
         string? detail = null,
@@ -54,7 +54,7 @@ An optional array of named values to be used when rendering the templated messag
 ### Returns
 [Error](Error.md)
 
-A new instance of the [Error](Error.md) record of the *Failure* [ErrorCategory](../ErrorCategory.md) initialized with provided parameters.
+A new instance of the [Error](Error.md) record of the *Critical* [ErrorCategory](../ErrorCategory.md) initialized with provided parameters.
 
 ### Exceptions
 [ArgumentException](https://learn.microsoft.com/dotnet/api/system.argumentexception)
@@ -67,7 +67,7 @@ The `typeUri` parameter and/or the `instanceUri` parameter are not a valid *URI 
 
 ### Examples
 ```csharp
-var error = Error.Failure(
+var error = Error.Critical(
                 ErrorUri.Tag("tag:exampleapp.com,2026:errors:payment:insufficient.funds"),
                 "Insufficient funds.",
                 "The account balance is too low to complete the transaction.",
@@ -77,13 +77,13 @@ var error = Error.Failure(
 ```
 
 
-## Failure(ErrorUri, String, String, ErrorUri, String, IEnumerable&lt;KeyValuePair&lt;String, Object&gt;&gt;)
+## Critical(ErrorUri, String, String, ErrorUri, String, IEnumerable&lt;KeyValuePair&lt;String, Object&gt;&gt;)
 Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Error.cs#L804" target="_blank">Error.cs</a>
 
-Creates a new instance of the [Error](Error.md) object of the *Failure* category with specified parameters.
+Creates a new instance of the [Error](Error.md) object of the *Critical* category with specified parameters.
 
 ```csharp
-public static Error Failure(
+public static Error Critical(
         ErrorUri typeUri,
         string title,
         string? detail = null,
@@ -114,7 +114,7 @@ An optional sequence of key-value pairs to be used when rendering the templated 
 ### Returns
 [Error](Error.md)
 
-A new instance of the [Error](Error.md) record of the *Failure* [ErrorCategory](../ErrorCategory.md) initialized with provided parameters.
+A new instance of the [Error](Error.md) record of the *Critical* [ErrorCategory](../ErrorCategory.md) initialized with provided parameters.
 
 ### Exceptions
 [ArgumentException](https://learn.microsoft.com/dotnet/api/system.argumentexception)
@@ -127,7 +127,7 @@ The `typeUri` parameter and/or the `instanceUri` parameter are not a valid *URI 
 
 ### Examples
 ```csharp
-var error = Error.Failure(
+var error = Error.Critical(
                 ErrorUri.Tag("tag:exampleapp.com,2026:errors:payment:insufficient.funds"),
                 "Insufficient funds.",
                 "The account balance is too low to complete the transaction.",
