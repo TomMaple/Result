@@ -775,7 +775,7 @@ public record Error
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
     ///     that is not a valid HTTP/HTTP <i>URI</i> or a valid <i>URI Tag</i>.
     /// </exception>
-    public static Error CriticalError(ErrorUri typeUri, string title, string? detail = null,
+    public static Error Critical(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
         params (string Key, object Value)[] detailNamedValues)
     {
@@ -814,7 +814,7 @@ public record Error
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
     ///     that is not a valid HTTP/HTTPS <i>URI</i> or a valid <i>URI Tag</i>.
     /// </exception>
-    public static Error CriticalError(ErrorUri typeUri, string title, string? detail = null,
+    public static Error Critical(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
         IEnumerable<KeyValuePair<string, object>>? detailNamedValues = null)
     {
