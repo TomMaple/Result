@@ -50,7 +50,7 @@ public static class IfErrorExtensions
         ArgumentNullException.ThrowIfNull(ifErrorAction);
 
         if (!result.IsSuccess())
-            ifErrorAction(result.Error!);
+            ifErrorAction(result.Error);
 
         return result;
     }
@@ -83,6 +83,6 @@ public static class IfErrorExtensions
         if (result.IsSuccess())
             return result;
 
-        return ifErrorFunction(result.Error!);
+        return ifErrorFunction(result.Error);
     }
 }

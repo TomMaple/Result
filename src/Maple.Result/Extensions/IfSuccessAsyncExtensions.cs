@@ -144,7 +144,7 @@ public static class IfSuccessAsyncExtensions
         if (result.IsSuccess())
             return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext);
 
-        return result.Error!;
+        return result.Error;
     }
 
     /// <summary>
@@ -187,7 +187,7 @@ public static class IfSuccessAsyncExtensions
         if (result.IsSuccess())
             return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext);
 
-        return result.Error!;
+        return result.Error;
     }
 
     #endregion
@@ -232,7 +232,7 @@ public static class IfSuccessAsyncExtensions
         ArgumentNullException.ThrowIfNull(ifSuccessAction);
 
         if (result.IsSuccess())
-            await ifSuccessAction(result.Value!).ConfigureAwait(continueOnCapturedContext);
+            await ifSuccessAction(result.Value).ConfigureAwait(continueOnCapturedContext);
 
         return result;
     }
@@ -276,9 +276,9 @@ public static class IfSuccessAsyncExtensions
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
 
         if (result.IsSuccess())
-            return await ifSuccessFunction(result.Value!).ConfigureAwait(continueOnCapturedContext);
+            return await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext);
 
-        return result.Error!;
+        return result.Error;
     }
 
     /// <summary>
@@ -326,9 +326,9 @@ public static class IfSuccessAsyncExtensions
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
 
         if (result.IsSuccess())
-            return await ifSuccessFunction(result.Value!).ConfigureAwait(continueOnCapturedContext);
+            return await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext);
 
-        return result.Error!;
+        return result.Error;
     }
 
     /// <summary>
@@ -376,9 +376,9 @@ public static class IfSuccessAsyncExtensions
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
 
         if (result.IsSuccess())
-            return await ifSuccessFunction(result.Value!).ConfigureAwait(continueOnCapturedContext);
+            return await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext);
 
-        return result.Error!;
+        return result.Error;
     }
 
     #endregion
@@ -552,7 +552,7 @@ public static class IfSuccessAsyncExtensions
         if (result.IsSuccess())
             return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext);
 
-        return result.Error!;
+        return result.Error;
     }
 
     /// <summary>
@@ -613,7 +613,7 @@ public static class IfSuccessAsyncExtensions
         if (result.IsSuccess())
             return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext);
 
-        return result.Error!;
+        return result.Error;
     }
 
     #endregion
@@ -676,7 +676,7 @@ public static class IfSuccessAsyncExtensions
             throw new InvalidOperationException("The asynchronous operation returned null.");
 
         if (result.IsSuccess())
-            await ifSuccessAction(result.Value!).ConfigureAwait(continueOnCapturedContext);
+            await ifSuccessAction(result.Value).ConfigureAwait(continueOnCapturedContext);
 
         return result;
     }
@@ -736,9 +736,9 @@ public static class IfSuccessAsyncExtensions
             throw new InvalidOperationException("The asynchronous operation returned null.");
 
         if (result.IsSuccess())
-            return await ifSuccessFunction(result.Value!).ConfigureAwait(continueOnCapturedContext);
+            return await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext);
 
-        return result.Error!;
+        return result.Error;
     }
 
     /// <summary>
@@ -801,9 +801,9 @@ public static class IfSuccessAsyncExtensions
             throw new InvalidOperationException("The asynchronous operation returned null.");
 
         if (result.IsSuccess())
-            return await ifSuccessFunction(result.Value!).ConfigureAwait(continueOnCapturedContext);
+            return await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext);
 
-        return result.Error!;
+        return result.Error;
     }
 
     /// <summary>
@@ -867,9 +867,9 @@ public static class IfSuccessAsyncExtensions
             throw new InvalidOperationException("The asynchronous operation returned null.");
 
         if (result.IsSuccess())
-            return await ifSuccessFunction(result.Value!).ConfigureAwait(continueOnCapturedContext);
+            return await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext);
 
-        return result.Error!;
+        return result.Error;
     }
 
     #endregion

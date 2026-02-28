@@ -59,6 +59,6 @@ public static class ResultAsyncExtensions
 
         return result.IsSuccess()
             ? Result.Success()
-            : Result.FromError(result.Error!);
+            : Result.FromError(result.Error);
     }
 }

@@ -120,7 +120,7 @@ public static class IfSuccessExtensions
         if (result.IsSuccess())
             return ifSuccessFunction();
 
-        return result.Error!;
+        return result.Error;
     }
 
     /// <summary>
@@ -155,7 +155,7 @@ public static class IfSuccessExtensions
         if (result.IsSuccess())
             return ifSuccessFunction();
 
-        return result.Error!;
+        return result.Error;
     }
 
     #endregion
@@ -189,7 +189,7 @@ public static class IfSuccessExtensions
         ArgumentNullException.ThrowIfNull(ifSuccessAction);
 
         if (result.IsSuccess())
-            ifSuccessAction(result.Value!);
+            ifSuccessAction(result.Value);
 
         return result;
     }
@@ -222,9 +222,9 @@ public static class IfSuccessExtensions
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
 
         if (result.IsSuccess())
-            return ifSuccessFunction(result.Value!);
+            return ifSuccessFunction(result.Value);
 
-        return result.Error!;
+        return result.Error;
     }
 
     /// <summary>
@@ -267,9 +267,9 @@ public static class IfSuccessExtensions
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
 
         if (result.IsSuccess())
-            return ifSuccessFunction(result.Value!);
+            return ifSuccessFunction(result.Value);
 
-        return result.Error!;
+        return result.Error;
     }
 
     /// <summary>
@@ -312,9 +312,9 @@ public static class IfSuccessExtensions
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
 
         if (result.IsSuccess())
-            return ifSuccessFunction(result.Value!);
+            return ifSuccessFunction(result.Value);
 
-        return result.Error!;
+        return result.Error;
     }
 
     #endregion

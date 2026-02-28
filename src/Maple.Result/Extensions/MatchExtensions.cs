@@ -59,7 +59,7 @@ public static class MatchExtensions
         if (result.IsSuccess())
             ifSuccessAction();
         else
-            ifErrorAction(result.Error!);
+            ifErrorAction(result.Error);
 
         return result;
     }
@@ -98,7 +98,7 @@ public static class MatchExtensions
         if (result.IsSuccess())
             return ifSuccessFunction();
 
-        ifErrorAction(result.Error!);
+        ifErrorAction(result.Error);
         return result;
     }
 
@@ -133,7 +133,7 @@ public static class MatchExtensions
 
         return result.IsSuccess()
             ? ifSuccessFunction()
-            : ifErrorFunction(result.Error!);
+            : ifErrorFunction(result.Error);
     }
 
     /// <summary>
@@ -173,8 +173,8 @@ public static class MatchExtensions
         if (result.IsSuccess())
             return ifSuccessFunction();
 
-        ifErrorAction(result.Error!);
-        return result.Error!;
+        ifErrorAction(result.Error);
+        return result.Error;
     }
 
     /// <summary>
@@ -211,7 +211,7 @@ public static class MatchExtensions
 
         return result.IsSuccess()
             ? ifSuccessFunction()
-            : ifErrorFunction(result.Error!);
+            : ifErrorFunction(result.Error);
     }
 
     /// <summary>
@@ -252,8 +252,8 @@ public static class MatchExtensions
         if (result.IsSuccess())
             return ifSuccessFunction();
 
-        ifErrorAction(result.Error!);
-        return result.Error!;
+        ifErrorAction(result.Error);
+        return result.Error;
     }
 
     /// <summary>
@@ -291,7 +291,7 @@ public static class MatchExtensions
 
         return result.IsSuccess()
             ? ifSuccessFunction()
-            : ifErrorFunction(result.Error!);
+            : ifErrorFunction(result.Error);
     }
 
     #endregion
@@ -332,9 +332,9 @@ public static class MatchExtensions
         ArgumentNullException.ThrowIfNull(ifErrorAction);
 
         if (result.IsSuccess())
-            ifSuccessAction(result.Value!);
+            ifSuccessAction(result.Value);
         else
-            ifErrorAction(result.Error!);
+            ifErrorAction(result.Error);
 
         return result;
     }
@@ -377,10 +377,10 @@ public static class MatchExtensions
         ArgumentNullException.ThrowIfNull(ifErrorAction);
 
         if (result.IsSuccess())
-            return ifSuccessFunction(result.Value!);
+            return ifSuccessFunction(result.Value);
 
-        ifErrorAction(result.Error!);
-        return result.Error!;
+        ifErrorAction(result.Error);
+        return result.Error;
     }
 
     /// <summary>
@@ -419,8 +419,8 @@ public static class MatchExtensions
         ArgumentNullException.ThrowIfNull(ifErrorFunction);
 
         return result.IsSuccess()
-            ? ifSuccessFunction(result.Value!)
-            : ifErrorFunction(result.Error!);
+            ? ifSuccessFunction(result.Value)
+            : ifErrorFunction(result.Error);
     }
 
     /// <summary>
@@ -461,10 +461,10 @@ public static class MatchExtensions
         ArgumentNullException.ThrowIfNull(ifErrorAction);
 
         if (result.IsSuccess())
-            return ifSuccessFunction(result.Value!);
+            return ifSuccessFunction(result.Value);
 
-        ifErrorAction(result.Error!);
-        return result.Error!;
+        ifErrorAction(result.Error);
+        return result.Error;
     }
 
     /// <summary>
@@ -503,8 +503,8 @@ public static class MatchExtensions
         ArgumentNullException.ThrowIfNull(ifErrorFunction);
 
         return result.IsSuccess()
-            ? ifSuccessFunction(result.Value!)
-            : ifErrorFunction(result.Error!);
+            ? ifSuccessFunction(result.Value)
+            : ifErrorFunction(result.Error);
     }
 
     #endregion

@@ -64,7 +64,7 @@ public static class IfErrorAsyncExtensions
         ArgumentNullException.ThrowIfNull(ifErrorAction);
 
         if (!result.IsSuccess())
-            await ifErrorAction(result.Error!).ConfigureAwait(continueOnCapturedContext);
+            await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext);
 
         return result;
     }
@@ -111,7 +111,7 @@ public static class IfErrorAsyncExtensions
         if (result.IsSuccess())
             return result;
 
-        return await ifErrorFunction(result.Error!).ConfigureAwait(continueOnCapturedContext);
+        return await ifErrorFunction(result.Error).ConfigureAwait(continueOnCapturedContext);
     }
 
     /// <summary>
@@ -173,7 +173,7 @@ public static class IfErrorAsyncExtensions
             throw new InvalidOperationException("The asynchronous operation returned null.");
 
         if (!result.IsSuccess())
-            await ifErrorAction(result.Error!).ConfigureAwait(continueOnCapturedContext);
+            await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext);
 
         return result;
     }
@@ -239,6 +239,6 @@ public static class IfErrorAsyncExtensions
         if (result.IsSuccess())
             return result;
 
-        return await ifErrorFunction(result.Error!).ConfigureAwait(continueOnCapturedContext);
+        return await ifErrorFunction(result.Error).ConfigureAwait(continueOnCapturedContext);
     }
 }

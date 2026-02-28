@@ -67,7 +67,7 @@ public static class MatchAsyncExtensions
         if (result.IsSuccess())
             await ifSuccessAction().ConfigureAwait(continueOnCapturedContext);
         else
-            await ifErrorAction(result.Error!).ConfigureAwait(continueOnCapturedContext);
+            await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext);
 
         return result;
     }
@@ -110,7 +110,7 @@ public static class MatchAsyncExtensions
         if (result.IsSuccess())
             return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext);
 
-        await ifErrorAction(result.Error!).ConfigureAwait(continueOnCapturedContext);
+        await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext);
         return result;
     }
 
@@ -149,7 +149,7 @@ public static class MatchAsyncExtensions
 
         return result.IsSuccess()
             ? await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext)
-            : await ifErrorFunction(result.Error!).ConfigureAwait(continueOnCapturedContext);
+            : await ifErrorFunction(result.Error).ConfigureAwait(continueOnCapturedContext);
     }
 
     /// <summary>
@@ -195,8 +195,8 @@ public static class MatchAsyncExtensions
         if (result.IsSuccess())
             return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext);
 
-        await ifErrorAction(result.Error!).ConfigureAwait(continueOnCapturedContext);
-        return result.Error!;
+        await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext);
+        return result.Error;
     }
 
     /// <summary>
@@ -238,7 +238,7 @@ public static class MatchAsyncExtensions
 
         return result.IsSuccess()
             ? await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext)
-            : await ifErrorFunction(result.Error!).ConfigureAwait(continueOnCapturedContext);
+            : await ifErrorFunction(result.Error).ConfigureAwait(continueOnCapturedContext);
     }
 
     /// <summary>
@@ -284,8 +284,8 @@ public static class MatchAsyncExtensions
         if (result.IsSuccess())
             return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext);
 
-        await ifErrorAction(result.Error!).ConfigureAwait(continueOnCapturedContext);
-        return result.Error!;
+        await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext);
+        return result.Error;
     }
 
     /// <summary>
@@ -327,7 +327,7 @@ public static class MatchAsyncExtensions
 
         return result.IsSuccess()
             ? await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext)
-            : await ifErrorFunction(result.Error!).ConfigureAwait(continueOnCapturedContext);
+            : await ifErrorFunction(result.Error).ConfigureAwait(continueOnCapturedContext);
     }
 
     #endregion
@@ -375,9 +375,9 @@ public static class MatchAsyncExtensions
         ArgumentNullException.ThrowIfNull(ifErrorAction);
 
         if (result.IsSuccess())
-            await ifSuccessAction(result.Value!).ConfigureAwait(continueOnCapturedContext);
+            await ifSuccessAction(result.Value).ConfigureAwait(continueOnCapturedContext);
         else
-            await ifErrorAction(result.Error!).ConfigureAwait(continueOnCapturedContext);
+            await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext);
 
         return result;
     }
@@ -428,10 +428,10 @@ public static class MatchAsyncExtensions
         ArgumentNullException.ThrowIfNull(ifErrorAction);
 
         if (result.IsSuccess())
-            return await ifSuccessFunction(result.Value!).ConfigureAwait(continueOnCapturedContext);
+            return await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext);
 
-        await ifErrorAction(result.Error!).ConfigureAwait(continueOnCapturedContext);
-        return result.Error!;
+        await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext);
+        return result.Error;
     }
 
     /// <summary>
@@ -477,8 +477,8 @@ public static class MatchAsyncExtensions
         ArgumentNullException.ThrowIfNull(ifErrorFunction);
 
         return result.IsSuccess()
-            ? await ifSuccessFunction(result.Value!).ConfigureAwait(continueOnCapturedContext)
-            : await ifErrorFunction(result.Error!).ConfigureAwait(continueOnCapturedContext);
+            ? await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext)
+            : await ifErrorFunction(result.Error).ConfigureAwait(continueOnCapturedContext);
     }
 
     /// <summary>
@@ -527,10 +527,10 @@ public static class MatchAsyncExtensions
         ArgumentNullException.ThrowIfNull(ifErrorAction);
 
         if (result.IsSuccess())
-            return await ifSuccessFunction(result.Value!).ConfigureAwait(continueOnCapturedContext);
+            return await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext);
 
-        await ifErrorAction(result.Error!).ConfigureAwait(continueOnCapturedContext);
-        return result.Error!;
+        await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext);
+        return result.Error;
     }
 
     /// <summary>
@@ -576,8 +576,8 @@ public static class MatchAsyncExtensions
         ArgumentNullException.ThrowIfNull(ifErrorFunction);
 
         return result.IsSuccess()
-            ? await ifSuccessFunction(result.Value!).ConfigureAwait(continueOnCapturedContext)
-            : await ifErrorFunction(result.Error!).ConfigureAwait(continueOnCapturedContext);
+            ? await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext)
+            : await ifErrorFunction(result.Error).ConfigureAwait(continueOnCapturedContext);
     }
 
     #endregion
@@ -642,7 +642,7 @@ public static class MatchAsyncExtensions
         if (result.IsSuccess())
             await ifSuccessAction().ConfigureAwait(continueOnCapturedContext);
         else
-            await ifErrorAction(result.Error!).ConfigureAwait(continueOnCapturedContext);
+            await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext);
 
         return result;
     }
@@ -702,7 +702,7 @@ public static class MatchAsyncExtensions
         if (result.IsSuccess())
             return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext);
 
-        await ifErrorAction(result.Error!).ConfigureAwait(continueOnCapturedContext);
+        await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext);
         return result;
     }
 
@@ -756,7 +756,7 @@ public static class MatchAsyncExtensions
 
         return result.IsSuccess()
             ? await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext)
-            : await ifErrorFunction(result.Error!).ConfigureAwait(continueOnCapturedContext);
+            : await ifErrorFunction(result.Error).ConfigureAwait(continueOnCapturedContext);
     }
 
     /// <summary>
@@ -813,8 +813,8 @@ public static class MatchAsyncExtensions
         if (result.IsSuccess())
             return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext);
 
-        await ifErrorAction(result.Error!).ConfigureAwait(continueOnCapturedContext);
-        return result.Error!;
+        await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext);
+        return result.Error;
     }
 
     /// <summary>
@@ -869,7 +869,7 @@ public static class MatchAsyncExtensions
 
         return result.IsSuccess()
             ? await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext)
-            : await ifErrorFunction(result.Error!).ConfigureAwait(continueOnCapturedContext);
+            : await ifErrorFunction(result.Error).ConfigureAwait(continueOnCapturedContext);
     }
 
     /// <summary>
@@ -928,8 +928,8 @@ public static class MatchAsyncExtensions
         if (result.IsSuccess())
             return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext);
 
-        await ifErrorAction(result.Error!).ConfigureAwait(continueOnCapturedContext);
-        return result.Error!;
+        await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext);
+        return result.Error;
     }
 
     /// <summary>
@@ -984,7 +984,7 @@ public static class MatchAsyncExtensions
 
         return result.IsSuccess()
             ? await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext)
-            : await ifErrorFunction(result.Error!).ConfigureAwait(continueOnCapturedContext);
+            : await ifErrorFunction(result.Error).ConfigureAwait(continueOnCapturedContext);
     }
 
     #endregion
@@ -1050,9 +1050,9 @@ public static class MatchAsyncExtensions
             throw new InvalidOperationException("The asynchronous operation returned null.");
 
         if (result.IsSuccess())
-            await ifSuccessAction(result.Value!).ConfigureAwait(continueOnCapturedContext);
+            await ifSuccessAction(result.Value).ConfigureAwait(continueOnCapturedContext);
         else
-            await ifErrorAction(result.Error!).ConfigureAwait(continueOnCapturedContext);
+            await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext);
 
         return result;
     }
@@ -1115,10 +1115,10 @@ public static class MatchAsyncExtensions
             throw new InvalidOperationException("The asynchronous operation returned null.");
 
         if (result.IsSuccess())
-            return await ifSuccessFunction(result.Value!).ConfigureAwait(continueOnCapturedContext);
+            return await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext);
 
-        await ifErrorAction(result.Error!).ConfigureAwait(continueOnCapturedContext);
-        return result.Error!;
+        await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext);
+        return result.Error;
     }
 
     /// <summary>
@@ -1175,8 +1175,8 @@ public static class MatchAsyncExtensions
             throw new InvalidOperationException("The asynchronous operation returned null.");
 
         return result.IsSuccess()
-            ? await ifSuccessFunction(result.Value!).ConfigureAwait(continueOnCapturedContext)
-            : await ifErrorFunction(result.Error!).ConfigureAwait(continueOnCapturedContext);
+            ? await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext)
+            : await ifErrorFunction(result.Error).ConfigureAwait(continueOnCapturedContext);
     }
 
     /// <summary>
@@ -1237,10 +1237,10 @@ public static class MatchAsyncExtensions
             throw new InvalidOperationException("The asynchronous operation returned null.");
 
         if (result.IsSuccess())
-            return await ifSuccessFunction(result.Value!).ConfigureAwait(continueOnCapturedContext);
+            return await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext);
 
-        await ifErrorAction(result.Error!).ConfigureAwait(continueOnCapturedContext);
-        return result.Error!;
+        await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext);
+        return result.Error;
     }
 
     /// <summary>
@@ -1297,8 +1297,8 @@ public static class MatchAsyncExtensions
             throw new InvalidOperationException("The asynchronous operation returned null.");
 
         return result.IsSuccess()
-            ? await ifSuccessFunction(result.Value!).ConfigureAwait(continueOnCapturedContext)
-            : await ifErrorFunction(result.Error!).ConfigureAwait(continueOnCapturedContext);
+            ? await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext)
+            : await ifErrorFunction(result.Error).ConfigureAwait(continueOnCapturedContext);
     }
 
     #endregion
