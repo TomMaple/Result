@@ -35,6 +35,6 @@ public static class ResultExtensions
 
         return result.IsSuccess()
             ? Result.Success()
-            : Result.FromError(result.Error!);
+            : Result.FromError(result.Error);
     }
 }

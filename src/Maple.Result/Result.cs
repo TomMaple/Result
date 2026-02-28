@@ -35,6 +35,7 @@ public interface IResult
     /// <returns>
     ///     <see langword="true" /> if the operation was successful; otherwise, <see langword="false" />.
     /// </returns>
+    [MemberNotNullWhen(false, nameof(Error))]
     public bool IsSuccess();
 }
 
