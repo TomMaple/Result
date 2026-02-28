@@ -158,7 +158,7 @@ public static class IfErrorAsyncExtensions
     ///     If the asynchronous operation represented by <paramref name="resultTask" /> returns <see langword="null" />.
     /// </exception>
     public static async Task<TResult> IfErrorAsync<TResult>(
-        [DisallowNull] this Task<TResult> resultTask,
+        this Task<TResult> resultTask,
         Func<Error, Task> ifErrorAction,
         bool continueOnCapturedContext = false
     )
@@ -222,7 +222,7 @@ public static class IfErrorAsyncExtensions
     ///     If the asynchronous operation represented by <paramref name="resultTask" /> returns <see langword="null" />.
     /// </exception>
     public static async Task<TResult> IfErrorAsync<TResult>(
-        [DisallowNull] this Task<TResult> resultTask,
+        this Task<TResult> resultTask,
         Func<Error, Task<TResult>> ifErrorFunction,
         bool continueOnCapturedContext = false
     )
