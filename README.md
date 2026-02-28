@@ -390,10 +390,12 @@ var userTokenResult =
 See more: [Maple.Result.Extensions](https://github.com/TomMaple/Result/blob/main/docs/Reference/Extensions/namespace.md)
 
 # Mapping to HTTP responses
-Mapping to HTTP responses is not part of this library.
+Check:
+* [Maple.Result.Extensions.AspNetCore](https://github.com/TomMaple/Maple.Result.Extensions.AspNetCore) library *(in development)* for mapping the *Result* to *ASP.NET Core* HTTP responses.
 
-> [!NOTE]
-> Mapping of the `Result` and `Error` to HTTP responses will be implemented as a separate library.
+### Coming soon:
+* *Maple.Result.Extensions.Functions.Worker* library for mapping the *Result* to *Azure Functions* HTTP responses.
+* *Maple.Result.Extensions.HttpClient* library for mapping *HTTP Client* responses to *Result* objects.
 
 # FAQ
 ## When to use a Result and when an Exception?
