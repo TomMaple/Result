@@ -1,0 +1,122 @@
+<Solution>
+  <Folder Name="/.github/" />
+  <Folder Name="/.github/workflows/">
+    <File Path=".github/workflows/build-and-publish.yml" />
+  </Folder>
+  <Folder Name="/.resources/">
+    <File Path=".resources/icon.png" />
+  </Folder>
+  <Folder Name="/docs/">
+    <File Path="docs/conventions.md" />
+    <File Path="docs/goals.md" />
+    <File Path="LICENSE" />
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/docs/Reference/">
+    <File Path="docs/Reference/ErrorCategory.md" />
+    <File Path="docs/Reference/namespace.md" />
+  </Folder>
+  <Folder Name="/docs/Reference/Error/">
+    <File Path="docs/Reference/Error/Error.md" />
+    <File Path="docs/Reference/Error/Error_AddDetail.md" />
+    <File Path="docs/Reference/Error/Error_Category.md" />
+    <File Path="docs/Reference/Error/Error_Conflict.md" />
+    <File Path="docs/Reference/Error/Error_constructors.md" />
+    <File Path="docs/Reference/Error/Error_Critical.md" />
+    <File Path="docs/Reference/Error/Error_Detail.md" />
+    <File Path="docs/Reference/Error/Error_DetailTemplated.md" />
+    <File Path="docs/Reference/Error/Error_ErrorDetails.md" />
+    <File Path="docs/Reference/Error/Error_Failure.md" />
+    <File Path="docs/Reference/Error/Error_InstanceUri.md" />
+    <File Path="docs/Reference/Error/Error_NotFound.md" />
+    <File Path="docs/Reference/Error/Error_NotImplemented.md" />
+    <File Path="docs/Reference/Error/Error_Timeout.md" />
+    <File Path="docs/Reference/Error/Error_Title.md" />
+    <File Path="docs/Reference/Error/Error_TypeUri.md" />
+    <File Path="docs/Reference/Error/Error_Unauthenticated.md" />
+    <File Path="docs/Reference/Error/Error_Unauthorized.md" />
+    <File Path="docs/Reference/Error/Error_Unavailable.md" />
+    <File Path="docs/Reference/Error/Error_Validation.md" />
+  </Folder>
+  <Folder Name="/docs/Reference/ErrorDetail/">
+    <File Path="docs/Reference/ErrorDetail/ErrorDetail.md" />
+    <File Path="docs/Reference/ErrorDetail/ErrorDetail_constructors.md" />
+    <File Path="docs/Reference/ErrorDetail/ErrorDetail_Detail.md" />
+    <File Path="docs/Reference/ErrorDetail/ErrorDetail_DetailTemplated.md" />
+    <File Path="docs/Reference/ErrorDetail/ErrorDetail_PropertyPointer.md" />
+  </Folder>
+  <Folder Name="/docs/Reference/ErrorUri/">
+    <File Path="docs/Reference/ErrorUri/ErrorUri.md" />
+    <File Path="docs/Reference/ErrorUri/ErrorUri_constructors.md" />
+    <File Path="docs/Reference/ErrorUri/ErrorUri_Locator.md" />
+    <File Path="docs/Reference/ErrorUri/ErrorUri_None.md" />
+    <File Path="docs/Reference/ErrorUri/ErrorUri_Tag.md" />
+    <File Path="docs/Reference/ErrorUri/ErrorUri_Value.md" />
+  </Folder>
+  <Folder Name="/docs/Reference/Extensions/">
+    <File Path="docs/Reference/Extensions/IfErrorAsyncExtensions.md" />
+    <File Path="docs/Reference/Extensions/IfErrorAsyncExtensions_IfErrorAsync.md" />
+    <File Path="docs/Reference/Extensions/IfErrorExtensions.md" />
+    <File Path="docs/Reference/Extensions/IfErrorExtensions_IfError.md" />
+    <File Path="docs/Reference/Extensions/IfSuccessAsyncExtensions.md" />
+    <File Path="docs/Reference/Extensions/IfSuccessAsyncExtensions_IfSuccessAsync.md" />
+    <File Path="docs/Reference/Extensions/IfSuccessExtensions.md" />
+    <File Path="docs/Reference/Extensions/IfSuccessExtensions_IfSuccess.md" />
+    <File Path="docs/Reference/Extensions/LinqAsyncExtensions.md" />
+    <File Path="docs/Reference/Extensions/LinqAsyncExtensions_SelectMany.md" />
+    <File Path="docs/Reference/Extensions/LinqExtensions.md" />
+    <File Path="docs/Reference/Extensions/LinqExtensions_SelectMany.md" />
+    <File Path="docs/Reference/Extensions/MatchAsyncExtensions.md" />
+    <File Path="docs/Reference/Extensions/MatchAsyncExtensions_MatchAsync.md" />
+    <File Path="docs/Reference/Extensions/MatchExtensions.md" />
+    <File Path="docs/Reference/Extensions/MatchExtensions_Match.md" />
+    <File Path="docs/Reference/Extensions/namespace.md" />
+    <File Path="docs/Reference/Extensions/ResultAsyncExtensions.md" />
+    <File Path="docs/Reference/Extensions/ResultAsyncExtensions_ToResultAsync.md" />
+    <File Path="docs/Reference/Extensions/ResultExtensions.md" />
+    <File Path="docs/Reference/Extensions/ResultExtensions_ToResult.md" />
+  </Folder>
+  <Folder Name="/docs/Reference/IResult/">
+    <File Path="docs/Reference/IResult/IResult.md" />
+    <File Path="docs/Reference/IResult/IResult_Error.md" />
+    <File Path="docs/Reference/IResult/IResult_IsSuccess.md" />
+  </Folder>
+  <Folder Name="/docs/Reference/Result/">
+    <File Path="docs/Reference/Result/Result.md" />
+    <File Path="docs/Reference/Result/Result_constructors.md" />
+    <File Path="docs/Reference/Result/Result_Error.md" />
+    <File Path="docs/Reference/Result/Result_FromError.md" />
+    <File Path="docs/Reference/Result/Result_FromValue.md" />
+    <File Path="docs/Reference/Result/Result_implicit_Error_to_Result.md" />
+    <File Path="docs/Reference/Result/Result_IsSuccess.md" />
+    <File Path="docs/Reference/Result/Result_Success.md" />
+  </Folder>
+  <Folder Name="/docs/Reference/ResultT/">
+    <File Path="docs/Reference/ResultT/ResultT.md" />
+    <File Path="docs/Reference/ResultT/ResultT_constructors.md" />
+    <File Path="docs/Reference/ResultT/ResultT_Error.md" />
+    <File Path="docs/Reference/ResultT/ResultT_FromError.md" />
+    <File Path="docs/Reference/ResultT/ResultT_FromValue.md" />
+    <File Path="docs/Reference/ResultT/ResultT_implicit_Error_to_ResultT.md" />
+    <File Path="docs/Reference/ResultT/ResultT_implicit_T_to_ResultT.md" />
+    <File Path="docs/Reference/ResultT/ResultT_IsSuccess.md" />
+    <File Path="docs/Reference/ResultT/ResultT_Value.md" />
+  </Folder>
+  <Folder Name="/docs/Reference/TemplatedMessage/">
+    <File Path="docs/Reference/TemplatedMessage/TemplatedMessage.md" />
+    <File Path="docs/Reference/TemplatedMessage/TemplatedMessage_constructors.md" />
+    <File Path="docs/Reference/TemplatedMessage/TemplatedMessage_Params.md" />
+    <File Path="docs/Reference/TemplatedMessage/TemplatedMessage_TemplateId.md" />
+  </Folder>
+  <Folder Name="/root/">
+    <File Path=".gitignore" />
+    <File Path="LICENSE" />
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/Maple.Result/Maple.Result.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Maple.Result.Tests.Unit/Maple.Result.Tests.Unit.csproj" />
+  </Folder>
+</Solution>
