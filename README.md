@@ -8,7 +8,10 @@
 # Result
 An abstraction of the operation result which can be either successful (with or without a value) or failed (with an error).
 
-It can be mapped to the HTTP response if needed.
+It can be mapped to or from the HTTP response if needed. Check:
+* [Maple.Result.Extensions.AspNetCore](https://github.com/TomMaple/Maple.Result.Extensions.AspNetCore),
+* [Maple.Result.Extensions.HttpClient](https://github.com/TomMaple/Maple.Result.Extensions.HttpClient).
+
 
 # Give it a star ⭐
 Do you like it? Show your support by giving this project a star!
@@ -395,7 +398,10 @@ Check:
 
 ### Coming soon:
 * *Maple.Result.Extensions.Functions.Worker* library for mapping the *Result* to *Azure Functions* HTTP responses.
-* *Maple.Result.Extensions.HttpClient* library for mapping *HTTP Client* responses to *Result* objects.
+
+# Mapping from HTTP responses
+Check:
+* [Maple.Result.Extensions.HttpClient](https://github.com/TomMaple/Maple.Result.Extensions.HttpClient) library for mapping *HTTP Client* responses to *Result* objects.
 
 # FAQ
 ## When to use a Result and when an Exception?
