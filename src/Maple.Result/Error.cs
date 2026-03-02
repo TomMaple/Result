@@ -341,7 +341,7 @@ public record Error
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
     /// <remarks>
     ///     Represents validation errors that prevent the underlying service from completing.<br />
-    ///     It can be mapped to the 400 HTTP status code (Bad Request) response.
+    ///     It can be mapped to the 401 HTTP status code (Unauthorized) response.
     /// </remarks>
     /// <exception cref="ArgumentException">
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
@@ -418,7 +418,7 @@ public record Error
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
     /// <remarks>
     ///     Represents validation errors that prevent the underlying service from completing.<br />
-    ///     It can be mapped to the 400 HTTP status code (Bad Request) response.
+    ///     It can be mapped to the 403 HTTP status code (Forbidden) response.
     /// </remarks>
     /// <exception cref="ArgumentException">
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
@@ -496,7 +496,7 @@ public record Error
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
     /// <remarks>
     ///     Represents validation errors that prevent the underlying service from completing.<br />
-    ///     It can be mapped to the 400 HTTP status code (Bad Request) response.
+    ///     It can be mapped to the 404 HTTP status code (Not Found) response.
     /// </remarks>
     /// <exception cref="ArgumentException">
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
@@ -574,7 +574,7 @@ public record Error
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
     /// <remarks>
     ///     Represents validation errors that prevent the underlying service from completing.<br />
-    ///     It can be mapped to the 400 HTTP status code (Bad Request) response.
+    ///     It can be mapped to the 408 HTTP status code (Request Timeout) response.
     /// </remarks>
     /// <exception cref="ArgumentException">
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
@@ -613,7 +613,7 @@ public record Error
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
     /// <remarks>
     ///     Indicates that the operation failed because it was not completed within the allotted time.<br />
-    ///     It can be mapped to the 408 HTTP status code (Request Timeout) response.
+    ///     It can be mapped to the 409 HTTP status code (Conflict) response.
     /// </remarks>
     /// <exception cref="ArgumentException">
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
@@ -652,7 +652,7 @@ public record Error
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
     /// <remarks>
     ///     Represents validation errors that prevent the underlying service from completing.<br />
-    ///     It can be mapped to the 400 HTTP status code (Bad Request) response.
+    ///     It can be mapped to the 409 HTTP status code (Conflict) response.
     /// </remarks>
     /// <exception cref="ArgumentException">
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
@@ -691,7 +691,7 @@ public record Error
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
     /// <remarks>
     ///     Indicates that the operation failed because it was not completed within the allotted time.<br />
-    ///     It can be mapped to the 408 HTTP status code (Request Timeout) response.
+    ///     It can be mapped to the 422 HTTP status code (Unprocessable Content) response.
     /// </remarks>
     /// <exception cref="ArgumentException">
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
@@ -730,7 +730,7 @@ public record Error
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
     /// <remarks>
     ///     Represents validation errors that prevent the underlying service from completing.<br />
-    ///     It can be mapped to the 400 HTTP status code (Bad Request) response.
+    ///     It can be mapped to the 422 HTTP status code (Unprocessable Content) response.
     /// </remarks>
     /// <exception cref="ArgumentException">
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
@@ -769,7 +769,7 @@ public record Error
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
     /// <remarks>
     ///     Indicates that the operation failed because it was not completed within the allotted time.<br />
-    ///     It can be mapped to the 408 HTTP status code (Request Timeout) response.
+    ///     It can be mapped to the 500 HTTP status code (Internal Server Error) response.
     /// </remarks>
     /// <exception cref="ArgumentException">
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
@@ -808,7 +808,7 @@ public record Error
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
     /// <remarks>
     ///     Represents validation errors that prevent the underlying service from completing.<br />
-    ///     It can be mapped to the 400 HTTP status code (Bad Request) response.
+    ///     It can be mapped to the 500 HTTP status code (Internal Server Error) response.
     /// </remarks>
     /// <exception cref="ArgumentException">
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
@@ -847,7 +847,7 @@ public record Error
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
     /// <remarks>
     ///     Indicates that the operation failed because it was not completed within the allotted time.<br />
-    ///     It can be mapped to the 408 HTTP status code (Request Timeout) response.
+    ///     It can be mapped to the 501 HTTP status code (Not Implemented) response.
     /// </remarks>
     /// <exception cref="ArgumentException">
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
@@ -886,7 +886,7 @@ public record Error
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
     /// <remarks>
     ///     Represents validation errors that prevent the underlying service from completing.<br />
-    ///     It can be mapped to the 400 HTTP status code (Bad Request) response.
+    ///     It can be mapped to the 501 HTTP status code (Not Implemented) response.
     /// </remarks>
     /// <exception cref="ArgumentException">
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
@@ -925,7 +925,7 @@ public record Error
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
     /// <remarks>
     ///     Indicates that the operation failed because it was not completed within the allotted time.<br />
-    ///     It can be mapped to the 408 HTTP status code (Request Timeout) response.
+    ///     It can be mapped to the 503 HTTP status code (Service Unavailable) response.
     /// </remarks>
     /// <exception cref="ArgumentException">
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
@@ -964,7 +964,7 @@ public record Error
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
     /// <remarks>
     ///     Represents validation errors that prevent the underlying service from completing.<br />
-    ///     It can be mapped to the 400 HTTP status code (Bad Request) response.
+    ///     It can be mapped to the 503 HTTP status code (Service Unavailable) response.
     /// </remarks>
     /// <exception cref="ArgumentException">
     ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
