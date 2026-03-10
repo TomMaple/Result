@@ -203,6 +203,12 @@ public record Error
         return this;
     }
 
+    internal Error AddDetail(ErrorDetail errorDetail)
+    {
+        _errorDetails.Add(errorDetail);
+        return this;
+    }
+
     #region factory methods
 
     /// <summary>
