@@ -190,6 +190,89 @@ public static class IfSuccessAsyncExtensions
         return result.Error;
     }
 
+
+    /// <summary>
+    ///     Invokes the specified asynchronous action as an asynchronous operation,
+    ///     if the <paramref name="result" /> represents a successful outcome.
+    /// </summary>
+    /// <param name="result">The <see cref="Result" /> to evaluate for success. Must not be <see langword="null" />.</param>
+    /// <param name="ifSuccessAction">The asynchronous action to execute if the <paramref name="result" /> is successful. Cannot be <see langword="null" />.</param>
+    /// <param name="continueOnCapturedContext"><see langword="true" /> to attempt to marshal the continuation back to the original context captured; otherwise, <see langword="false" />.</param>
+    /// <returns>A <see cref="Task{Result}" /> that represents the original <paramref name="result" />.</returns>
+    public static async Task<Result> IfSuccessAsync(this Result result, Func<ValueTask> ifSuccessAction,
+        bool continueOnCapturedContext = false)
+    {
+        ArgumentNullException.ThrowIfNull(result);
+        ArgumentNullException.ThrowIfNull(ifSuccessAction);
+
+        if (result.IsSuccess())
+            await ifSuccessAction().ConfigureAwait(continueOnCapturedContext);
+
+        return result;
+    }
+
+    /// <summary>
+    ///     Invokes the specified asynchronous function as an asynchronous operation,
+    ///     if the <paramref name="result" /> represents a successful outcome.
+    /// </summary>
+    /// <param name="result">The <see cref="Result" /> to evaluate for success. Must not be <see langword="null" />.</param>
+    /// <param name="ifSuccessFunction">An asynchronous function to execute if <paramref name="result" /> is successful. Must not be <see langword="null" />.</param>
+    /// <param name="continueOnCapturedContext"><see langword="true" /> to attempt to marshal the continuation back to the original context captured; otherwise, <see langword="false" />.</param>
+    /// <returns>A <see cref="Task{Result}" /> returned by <paramref name="ifSuccessFunction" /> if <paramref name="result" /> is successful; otherwise, the original error <paramref name="result" />.</returns>
+    public static async Task<Result> IfSuccessAsync(this Result result, Func<ValueTask<Result>> ifSuccessFunction,
+        bool continueOnCapturedContext = false)
+    {
+        ArgumentNullException.ThrowIfNull(result);
+        ArgumentNullException.ThrowIfNull(ifSuccessFunction);
+
+        if (result.IsSuccess())
+            return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext);
+
+        return result;
+    }
+
+    /// <summary>
+    ///     Invokes the specified asynchronous function as an asynchronous operation, and returns its output
+    ///     as a <see cref="Task{TResult}" />, if the operation represented by the <paramref name="result" /> is successful.
+    /// </summary>
+    /// <typeparam name="T">The type of the <see cref="Result{T}" /> value to return if the operation is successful.</typeparam>
+    /// <param name="result">The <see cref="Result" /> to evaluate for success. Must not be <see langword="null" />.</param>
+    /// <param name="ifSuccessFunction">An asynchronous function to execute if the <paramref name="result" /> is successful. Must not be <see langword="null" />.</param>
+    /// <param name="continueOnCapturedContext"><see langword="true" /> to attempt to marshal the continuation back to the original context captured; otherwise, <see langword="false" />.</param>
+    /// <returns>A <see cref="Task{TResult}" /> that represents the successful <see cref="Result{T}" /> if <paramref name="result" /> is successful; otherwise, a failed <see cref="Result{T}" />.</returns>
+    public static async Task<Result<T>> IfSuccessAsync<T>(this Result result, Func<ValueTask<T>> ifSuccessFunction,
+        bool continueOnCapturedContext = false)
+    {
+        ArgumentNullException.ThrowIfNull(result);
+        ArgumentNullException.ThrowIfNull(ifSuccessFunction);
+
+        if (result.IsSuccess())
+            return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext);
+
+        return result.Error;
+    }
+
+    /// <summary>
+    ///     Invokes the specified asynchronous function as an asynchronous operation,
+    ///     and returns a <see cref="Result{T}" /> with its output if the operation represented by the <paramref name="result" /> is successful.
+    /// </summary>
+    /// <typeparam name="T">The type of the <see cref="Result{T}" /> value to return if the operation is successful.</typeparam>
+    /// <param name="result">The <see cref="Result" /> to evaluate for success. Must not be <see langword="null" />.</param>
+    /// <param name="ifSuccessFunction">An asynchronous function to execute if the <paramref name="result" /> is successful. Must not be <see langword="null" />.</param>
+    /// <param name="continueOnCapturedContext"><see langword="true" /> to attempt to marshal the continuation back to the original context captured; otherwise, <see langword="false" />.</param>
+    /// <returns>A <see cref="Task{TResult}" /> that represents a successful <see cref="Result{T}" /> returned by <paramref name="ifSuccessFunction" /> if <paramref name="result" /> is successful; otherwise, a failed <see cref="Result{T}" />.</returns>
+    public static async Task<Result<T>> IfSuccessAsync<T>(this Result result, Func<ValueTask<Result<T>>> ifSuccessFunction,
+        bool continueOnCapturedContext = false)
+    {
+        ArgumentNullException.ThrowIfNull(result);
+        ArgumentNullException.ThrowIfNull(ifSuccessFunction);
+
+        if (result.IsSuccess())
+            return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext);
+
+        return result.Error;
+    }
+
     #endregion
 
     #region Result<T> extensions
@@ -371,6 +454,69 @@ public static class IfSuccessAsyncExtensions
     /// </exception>
     public static async Task<Result<TNext>> IfSuccessAsync<T, TNext>(this Result<T> result,
         Func<T, Task<Result<TNext>>> ifSuccessFunction, bool continueOnCapturedContext = false)
+    {
+        ArgumentNullException.ThrowIfNull(result);
+        ArgumentNullException.ThrowIfNull(ifSuccessFunction);
+
+        if (result.IsSuccess())
+            return await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext);
+
+        return result.Error;
+    }
+
+
+    /// <summary>
+    ///     Invokes the specified asynchronous action if the <paramref name="result" /> represents a successful outcome.
+    /// </summary>
+    public static async Task<Result<T>> IfSuccessAsync<T>(this Result<T> result, Func<T, ValueTask> ifSuccessAction,
+        bool continueOnCapturedContext = false)
+    {
+        ArgumentNullException.ThrowIfNull(result);
+        ArgumentNullException.ThrowIfNull(ifSuccessAction);
+
+        if (result.IsSuccess())
+            await ifSuccessAction(result.Value).ConfigureAwait(continueOnCapturedContext);
+
+        return result;
+    }
+
+    /// <summary>
+    ///     Invokes the specified asynchronous function if the <paramref name="result" /> represents a successful outcome.
+    /// </summary>
+    public static async Task<Result> IfSuccessAsync<T>(this Result<T> result, Func<T, ValueTask<Result>> ifSuccessFunction,
+        bool continueOnCapturedContext = false)
+    {
+        ArgumentNullException.ThrowIfNull(result);
+        ArgumentNullException.ThrowIfNull(ifSuccessFunction);
+
+        if (result.IsSuccess())
+            return await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext);
+
+        return result.Error;
+    }
+
+    /// <summary>
+    ///     Invokes the specified asynchronous function and returns its output as a <see cref="Result{TNext}" />
+    ///     if the operation represented by the <paramref name="result" /> is successful.
+    /// </summary>
+    public static async Task<Result<TNext>> IfSuccessAsync<T, TNext>(this Result<T> result,
+        Func<T, ValueTask<TNext>> ifSuccessFunction, bool continueOnCapturedContext = false)
+    {
+        ArgumentNullException.ThrowIfNull(result);
+        ArgumentNullException.ThrowIfNull(ifSuccessFunction);
+
+        if (result.IsSuccess())
+            return await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext);
+
+        return result.Error;
+    }
+
+    /// <summary>
+    ///     Invokes the specified asynchronous function and returns a <see cref="Result{TNext}" /> with its output
+    ///     if the operation represented by the <paramref name="result" /> is successful.
+    /// </summary>
+    public static async Task<Result<TNext>> IfSuccessAsync<T, TNext>(this Result<T> result,
+        Func<T, ValueTask<Result<TNext>>> ifSuccessFunction, bool continueOnCapturedContext = false)
     {
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
@@ -603,6 +749,173 @@ public static class IfSuccessAsyncExtensions
         bool continueOnCapturedContext = false)
     {
         ArgumentNullException.ThrowIfNull(resultTask);
+        ArgumentNullException.ThrowIfNull(ifSuccessFunction);
+
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+
+        if (result is null)
+            throw new InvalidOperationException("The asynchronous operation returned null.");
+
+        if (result.IsSuccess())
+            return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext);
+
+        return result.Error;
+    }
+
+    #endregion
+
+
+    #region ValueTask<Result> extensions
+
+    /// <summary>
+    ///     Invokes the specified asynchronous action as an asynchronous operation,
+    ///     if the asynchronous <paramref name="resultTask" /> operation represents a successful outcome.
+    /// </summary>
+    public static async Task<Result> IfSuccessAsync(this ValueTask<Result> resultTask, Func<Task> ifSuccessAction,
+        bool continueOnCapturedContext = false)
+    {
+        ArgumentNullException.ThrowIfNull(ifSuccessAction);
+
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+
+        if (result is null)
+            throw new InvalidOperationException("The asynchronous operation returned null.");
+
+        if (result.IsSuccess())
+            await ifSuccessAction().ConfigureAwait(continueOnCapturedContext);
+
+        return result;
+    }
+
+    /// <summary>
+    ///     Invokes the specified asynchronous action as an asynchronous operation,
+    ///     if the asynchronous <paramref name="resultTask" /> operation represents a successful outcome.
+    /// </summary>
+    public static async Task<Result> IfSuccessAsync(this ValueTask<Result> resultTask, Func<ValueTask> ifSuccessAction,
+        bool continueOnCapturedContext = false)
+    {
+        ArgumentNullException.ThrowIfNull(ifSuccessAction);
+
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+
+        if (result is null)
+            throw new InvalidOperationException("The asynchronous operation returned null.");
+
+        if (result.IsSuccess())
+            await ifSuccessAction().ConfigureAwait(continueOnCapturedContext);
+
+        return result;
+    }
+
+    /// <summary>
+    ///     Invokes the specified asynchronous function as an asynchronous operation,
+    ///     if the asynchronous <paramref name="resultTask" /> operation represents a successful outcome.
+    /// </summary>
+    public static async Task<Result> IfSuccessAsync(this ValueTask<Result> resultTask, Func<Task<Result>> ifSuccessFunction,
+        bool continueOnCapturedContext = false)
+    {
+        ArgumentNullException.ThrowIfNull(ifSuccessFunction);
+
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+
+        if (result is null)
+            throw new InvalidOperationException("The asynchronous operation returned null.");
+
+        if (result.IsSuccess())
+            return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext);
+
+        return result;
+    }
+
+    /// <summary>
+    ///     Invokes the specified asynchronous function as an asynchronous operation,
+    ///     if the asynchronous <paramref name="resultTask" /> operation represents a successful outcome.
+    /// </summary>
+    public static async Task<Result> IfSuccessAsync(this ValueTask<Result> resultTask, Func<ValueTask<Result>> ifSuccessFunction,
+        bool continueOnCapturedContext = false)
+    {
+        ArgumentNullException.ThrowIfNull(ifSuccessFunction);
+
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+
+        if (result is null)
+            throw new InvalidOperationException("The asynchronous operation returned null.");
+
+        if (result.IsSuccess())
+            return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext);
+
+        return result;
+    }
+
+    /// <summary>
+    ///     Invokes the specified asynchronous function as an asynchronous operation, and returns its output
+    ///     as a <see cref="Task{TResult}" />, if the operation represented by the <paramref name="resultTask" /> is successful.
+    /// </summary>
+    public static async Task<Result<T>> IfSuccessAsync<T>(this ValueTask<Result> resultTask, Func<Task<T>> ifSuccessFunction,
+        bool continueOnCapturedContext = false)
+    {
+        ArgumentNullException.ThrowIfNull(ifSuccessFunction);
+
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+
+        if (result is null)
+            throw new InvalidOperationException("The asynchronous operation returned null.");
+
+        if (result.IsSuccess())
+            return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext);
+
+        return result.Error;
+    }
+
+    /// <summary>
+    ///     Invokes the specified asynchronous function as an asynchronous operation, and returns its output
+    ///     as a <see cref="Task{TResult}" />, if the operation represented by the <paramref name="resultTask" /> is successful.
+    /// </summary>
+    public static async Task<Result<T>> IfSuccessAsync<T>(this ValueTask<Result> resultTask, Func<ValueTask<T>> ifSuccessFunction,
+        bool continueOnCapturedContext = false)
+    {
+        ArgumentNullException.ThrowIfNull(ifSuccessFunction);
+
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+
+        if (result is null)
+            throw new InvalidOperationException("The asynchronous operation returned null.");
+
+        if (result.IsSuccess())
+            return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext);
+
+        return result.Error;
+    }
+
+    /// <summary>
+    ///     Invokes the specified asynchronous function as an asynchronous operation,
+    ///     and returns its output as a <see cref="Task{TResult}" />, if the operation represented by the <paramref name="resultTask" /> is successful.
+    /// </summary>
+    public static async Task<Result<T>> IfSuccessAsync<T>(this ValueTask<Result> resultTask,
+        Func<Task<Result<T>>> ifSuccessFunction,
+        bool continueOnCapturedContext = false)
+    {
+        ArgumentNullException.ThrowIfNull(ifSuccessFunction);
+
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+
+        if (result is null)
+            throw new InvalidOperationException("The asynchronous operation returned null.");
+
+        if (result.IsSuccess())
+            return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext);
+
+        return result.Error;
+    }
+
+    /// <summary>
+    ///     Invokes the specified asynchronous function as an asynchronous operation,
+    ///     and returns its output as a <see cref="Task{TResult}" />, if the operation represented by the <paramref name="resultTask" /> is successful.
+    /// </summary>
+    public static async Task<Result<T>> IfSuccessAsync<T>(this ValueTask<Result> resultTask,
+        Func<ValueTask<Result<T>>> ifSuccessFunction,
+        bool continueOnCapturedContext = false)
+    {
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
 
         var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
@@ -873,4 +1186,173 @@ public static class IfSuccessAsyncExtensions
     }
 
     #endregion
+
+    #region ValueTask<Result<T>> extensions
+
+    /// <summary>
+    ///     Invokes the specified asynchronous action as an asynchronous operation,
+    ///     if the asynchronous <paramref name="resultTask" /> operation represents a successful outcome.
+    /// </summary>
+    public static async Task<Result<T>> IfSuccessAsync<T>(this ValueTask<Result<T>> resultTask,
+        Func<T, Task> ifSuccessAction, bool continueOnCapturedContext = false)
+    {
+        ArgumentNullException.ThrowIfNull(ifSuccessAction);
+
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+
+        if (result is null)
+            throw new InvalidOperationException("The asynchronous operation returned null.");
+
+        if (result.IsSuccess())
+            await ifSuccessAction(result.Value).ConfigureAwait(continueOnCapturedContext);
+
+        return result;
+    }
+
+    /// <summary>
+    ///     Invokes the specified asynchronous action as an asynchronous operation,
+    ///     if the asynchronous <paramref name="resultTask" /> operation represents a successful outcome.
+    /// </summary>
+    public static async Task<Result<T>> IfSuccessAsync<T>(this ValueTask<Result<T>> resultTask,
+        Func<T, ValueTask> ifSuccessAction, bool continueOnCapturedContext = false)
+    {
+        ArgumentNullException.ThrowIfNull(ifSuccessAction);
+
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+
+        if (result is null)
+            throw new InvalidOperationException("The asynchronous operation returned null.");
+
+        if (result.IsSuccess())
+            await ifSuccessAction(result.Value).ConfigureAwait(continueOnCapturedContext);
+
+        return result;
+    }
+
+    /// <summary>
+    ///     Invokes the specified asynchronous function as an asynchronous operation,
+    ///     if the <paramref name="resultTask" /> represents a successful outcome.
+    /// </summary>
+    public static async Task<Result> IfSuccessAsync<T>(this ValueTask<Result<T>> resultTask,
+        Func<T, Task<Result>> ifSuccessFunction, bool continueOnCapturedContext = false)
+    {
+        ArgumentNullException.ThrowIfNull(ifSuccessFunction);
+
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+
+        if (result is null)
+            throw new InvalidOperationException("The asynchronous operation returned null.");
+
+        if (result.IsSuccess())
+            return await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext);
+
+        return result.Error;
+    }
+
+    /// <summary>
+    ///     Invokes the specified asynchronous function as an asynchronous operation,
+    ///     if the <paramref name="resultTask" /> represents a successful outcome.
+    /// </summary>
+    public static async Task<Result> IfSuccessAsync<T>(this ValueTask<Result<T>> resultTask,
+        Func<T, ValueTask<Result>> ifSuccessFunction, bool continueOnCapturedContext = false)
+    {
+        ArgumentNullException.ThrowIfNull(ifSuccessFunction);
+
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+
+        if (result is null)
+            throw new InvalidOperationException("The asynchronous operation returned null.");
+
+        if (result.IsSuccess())
+            return await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext);
+
+        return result.Error;
+    }
+
+    /// <summary>
+    ///     Invokes the specified asynchronous function as an asynchronous operation
+    ///     and returns its output as an asynchronous operation that returns <see cref="Result{TNext}" />,
+    ///     if the asynchronous <paramref name="resultTask" /> operation represents a successful outcome.
+    /// </summary>
+    public static async Task<Result<TNext>> IfSuccessAsync<T, TNext>(this ValueTask<Result<T>> resultTask,
+        Func<T, Task<TNext>> ifSuccessFunction, bool continueOnCapturedContext = false)
+    {
+        ArgumentNullException.ThrowIfNull(ifSuccessFunction);
+
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+
+        if (result is null)
+            throw new InvalidOperationException("The asynchronous operation returned null.");
+
+        if (result.IsSuccess())
+            return await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext);
+
+        return result.Error;
+    }
+
+    /// <summary>
+    ///     Invokes the specified asynchronous function as an asynchronous operation
+    ///     and returns its output as an asynchronous operation that returns <see cref="Result{TNext}" />,
+    ///     if the asynchronous <paramref name="resultTask" /> operation represents a successful outcome.
+    /// </summary>
+    public static async Task<Result<TNext>> IfSuccessAsync<T, TNext>(this ValueTask<Result<T>> resultTask,
+        Func<T, ValueTask<TNext>> ifSuccessFunction, bool continueOnCapturedContext = false)
+    {
+        ArgumentNullException.ThrowIfNull(ifSuccessFunction);
+
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+
+        if (result is null)
+            throw new InvalidOperationException("The asynchronous operation returned null.");
+
+        if (result.IsSuccess())
+            return await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext);
+
+        return result.Error;
+    }
+
+    /// <summary>
+    ///     Invokes the specified asynchronous function as an asynchronous operation
+    ///     and returns its output as an asynchronous operation that returns <see cref="Result{TNext}" />,
+    ///     if the asynchronous <paramref name="resultTask" /> operation represents a successful outcome.
+    /// </summary>
+    public static async Task<Result<TNext>> IfSuccessAsync<T, TNext>(this ValueTask<Result<T>> resultTask,
+        Func<T, Task<Result<TNext>>> ifSuccessFunction, bool continueOnCapturedContext = false)
+    {
+        ArgumentNullException.ThrowIfNull(ifSuccessFunction);
+
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+
+        if (result is null)
+            throw new InvalidOperationException("The asynchronous operation returned null.");
+
+        if (result.IsSuccess())
+            return await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext);
+
+        return result.Error;
+    }
+
+    /// <summary>
+    ///     Invokes the specified asynchronous function as an asynchronous operation
+    ///     and returns its output as an asynchronous operation that returns <see cref="Result{TNext}" />,
+    ///     if the asynchronous <paramref name="resultTask" /> operation represents a successful outcome.
+    /// </summary>
+    public static async Task<Result<TNext>> IfSuccessAsync<T, TNext>(this ValueTask<Result<T>> resultTask,
+        Func<T, ValueTask<Result<TNext>>> ifSuccessFunction, bool continueOnCapturedContext = false)
+    {
+        ArgumentNullException.ThrowIfNull(ifSuccessFunction);
+
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+
+        if (result is null)
+            throw new InvalidOperationException("The asynchronous operation returned null.");
+
+        if (result.IsSuccess())
+            return await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext);
+
+        return result.Error;
+    }
+
+    #endregion
+
 }

@@ -63,10 +63,46 @@ public static class LinqAsyncExtensions
 
         var resultValue = await result;
 
-        return await resultValue.IfSuccessAsync(async x =>
+        return await resultValue.IfSuccessAsync(CollectionSelectorAsync);
+
+        async Task<Result<TNext>> CollectionSelectorAsync(T x)
         {
             var collectionResult = await collectionSelector(x);
             return collectionResult.IfSuccess(y => resultSelector(x, y));
-        });
+        }
     }
+
+    /// <summary>
+    ///     Returns a new instance of the <see cref="Task{TResult}" /> that represents the result of applying
+    ///     the provided collection selector and a result selector functions if the current <see cref="Result{T}" />
+    ///     is successful, or the new <see cref="Task{TResult}" /> that represents a new <see cref="Result{TNext}" /> instance
+    ///     with the same error otherwise.
+    /// </summary>
+    /// <typeparam name="T">The type of the source result value.</typeparam>
+    /// <typeparam name="TMiddle">The type of the intermediate result value.</typeparam>
+    /// <typeparam name="TNext">The output type of the <see cref="Result{TNext}" /> value to return.</typeparam>
+    /// <param name="result">The <see cref="ValueTask{TResult}" /> that represents the initial result to transform if it is successful.</param>
+    /// <param name="collectionSelector">A function that takes the value of the initial result and returns a new result representing an intermediate value.</param>
+    /// <param name="resultSelector">A function that combines the value from the initial result and the intermediate value to produce the final value.</param>
+    /// <exception cref="ArgumentNullException">If any of the <paramref name="collectionSelector" /> or <paramref name="resultSelector" /> parameters are <see langword="null" />.</exception>
+    /// <returns>A <see cref="Task{TResult}" /> that represents the transformed result.</returns>
+    public static async Task<Result<TNext>> SelectMany<T, TMiddle, TNext>(
+        this ValueTask<Result<T>> result,
+        Func<T, Task<Result<TMiddle>>> collectionSelector,
+        Func<T, TMiddle, TNext> resultSelector)
+    {
+        ArgumentNullException.ThrowIfNull(collectionSelector);
+        ArgumentNullException.ThrowIfNull(resultSelector);
+
+        var resultValue = await result;
+
+        return await resultValue.IfSuccessAsync(CollectionSelectorAsync);
+
+        async Task<Result<TNext>> CollectionSelectorAsync(T x)
+        {
+            var collectionResult = await collectionSelector(x);
+            return collectionResult.IfSuccess(y => resultSelector(x, y));
+        }
+    }
+
 }
