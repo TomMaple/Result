@@ -8,7 +8,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-using Maple.Result.Converters;
+using Maple.Json.ObjectAsPrimitiveConverter;
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
