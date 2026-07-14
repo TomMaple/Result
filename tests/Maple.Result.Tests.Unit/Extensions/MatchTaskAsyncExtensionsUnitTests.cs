@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Maple.Result.Tests.Unit.Extensions;
 
-public class MatchAsyncExtensionsUnitTests
+public class MatchTaskAsyncExtensionsUnitTests
 {
     #region MatchAsync (Result, Func<Task>, Func<Error, Task>)
 

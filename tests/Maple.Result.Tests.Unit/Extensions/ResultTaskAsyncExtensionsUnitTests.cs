@@ -14,7 +14,7 @@ using Maple.Result.Extensions;
 
 namespace Maple.Result.Tests.Unit.Extensions;
 
-public class ResultAsyncExtensionsUnitTests
+public class ResultTaskAsyncExtensionsUnitTests
 {
     [Fact]
     public async Task ToResult_NoGenericResultTask_ThrowsException()

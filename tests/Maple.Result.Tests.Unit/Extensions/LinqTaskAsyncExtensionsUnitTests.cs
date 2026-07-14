@@ -5,7 +5,7 @@ using Moq;
 
 namespace Maple.Result.Tests.Unit.Extensions;
 
-public class LinqAsyncExtensionsUnitTests
+public class LinqTaskAsyncExtensionsUnitTests
 {
 #pragma warning disable CS8848 // Operator cannot be used here due to precedence.
 

@@ -22,7 +22,7 @@ namespace Maple.Result.Extensions;
 ///     the status of the <see cref="Result" /> instance. These helpers centralize success/error handling logic by
 ///     accepting delegates for each branch, enabling concise match-like patterns across synchronous result workflows.
 /// </remarks>
-public static class MatchAsyncExtensions
+public static class MatchTaskAsyncExtensions
 {
     #region Result
 

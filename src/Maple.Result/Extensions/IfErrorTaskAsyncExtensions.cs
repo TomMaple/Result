@@ -22,7 +22,7 @@ namespace Maple.Result.Extensions;
 ///     These methods enable fluent handling of error scenarios by allowing to specify actions or functions
 ///     that should be executed only when the result indicates an error.
 /// </remarks>
-public static class IfErrorAsyncExtensions
+public static class IfErrorTaskAsyncExtensions
 {
     /// <summary>
     ///     Invokes the specified asynchronous action if the <paramref name="result" /> represents an error,

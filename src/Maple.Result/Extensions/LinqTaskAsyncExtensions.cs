@@ -12,7 +12,7 @@ namespace Maple.Result.Extensions;
 ///     They help simplify error handling and reduce boilerplate code when working with
 ///     <see cref="Result{T}" />-based asynchronous workflows.
 /// </remarks>
-public static class LinqAsyncExtensions
+public static class LinqTaskAsyncExtensions
 {
     /// <summary>
     ///     Returns a new instance of the <see cref="Task{TResult}" /> that represents the result of applying

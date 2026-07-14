@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Maple.Result.Tests.Unit.Extensions;
 
-public class IfSuccessAsyncExtensionsUnitTests
+public class IfSuccessTaskAsyncExtensionsUnitTests
 {
     #region IfSuccessAsync (Result, Func<Task>)
 

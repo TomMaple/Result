@@ -22,7 +22,7 @@ namespace Maple.Result.Extensions;
 ///     <see cref="Result" /> indicates success. They help simplify error handling and reduce boilerplate code
 ///     when working with <see cref="Result" />-based workflows.
 /// </remarks>
-public static class IfSuccessAsyncExtensions
+public static class IfSuccessTaskAsyncExtensions
 {
     #region Result extensions
 
