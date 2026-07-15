@@ -1,8 +1,8 @@
-﻿# ResultAsyncExtensions.ToResultAsync(Task&lt;Result&lt;T&gt;&gt;) Method
+﻿# ResultTaskAsyncExtensions.ToResultAsync(Task&lt;Result&lt;T&gt;&gt;) Method
 ## Definition
 Namespace: [Maple.Result.Extensions](namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/ResultAsyncExtensions.csL50" target="_blank">ResultAsyncExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/ResultTaskAsyncExtensions.csL50" target="_blank">ResultTaskAsyncExtensions.cs</a>
 
 Asynchronously converts the outcome of the asynchronous operation represented by the [Result&lt;T&gt;](../ResultT/ResultT.md) to the non-generic [Result](../Result/Result.md).
 

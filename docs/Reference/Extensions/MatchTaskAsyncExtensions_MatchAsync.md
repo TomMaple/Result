@@ -1,4 +1,4 @@
-﻿# MatchAsyncExtensions.MatchAsync Methods
+﻿# MatchTaskAsyncExtensions.MatchAsync Methods
 ## Definition
 Namespace: [Maple.Result.Extensions](namespace.md)<br>
 Assembly: Maple.Result.dll<br>
@@ -43,7 +43,7 @@ Runs a specific asynchronous action or function depending on whether the instanc
 
 
 ## MatchAsync(Result, Func&lt;Task&gt;, Func&lt;Error, Task&gt;, Boolean)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchAsyncExtensions.cs#L60" target="_blank">MatchAsyncExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchTaskAsyncExtensions.cs#L60" target="_blank">MatchTaskAsyncExtensions.cs</a>
 
 Executes the provided asynchronous `ifSuccessAction`, only if the instance of [Result](../Result/Result.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)), or the provided asynchronous `ifErrorAction` otherwise, as an asynchronous operation.
 
@@ -86,7 +86,7 @@ await createUserResult.MatchAsync(
 
 
 ## MatchAsync(Result, Func&lt;Task&lt;Result&gt;&gt;, Func&lt;Error, Task&gt;, Boolean)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchAsyncExtensions.cs#L103" target="_blank">MatchAsyncExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchTaskAsyncExtensions.cs#L103" target="_blank">MatchTaskAsyncExtensions.cs</a>
 
 Executes the provided asynchronous `ifSuccessFunction`, only if the instance of [Result](../Result/Result.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)), or the provided asynchronous `ifErrorAction` otherwise, as an asynchronous operation.
 
@@ -129,7 +129,7 @@ var userAddedResult = await createUserResult.MatchAsync(
 
 
 ## MatchAsync(Result, Func&lt;Task&lt;Result&gt;&gt;, Func&lt;Error, Task&lt;Result&gt;&gt;, Boolean)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchAsyncExtensions.cs#L143" target="_blank">MatchAsyncExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchTaskAsyncExtensions.cs#L143" target="_blank">MatchTaskAsyncExtensions.cs</a>
 
 Executes the provided asynchronous `ifSuccessFunction`, only if the instance of [Result](../Result/Result.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)), or the provided asynchronous `ifErrorFunction` otherwise, as an asynchronous operation.
 
@@ -176,7 +176,7 @@ var userAddedResult = await authenticationResult.MatchAsync(
 
 
 ## MatchAsync&lt;T&gt;(Result, Func&lt;Task&lt;T&gt;&gt;, Func&lt;Error, Task&gt;, Boolean)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchAsyncExtensions.cs#L188" target="_blank">MatchAsyncExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchTaskAsyncExtensions.cs#L188" target="_blank">MatchTaskAsyncExtensions.cs</a>
 
 Executes the provided asynchronous `ifSuccessFunction`, only if the instance of [Result](../Result/Result.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)), or the provided asynchronous `ifErrorAction` otherwise, as an asynchronous operation.
 
@@ -223,7 +223,7 @@ var companyResult = await createUserResult.MatchAsync(
 
 
 ## MatchAsync&lt;T&gt;(Result, Func&lt;Task&lt;T&gt;&gt;, Func&lt;Error, Task&lt;T&gt;&gt;, Boolean)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchAsyncExtensions.cs#L232" target="_blank">MatchAsyncExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchTaskAsyncExtensions.cs#L232" target="_blank">MatchTaskAsyncExtensions.cs</a>
 
 Executes the provided asynchronous `ifSuccessFunction`, only if the instance of [Result](../Result/Result.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)), or the provided asynchronous `ifErrorFunction` otherwise, as an asynchronous operation.
 
@@ -274,7 +274,7 @@ var viewModel = await createUserResult.MatchAsync(
 
 
 ## MatchAsync&lt;T&gt;(Result, Func&lt;Task&lt;Result&lt;T&gt;&gt;&gt;, Func&lt;Error, Task&gt;, Boolean)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchAsyncExtensions.cs#L277" target="_blank">MatchAsyncExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchTaskAsyncExtensions.cs#L277" target="_blank">MatchTaskAsyncExtensions.cs</a>
 
 Executes the provided asynchronous `ifSuccessFunction`, only if the instance of [Result](../Result/Result.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)), or the provided asynchronous `ifErrorAction` otherwise, as an asynchronous operation.
 
@@ -321,7 +321,7 @@ var userDetailsResult = await createUserResult.MatchAsync(
 
 
 ## MatchAsync&lt;T&gt;(Result, Func&lt;Task&lt;Result&lt;T&gt;&gt;&gt;, Func&lt;Error, Task&lt;Result&lt;T&gt;&gt;&gt;, Boolean)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchAsyncExtensions.cs#L321" target="_blank">MatchAsyncExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchTaskAsyncExtensions.cs#L321" target="_blank">MatchTaskAsyncExtensions.cs</a>
 
 Executes the provided asynchronous `ifSuccessFunction`, only if the instance of [Result](../Result/Result.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)), or the provided asynchronous `ifErrorFunction` otherwise, as an asynchronous operation.
 
@@ -368,7 +368,7 @@ var userDetailsResult = await createUserResult.MatchAsync(
 
 
 ## MatchAsync&lt;T&gt;(Result&lt;T&gt;, Func&lt;T, Task&gt;, Func&lt;Error, Task&gt;, Boolean)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchAsyncExtensions.cs#L370" target="_blank">MatchAsyncExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchTaskAsyncExtensions.cs#L370" target="_blank">MatchTaskAsyncExtensions.cs</a>
 
 Executes the provided asynchronous `ifSuccessAction`, only if the instance of [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)), or the provided asynchronous `ifErrorAction` otherwise, as an asynchronous operation.
 
@@ -415,7 +415,7 @@ await userResult.MatchAsync(
 
 
 ## MatchAsync&lt;T, TNext&gt;(Result&lt;T&gt;, Func&lt;T, Task&lt;TNext&gt;&gt;, Func&lt;Error, Task&gt;, Boolean)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchAsyncExtensions.cs#L420" target="_blank">MatchAsyncExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchTaskAsyncExtensions.cs#L420" target="_blank">MatchTaskAsyncExtensions.cs</a>
 
 Executes the provided asynchronous `ifSuccessFunction`, only if the instance of [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)), or the provided asynchronous `ifErrorAction` otherwise, as an asynchronous operation.
 
@@ -468,7 +468,7 @@ var userAddedResult = await createUserResult.MatchAsync(
 
 
 ## MatchAsync&lt;T, TNext&gt;(Result&lt;T&gt;, Func&lt;T, Task&lt;TNext&gt;&gt;, Func&lt;Error, Task&lt;TNext&gt;&gt;, Boolean)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchAsyncExtensions.cs#L469" target="_blank">MatchAsyncExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchTaskAsyncExtensions.cs#L469" target="_blank">MatchTaskAsyncExtensions.cs</a>
 
 Executes the provided asynchronous `ifSuccessFunction`, only if the instance of [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)), or the provided asynchronous `ifErrorFunction` otherwise, as an asynchronous operation.
 
@@ -525,7 +525,7 @@ var companyResult = await createUserResult.MatchAsync(
 
 
 ## MatchAsync&lt;T, TNext&gt;(Result&lt;T&gt;, Func&lt;T, Task&lt;Result&lt;TNext&gt;&gt;&gt;, Func&lt;Error, Task&gt;, Boolean)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchAsyncExtensions.cs#L519" target="_blank">MatchAsyncExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchTaskAsyncExtensions.cs#L519" target="_blank">MatchTaskAsyncExtensions.cs</a>
 
 Executes the provided asynchronous `ifSuccessFunction`, only if the instance of [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)), or the provided asynchronous `ifErrorAction` otherwise, as an asynchronous operation.
 
@@ -578,7 +578,7 @@ var companyResult = await createUserResult.MatchAsync(
 
 
 ## MatchAsync&lt;T, TNext&gt;(Result&lt;T&gt;, Func&lt;T, Task&lt;Result&lt;TNext&gt;&gt;&gt;, Func&lt;Error, Task&lt;Result&lt;TNext&gt;&gt;&gt;, Boolean)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchAsyncExtensions.cs#L568" target="_blank">MatchAsyncExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchTaskAsyncExtensions.cs#L568" target="_blank">MatchTaskAsyncExtensions.cs</a>
 
 Executes the provided asynchronous `ifSuccessFunction`, only if the instance of [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)), or the provided asynchronous `ifErrorFunction` otherwise, as an asynchronous operation.
 
@@ -635,7 +635,7 @@ var viewModel = await createUserResult.MatchAsync(
 
 
 ## MatchAsync(Task&lt;Result&gt;, Func&lt;Task&gt;, Func&lt;Error, Task&gt;, Boolean)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchAsyncExtensions.cs#L630" target="_blank">MatchAsyncExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchTaskAsyncExtensions.cs#L630" target="_blank">MatchTaskAsyncExtensions.cs</a>
 
 Executes the provided asynchronous `ifSuccessAction`, only if the asynchronous operation `resultTask` represents a successful instance of [Result](../Result/Result.md); or the provided asynchronous `ifErrorAction`, otherwise.
 
@@ -683,7 +683,7 @@ var createUserResult = await _userService.CreateUserAsync(userData)
 
 
 ## MatchAsync(Task&lt;Result&gt;, Func&lt;Task&lt;Result&gt;&gt;, Func&lt;Error, Task&gt;, Boolean)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchAsyncExtensions.cs#L690" target="_blank">MatchAsyncExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchTaskAsyncExtensions.cs#L690" target="_blank">MatchTaskAsyncExtensions.cs</a>
 
 Executes the provided asynchronous `ifSuccessFunction`, only if the asynchronous operation `resultTask` represents a successful instance of [Result](../Result/Result.md); or the provided asynchronous `ifErrorAction`, otherwise.
 
@@ -731,7 +731,7 @@ var createUserResult = await _userService.CreateUserAsync(userData)
 
 
 ## MatchAsync(Task&lt;Result&gt;, Func&lt;Task&lt;Result&gt;&gt;, Func&lt;Error, Task&lt;Result&gt;&gt;, Boolean)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchAsyncExtensions.cs#L745" target="_blank">MatchAsyncExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchTaskAsyncExtensions.cs#L745" target="_blank">MatchTaskAsyncExtensions.cs</a>
 
 Executes the provided asynchronous `ifSuccessFunction`, only if the asynchronous operation `resultTask` represents a successful instance of [Result](../Result/Result.md); or the provided asynchronous `ifErrorFunction`, otherwise.
 
@@ -783,7 +783,7 @@ var authenticationResult = await _loginService.AuthenticateAsync(loginData)
 
 
 ## MatchAsync&lt;T&gt;(Task&lt;Result&gt;, Func&lt;Task&lt;T&gt;&gt;, Func&lt;Error, Task&gt;, Boolean)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchAsyncExtensions.cs#L801" target="_blank">MatchAsyncExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchTaskAsyncExtensions.cs#L801" target="_blank">MatchTaskAsyncExtensions.cs</a>
 
 Executes the provided asynchronous `ifSuccessFunction`, only if the asynchronous operation `resultTask` represents a successful instance of [Result](../Result/Result.md); or the provided asynchronous `ifErrorAction`, otherwise.
 
@@ -835,7 +835,7 @@ var createUserResult = await _userService.CreateUserAsync(userData)
 
 
 ## MatchAsync&lt;T&gt;(Task&lt;Result&gt;, Func&lt;Task&lt;T&gt;&gt;, Func&lt;Error, Task&lt;T&gt;&gt;, Boolean)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchAsyncExtensions.cs#L858" target="_blank">MatchAsyncExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchTaskAsyncExtensions.cs#L858" target="_blank">MatchTaskAsyncExtensions.cs</a>
 
 Executes the provided asynchronous `ifSuccessFunction`, only if the asynchronous operation `resultTask` represents a successful instance of [Result](../Result/Result.md); or the provided asynchronous `ifErrorFunction`, otherwise.
 
@@ -891,7 +891,7 @@ var createUserResult = await _userService.CreateUserAsync(userData)
 
 
 ## MatchAsync&lt;T&gt;(Task&lt;Result&gt;, Func&lt;Task&lt;Result&lt;T&gt;&gt;&gt;, Func&lt;Error, Task&gt;, Boolean)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchAsyncExtensions.cs#L915" target="_blank">MatchAsyncExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchTaskAsyncExtensions.cs#L915" target="_blank">MatchTaskAsyncExtensions.cs</a>
 
 Executes the provided asynchronous `ifSuccessFunction`, only if the asynchronous operation `resultTask` represents a successful instance of [Result](../Result/Result.md); or the provided asynchronous `ifErrorAction`, otherwise.
 
@@ -944,7 +944,7 @@ var createUserResult = await _userService.CreateUserAsync(userData)
 
 
 ## MatchAsync&lt;T&gt;(Task&lt;Result&gt;, Func&lt;Task&lt;Result&lt;T&gt;&gt;&gt;, Func&lt;Error, Task&lt;Result&lt;T&gt;&gt;&gt;, Boolean)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchAsyncExtensions.cs#L972" target="_blank">MatchAsyncExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchTaskAsyncExtensions.cs#L972" target="_blank">MatchTaskAsyncExtensions.cs</a>
 
 Executes the provided asynchronous `ifSuccessFunction`, only if the asynchronous operation `resultTask` represents a successful instance of [Result](../Result/Result.md); or the provided asynchronous `ifErrorFunction`, otherwise.
 
@@ -997,7 +997,7 @@ var createUserResult = await _userService.CreateUserAsync(userData)
 
 
 ## MatchAsync&lt;T&gt;(Task&lt;Result&lt;T&gt;&gt;, Func&lt;T, Task&gt;, Func&lt;Error, Task&gt;, Boolean)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchAsyncExtensions.cs#L1040" target="_blank">MatchAsyncExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchTaskAsyncExtensions.cs#L1040" target="_blank">MatchTaskAsyncExtensions.cs</a>
 
 Executes the provided asynchronous `ifSuccessAction`, only if the asynchronous operation `resultTask` represents a successful instance of [Result&lt;T&gt;](../ResultT/ResultT.md); or the provided asynchronous `ifErrorAction`, otherwise.
 
@@ -1050,7 +1050,7 @@ var userResult = await _userService.CreateUserAsync(userData)
 
 
 ## MatchAsync&lt;T, TNext&gt;(Task&lt;Result&lt;T&gt;&gt;, Func&lt;T, Task&lt;TNext&gt;&gt;, Func&lt;Error, Task&gt;, Boolean)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchAsyncExtensions.cs#L1102" target="_blank">MatchAsyncExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchTaskAsyncExtensions.cs#L1102" target="_blank">MatchTaskAsyncExtensions.cs</a>
 
 Executes the provided asynchronous `ifSuccessFunction`, only if the asynchronous operation `resultTask` represents a successful instance of [Result&lt;T&gt;](../ResultT/ResultT.md); or the provided asynchronous `ifErrorAction`, otherwise.
 
@@ -1109,7 +1109,7 @@ var createUserResult = await _userService.CreateUserAsync(userData)
 
 
 ## MatchAsync&lt;T, TNext&gt;(Task&lt;Result&lt;T&gt;&gt;, Func&lt;T, Task&lt;TNext&gt;&gt;, Func&lt;Error, Task&lt;TNext&gt;&gt;, Boolean)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchAsyncExtensions.cs#L1162" target="_blank">MatchAsyncExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchTaskAsyncExtensions.cs#L1162" target="_blank">MatchTaskAsyncExtensions.cs</a>
 
 Executes the provided asynchronous `ifSuccessFunction`, only if the instance of [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)), or the provided asynchronous `ifErrorFunction` otherwise, as an asynchronous operation.
 
@@ -1172,7 +1172,7 @@ var createUserResult = await _userService.CreateUserAsync(userData)
 
 
 ## MatchAsync&lt;T, TNext&gt;(Task&lt;Result&lt;T&gt;&gt;, Func&lt;T, Task&lt;Result&lt;TNext&gt;&gt;&gt;, Func&lt;Error, Task&gt;, Boolean)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchAsyncExtensions.cs#L1224" target="_blank">MatchAsyncExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchTaskAsyncExtensions.cs#L1224" target="_blank">MatchTaskAsyncExtensions.cs</a>
 
 Executes the provided asynchronous `ifSuccessFunction`, only if the asynchronous operation `resultTask` represents a successful instance of [Result&lt;T&gt;](../ResultT/ResultT.md); or the provided asynchronous `ifErrorAction`, otherwise.
 
@@ -1231,7 +1231,7 @@ var createUserResult = await _userService.CreateUserAsync(userData)
 
 
 ## MatchAsync&lt;T, TNext&gt;(Task&lt;Result&lt;T&gt;&gt;, Func&lt;T, Task&lt;Result&lt;TNext&gt;&gt;&gt;, Func&lt;Error, Task&lt;Result&lt;TNext&gt;&gt;&gt;, Boolean)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchAsyncExtensions.cs#L1284" target="_blank">MatchAsyncExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchTaskAsyncExtensions.cs#L1284" target="_blank">MatchTaskAsyncExtensions.cs</a>
 
 Executes the provided asynchronous `ifSuccessFunction`, only if the asynchronous operation `resultTask` represents a successful instance of [Result&lt;T&gt;](../ResultT/ResultT.md); or the provided asynchronous `ifErrorFunction`, otherwise.
 

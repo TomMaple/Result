@@ -1,4 +1,4 @@
-﻿# IfErrorAsyncExtensions.IfErrorAsync Methods
+﻿# IfErrorTaskAsyncExtensions.IfErrorAsync Methods
 ## Definition
 Namespace: [Maple.Result.Extensions](namespace.md)<br>
 Assembly: Maple.Result.dll<br>
@@ -22,7 +22,7 @@ Runs a specific asynchronous action or function, if the instance of `TResult` re
 
 
 ## IfErrorAsync&lt;TResult&gt;(TResult, Func&lt;Error, Task&gt;, Boolean)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/IfErrorAsyncExtensions.cs#L56" target="_blank">IfErrorAsyncExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/IfErrorTaskAsyncExtensions.cs#L56" target="_blank">IfErrorTaskAsyncExtensions.cs</a>
 
 Executes the provided asynchronous action, only if the instance of `TResult` represents a failed operation (i.e., contains an [Error](../Error/Error.md)), as an asynchronous operation.
 
@@ -68,7 +68,7 @@ await createUserResult.IfErrorAsync(async error =>
 
 
 ## IfErrorAsync&lt;TResult&gt;(TResult, Func&lt;Error, Task&lt;TResult&gt;&gt;, Boolean)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/IfErrorAsyncExtensions.cs#L101" target="_blank">IfErrorExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/IfErrorTaskAsyncExtensions.cs#L101" target="_blank">IfErrorExtensions.cs</a>
 
 Executes the provided asynchronous function, only if the instance of `TResult` represents a failed operation (i.e., contains an [Error](../Error/Error.md)), as an asynchronous operation.
 
@@ -122,7 +122,7 @@ await userResult.IfErrorAsync(async error =>
 
 
 ## IfErrorAsync&lt;TResult&gt;(Task&lt;TResult&gt;, Func&lt;Error, Task&gt;, Boolean)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/IfErrorAsyncExtensions.cs#L160" target="_blank">IfErrorAsyncExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/IfErrorTaskAsyncExtensions.cs#L160" target="_blank">IfErrorTaskAsyncExtensions.cs</a>
 
 Executes the provided asynchronous function, if the provided asynchronous operation returns a failed`TResult` instance (i.e., contains an [Error](../Error/Error.md)), and returns its result as an asynchronous operation.
 
@@ -176,7 +176,7 @@ var createUserResult = await _userService.CreateUserAsync(userData)
 
 
 ## IfErrorAsync&lt;TResult&gt;(Task&lt;TResult&gt;, Func&lt;Error, Task&lt;TResult&gt;&gt;, Boolean)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/IfErrorAsyncExtensions.cs#L224" target="_blank">IfErrorExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/IfErrorTaskAsyncExtensions.cs#L224" target="_blank">IfErrorTaskAsyncExtensions.cs</a>
 
 Executes the provided asynchronous function, if the provided asynchronous operation returns a failed`TResult` instance (i.e., contains an [Error](../Error/Error.md)), and returns its result as an asynchronous operation.
 

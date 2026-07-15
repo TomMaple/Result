@@ -54,27 +54,27 @@
     <File Path="docs/Reference/ErrorUri/ErrorUri_Value.md" />
   </Folder>
   <Folder Name="/docs/Reference/Extensions/">
-    <File Path="docs/Reference/Extensions/IfErrorAsyncExtensions.md" />
-    <File Path="docs/Reference/Extensions/IfErrorAsyncExtensions_IfErrorAsync.md" />
     <File Path="docs/Reference/Extensions/IfErrorExtensions.md" />
     <File Path="docs/Reference/Extensions/IfErrorExtensions_IfError.md" />
-    <File Path="docs/Reference/Extensions/IfSuccessAsyncExtensions.md" />
-    <File Path="docs/Reference/Extensions/IfSuccessAsyncExtensions_IfSuccessAsync.md" />
+    <File Path="docs/Reference/Extensions/IfErrorTaskAsyncExtensions.md" />
+    <File Path="docs/Reference/Extensions/IfErrorTaskAsyncExtensions_IfErrorAsync.md" />
     <File Path="docs/Reference/Extensions/IfSuccessExtensions.md" />
     <File Path="docs/Reference/Extensions/IfSuccessExtensions_IfSuccess.md" />
-    <File Path="docs/Reference/Extensions/LinqAsyncExtensions.md" />
-    <File Path="docs/Reference/Extensions/LinqAsyncExtensions_SelectMany.md" />
+    <File Path="docs/Reference/Extensions/IfSuccessTaskAsyncExtensions.md" />
+    <File Path="docs/Reference/Extensions/IfSuccessTaskAsyncExtensions_IfSuccessAsync.md" />
     <File Path="docs/Reference/Extensions/LinqExtensions.md" />
     <File Path="docs/Reference/Extensions/LinqExtensions_SelectMany.md" />
-    <File Path="docs/Reference/Extensions/MatchAsyncExtensions.md" />
-    <File Path="docs/Reference/Extensions/MatchAsyncExtensions_MatchAsync.md" />
+    <File Path="docs/Reference/Extensions/LinqTaskAsyncExtensions.md" />
+    <File Path="docs/Reference/Extensions/LinqTaskAsyncExtensions_SelectMany.md" />
     <File Path="docs/Reference/Extensions/MatchExtensions.md" />
     <File Path="docs/Reference/Extensions/MatchExtensions_Match.md" />
+    <File Path="docs/Reference/Extensions/MatchTaskAsyncExtensions.md" />
+    <File Path="docs/Reference/Extensions/MatchTaskAsyncExtensions_MatchAsync.md" />
     <File Path="docs/Reference/Extensions/namespace.md" />
-    <File Path="docs/Reference/Extensions/ResultAsyncExtensions.md" />
-    <File Path="docs/Reference/Extensions/ResultAsyncExtensions_ToResultAsync.md" />
     <File Path="docs/Reference/Extensions/ResultExtensions.md" />
     <File Path="docs/Reference/Extensions/ResultExtensions_ToResult.md" />
+    <File Path="docs/Reference/Extensions/ResultTaskAsyncExtensions.md" />
+    <File Path="docs/Reference/Extensions/ResultTaskAsyncExtensions_ToResultAsync.md" />
   </Folder>
   <Folder Name="/docs/Reference/IResult/">
     <File Path="docs/Reference/IResult/IResult.md" />
