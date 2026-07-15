@@ -57,6 +57,9 @@ public static class LinqTaskAsyncExtensions
     ///     If any of the <paramref name="result" /> or <paramref name="collectionSelector" /> or
     ///     <paramref name="resultSelector" /> parameters are <see langword="null" />.
     /// </exception>
+    /// <exception cref="InvalidOperationException">
+    ///     If the asynchronous operation represented by <paramref name="result" /> returns <see langword="null" />.
+    /// </exception>
     /// <returns>
     ///     A <see cref="Task{TResult}" /> that represents the result of applying the provided collection selector and
     ///     a result selector functions if the current <paramref name="result" /> is successful;
@@ -73,7 +76,10 @@ public static class LinqTaskAsyncExtensions
 
         var resultValue = await result;
 
-        return await resultValue.IfSuccessAsync(async x =>
+        if (resultValue is null)
+            throw new InvalidOperationException("The asynchronous operation represented by ‘result’ returned null.");
+
+        return await resultValue.IfSuccessAsync(async Task<Result<TNext>> (x) =>
         {
             var collectionResult = await collectionSelector(x);
             return collectionResult.IfSuccess(y => resultSelector(x, y));

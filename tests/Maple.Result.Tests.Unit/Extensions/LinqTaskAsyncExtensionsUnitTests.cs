@@ -17,8 +17,6 @@ namespace Maple.Result.Tests.Unit.Extensions;
 
 public class LinqTaskAsyncExtensionsUnitTests
 {
-#pragma warning disable CS8848 // Operator cannot be used here due to precedence.
-
     #region SelectMany(Task<Result<T>>, Func<T, Task<Result<TMiddle>>>, Func<T, TMiddle, TNext>)
 
     [Fact]
@@ -34,6 +32,21 @@ public class LinqTaskAsyncExtensionsUnitTests
         exception.ShouldNotBeNull();
         exception.ShouldBeOfType<ArgumentNullException>();
         exception.Message.ShouldStartWith("Value cannot be null.");
+    }
+
+    [Fact]
+    public async Task SelectMany_NoResultValueWithSelectorFunctions_ThrowsException()
+    {
+        // Arrange
+        var sut = Task.FromResult<Result<int>>(null!);
+
+        // Act
+        var exception = await Record.ExceptionAsync(() => sut.SelectMany(x => Task.FromResult(Result.FromValue(x.ToString())), (x, _) => (double)x));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<InvalidOperationException>();
+        exception.Message.ShouldStartWith("The asynchronous operation represented by ‘result’ returned null.");
     }
 
     [Fact]
@@ -188,6 +201,8 @@ public class LinqTaskAsyncExtensionsUnitTests
     #endregion
 
     #region LINQ query syntax
+
+    // ReSharper disable RedundantAssignment
 
     [Fact]
     public async Task LinqQueryAsyncSyntax_SuccessfulResult_CallsFunctions()
@@ -411,9 +426,9 @@ public class LinqTaskAsyncExtensionsUnitTests
         result.Error.ShouldBeSameAs(errorResult.Error);
     }
 
+    // ReSharper restore RedundantAssignment
+ 
     #endregion
-
-#pragma warning restore CS8848 // Operator cannot be used here due to precedence.
 
     #region helper methods
 

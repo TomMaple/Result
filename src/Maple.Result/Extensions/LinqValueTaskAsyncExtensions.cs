@@ -58,6 +58,9 @@ public static class LinqValueTaskAsyncExtensions
     ///     If any of the <paramref name="collectionSelector" /> or
     ///     <paramref name="resultSelector" /> parameters are <see langword="null" />.
     /// </exception>
+    /// <exception cref="InvalidOperationException">
+    ///     If the asynchronous operation represented by <paramref name="result" /> returns <see langword="null" />.
+    /// </exception>
     /// <returns>
     ///     A <see cref="ValueTask{TResult}" /> that represents the result of applying the provided collection selector and
     ///     a result selector functions if the current <paramref name="result" /> is successful;
@@ -72,6 +75,9 @@ public static class LinqValueTaskAsyncExtensions
         ArgumentNullException.ThrowIfNull(resultSelector);
 
         var resultValue = await result;
+
+        if (resultValue is null)
+            throw new InvalidOperationException("The asynchronous operation represented by ‘result’ returned null.");
 
         return await resultValue.IfSuccessAsync(async ValueTask<Result<TNext>> (x) =>
         {
