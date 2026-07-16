@@ -2,7 +2,7 @@
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/ErrorUri.cs#L57" target="_blank">ErrorUri.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/ErrorUri.cs#L61" target="_blank">ErrorUri.cs</a>
 
 Initializes a new instance of the [ErrorUri](ErrorUri.md) record.
 
@@ -17,6 +17,9 @@ public ErrorUri(string value);
 > This constructor is required for deserialization.
 > 
 > Instead, use one of the static methods such as [Locator(String)](ErrorUri_Locator.md), [Tag(String)](ErrorUri_Tag.md) or [None()](ErrorUri_None.md) to create an instance of the [ErrorUri](ErrorUri.md) record with an appropriate value.
+
+> [!NOTE]
+> Passing a `null` value does not throw. The resulting instance reports `about:blank` from its [Value](ErrorUri_Value.md) property, exactly as a default instance does.
 
 ## See also
 * [Error](../Error/Error.md)

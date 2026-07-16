@@ -39,6 +39,10 @@ namespace Maple.Result;
 /// </remarks>
 public readonly record struct ErrorUri
 {
+    private const string NoneValue = "about:blank";
+
+    private readonly string? _value;
+
     #region constructors
 
     /// <summary>
@@ -56,7 +60,7 @@ public readonly record struct ErrorUri
     /// </remarks>
     public ErrorUri(string value)
     {
-        Value = value;
+        _value = value;
     }
 
     #endregion
@@ -64,14 +68,19 @@ public readonly record struct ErrorUri
     /// <summary>
     ///     The <i>URI</i> value representing the error type or category.
     /// </summary>
-    public string Value { get; }
+    /// <remarks>
+    ///     A default <see cref="ErrorUri" /> instance—which bypasses the constructor and therefore has no underlying
+    ///     value—reports <c>about:blank</c>, the value that <i>RFC 9457</i> defines for an unspecified type.
+    ///     This keeps the mandatory <see cref="Error.TypeUri" /> from ever being <see langword="null" />.
+    /// </remarks>
+    public string Value => _value ?? NoneValue;
 
     /// <summary>
     ///     Returns a new instance of the no-value <see cref="ErrorUri" />: <c>about:blank</c>.
     /// </summary>
     public static ErrorUri None()
     {
-        return new ErrorUri("about:blank");
+        return new ErrorUri(NoneValue);
     }
 
     /// <summary>
@@ -93,4 +102,32 @@ public readonly record struct ErrorUri
 
         return new ErrorUri(uriTag);
     }
+
+    #region equality
+
+    /// <summary>
+    ///     Determines whether the specified <see cref="ErrorUri" /> is equal to the current one,
+    ///     comparing the <see cref="Value" /> rather than the underlying field, so that a default instance
+    ///     is equal to the one returned by <see cref="None" />.
+    /// </summary>
+    /// <param name="other">The <see cref="ErrorUri" /> to compare with the current instance.</param>
+    /// <returns>
+    ///     <see langword="true" /> if the specified <see cref="ErrorUri" /> is equal to the current one;
+    ///     otherwise, <see langword="false" />.
+    /// </returns>
+    public bool Equals(ErrorUri other)
+    {
+        return Value == other.Value;
+    }
+
+    /// <summary>
+    ///     Returns a hash code that is consistent with <see cref="Equals(ErrorUri)" />.
+    /// </summary>
+    /// <returns>A hash code for the current <see cref="ErrorUri" />.</returns>
+    public override int GetHashCode()
+    {
+        return Value.GetHashCode();
+    }
+
+    #endregion
 }
