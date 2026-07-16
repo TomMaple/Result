@@ -27,6 +27,11 @@ Each item is a [ErrorDetail](../ErrorDetail/ErrorDetail.md) object that describe
 > 
 > It should not be assigned directly (i.e., via the property setter) but rather through the [AddDetail(String, String, String, (String, Object)[])](Error_AddDetail.md) method of the [Error](Error.md) record, which uses [TemplatedMessage](../TemplatedMessage/TemplatedMessage.md) to validate and provide the value. For deserialization, the setter is marked as `init` to allow assignment during object initialization.
 
+> [!NOTE]
+> This collection participates in the value-based equality of [Error](Error.md): it is compared **by content** (order-sensitive), so two errors with identically-built details are considered equal. See [Equals(Error)](Error_Equals.md).
+>
+> Copying an [Error](Error.md) with a `with` expression deep-copies this collection, producing an independent copy. Adding a detail to the copy does not affect the original, and vice versa.
+
 ## Examples
 ```csharp
 var error = Error.Validation(
