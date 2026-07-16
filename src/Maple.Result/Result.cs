@@ -189,14 +189,27 @@ public sealed record Result<T> : IResult
     ///     Returns the value of type <typeparamref name="T" /> if the operation was successful;
     ///     otherwise, returns <see langword="null" />.
     /// </summary>
+    /// <remarks>
+    ///     The setter is <see langword="init" />-only and intended for deserialization. A <see langword="null" />
+    ///     assignment is ignored rather than throwing, so that deserializing a failed <see cref="Result{T}" />
+    ///     (where the value is absent) leaves the value unset instead of overwriting an already-populated member.
+    ///     Assigning a non-null value while an <see cref="Error" /> is already set throws, because a
+    ///     <see cref="Result{T}" /> can never hold both a value and an error.
+    /// </remarks>
+    /// <exception cref="InvalidOperationException">
+    ///     If a non-null value is assigned while an <see cref="Error" /> is already set.
+    /// </exception>
     public T? Value
     {
         get => _value;
         init
         {
+            // Ignore a null assignment (e.g., the absent value when deserializing a failed result) instead of
+            // throwing, so object/deserialization initializers can set only the relevant member.
             if (value is null)
                 return;
 
+            // A result is either successful (a value) or failed (an error), never both.
             if (_error is not null)
                 throw new InvalidOperationException("Cannot set both Value and Error of the Result!");
 
@@ -208,14 +221,27 @@ public sealed record Result<T> : IResult
     ///     Returns an <see cref="Error" /> object if the operation failed;
     ///     otherwise, returns <see langword="null" />.
     /// </summary>
+    /// <remarks>
+    ///     The setter is <see langword="init" />-only and intended for deserialization. A <see langword="null" />
+    ///     assignment is ignored rather than throwing, so that deserializing a successful <see cref="Result{T}" />
+    ///     (where the error is absent) leaves the error unset instead of overwriting an already-populated member.
+    ///     Assigning a non-null error while a value is already set throws, because a <see cref="Result{T}" />
+    ///     can never hold both a value and an error.
+    /// </remarks>
+    /// <exception cref="InvalidOperationException">
+    ///     If a non-null error is assigned while a value is already set.
+    /// </exception>
     public Error? Error
     {
         get => _error;
         init
         {
+            // Ignore a null assignment (e.g., the absent error when deserializing a successful result) instead of
+            // throwing, so object/deserialization initializers can set only the relevant member.
             if (value is null)
                 return;
 
+            // A result is either successful (a value) or failed (an error), never both.
             if (_value is not null)
                 throw new InvalidOperationException("Cannot set both Value and Error of the Result!");
 

@@ -150,5 +150,31 @@ public class ErrorUriUnitTests
         exception.Message.ShouldContain("The URI tag is not valid. Check https://datatracker.ietf.org/doc/html/rfc4151#section-2.1 for details.");
     }
 
+    [Theory]
+    [InlineData("mailto:email@company.com")]
+    [InlineData("https://www.company.com")]
+    public void Tag_WellFormedUriWithNonTagScheme_ThrowsWithoutWrappingAnotherException(string value)
+    {
+        // Act
+        var exception = Record.Exception(() => ErrorUri.Tag(value));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<UriFormatException>();
+        exception.InnerException.ShouldBeNull();
+    }
+
+    [Fact]
+    public void Tag_MalformedUri_ThrowsWithPreservedInnerException()
+    {
+        // Act
+        var exception = Record.Exception(() => ErrorUri.Tag("error"));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<UriFormatException>();
+        exception.InnerException.ShouldNotBeNull();
+    }
+
     #endregion
 }

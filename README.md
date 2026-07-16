@@ -117,6 +117,9 @@ var userTokenResult =
     select token;
 ```
 
+> [!NOTE]
+> The asynchronous extension methods (`IfSuccessAsync()`, `IfErrorAsync()`, `MatchAsync()`, `ToResultAsync()` and the LINQ `SelectMany()`) support both `Task` and `ValueTask`, so you can chain and `await` results regardless of which one your methods return.
+
 See more: [Maple.Result.Extensions](https://github.com/TomMaple/Result/blob/main/docs/Reference/Extensions/namespace.md)
 
 # The Result Pattern
@@ -207,7 +210,6 @@ public async Task<Result<User>> GetUserAsync(int userId)
                 ErrorUri.Locator("https://api.exampleapp.com/errors/8783927589734857/details"),
                 "errors.user.account.notFound",
                 ("accountId", "12345"), ("action", "account:update"));
-            });
         }
 
         return user;
@@ -216,7 +218,7 @@ public async Task<Result<User>> GetUserAsync(int userId)
     {
         _logger.LogError(ex, "An unexpected error occurred while retrieving user with ID {UserId}", userId);
 
-        return Error.InternalServerError(
+        return Error.Critical(
             ErrorUri.Tag("tag:exampleapp.com,2026:errors:user:account:geterror"),
             "An unexpected error occurred.",
             "An unexpected error occurred while getting the user account details.",
@@ -255,7 +257,7 @@ var error = Error.Validation(
     )
     .AddDetail("#/email", "Email is required.", "errors.signup.validation.email.required")
     .AddDetail("#/firstName", "At least 3 characters are required.", "errors.signup.validation.email.minLength", ("minLength", 3))
-    .AddDetail("#/mobile", "Phone number should be in format: (111) 111-1111.", "errors.signup.validation.mobile.format", ("format": "(111) 111-1111"));
+    .AddDetail("#/mobile", "Phone number should be in format: (111) 111-1111.", "errors.signup.validation.mobile.format", ("format", "(111) 111-1111"));
 ```
 
 ### Error Categories
@@ -325,7 +327,7 @@ where the parameters are:
 | `propertyPointer` | `string` | JSON Pointer to the input data. | no | `#/firstName` |
 | `detail` | `string` | A human-readable explanation of this error detail. | yes | `Mininum 5 characters are required.` |
 | `messageId` | `string` | A message template ID. | no | `errors.signup.validation.firstName.minLength` |
-| `namedValues` | `(string, object)[]` | The collection of named values for the message template. | no | `("minLength": 5)` |
+| `namedValues` | `(string, object)[]` | The collection of named values for the message template. | no | `("minLength", 5)` |
 
 ### Support for localization
 The localization can be achieved by generating messages based on the template.
@@ -333,11 +335,11 @@ The localization can be achieved by generating messages based on the template.
 #### Example
 ```csharp
 var error = Error.Unauthorized(
-    "tag:exampleapp.com,2026:errors:contact:delete:authorization:missing",
+    ErrorUri.Tag("tag:exampleapp.com,2026:errors:contact:delete:authorization:missing"),
     "User is not authorized to delete a contact.",
     "The ‘contact_delete’ permission is required to delete a contact.",
     detailTemplateId: "errors.contact.delete.unauthorized",
-    detailNamedValues: ("requiredPermission", "contact_delete"));
+    detailNamedValues: [("requiredPermission", "contact_delete")]);
 ```
 
 It uses:
@@ -347,8 +349,8 @@ It uses:
 
 |   | en\_ca | fr\_ca | es | zh\_cn |
 | - | ------ | ------ | -- | ------ |
-| Template | `The ‘{requiredPermission}’ permission is required to delete a contact.` | `L’autorisation «{requiredPermission}`»` est requise pour supprimer un contact.` | `Se requiere el permiso `«`{requiredPermission}`»` para eliminar un contacto.` | `删除联系人需要“{requiredPermission}”权限。` |
-| Localized message | `The ‘contact_delete’ permission is required to delete a contact.` | `L’autorisation `«`contact_delete`»` est requise pour supprimer un contact.` | `Se requiere el permiso `«`contact_delete`»` para eliminar un contacto.` | `删除联系人需要“contact_delete”权限。` |
+| Template | `The ‘{requiredPermission}’ permission is required to delete a contact.` | `L’autorisation «{requiredPermission}» est requise pour supprimer un contact.` | `Se requiere el permiso «{requiredPermission}» para eliminar un contacto.` | `删除联系人需要“{requiredPermission}”权限。` |
+| Localized message | `The ‘contact_delete’ permission is required to delete a contact.` | `L’autorisation «contact_delete» est requise pour supprimer un contact.` | `Se requiere el permiso «contact_delete» para eliminar un contacto.` | `删除联系人需要“contact_delete”权限。` |
 
 See more: [Error](https://github.com/TomMaple/Result/blob/main/docs/Reference/Error/Error.md)
 
@@ -356,8 +358,8 @@ See more: [Error](https://github.com/TomMaple/Result/blob/main/docs/Reference/Er
 You can use:
 * `IsSuccess()` method of the `Result`,
 * extension methods:
-  * `IsSuccess()`, `IsSuccessAsync()`,
-  * `IsError()`, `IsErrorAsync()`,
+  * `IfSuccess()`, `IfSuccessAsync()`,
+  * `IfError()`, `IfErrorAsync()`,
   * `Match()`, `MatchAsync()`.
 
 ```csharp
@@ -432,8 +434,8 @@ This library minimizes the amount of extension methods:
 * `Bind()`can be replaced with e.g., `IfSuccess<T, TNext>(Result<T>, Func<T, TNext>)`,
 * `Else()` can be replaced with e.g., `IfError<T>(Result, Func<Error, T>)`,
 * `Map()` can be replaced with e.g., `IfSuccess<T, TNext>(Result<T>, Func<T, TNext>)`,
-* `Switch()` can be replaced with e.g., `Match<T>(Result<T>, Action<T>, Action<Errror>)`,
-* `Then()` can be replaces with e.g., `IfSuccess<T, TNext>(Result<T>, Func<T, TNext>)`.
+* `Switch()` can be replaced with e.g., `Match<T>(Result<T>, Action<T>, Action<Error>)`,
+* `Then()` can be replaced with e.g., `IfSuccess<T, TNext>(Result<T>, Func<T, TNext>)`.
 
 # Learn More
 ## Documentation
