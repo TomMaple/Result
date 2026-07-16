@@ -85,6 +85,32 @@ public class ErrorUriUnitTests
         exception.Message.ShouldContain("The URI locator is not valid. Check https://datatracker.ietf.org/doc/html/rfc3986#section-3.1 for details.");
     }
 
+    [Theory]
+    [InlineData("mailto:email@company.com")]
+    [InlineData("tag:example.com,2004:1234")]
+    public void Locator_WellFormedUriWithNonHttpScheme_ThrowsWithoutWrappingAnotherException(string value)
+    {
+        // Act
+        var exception = Record.Exception(() => ErrorUri.Locator(value));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<UriFormatException>();
+        exception.InnerException.ShouldBeNull();
+    }
+
+    [Fact]
+    public void Locator_MalformedUri_ThrowsWithPreservedInnerException()
+    {
+        // Act
+        var exception = Record.Exception(() => ErrorUri.Locator("error"));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<UriFormatException>();
+        exception.InnerException.ShouldNotBeNull();
+    }
+
     #endregion
 
     #region Tag
