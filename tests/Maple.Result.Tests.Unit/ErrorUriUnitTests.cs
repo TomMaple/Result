@@ -28,6 +28,71 @@ public class ErrorUriUnitTests
 
     #endregion
 
+    #region default instance
+
+    [Fact]
+    public void Value_DefaultInstance_ReturnsAboutBlank()
+    {
+        // Arrange
+        const string ExpectedValue = "about:blank";
+
+        // Act
+        var result = default(ErrorUri);
+
+        // Assert
+        result.Value.ShouldBe(ExpectedValue);
+    }
+
+    [Fact]
+    public void Value_ConstructedWithNull_ReturnsAboutBlank()
+    {
+        // Arrange
+        const string ExpectedValue = "about:blank";
+
+        // Act
+        var result = new ErrorUri(null!);
+
+        // Assert
+        result.Value.ShouldBe(ExpectedValue);
+    }
+
+    [Fact]
+    public void Equals_DefaultInstanceAndNone_AreEqual()
+    {
+        // Arrange
+        var first = default(ErrorUri);
+        var second = ErrorUri.None();
+
+        // Act & Assert
+        first.Equals(second).ShouldBeTrue();
+        (first == second).ShouldBeTrue();
+    }
+
+    [Fact]
+    public void GetHashCode_DefaultInstanceAndNone_AreEqual()
+    {
+        // Arrange
+        var first = default(ErrorUri);
+        var second = ErrorUri.None();
+
+        // Act & Assert
+        first.GetHashCode().ShouldBe(second.GetHashCode());
+    }
+
+    [Fact]
+    public void Equals_ErrorUrisWithDifferentValues_AreNotEqual()
+    {
+        // Arrange
+        var first = ErrorUri.None();
+        var second = ErrorUri.Locator("https://example.com");
+
+        // Act & Assert
+        first.Equals(second).ShouldBeFalse();
+        (first == second).ShouldBeFalse();
+    }
+
+    #endregion
+
     #region Locator
 
     [Theory]
@@ -83,6 +148,32 @@ public class ErrorUriUnitTests
         exception.ShouldNotBeNull();
         exception.ShouldBeOfType<UriFormatException>();
         exception.Message.ShouldContain("The URI locator is not valid. Check https://datatracker.ietf.org/doc/html/rfc3986#section-3.1 for details.");
+    }
+
+    [Theory]
+    [InlineData("mailto:email@company.com")]
+    [InlineData("tag:example.com,2004:1234")]
+    public void Locator_WellFormedUriWithNonHttpScheme_ThrowsWithoutWrappingAnotherException(string value)
+    {
+        // Act
+        var exception = Record.Exception(() => ErrorUri.Locator(value));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<UriFormatException>();
+        exception.InnerException.ShouldBeNull();
+    }
+
+    [Fact]
+    public void Locator_MalformedUri_ThrowsWithPreservedInnerException()
+    {
+        // Act
+        var exception = Record.Exception(() => ErrorUri.Locator("error"));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<UriFormatException>();
+        exception.InnerException.ShouldNotBeNull();
     }
 
     #endregion

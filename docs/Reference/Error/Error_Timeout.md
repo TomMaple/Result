@@ -18,7 +18,7 @@ It relates to `408` HTTP status code (Request Timeout), but can also be used in 
 
 
 ## Timeout(ErrorUri, String, String, ErrorUri, String, (String, Object)[])
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Error.cs#L531" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Error.cs#L632" target="_blank">Error.cs</a>
 
 Creates a new instance of the [Error](Error.md) object of the *Timeout* category with specified parameters.
 
@@ -59,7 +59,7 @@ A new instance of the [Error](Error.md) record of the *Timeout* [ErrorCategory](
 ### Exceptions
 [ArgumentException](https://learn.microsoft.com/dotnet/api/system.argumentexception)
 
-The `typeUri` parameter and/or the `instanceUri` parameter are not a valid *URI Locator* or *URI Tag*.
+The `typeUri` parameter resolves to an empty or whitespace-only value.
 
 ### Remarks
 > [!NOTE]
@@ -78,7 +78,7 @@ var error = Error.Timeout(
 
 
 ## Timeout(ErrorUri, String, String, ErrorUri, String, IEnumerable&lt;KeyValuePair&lt;String, Object&gt;&gt;)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Error.cs#L570" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Error.cs#L670" target="_blank">Error.cs</a>
 
 Creates a new instance of the [Error](Error.md) object of the *Timeout* category with specified parameters.
 
@@ -119,7 +119,7 @@ A new instance of the [Error](Error.md) record of the *Timeout* [ErrorCategory](
 ### Exceptions
 [ArgumentException](https://learn.microsoft.com/dotnet/api/system.argumentexception)
 
-The `typeUri` parameter and/or the `instanceUri` parameter are not a valid *URI Locator* or *URI Tag*.
+The `typeUri` parameter resolves to an empty or whitespace-only value.
 
 ### Remarks
 > [!NOTE]

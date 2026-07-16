@@ -2,7 +2,7 @@
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Error.cs#L158" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Error.cs#L199" target="_blank">Error.cs</a>
 
 Gets or sets a collection of error details.
 
@@ -31,6 +31,9 @@ Each item is a [ErrorDetail](../ErrorDetail/ErrorDetail.md) object that describe
 > This collection participates in the value-based equality of [Error](Error.md): it is compared **by content** (order-sensitive), so two errors with identically-built details are considered equal. See [Equals(Error)](Error_Equals.md).
 >
 > Copying an [Error](Error.md) with a `with` expression deep-copies this collection, producing an independent copy. Adding a detail to the copy does not affect the original, and vice versa.
+
+> [!CAUTION]
+> This collection is mutable through [AddDetail(String, String, String, (String, Object)[])](Error_AddDetail.md), which appends to it in place rather than returning a copy. Because the collection also feeds [GetHashCode()](Error_GetHashCode.md), an [Error](Error.md) changes its hash code whenever a detail is added, and every holder of a shared instance observes the new detail. See [AddDetail(String, String, String, (String, Object)[])](Error_AddDetail.md) for the consequences and how to avoid them.
 
 ## Examples
 ```csharp

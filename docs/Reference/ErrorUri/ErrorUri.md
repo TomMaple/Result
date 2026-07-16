@@ -33,10 +33,15 @@ error.AddDetail("#/email", "Email is invalid", "errors-email-invalid",
 ## Methods
 | Name | Description |
 | ---- | ----------- |
+| [Equals(ErrorUri)](ErrorUri_Equals.md) | Determines whether the specified [ErrorUri](ErrorUri.md) is equal to the current one, comparing the [Value](ErrorUri_Value.md) property. |
+| [GetHashCode()](ErrorUri_GetHashCode.md) | Returns a hash code that is consistent with [Equals(ErrorUri)](ErrorUri_Equals.md). |
 | [Locator(String)](ErrorUri_Locator.md) | Creates a new instance of the [ErrorUri](ErrorUri.md) record with a *URI Locator* value. |
 | [None()](ErrorUri_None.md) |  Creates a new instance of the [ErrorUri](ErrorUri.md) record with the `about:blank` value. |
 | [Tag(String)](ErrorUri_Tag.md) | Creates a new instance of the [ErrorUri](ErrorUri.md) record with a *URI Tag* value. |
 
+## Remarks
+> [!NOTE]
+> A default [ErrorUri](ErrorUri.md) instance is equivalent to the one returned by [None()](ErrorUri_None.md): its [Value](ErrorUri_Value.md) is `about:blank` and it compares equal to `ErrorUri.None()`.
 
 ## See Also
 * [Error](../Error/Error.md)

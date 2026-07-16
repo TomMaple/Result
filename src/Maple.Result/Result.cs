@@ -147,6 +147,9 @@ public sealed record Result<T> : IResult
     private readonly Error? _error;
     private readonly T? _value;
 
+    // Tells an unset value apart from a value that happens to equal default (e.g., 0 for a Result<int>).
+    private readonly bool _hasValue;
+
     #endregion
 
     #region constructors
@@ -175,6 +178,7 @@ public sealed record Result<T> : IResult
             throw new ArgumentNullException(nameof(value), "Value cannot be null!");
 
         _value = value;
+        _hasValue = true;
     }
 
     internal Result(Error error)
@@ -214,6 +218,7 @@ public sealed record Result<T> : IResult
                 throw new InvalidOperationException("Cannot set both Value and Error of the Result!");
 
             _value = value;
+            _hasValue = true;
         }
     }
 
@@ -255,11 +260,25 @@ public sealed record Result<T> : IResult
     /// <returns>
     ///     <see langword="true" /> if the operation was successful; otherwise, <see langword="false" />.
     /// </returns>
+    /// <exception cref="InvalidOperationException">
+    ///     If the <see cref="Result{T}" /> holds neither a <see cref="Value" /> nor an <see cref="Error" />.
+    ///     Such an instance can only be produced by the parameterless constructor (which is intended for
+    ///     deserialization) when neither member is subsequently populated.
+    /// </exception>
     [MemberNotNullWhen(false, nameof(Error))]
     [MemberNotNullWhen(true, nameof(Value))]
     public bool IsSuccess()
     {
-        return Error is null;
+        // A Result<T> is either successful (a value) or failed (an error). An instance holding neither cannot honour
+        // the MemberNotNullWhen contract below, so report the broken state instead of returning a misleading `true`.
+        if (_error is null && !_hasValue)
+        {
+            throw new InvalidOperationException(
+                "The Result<T> has neither a value nor an error. It was created with the parameterless constructor "
+                + "and never populated. Use Result.FromValue(), Result<T>.FromError() or an implicit conversion.");
+        }
+
+        return _error is null;
     }
 
     #region implicit operators

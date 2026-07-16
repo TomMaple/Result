@@ -2,7 +2,7 @@
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Error.cs#L180" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Error.cs#L235" target="_blank">Error.cs</a>
 
 Adds details of an individual error occurrence found.
 
@@ -36,11 +36,20 @@ The current instance of the [Error](Error.md) record with the new error detail a
 > [!NOTE]
 > This is a recommended way to add individual error details to an error instance, rather than directly using the [ErrorDetails](Error_ErrorDetails.md) property.
 
-This is a collection of individual error occurrences found, or an empty collection if no such details are available.
+This method **mutates the current instance in place** and returns that same instance; it does not create a copy. The returned reference is the one it was called on, so a fluent chain such as `error.AddDetail(...).AddDetail(...)` accumulates the details on the original `error`.
 
-Each item is a [ErrorDetail](../ErrorDetail/ErrorDetail.md) object that describes a specific aspect of the overall error condition. It contains properties that provide a human-readable message, and optionally a templated message (so than the client can localize it) and a property path indicating the specific part of the request that caused the error.
+> [!CAUTION]
+> Because the instance is mutated rather than copied, every holder of that instance observes the added detail. Do not add details to an [Error](Error.md) that is shared or cached—for example, one held in a `static readonly` field and reused across requests. Doing so appends to the shared instance on every call, which both grows it without bound and leaks one caller's detail into another caller's error.
+>
+> To add a detail to a shared [Error](Error.md), first take an independent copy with a `with` expression, which deep-copies the [ErrorDetails](Error_ErrorDetails.md) collection:
+>
+> ```csharp
+> var copy = sharedError with { };
+> copy.AddDetail("#/id", "The user does not exist.");
+> ```
 
-It should not be assigned directly (i.e., via the property setter) but rather through the [AddDetail(String, String, String, (String, Object)[])](Error_AddDetail.md) method of the [Error](Error.md) record, which uses [TemplatedMessage](../TemplatedMessage/TemplatedMessage.md) to validate and provide the value. For deserialization, the setter is marked as `init` to allow assignment during object initialization.
+> [!CAUTION]
+> Because [GetHashCode()](Error_GetHashCode.md) incorporates the [ErrorDetails](Error_ErrorDetails.md) collection, adding a detail **changes the hash code** of the instance. An [Error](Error.md) must therefore be fully built before it is used as a key in a hash-based collection (such as a `Dictionary<TKey, TValue>` or a `HashSet<T>`), or in an operation that relies on hashing (such as `Distinct()` or `GroupBy()`). Adding a detail after insertion leaves the entry stored under its previous hash code, where a lookup will not find it—not even with the very same reference.
 
 ## Examples
 ```csharp

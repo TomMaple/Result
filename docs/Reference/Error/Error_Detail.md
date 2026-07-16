@@ -2,7 +2,7 @@
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Error.cs#L116" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Error.cs#L157" target="_blank">Error.cs</a>
 
 Gets or sets a human-readable explanation specific to this occurrence of the problem.
 
