@@ -18,7 +18,7 @@ It relates to `501` HTTP status code (Not Implemented).
 
 
 ## NotImplemented(ErrorUri, String, String, ErrorUri, String, (String, Object)[])
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Error.cs#L922" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Error.cs#L936" target="_blank">Error.cs</a>
 
 Creates a new instance of the [Error](Error.md) object of the *NotImplemented* category with specified parameters.
 
@@ -78,7 +78,7 @@ var error = Error.NotImplemented(
 
 
 ## NotImplemented(ErrorUri, String, String, ErrorUri, String, IEnumerable&lt;KeyValuePair&lt;String, Object&gt;&gt;)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Error.cs#L960" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Error.cs#L974" target="_blank">Error.cs</a>
 
 Creates a new instance of the [Error](Error.md) object of the *NotImplemented* category with specified parameters.
 

@@ -18,7 +18,7 @@ It relates to `403` HTTP status code (Forbidden), but can also be used in other 
 
 
 ## Unauthorized(ErrorUri, String, String, ErrorUri, String, (String, Object)[])
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Error.cs#L467" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Error.cs#L481" target="_blank">Error.cs</a>
 
 Creates a new instance of the [Error](Error.md) object of the *Unauthorized* category with specified parameters.
 
@@ -78,7 +78,7 @@ var error = Error.Unauthorized(
 
 
 ## Unauthorized(ErrorUri, String, String, ErrorUri, String, IEnumerable&lt;KeyValuePair&lt;String, Object&gt;&gt;)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Error.cs#L504" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Error.cs#L518" target="_blank">Error.cs</a>
 
 Creates a new instance of the [Error](Error.md) object of the *Unauthorized* category with specified parameters.
 

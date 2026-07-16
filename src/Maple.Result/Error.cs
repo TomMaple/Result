@@ -213,7 +213,21 @@ public record Error
     ///     a localized message.
     /// </param>
     /// <remarks>
-    ///     For more details about JSON Pointers, see: <seealso href="https://datatracker.ietf.org/doc/html/rfc6901" />.
+    ///     <para>
+    ///         This method mutates the current instance in place and returns that same instance; it does not create
+    ///         a copy. Every holder of the instance observes the added detail, so do not add details to an
+    ///         <see cref="Error" /> that is shared or cached (for example, in a static field). Use a <c>with</c>
+    ///         expression first to obtain an independent copy.
+    ///     </para>
+    ///     <para>
+    ///         Because <see cref="GetHashCode" /> incorporates the <see cref="ErrorDetails" /> collection, adding
+    ///         a detail changes the hash code of the instance. An <see cref="Error" /> must therefore be fully built
+    ///         before it is used as a key in a hash-based collection such as a dictionary or a set; adding a detail
+    ///         afterwards leaves the entry stored under its previous hash code and unreachable by lookup.
+    ///     </para>
+    ///     <para>
+    ///         For more details about JSON Pointers, see: <seealso href="https://datatracker.ietf.org/doc/html/rfc6901" />.
+    ///     </para>
     /// </remarks>
     /// <returns>
     ///     The current instance of the <see cref="Error" /> object.

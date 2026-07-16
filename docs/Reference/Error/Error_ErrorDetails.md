@@ -32,6 +32,9 @@ Each item is a [ErrorDetail](../ErrorDetail/ErrorDetail.md) object that describe
 >
 > Copying an [Error](Error.md) with a `with` expression deep-copies this collection, producing an independent copy. Adding a detail to the copy does not affect the original, and vice versa.
 
+> [!CAUTION]
+> This collection is mutable through [AddDetail(String, String, String, (String, Object)[])](Error_AddDetail.md), which appends to it in place rather than returning a copy. Because the collection also feeds [GetHashCode()](Error_GetHashCode.md), an [Error](Error.md) changes its hash code whenever a detail is added, and every holder of a shared instance observes the new detail. See [AddDetail(String, String, String, (String, Object)[])](Error_AddDetail.md) for the consequences and how to avoid them.
+
 ## Examples
 ```csharp
 var error = Error.Validation(
