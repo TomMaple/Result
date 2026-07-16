@@ -504,6 +504,79 @@ public class ResultUnitTests
     #region Result<T>, ctor
 
     [Fact]
+    public void IsSuccess_ParameterlessCtorAndReferenceTypeValue_ThrowsException()
+    {
+        // Arrange
+        var sut = new Result<TestClass>();
+
+        // Act
+        var exception = Record.Exception(() => sut.IsSuccess());
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<InvalidOperationException>();
+        exception.Message.ShouldContain("has neither a value nor an error");
+    }
+
+    [Fact]
+    public void IsSuccess_ParameterlessCtorAndValueTypeValue_ThrowsException()
+    {
+        // Arrange
+        var sut = new Result<int>();
+
+        // Act
+        var exception = Record.Exception(() => sut.IsSuccess());
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<InvalidOperationException>();
+        exception.Message.ShouldContain("has neither a value nor an error");
+    }
+
+    [Fact]
+    public void IsSuccess_ValueTypeValueEqualToDefault_ReturnsTrue()
+    {
+        // Arrange
+        var sut = Result.FromValue(0);
+
+        // Act
+        var result = sut.IsSuccess();
+
+        // Assert
+        result.ShouldBeTrue();
+        sut.Value.ShouldBe(0);
+    }
+
+    [Fact]
+    public void IsSuccess_ParameterlessCtorWithValueAssigned_ReturnsTrue()
+    {
+        // Arrange
+        var sut = new Result<int> { Value = 0 };
+
+        // Act
+        var result = sut.IsSuccess();
+
+        // Assert
+        result.ShouldBeTrue();
+        sut.Value.ShouldBe(0);
+    }
+
+    [Fact]
+    public void IsSuccess_ParameterlessCtorWithErrorAssigned_ReturnsFalse()
+    {
+        // Arrange
+        var error = Error.NotFound(ErrorUri.Tag("tag:test.com,2024:Test"), "Test title");
+        var sut = new Result<TestClass> { Error = error };
+
+        // Act
+        var result = sut.IsSuccess();
+
+        // Assert
+        result.ShouldBeFalse();
+        sut.Error.ShouldBe(error);
+    }
+
+    [Fact]
     public void Ctor_SuccessWithValue_ReturnsSuccessResultWithValue()
     {
         // Arrange
