@@ -117,6 +117,9 @@ var userTokenResult =
     select token;
 ```
 
+> [!NOTE]
+> The asynchronous extension methods (`IfSuccessAsync()`, `IfErrorAsync()`, `MatchAsync()`, `ToResultAsync()` and the LINQ `SelectMany()`) support both `Task` and `ValueTask`, so you can chain and `await` results regardless of which one your methods return.
+
 See more: [Maple.Result.Extensions](https://github.com/TomMaple/Result/blob/main/docs/Reference/Extensions/namespace.md)
 
 # The Result Pattern
