@@ -206,11 +206,11 @@ public class LinqValueTaskAsyncExtensionsUnitTests
             .ReturnsAsync(Result.FromValue("100"));
 
         // Act
-        await
+        await (
             from initialValue in sut
             from function1Result in function1Mock.Object(initialValue)
             from function2Result in function2Mock.Object(function1Result)
-            select function2Result;
+            select function2Result);
 
         // Assert
         function1Mock.Verify(x => x.Invoke(90), Times.Once);
@@ -229,11 +229,11 @@ public class LinqValueTaskAsyncExtensionsUnitTests
         static ValueTask<Result<string>> Function2(int value) => ValueTask.FromResult(Result.FromValue(value.ToString()));
 
         // Act
-        var result = await
+        var result = await (
             from initialValue in sut
             from function1Result in Function1(initialValue)
             from function2Result in Function2(function1Result)
-            select function2Result;
+            select function2Result);
 
         // Assert
         result.ShouldNotBeNull();
@@ -258,11 +258,11 @@ public class LinqValueTaskAsyncExtensionsUnitTests
             .ReturnsAsync("100");
 
         // Act
-        await
+        await (
             from initialValue in sut
             from function1Result in function1Mock.Object(initialValue)
             from function2Result in function2Mock.Object(function1Result)
-            select function2Result;
+            select function2Result);
 
         // Assert
         function1Mock.Verify(x => x.Invoke(90), Times.Once);
@@ -285,11 +285,11 @@ public class LinqValueTaskAsyncExtensionsUnitTests
             .ReturnsAsync("100");
 
         // Act
-        await
+        await (
             from initialValue in sut
             from function1Result in function1Mock.Object(initialValue)
             from function2Result in function2Mock.Object(function1Result)
-            select function2Result;
+            select function2Result);
 
         // Assert
         function2Mock.Verify(x => x.Invoke(It.IsAny<int>()), Times.Never);
@@ -313,11 +313,11 @@ public class LinqValueTaskAsyncExtensionsUnitTests
             .ReturnsAsync("100");
 
         // Act
-        var result = await
+        var result = await (
             from initialValue in sut
             from function1Result in function1Mock.Object(initialValue)
             from function2Result in function2Mock.Object(function1Result)
-            select function2Result;
+            select function2Result);
 
         // Assert
         result.ShouldNotBeNull();
@@ -343,11 +343,11 @@ public class LinqValueTaskAsyncExtensionsUnitTests
             .ReturnsAsync(GetErrorResult<string>());
 
         // Act
-        await
+        await (
             from initialValue in sut
             from function1Result in function1Mock.Object(initialValue)
             from function2Result in function2Mock.Object(function1Result)
-            select function2Result;
+            select function2Result);
 
         // Assert
         function1Mock.Verify(x => x.Invoke(90), Times.Once);
@@ -370,11 +370,11 @@ public class LinqValueTaskAsyncExtensionsUnitTests
             .ReturnsAsync(GetErrorResult<string>());
 
         // Act
-        await
+        await (
             from initialValue in sut
             from function1Result in function1Mock.Object(initialValue)
             from function2Result in function2Mock.Object(function1Result)
-            select function2Result;
+            select function2Result);
 
         // Assert
         function2Mock.Verify(x => x.Invoke(100), Times.Once);
@@ -398,11 +398,11 @@ public class LinqValueTaskAsyncExtensionsUnitTests
             .ReturnsAsync(GetErrorResult<string>());
 
         // Act
-        var result = await
+        var result = await (
             from initialValue in sut
             from function1Result in function1Mock.Object(initialValue)
             from function2Result in function2Mock.Object(function1Result)
-            select function2Result;
+            select function2Result);
 
         // Assert
         result.ShouldNotBeNull();

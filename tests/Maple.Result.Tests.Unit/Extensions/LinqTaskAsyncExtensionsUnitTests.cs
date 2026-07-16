@@ -221,11 +221,11 @@ public class LinqTaskAsyncExtensionsUnitTests
             .ReturnsAsync(Result.FromValue("100"));
 
         // Act
-        await
+        await (
             from initialValue in sut
             from function1Result in function1Mock.Object(initialValue)
             from function2Result in function2Mock.Object(function1Result)
-            select function2Result;
+            select function2Result);
 
         // Assert
         function1Mock.Verify(x => x.Invoke(90), Times.Once);
@@ -244,11 +244,11 @@ public class LinqTaskAsyncExtensionsUnitTests
         static Task<Result<string>> Function2(int value) => Task.FromResult(Result.FromValue(value.ToString()));
 
         // Act
-        var result = await
+        var result = await (
             from initialValue in sut
             from function1Result in Function1(initialValue)
             from function2Result in Function2(function1Result)
-            select function2Result;
+            select function2Result);
 
         // Assert
         result.ShouldNotBeNull();
@@ -273,11 +273,11 @@ public class LinqTaskAsyncExtensionsUnitTests
             .ReturnsAsync("100");
 
         // Act
-        await
+        await (
             from initialValue in sut
             from function1Result in function1Mock.Object(initialValue)
             from function2Result in function2Mock.Object(function1Result)
-            select function2Result;
+            select function2Result);
 
         // Assert
         function1Mock.Verify(x => x.Invoke(90), Times.Once);
@@ -300,11 +300,11 @@ public class LinqTaskAsyncExtensionsUnitTests
             .ReturnsAsync("100");
 
         // Act
-        await
+        await (
             from initialValue in sut
             from function1Result in function1Mock.Object(initialValue)
             from function2Result in function2Mock.Object(function1Result)
-            select function2Result;
+            select function2Result);
 
         // Assert
         function2Mock.Verify(x => x.Invoke(It.IsAny<int>()), Times.Never);
@@ -328,11 +328,11 @@ public class LinqTaskAsyncExtensionsUnitTests
             .ReturnsAsync("100");
 
         // Act
-        var result = await
+        var result = await (
             from initialValue in sut
             from function1Result in function1Mock.Object(initialValue)
             from function2Result in function2Mock.Object(function1Result)
-            select function2Result;
+            select function2Result);
 
         // Assert
         result.ShouldNotBeNull();
@@ -358,11 +358,11 @@ public class LinqTaskAsyncExtensionsUnitTests
             .ReturnsAsync(GetErrorResult<string>());
 
         // Act
-        await
+        await (
             from initialValue in sut
             from function1Result in function1Mock.Object(initialValue)
             from function2Result in function2Mock.Object(function1Result)
-            select function2Result;
+            select function2Result);
 
         // Assert
         function1Mock.Verify(x => x.Invoke(90), Times.Once);
@@ -385,11 +385,11 @@ public class LinqTaskAsyncExtensionsUnitTests
             .ReturnsAsync(GetErrorResult<string>());
 
         // Act
-        await
+        await (
             from initialValue in sut
             from function1Result in function1Mock.Object(initialValue)
             from function2Result in function2Mock.Object(function1Result)
-            select function2Result;
+            select function2Result);
 
         // Assert
         function2Mock.Verify(x => x.Invoke(100), Times.Once);
@@ -413,11 +413,11 @@ public class LinqTaskAsyncExtensionsUnitTests
             .ReturnsAsync(GetErrorResult<string>());
 
         // Act
-        var result = await
+        var result = await (
             from initialValue in sut
             from function1Result in function1Mock.Object(initialValue)
             from function2Result in function2Mock.Object(function1Result)
-            select function2Result;
+            select function2Result);
 
         // Assert
         result.ShouldNotBeNull();
