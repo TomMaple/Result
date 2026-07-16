@@ -16,7 +16,7 @@ namespace Maple.Result.Extensions;
 /// <summary>
 ///     The collection of asynchronous extension methods for the <see cref="Result{T}" /> type.
 /// </summary>
-public static class ResultAsyncExtensions
+public static class ResultTaskAsyncExtensions
 {
     /// <summary>
     ///     Asynchronously converts a task that produces a generic result into a non-generic result, preserving success or

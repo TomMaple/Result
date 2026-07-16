@@ -1,4 +1,4 @@
-﻿// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: MIT
 /*
  * This code is a part of a Maple.Result library project.
  * https://github.com/TomMaple/Result/
@@ -14,31 +14,16 @@ using Maple.Result.Extensions;
 
 namespace Maple.Result.Tests.Unit.Extensions;
 
-public class ResultAsyncExtensionsUnitTests
+public class ResultValueTaskAsyncExtensionsUnitTests
 {
     [Fact]
-    public async Task ToResult_NoGenericResultTask_ThrowsException()
+    public async Task ToResult_NullGenericResultValueTask_ThrowsException()
     {
         // Arrange
-        const Task<Result<int>>? Sut = null;
+        var sut = ValueTask.FromResult<Result<int>?>(null);
 
         // Act
-        var exception = await Record.ExceptionAsync(() => Sut!.ToResultAsync());
-
-        // Assert
-        exception.ShouldNotBeNull();
-        exception.ShouldBeOfType<ArgumentNullException>();
-        exception.Message.ShouldStartWith("Value cannot be null.");
-    }
-
-    [Fact]
-    public async Task ToResult_NullGenericResultTask_ThrowsException()
-    {
-        // Arrange
-        var sut = Task.FromResult<Result<int>?>(null);
-
-        // Act
-        var exception = await Record.ExceptionAsync(() => sut!.ToResultAsync());
+        var exception = await Record.ExceptionAsync(() => sut!.ToResultAsync().AsTask());
 
         // Assert
         exception.ShouldNotBeNull();
@@ -47,12 +32,12 @@ public class ResultAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task ToResult_SuccessfulGenericResultTask_ReturnsSuccessfulResult()
+    public async Task ToResult_SuccessfulGenericResultValueTask_ReturnsSuccessfulResult()
     {
         // Arrange
         const int InitialValue = 362;
 
-        var sut = Task.FromResult(Result.FromValue(InitialValue));
+        var sut = ValueTask.FromResult(Result.FromValue(InitialValue));
 
         // Act
         var result = await sut.ToResultAsync();
@@ -64,12 +49,12 @@ public class ResultAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task ToResult_ErrorGenericResultTask_ReturnsErrorResultWithOriginalError()
+    public async Task ToResult_ErrorGenericResultValueTask_ReturnsErrorResultWithOriginalError()
     {
         // Arrange
         var error = GetError();
 
-        var sut = Task.FromResult(Result<int>.FromError(error));
+        var sut = ValueTask.FromResult(Result<int>.FromError(error));
 
         // Act
         var result = await sut.ToResultAsync();

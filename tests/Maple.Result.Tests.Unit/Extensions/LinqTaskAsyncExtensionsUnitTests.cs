@@ -1,14 +1,22 @@
-﻿using System;
+﻿// SPDX-License-Identifier: MIT
+/*
+ * This code is a part of a Maple.Result library project.
+ * https://github.com/TomMaple/Result/
+ * Copyright (c) Tom Maple
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+using System;
 using System.Threading.Tasks;
 using Maple.Result.Extensions;
 using Moq;
 
 namespace Maple.Result.Tests.Unit.Extensions;
 
-public class LinqAsyncExtensionsUnitTests
+public class LinqTaskAsyncExtensionsUnitTests
 {
-#pragma warning disable CS8848 // Operator cannot be used here due to precedence.
-
     #region SelectMany(Task<Result<T>>, Func<T, Task<Result<TMiddle>>>, Func<T, TMiddle, TNext>)
 
     [Fact]
@@ -24,6 +32,21 @@ public class LinqAsyncExtensionsUnitTests
         exception.ShouldNotBeNull();
         exception.ShouldBeOfType<ArgumentNullException>();
         exception.Message.ShouldStartWith("Value cannot be null.");
+    }
+
+    [Fact]
+    public async Task SelectMany_NoResultValueWithSelectorFunctions_ThrowsException()
+    {
+        // Arrange
+        var sut = Task.FromResult<Result<int>>(null!);
+
+        // Act
+        var exception = await Record.ExceptionAsync(() => sut.SelectMany(x => Task.FromResult(Result.FromValue(x.ToString())), (x, _) => (double)x));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<InvalidOperationException>();
+        exception.Message.ShouldStartWith("The asynchronous operation represented by ‘result’ returned null.");
     }
 
     [Fact]
@@ -179,6 +202,8 @@ public class LinqAsyncExtensionsUnitTests
 
     #region LINQ query syntax
 
+    // ReSharper disable RedundantAssignment
+
     [Fact]
     public async Task LinqQueryAsyncSyntax_SuccessfulResult_CallsFunctions()
     {
@@ -196,11 +221,11 @@ public class LinqAsyncExtensionsUnitTests
             .ReturnsAsync(Result.FromValue("100"));
 
         // Act
-        await
+        await (
             from initialValue in sut
             from function1Result in function1Mock.Object(initialValue)
             from function2Result in function2Mock.Object(function1Result)
-            select function2Result;
+            select function2Result);
 
         // Assert
         function1Mock.Verify(x => x.Invoke(90), Times.Once);
@@ -219,11 +244,11 @@ public class LinqAsyncExtensionsUnitTests
         static Task<Result<string>> Function2(int value) => Task.FromResult(Result.FromValue(value.ToString()));
 
         // Act
-        var result = await
+        var result = await (
             from initialValue in sut
             from function1Result in Function1(initialValue)
             from function2Result in Function2(function1Result)
-            select function2Result;
+            select function2Result);
 
         // Assert
         result.ShouldNotBeNull();
@@ -248,11 +273,11 @@ public class LinqAsyncExtensionsUnitTests
             .ReturnsAsync("100");
 
         // Act
-        await
+        await (
             from initialValue in sut
             from function1Result in function1Mock.Object(initialValue)
             from function2Result in function2Mock.Object(function1Result)
-            select function2Result;
+            select function2Result);
 
         // Assert
         function1Mock.Verify(x => x.Invoke(90), Times.Once);
@@ -275,11 +300,11 @@ public class LinqAsyncExtensionsUnitTests
             .ReturnsAsync("100");
 
         // Act
-        await
+        await (
             from initialValue in sut
             from function1Result in function1Mock.Object(initialValue)
             from function2Result in function2Mock.Object(function1Result)
-            select function2Result;
+            select function2Result);
 
         // Assert
         function2Mock.Verify(x => x.Invoke(It.IsAny<int>()), Times.Never);
@@ -303,11 +328,11 @@ public class LinqAsyncExtensionsUnitTests
             .ReturnsAsync("100");
 
         // Act
-        var result = await
+        var result = await (
             from initialValue in sut
             from function1Result in function1Mock.Object(initialValue)
             from function2Result in function2Mock.Object(function1Result)
-            select function2Result;
+            select function2Result);
 
         // Assert
         result.ShouldNotBeNull();
@@ -333,11 +358,11 @@ public class LinqAsyncExtensionsUnitTests
             .ReturnsAsync(GetErrorResult<string>());
 
         // Act
-        await
+        await (
             from initialValue in sut
             from function1Result in function1Mock.Object(initialValue)
             from function2Result in function2Mock.Object(function1Result)
-            select function2Result;
+            select function2Result);
 
         // Assert
         function1Mock.Verify(x => x.Invoke(90), Times.Once);
@@ -360,11 +385,11 @@ public class LinqAsyncExtensionsUnitTests
             .ReturnsAsync(GetErrorResult<string>());
 
         // Act
-        await
+        await (
             from initialValue in sut
             from function1Result in function1Mock.Object(initialValue)
             from function2Result in function2Mock.Object(function1Result)
-            select function2Result;
+            select function2Result);
 
         // Assert
         function2Mock.Verify(x => x.Invoke(100), Times.Once);
@@ -388,11 +413,11 @@ public class LinqAsyncExtensionsUnitTests
             .ReturnsAsync(GetErrorResult<string>());
 
         // Act
-        var result = await
+        var result = await (
             from initialValue in sut
             from function1Result in function1Mock.Object(initialValue)
             from function2Result in function2Mock.Object(function1Result)
-            select function2Result;
+            select function2Result);
 
         // Assert
         result.ShouldNotBeNull();
@@ -401,9 +426,9 @@ public class LinqAsyncExtensionsUnitTests
         result.Error.ShouldBeSameAs(errorResult.Error);
     }
 
+    // ReSharper restore RedundantAssignment
+ 
     #endregion
-
-#pragma warning restore CS8848 // Operator cannot be used here due to precedence.
 
     #region helper methods
 

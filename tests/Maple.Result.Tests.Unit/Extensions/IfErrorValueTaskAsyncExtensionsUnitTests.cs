@@ -15,9 +15,9 @@ using System.Threading.Tasks;
 
 namespace Maple.Result.Tests.Unit.Extensions;
 
-public class IfErrorAsyncExtensionsUnitTests
+public class IfErrorValueTaskAsyncExtensionsUnitTests
 {
-    #region IfErrorAsync (Result, Func<Error, Task>)
+    #region IfErrorAsync (Result, Func<Error, ValueTask>)
 
     [Fact]
     public async Task IfErrorAsync_NoResultWithAction_ThrowsException()
@@ -26,7 +26,7 @@ public class IfErrorAsyncExtensionsUnitTests
         const Result? Sut = null;
 
         // Act
-        var exception = await Record.ExceptionAsync(() => Sut!.IfErrorAsync(_ => Task.CompletedTask));
+        var exception = await Record.ExceptionAsync(() => Sut!.IfErrorAsync(_ => ValueTask.CompletedTask).AsTask());
 
         // Assert
         exception.ShouldNotBeNull();
@@ -38,12 +38,12 @@ public class IfErrorAsyncExtensionsUnitTests
     public async Task IfErrorAsync_SuccessfulResultWithNoAction_ThrowsException()
     {
         // Arrange
-        const Func<Error, Task>? AsyncAction = null;
+        const Func<Error, ValueTask>? AsyncAction = null;
 
         var sut = Result.Success();
 
         // Act
-        var exception = await Record.ExceptionAsync(() => sut.IfErrorAsync(AsyncAction!));
+        var exception = await Record.ExceptionAsync(() => sut.IfErrorAsync(AsyncAction!).AsTask());
 
         // Assert
         exception.ShouldNotBeNull();
@@ -55,12 +55,12 @@ public class IfErrorAsyncExtensionsUnitTests
     public async Task IfErrorAsync_ErrorResultWithNoAction_ThrowsException()
     {
         // Arrange
-        const Func<Error, Task>? AsyncAction = null;
+        const Func<Error, ValueTask>? AsyncAction = null;
 
         var sut = GetErrorResult();
 
         // Act
-        var exception = await Record.ExceptionAsync(() => sut.IfErrorAsync(AsyncAction!));
+        var exception = await Record.ExceptionAsync(() => sut.IfErrorAsync(AsyncAction!).AsTask());
 
         // Assert
         exception.ShouldNotBeNull();
@@ -72,7 +72,7 @@ public class IfErrorAsyncExtensionsUnitTests
     public async Task IfErrorAsync_SuccessfulResultWithAction_DoesNotCallAction()
     {
         // Arrange
-        var actionMock = new Mock<Func<Error, Task>>();
+        var actionMock = new Mock<Func<Error, ValueTask>>();
 
         var sut = Result.Success();
 
@@ -90,7 +90,7 @@ public class IfErrorAsyncExtensionsUnitTests
         var sut = Result.Success();
 
         // Act
-        var result = await sut.IfErrorAsync(_ => Task.CompletedTask);
+        var result = await sut.IfErrorAsync(_ => ValueTask.CompletedTask);
 
         // Assert
         result.ShouldNotBeNull();
@@ -102,7 +102,7 @@ public class IfErrorAsyncExtensionsUnitTests
     public async Task IfErrorAsync_ErrorResultWithAction_CallsAction()
     {
         // Arrange
-        var actionMock = new Mock<Func<Error, Task>>();
+        var actionMock = new Mock<Func<Error, ValueTask>>();
 
         var sut = GetErrorResult();
 
@@ -120,7 +120,7 @@ public class IfErrorAsyncExtensionsUnitTests
         var sut = GetErrorResult();
 
         // Act
-        var result = await sut.IfErrorAsync(_ => Task.CompletedTask);
+        var result = await sut.IfErrorAsync(_ => ValueTask.CompletedTask);
 
         // Assert
         result.ShouldNotBeNull();
@@ -131,7 +131,7 @@ public class IfErrorAsyncExtensionsUnitTests
 
     #endregion
 
-    #region IfErrorAsync (Result, Func<Error, Task<Result>>)
+    #region IfErrorAsync (Result, Func<Error, ValueTask<Result>>)
 
     [Fact]
     public async Task IfErrorAsync_NoResultWithResultFunction_ThrowsException()
@@ -140,7 +140,7 @@ public class IfErrorAsyncExtensionsUnitTests
         const Result? Sut = null;
 
         // Act
-        var exception = await Record.ExceptionAsync(() => Sut!.IfErrorAsync(_ => Task.FromResult(Result.Success())));
+        var exception = await Record.ExceptionAsync(() => Sut!.IfErrorAsync(_ => ValueTask.FromResult(Result.Success())).AsTask());
 
         // Assert
         exception.ShouldNotBeNull();
@@ -152,12 +152,12 @@ public class IfErrorAsyncExtensionsUnitTests
     public async Task IfErrorAsync_SuccessfulResultWithNoResultFunction_ThrowsException()
     {
         // Arrange
-        const Func<Error, Task<Result>>? Function = null;
+        const Func<Error, ValueTask<Result>>? Function = null;
 
         var sut = Result.Success();
 
         // Act
-        var exception = await Record.ExceptionAsync(() => sut.IfErrorAsync(Function!));
+        var exception = await Record.ExceptionAsync(() => sut.IfErrorAsync(Function!).AsTask());
 
         // Assert
         exception.ShouldNotBeNull();
@@ -169,12 +169,12 @@ public class IfErrorAsyncExtensionsUnitTests
     public async Task IfErrorAsync_ErrorResultWithNoResultFunction_ThrowsException()
     {
         // Arrange
-        const Func<Error, Task<Result>>? Function = null;
+        const Func<Error, ValueTask<Result>>? Function = null;
 
         var sut = GetErrorResult();
 
         // Act
-        var exception = await Record.ExceptionAsync(() => sut.IfErrorAsync(Function!));
+        var exception = await Record.ExceptionAsync(() => sut.IfErrorAsync(Function!).AsTask());
 
         // Assert
         exception.ShouldNotBeNull();
@@ -186,7 +186,7 @@ public class IfErrorAsyncExtensionsUnitTests
     public async Task IfErrorAsync_SuccessfulResultWithResultFunction_DoesNotCallFunction()
     {
         // Arrange
-        var functionMock = new Mock<Func<Error, Task<Result>>>();
+        var functionMock = new Mock<Func<Error, ValueTask<Result>>>();
 
         var sut = Result.Success();
 
@@ -204,7 +204,7 @@ public class IfErrorAsyncExtensionsUnitTests
         var sut = Result.Success();
 
         // Act
-        var result = await sut.IfErrorAsync(_ => Task.FromResult(Result.Success()));
+        var result = await sut.IfErrorAsync(_ => ValueTask.FromResult(Result.Success()));
 
         // Assert
         result.ShouldNotBeNull();
@@ -216,7 +216,7 @@ public class IfErrorAsyncExtensionsUnitTests
     public async Task IfErrorAsync_ErrorResultWithResultFunction_CallsFunction()
     {
         // Arrange
-        var functionMock = new Mock<Func<Error, Task<Result>>>();
+        var functionMock = new Mock<Func<Error, ValueTask<Result>>>();
 
         var sut = GetErrorResult();
 
@@ -236,7 +236,7 @@ public class IfErrorAsyncExtensionsUnitTests
         var sut = GetErrorResult();
 
         // Act
-        var result = await sut.IfErrorAsync(_ => Task.FromResult(asyncFuncResult));
+        var result = await sut.IfErrorAsync(_ => ValueTask.FromResult(asyncFuncResult));
 
         // Assert
         result.ShouldNotBeNull();
@@ -252,7 +252,7 @@ public class IfErrorAsyncExtensionsUnitTests
         var sut = GetErrorResult();
 
         // Act
-        var result = await sut.IfErrorAsync(_ => Task.FromResult(Result.FromError(asyncFuncError)));
+        var result = await sut.IfErrorAsync(_ => ValueTask.FromResult(Result.FromError(asyncFuncError)));
 
         // Assert
         result.ShouldNotBeNull();
@@ -262,7 +262,7 @@ public class IfErrorAsyncExtensionsUnitTests
 
     #endregion
 
-    #region IfErrorAsync (Result<T>, Func<Error, Task>)
+    #region IfErrorAsync (Result<T>, Func<Error, ValueTask>)
 
     [Fact]
     public async Task IfErrorAsync_NoGenericResultWithAction_ThrowsException()
@@ -271,7 +271,7 @@ public class IfErrorAsyncExtensionsUnitTests
         const Result<int>? Sut = null;
 
         // Act
-        var exception = await Record.ExceptionAsync(() => Sut!.IfErrorAsync(_ => Task.CompletedTask));
+        var exception = await Record.ExceptionAsync(() => Sut!.IfErrorAsync(_ => ValueTask.CompletedTask).AsTask());
 
         // Assert
         exception.ShouldNotBeNull();
@@ -284,12 +284,12 @@ public class IfErrorAsyncExtensionsUnitTests
     {
         // Arrange
         const int InitialValue = 24;
-        const Func<Error, Task>? AsyncAction = null;
+        const Func<Error, ValueTask>? AsyncAction = null;
 
         Result<int> sut = InitialValue;
 
         // Act
-        var exception = await Record.ExceptionAsync(() => sut.IfErrorAsync(AsyncAction!));
+        var exception = await Record.ExceptionAsync(() => sut.IfErrorAsync(AsyncAction!).AsTask());
 
         // Assert
         exception.ShouldNotBeNull();
@@ -301,12 +301,12 @@ public class IfErrorAsyncExtensionsUnitTests
     public async Task IfErrorAsync_ErrorGenericResultWithNoAction_ThrowsException()
     {
         // Arrange
-        const Func<Error, Task>? AsyncAction = null;
+        const Func<Error, ValueTask>? AsyncAction = null;
 
         var sut = GetErrorResult<int>();
 
         // Act
-        var exception = await Record.ExceptionAsync(() => sut.IfErrorAsync(AsyncAction!));
+        var exception = await Record.ExceptionAsync(() => sut.IfErrorAsync(AsyncAction!).AsTask());
 
         // Assert
         exception.ShouldNotBeNull();
@@ -319,7 +319,7 @@ public class IfErrorAsyncExtensionsUnitTests
     {
         // Arrange
         const int InitialValue = 29;
-        var actionMock = new Mock<Func<Error, Task>>();
+        var actionMock = new Mock<Func<Error, ValueTask>>();
 
         Result<int> sut = InitialValue;
 
@@ -339,7 +339,7 @@ public class IfErrorAsyncExtensionsUnitTests
         Result<int> sut = InitialValue;
 
         // Act
-        var result = await sut.IfErrorAsync(_ => Task.CompletedTask);
+        var result = await sut.IfErrorAsync(_ => ValueTask.CompletedTask);
 
         // Assert
         result.ShouldNotBeNull();
@@ -352,7 +352,7 @@ public class IfErrorAsyncExtensionsUnitTests
     public async Task IfErrorAsync_ErrorGenericResultWithAction_CallsAction()
     {
         // Arrange
-        var actionMock = new Mock<Func<Error, Task>>();
+        var actionMock = new Mock<Func<Error, ValueTask>>();
 
         var sut = GetErrorResult<int>();
 
@@ -370,7 +370,7 @@ public class IfErrorAsyncExtensionsUnitTests
         var sut = GetErrorResult<int>();
 
         // Act
-        var result = await sut.IfErrorAsync(_ => Task.CompletedTask);
+        var result = await sut.IfErrorAsync(_ => ValueTask.CompletedTask);
 
         // Assert
         result.ShouldNotBeNull();
@@ -381,7 +381,7 @@ public class IfErrorAsyncExtensionsUnitTests
 
     #endregion
 
-    #region IfErrorAsync (Result<T>, Func<Error, Task<IResult>>)
+    #region IfErrorAsync (Result<T>, Func<Error, ValueTask<IResult>>)
 
     [Fact]
     public async Task IfErrorAsync_NoGenericResultWithGenericResultFunction_ThrowsException()
@@ -390,7 +390,7 @@ public class IfErrorAsyncExtensionsUnitTests
         const Result<int>? Sut = null;
 
         // Act
-        var exception = await Record.ExceptionAsync(() => Sut!.IfErrorAsync(_ => Task.FromResult(Result.FromValue(1))));
+        var exception = await Record.ExceptionAsync(() => Sut!.IfErrorAsync(_ => ValueTask.FromResult(Result.FromValue(1))).AsTask());
 
         // Assert
         exception.ShouldNotBeNull();
@@ -403,12 +403,12 @@ public class IfErrorAsyncExtensionsUnitTests
     {
         // Arrange
         const int InitialValue = 24;
-        const Func<Error, Task<Result<int>>>? Function = null;
+        const Func<Error, ValueTask<Result<int>>>? Function = null;
 
         Result<int> sut = InitialValue;
 
         // Act
-        var exception = await Record.ExceptionAsync(() => sut.IfErrorAsync(Function!));
+        var exception = await Record.ExceptionAsync(() => sut.IfErrorAsync(Function!).AsTask());
 
         // Assert
         exception.ShouldNotBeNull();
@@ -420,12 +420,12 @@ public class IfErrorAsyncExtensionsUnitTests
     public async Task IfErrorAsync_ErrorGenericResultWithNoGenericResultFunction_ThrowsException()
     {
         // Arrange
-        const Func<Error, Task<Result<int>>>? Function = null;
+        const Func<Error, ValueTask<Result<int>>>? Function = null;
 
         var sut = GetErrorResult<int>();
 
         // Act
-        var exception = await Record.ExceptionAsync(() => sut.IfErrorAsync(Function!));
+        var exception = await Record.ExceptionAsync(() => sut.IfErrorAsync(Function!).AsTask());
 
         // Assert
         exception.ShouldNotBeNull();
@@ -438,7 +438,7 @@ public class IfErrorAsyncExtensionsUnitTests
     {
         // Arrange
         const int InitialValue = 42;
-        var functionMock = new Mock<Func<Error, Task<Result<int>>>>();
+        var functionMock = new Mock<Func<Error, ValueTask<Result<int>>>>();
 
         Result<int> sut = InitialValue;
 
@@ -458,7 +458,7 @@ public class IfErrorAsyncExtensionsUnitTests
         Result<int> sut = InitialValue;
 
         // Act
-        var result = await sut.IfErrorAsync(_ => Task.FromResult(Result.FromValue(2)));
+        var result = await sut.IfErrorAsync(_ => ValueTask.FromResult(Result.FromValue(2)));
 
         // Assert
         result.ShouldNotBeNull();
@@ -470,7 +470,7 @@ public class IfErrorAsyncExtensionsUnitTests
     public async Task IfErrorAsync_ErrorGenericResultWithGenericResultFunction_CallsFunction()
     {
         // Arrange
-        var functionMock = new Mock<Func<Error, Task<Result<int>>>>();
+        var functionMock = new Mock<Func<Error, ValueTask<Result<int>>>>();
 
         var sut = GetErrorResult<int>();
 
@@ -490,7 +490,7 @@ public class IfErrorAsyncExtensionsUnitTests
         var sut = GetErrorResult<int>();
 
         // Act
-        var result = await sut.IfErrorAsync(_ => Task.FromResult(asyncFuncResult));
+        var result = await sut.IfErrorAsync(_ => ValueTask.FromResult(asyncFuncResult));
 
         // Assert
         result.ShouldNotBeNull();
@@ -507,7 +507,7 @@ public class IfErrorAsyncExtensionsUnitTests
         var sut = GetErrorResult<int>();
 
         // Act
-        var result = await sut.IfErrorAsync(_ => Task.FromResult(Result<int>.FromError(asyncFuncError)));
+        var result = await sut.IfErrorAsync(_ => ValueTask.FromResult(Result<int>.FromError(asyncFuncError)));
 
         // Assert
         result.ShouldNotBeNull();
@@ -517,16 +517,18 @@ public class IfErrorAsyncExtensionsUnitTests
 
     #endregion
 
-    #region IfErrorAsync (Task<Result>, Func<Error, Task>)
+    #region IfErrorAsync (ValueTask<Result>, Func<Error, ValueTask>)
 
     [Fact]
-    public async Task IfErrorAsync_NoResultTaskWithAction_ThrowsException()
+    public async Task IfErrorAsync_SuccessfulResultValueTaskWithNoAction_ThrowsException()
     {
         // Arrange
-        const Task<Result>? Sut = null;
+        const Func<Error, ValueTask>? AsyncAction = null;
+
+        var sut = ValueTask.FromResult(Result.Success());
 
         // Act
-        var exception = await Record.ExceptionAsync(() => Sut!.IfErrorAsync(_ => Task.CompletedTask));
+        var exception = await Record.ExceptionAsync(() => sut.IfErrorAsync(AsyncAction!).AsTask());
 
         // Assert
         exception.ShouldNotBeNull();
@@ -535,15 +537,15 @@ public class IfErrorAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfErrorAsync_SuccessfulResultTaskWithNoAction_ThrowsException()
+    public async Task IfErrorAsync_ErrorResultValueTaskWithNoAction_ThrowsException()
     {
         // Arrange
-        const Func<Error, Task>? AsyncAction = null;
+        const Func<Error, ValueTask>? AsyncAction = null;
 
-        var sut = Task.FromResult(Result.Success());
+        var sut = ValueTask.FromResult(GetErrorResult());
 
         // Act
-        var exception = await Record.ExceptionAsync(() => sut.IfErrorAsync(AsyncAction!));
+        var exception = await Record.ExceptionAsync(() => sut.IfErrorAsync(AsyncAction!).AsTask());
 
         // Assert
         exception.ShouldNotBeNull();
@@ -552,29 +554,12 @@ public class IfErrorAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfErrorAsync_ErrorResultTaskWithNoAction_ThrowsException()
+    public async Task IfErrorAsync_SuccessfulResultValueTaskWithAction_DoesNotCallAction()
     {
         // Arrange
-        const Func<Error, Task>? AsyncAction = null;
+        var actionMock = new Mock<Func<Error, ValueTask>>();
 
-        var sut = Task.FromResult(GetErrorResult());
-
-        // Act
-        var exception = await Record.ExceptionAsync(() => sut.IfErrorAsync(AsyncAction!));
-
-        // Assert
-        exception.ShouldNotBeNull();
-        exception.ShouldBeOfType<ArgumentNullException>();
-        exception.Message.ShouldStartWith("Value cannot be null.");
-    }
-
-    [Fact]
-    public async Task IfErrorAsync_SuccessfulResultTaskWithAction_DoesNotCallAction()
-    {
-        // Arrange
-        var actionMock = new Mock<Func<Error, Task>>();
-
-        var sut = Task.FromResult(Result.Success());
+        var sut = ValueTask.FromResult(Result.Success());
 
         // Act
         await sut.IfErrorAsync(actionMock.Object);
@@ -584,14 +569,14 @@ public class IfErrorAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfErrorAsync_SuccessfulResultTaskWithAction_ReturnsOriginalResult()
+    public async Task IfErrorAsync_SuccessfulResultValueTaskWithAction_ReturnsOriginalResult()
     {
         // Arrange
         var successResult = Result.Success();
-        var sut = Task.FromResult(successResult);
+        var sut = ValueTask.FromResult(successResult);
 
         // Act
-        var result = await sut.IfErrorAsync(_ => Task.CompletedTask);
+        var result = await sut.IfErrorAsync(_ => ValueTask.CompletedTask);
 
         // Assert
         result.ShouldNotBeNull();
@@ -600,13 +585,13 @@ public class IfErrorAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfErrorAsync_ErrorResultTaskWithAction_CallsAction()
+    public async Task IfErrorAsync_ErrorResultValueTaskWithAction_CallsAction()
     {
         // Arrange
-        var actionMock = new Mock<Func<Error, Task>>();
+        var actionMock = new Mock<Func<Error, ValueTask>>();
 
         var errorResult = GetErrorResult();
-        var sut = Task.FromResult(errorResult);
+        var sut = ValueTask.FromResult(errorResult);
 
         // Act
         await sut.IfErrorAsync(actionMock.Object);
@@ -616,14 +601,14 @@ public class IfErrorAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfErrorAsync_ErrorResultTaskWithAction_ReturnsOriginalResult()
+    public async Task IfErrorAsync_ErrorResultValueTaskWithAction_ReturnsOriginalResult()
     {
         // Arrange
         var errorResult = GetErrorResult();
-        var sut = Task.FromResult(errorResult);
+        var sut = ValueTask.FromResult(errorResult);
 
         // Act
-        var result = await sut.IfErrorAsync(_ => Task.CompletedTask);
+        var result = await sut.IfErrorAsync(_ => ValueTask.CompletedTask);
 
         // Assert
         result.ShouldNotBeNull();
@@ -634,16 +619,18 @@ public class IfErrorAsyncExtensionsUnitTests
 
     #endregion
 
-    #region IfErrorAsync (Task<Result>, Func<Error, Task<Result>>)
+    #region IfErrorAsync (ValueTask<Result>, Func<Error, ValueTask<Result>>)
 
     [Fact]
-    public async Task IfErrorAsync_NoResultTaskWithResultFunction_ThrowsException()
+    public async Task IfErrorAsync_SuccessfulResultValueTaskWithNoResultFunction_ThrowsException()
     {
         // Arrange
-        const Task<Result>? Sut = null;
+        const Func<Error, ValueTask<Result>>? Function = null;
+
+        var sut = ValueTask.FromResult(Result.Success());
 
         // Act
-        var exception = await Record.ExceptionAsync(() => Sut!.IfErrorAsync(_ => Task.FromResult(Result.Success())));
+        var exception = await Record.ExceptionAsync(() => sut.IfErrorAsync(Function!).AsTask());
 
         // Assert
         exception.ShouldNotBeNull();
@@ -652,15 +639,15 @@ public class IfErrorAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfErrorAsync_SuccessfulResultTaskWithNoResultFunction_ThrowsException()
+    public async Task IfErrorAsync_ErrorResultValueTaskWithNoResultFunction_ThrowsException()
     {
         // Arrange
-        const Func<Error, Task<Result>>? Function = null;
+        const Func<Error, ValueTask<Result>>? Function = null;
 
-        var sut = Task.FromResult(Result.Success());
+        var sut = ValueTask.FromResult(GetErrorResult());
 
         // Act
-        var exception = await Record.ExceptionAsync(() => sut.IfErrorAsync(Function!));
+        var exception = await Record.ExceptionAsync(() => sut.IfErrorAsync(Function!).AsTask());
 
         // Assert
         exception.ShouldNotBeNull();
@@ -669,29 +656,12 @@ public class IfErrorAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfErrorAsync_ErrorResultTaskWithNoResultFunction_ThrowsException()
+    public async Task IfErrorAsync_SuccessfulResultValueTaskWithResultFunction_DoesNotCallFunction()
     {
         // Arrange
-        const Func<Error, Task<Result>>? Function = null;
+        var functionMock = new Mock<Func<Error, ValueTask<Result>>>();
 
-        var sut = Task.FromResult(GetErrorResult());
-
-        // Act
-        var exception = await Record.ExceptionAsync(() => sut.IfErrorAsync(Function!));
-
-        // Assert
-        exception.ShouldNotBeNull();
-        exception.ShouldBeOfType<ArgumentNullException>();
-        exception.Message.ShouldStartWith("Value cannot be null.");
-    }
-
-    [Fact]
-    public async Task IfErrorAsync_SuccessfulResultTaskWithResultFunction_DoesNotCallFunction()
-    {
-        // Arrange
-        var functionMock = new Mock<Func<Error, Task<Result>>>();
-
-        var sut = Task.FromResult(Result.Success());
+        var sut = ValueTask.FromResult(Result.Success());
 
         // Act
         await sut.IfErrorAsync(functionMock.Object);
@@ -701,14 +671,14 @@ public class IfErrorAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfErrorAsync_SuccessfulResultTaskWithResultFunction_ReturnsOriginalResult()
+    public async Task IfErrorAsync_SuccessfulResultValueTaskWithResultFunction_ReturnsOriginalResult()
     {
         // Arrange
         var successResult = Result.Success();
-        var sut = Task.FromResult(successResult);
+        var sut = ValueTask.FromResult(successResult);
 
         // Act
-        var result = await sut.IfErrorAsync(_ => Task.FromResult(Result.Success()));
+        var result = await sut.IfErrorAsync(_ => ValueTask.FromResult(Result.Success()));
 
         // Assert
         result.ShouldNotBeNull();
@@ -717,13 +687,13 @@ public class IfErrorAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfErrorAsync_ErrorResultTaskWithResultFunction_CallsFunction()
+    public async Task IfErrorAsync_ErrorResultValueTaskWithResultFunction_CallsFunction()
     {
         // Arrange
-        var functionMock = new Mock<Func<Error, Task<Result>>>();
+        var functionMock = new Mock<Func<Error, ValueTask<Result>>>();
 
         var errorResult = GetErrorResult();
-        var sut = Task.FromResult(errorResult);
+        var sut = ValueTask.FromResult(errorResult);
 
         // Act
         await sut.IfErrorAsync(functionMock.Object);
@@ -733,16 +703,16 @@ public class IfErrorAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfErrorAsync_ErrorResultTaskWithSuccessResultFunction_ReturnsFunctionResult()
+    public async Task IfErrorAsync_ErrorResultValueTaskWithSuccessResultFunction_ReturnsFunctionResult()
     {
         // Arrange
         var asyncFuncResult = Result.Success();
 
         var errorResult = GetErrorResult();
-        var sut = Task.FromResult(errorResult);
+        var sut = ValueTask.FromResult(errorResult);
 
         // Act
-        var result = await sut.IfErrorAsync(_ => Task.FromResult(asyncFuncResult));
+        var result = await sut.IfErrorAsync(_ => ValueTask.FromResult(asyncFuncResult));
 
         // Assert
         result.ShouldNotBeNull();
@@ -750,15 +720,15 @@ public class IfErrorAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfErrorAsync_ErrorResultTaskWithErrorResultFunction_ReturnsFunctionResult()
+    public async Task IfErrorAsync_ErrorResultValueTaskWithErrorResultFunction_ReturnsFunctionResult()
     {
         // Arrange
         var asyncFuncError = GetReplacementError();
 
-        var sut = Task.FromResult(GetErrorResult());
+        var sut = ValueTask.FromResult(GetErrorResult());
 
         // Act
-        var result = await sut.IfErrorAsync(_ => Task.FromResult(Result.FromError(asyncFuncError)));
+        var result = await sut.IfErrorAsync(_ => ValueTask.FromResult(Result.FromError(asyncFuncError)));
 
         // Assert
         result.ShouldNotBeNull();
@@ -768,34 +738,19 @@ public class IfErrorAsyncExtensionsUnitTests
 
     #endregion
 
-    #region IfErrorAsync (Task<Result<T>>, Func<Error, Task>)
+    #region IfErrorAsync (ValueTask<Result<T>>, Func<Error, ValueTask>)
 
     [Fact]
-    public async Task IfErrorAsync_NoGenericResultTaskWithAction_ThrowsException()
-    {
-        // Arrange
-        const Task<Result<int>>? Sut = null;
-
-        // Act
-        var exception = await Record.ExceptionAsync(() => Sut!.IfErrorAsync(_ => Task.CompletedTask));
-
-        // Assert
-        exception.ShouldNotBeNull();
-        exception.ShouldBeOfType<ArgumentNullException>();
-        exception.Message.ShouldStartWith("Value cannot be null.");
-    }
-
-    [Fact]
-    public async Task IfErrorAsync_SuccessfulGenericResultTaskWithNoAction_ThrowsException()
+    public async Task IfErrorAsync_SuccessfulGenericResultValueTaskWithNoAction_ThrowsException()
     {
         // Arrange
         const int InitialValue = 24;
-        const Func<Error, Task>? AsyncAction = null;
+        const Func<Error, ValueTask>? AsyncAction = null;
 
-        var sut = Task.FromResult(Result.FromValue(InitialValue));
+        var sut = ValueTask.FromResult(Result.FromValue(InitialValue));
 
         // Act
-        var exception = await Record.ExceptionAsync(() => sut.IfErrorAsync(AsyncAction!));
+        var exception = await Record.ExceptionAsync(() => sut.IfErrorAsync(AsyncAction!).AsTask());
 
         // Assert
         exception.ShouldNotBeNull();
@@ -804,15 +759,15 @@ public class IfErrorAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfErrorAsync_ErrorGenericResultTaskWithNoAction_ThrowsException()
+    public async Task IfErrorAsync_ErrorGenericResultValueTaskWithNoAction_ThrowsException()
     {
         // Arrange
-        const Func<Error, Task>? AsyncAction = null;
+        const Func<Error, ValueTask>? AsyncAction = null;
 
-        var sut = Task.FromResult(GetErrorResult<int>());
+        var sut = ValueTask.FromResult(GetErrorResult<int>());
 
         // Act
-        var exception = await Record.ExceptionAsync(() => sut.IfErrorAsync(AsyncAction!));
+        var exception = await Record.ExceptionAsync(() => sut.IfErrorAsync(AsyncAction!).AsTask());
 
         // Assert
         exception.ShouldNotBeNull();
@@ -821,13 +776,13 @@ public class IfErrorAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfErrorAsync_SuccessfulGenericResultTaskWithAction_DoesNotCallAction()
+    public async Task IfErrorAsync_SuccessfulGenericResultValueTaskWithAction_DoesNotCallAction()
     {
         // Arrange
         const int InitialValue = 29;
-        var actionMock = new Mock<Func<Error, Task>>();
+        var actionMock = new Mock<Func<Error, ValueTask>>();
 
-        var sut = Task.FromResult(Result.FromValue(InitialValue));
+        var sut = ValueTask.FromResult(Result.FromValue(InitialValue));
 
         // Act
         await sut.IfErrorAsync(actionMock.Object);
@@ -837,16 +792,16 @@ public class IfErrorAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfErrorAsync_SuccessfulGenericResultTaskWithAction_ReturnsOriginalValueResult()
+    public async Task IfErrorAsync_SuccessfulGenericResultValueTaskWithAction_ReturnsOriginalValueResult()
     {
         // Arrange
         const int InitialValue = 38;
 
         var resultValue = Result.FromValue(InitialValue);
-        var sut = Task.FromResult(resultValue);
+        var sut = ValueTask.FromResult(resultValue);
 
         // Act
-        var result = await sut.IfErrorAsync(_ => Task.CompletedTask);
+        var result = await sut.IfErrorAsync(_ => ValueTask.CompletedTask);
 
         // Assert
         result.ShouldNotBeNull();
@@ -856,13 +811,13 @@ public class IfErrorAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfErrorAsync_ErrorGenericResultTaskWithAction_CallsAction()
+    public async Task IfErrorAsync_ErrorGenericResultValueTaskWithAction_CallsAction()
     {
         // Arrange
-        var actionMock = new Mock<Func<Error, Task>>();
+        var actionMock = new Mock<Func<Error, ValueTask>>();
 
         var errorResult = GetErrorResult<int>();
-        var sut = Task.FromResult(errorResult);
+        var sut = ValueTask.FromResult(errorResult);
 
         // Act
         await sut.IfErrorAsync(actionMock.Object);
@@ -872,14 +827,14 @@ public class IfErrorAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfErrorAsync_ErrorGenericResultTaskWithAction_ReturnsOriginalValueResultWithError()
+    public async Task IfErrorAsync_ErrorGenericResultValueTaskWithAction_ReturnsOriginalValueResultWithError()
     {
         // Arrange
         var errorResult = GetErrorResult<int>();
-        var sut = Task.FromResult(errorResult);
+        var sut = ValueTask.FromResult(errorResult);
 
         // Act
-        var result = await sut.IfErrorAsync(_ => Task.CompletedTask);
+        var result = await sut.IfErrorAsync(_ => ValueTask.CompletedTask);
 
         // Assert
         result.ShouldNotBeNull();
@@ -890,34 +845,19 @@ public class IfErrorAsyncExtensionsUnitTests
 
     #endregion
 
-    #region IfErrorAsync (Task<Result<T>>, Func<Error, Task<IResult>>)
+    #region IfErrorAsync (ValueTask<Result<T>>, Func<Error, ValueTask<IResult>>)
 
     [Fact]
-    public async Task IfErrorAsync_NoGenericResultTaskWithGenericResultFunction_ThrowsException()
-    {
-        // Arrange
-        const Task<Result<int>>? Sut = null;
-
-        // Act
-        var exception = await Record.ExceptionAsync(() => Sut!.IfErrorAsync(_ => Task.FromResult(Result.FromValue(1))));
-
-        // Assert
-        exception.ShouldNotBeNull();
-        exception.ShouldBeOfType<ArgumentNullException>();
-        exception.Message.ShouldStartWith("Value cannot be null.");
-    }
-
-    [Fact]
-    public async Task IfErrorAsync_SuccessfulGenericResultTaskWithNoGenericResultFunction_ThrowsException()
+    public async Task IfErrorAsync_SuccessfulGenericResultValueTaskWithNoGenericResultFunction_ThrowsException()
     {
         // Arrange
         const int InitialValue = 24;
-        const Func<Error, Task<Result<int>>>? Function = null;
+        const Func<Error, ValueTask<Result<int>>>? Function = null;
 
-        var sut = Task.FromResult(Result.FromValue(InitialValue));
+        var sut = ValueTask.FromResult(Result.FromValue(InitialValue));
 
         // Act
-        var exception = await Record.ExceptionAsync(() => sut.IfErrorAsync(Function!));
+        var exception = await Record.ExceptionAsync(() => sut.IfErrorAsync(Function!).AsTask());
 
         // Assert
         exception.ShouldNotBeNull();
@@ -926,15 +866,15 @@ public class IfErrorAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfErrorAsync_ErrorGenericResultTaskWithNoGenericResultFunction_ThrowsException()
+    public async Task IfErrorAsync_ErrorGenericResultValueTaskWithNoGenericResultFunction_ThrowsException()
     {
         // Arrange
-        const Func<Error, Task<Result<int>>>? Function = null;
+        const Func<Error, ValueTask<Result<int>>>? Function = null;
 
-        var sut = Task.FromResult(GetErrorResult<int>());
+        var sut = ValueTask.FromResult(GetErrorResult<int>());
 
         // Act
-        var exception = await Record.ExceptionAsync(() => sut.IfErrorAsync(Function!));
+        var exception = await Record.ExceptionAsync(() => sut.IfErrorAsync(Function!).AsTask());
 
         // Assert
         exception.ShouldNotBeNull();
@@ -943,13 +883,13 @@ public class IfErrorAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfErrorAsync_SuccessfulGenericResultTaskWithGenericResultFunction_DoesNotCallFunction()
+    public async Task IfErrorAsync_SuccessfulGenericResultValueTaskWithGenericResultFunction_DoesNotCallFunction()
     {
         // Arrange
         const int InitialValue = 42;
-        var functionMock = new Mock<Func<Error, Task<Result<int>>>>();
+        var functionMock = new Mock<Func<Error, ValueTask<Result<int>>>>();
 
-        var sut = Task.FromResult(Result.FromValue(InitialValue));
+        var sut = ValueTask.FromResult(Result.FromValue(InitialValue));
 
         // Act
         await sut.IfErrorAsync(functionMock.Object);
@@ -959,16 +899,16 @@ public class IfErrorAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfErrorAsync_SuccessfulGenericResultTaskWithGenericResultFunction_ReturnsOriginalValueResult()
+    public async Task IfErrorAsync_SuccessfulGenericResultValueTaskWithGenericResultFunction_ReturnsOriginalValueResult()
     {
         // Arrange
         const int InitialValue = 42;
 
         var initialResult = Result.FromValue(InitialValue);
-        var sut = Task.FromResult(initialResult);
+        var sut = ValueTask.FromResult(initialResult);
 
         // Act
-        var result = await sut.IfErrorAsync(_ => Task.FromResult(Result.FromValue(2)));
+        var result = await sut.IfErrorAsync(_ => ValueTask.FromResult(Result.FromValue(2)));
 
         // Assert
         result.ShouldNotBeNull();
@@ -977,13 +917,13 @@ public class IfErrorAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfErrorAsync_ErrorGenericResultTaskWithGenericResultFunction_CallsFunction()
+    public async Task IfErrorAsync_ErrorGenericResultValueTaskWithGenericResultFunction_CallsFunction()
     {
         // Arrange
-        var functionMock = new Mock<Func<Error, Task<Result<int>>>>();
+        var functionMock = new Mock<Func<Error, ValueTask<Result<int>>>>();
 
         var errorResult = GetErrorResult<int>();
-        var sut = Task.FromResult(errorResult);
+        var sut = ValueTask.FromResult(errorResult);
 
         // Act
         await sut.IfErrorAsync(functionMock.Object);
@@ -993,15 +933,15 @@ public class IfErrorAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfErrorAsync_ErrorGenericResultTaskWithGenericResultFunction_ReturnsFunctionValueResult()
+    public async Task IfErrorAsync_ErrorGenericResultValueTaskWithGenericResultFunction_ReturnsFunctionValueResult()
     {
         // Arrange
         var asyncFuncResult = Result.FromValue(58);
 
-        var sut = Task.FromResult(GetErrorResult<int>());
+        var sut = ValueTask.FromResult(GetErrorResult<int>());
 
         // Act
-        var result = await sut.IfErrorAsync(_ => Task.FromResult(asyncFuncResult));
+        var result = await sut.IfErrorAsync(_ => ValueTask.FromResult(asyncFuncResult));
 
         // Assert
         result.ShouldNotBeNull();
@@ -1010,15 +950,15 @@ public class IfErrorAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfErrorAsync_ErrorGenericResultTaskWithGenericResultFunction_ReturnsFunctionValueResultWithError()
+    public async Task IfErrorAsync_ErrorGenericResultValueTaskWithGenericResultFunction_ReturnsFunctionValueResultWithError()
     {
         // Arrange
         var asyncFuncError = GetReplacementError();
 
-        var sut = Task.FromResult(GetErrorResult<int>());
+        var sut = ValueTask.FromResult(GetErrorResult<int>());
 
         // Act
-        var result = await sut.IfErrorAsync(_ => Task.FromResult(Result<int>.FromError(asyncFuncError)));
+        var result = await sut.IfErrorAsync(_ => ValueTask.FromResult(Result<int>.FromError(asyncFuncError)));
 
         // Assert
         result.ShouldNotBeNull();
