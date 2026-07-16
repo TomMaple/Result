@@ -27,8 +27,8 @@ Two [Error](Error.md) instances are equal when all of their properties are equal
 
 This override is consistent with [GetHashCode()](Error_GetHashCode.md): equal [Error](Error.md) instances always produce the same hash code.
 
-> [!IMPORTANT]
-> Details that carry a [TemplatedMessage](../TemplatedMessage/TemplatedMessage.md) with parameters (i.e., added via [AddDetail(String, String, String, (String, Object)[])](Error_AddDetail.md) with a `messageId` and `namedValues`) are compared using the equality of [TemplatedMessage](../TemplatedMessage/TemplatedMessage.md), whose `Params` dictionary is compared by reference. As a result, two such details are only equal when they share the same `Params` instance.
+> [!NOTE]
+> Details that carry a [TemplatedMessage](../TemplatedMessage/TemplatedMessage.md) with parameters (i.e., added via [AddDetail(String, String, String, (String, Object)[])](Error_AddDetail.md) with a `messageId` and `namedValues`) are also compared by value: [TemplatedMessage](../TemplatedMessage/TemplatedMessage.md) compares its `Params` collection by content, so two identically-built templated details are equal.
 
 ## Examples
 ```csharp

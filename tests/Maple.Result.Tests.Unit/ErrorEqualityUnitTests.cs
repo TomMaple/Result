@@ -15,14 +15,6 @@ namespace Maple.Result.Tests.Unit;
 
 public class ErrorEqualityUnitTests
 {
-    private static Sut CreateError()
-    {
-        return Sut.Validation(
-            ErrorUri.Tag("tag:test.com,2024:test"),
-            "Test title",
-            "Test detail");
-    }
-
     #region value equality
 
     [Fact]
@@ -45,9 +37,26 @@ public class ErrorEqualityUnitTests
         var first = CreateError()
             .AddDetail("#/first", "First detail")
             .AddDetail("#/second", "Second detail");
+
         var second = CreateError()
             .AddDetail("#/first", "First detail")
             .AddDetail("#/second", "Second detail");
+
+        // Act & Assert
+        first.Equals(second).ShouldBeTrue();
+        (first == second).ShouldBeTrue();
+        first.GetHashCode().ShouldBe(second.GetHashCode());
+    }
+
+    [Fact]
+    public void Equals_TwoIdenticallyBuiltErrorsWithTemplatedDetails_AreEqual()
+    {
+        // Arrange
+        var first = CreateError()
+            .AddDetail("#/email", "The email is required.", "errors.email.required", ("minLength", 3));
+
+        var second = CreateError()
+            .AddDetail("#/email", "The email is required.", "errors.email.required", ("minLength", 3));
 
         // Act & Assert
         first.Equals(second).ShouldBeTrue();
@@ -157,6 +166,18 @@ public class ErrorEqualityUnitTests
         // Assert
         error.ErrorDetails.ShouldBeAssignableTo<IReadOnlyList<ErrorDetail>>();
         error.ErrorDetails.Count.ShouldBe(1);
+    }
+
+    #endregion
+
+    #region helper methods
+
+    private static Sut CreateError()
+    {
+        return Sut.Validation(
+            ErrorUri.Tag("tag:test.com,2024:test"),
+            "Test title",
+            "Test detail");
     }
 
     #endregion
