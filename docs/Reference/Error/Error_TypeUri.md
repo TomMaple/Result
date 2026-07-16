@@ -2,7 +2,7 @@
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Error.cs#L95" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Error.cs#L136" target="_blank">Error.cs</a>
 
 Gets or sets a *URI* that identifies the type of the problem.
 
@@ -20,6 +20,9 @@ This is a mandatory property that contains a text value of a *URI* that identifi
 
 > [!CAUTION]
 > It should not be assigned directly (i.e., via the property setter) but rather through the factory methods of the [Error](Error.md) record, which use [ErrorUri](../ErrorUri/ErrorUri.md) to validate and provide the value. For deserialization, the setter is marked as `init` to allow assignment during object initialization.
+
+> [!NOTE]
+> When set through a factory method, this property is never `null` and never empty. A default [ErrorUri](../ErrorUri/ErrorUri.md) yields `about:blank` (see [Value](../ErrorUri/ErrorUri_Value.md)), and an [ErrorUri](../ErrorUri/ErrorUri.md) carrying an empty or whitespace-only value is rejected with an [ArgumentException](https://learn.microsoft.com/dotnet/api/system.argumentexception).
 
 The value of this property should be:
 * `about:blank`,

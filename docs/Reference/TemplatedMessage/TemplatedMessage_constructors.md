@@ -2,7 +2,7 @@
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/TemplatedMessage.cs#L26" target="_blank">TemplatedMessage.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/TemplatedMessage.cs#L27" target="_blank">TemplatedMessage.cs</a>
 Initializes a new instance of the [TemplatedMessage](TemplatedMessage.md) record.
 
 ```csharp

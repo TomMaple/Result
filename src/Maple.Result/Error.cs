@@ -309,8 +309,7 @@ public record Error
     ///     It can be mapped to the 400 HTTP status code (Bad Request) response.
     /// </remarks>
     /// <exception cref="ArgumentException">
-    ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
-    ///     that is not a valid HTTP/HTTPS <i>URI</i> or a valid <i>URI Tag</i>.
+    ///     If the <paramref name="typeUri" /> resolves to an empty or whitespace-only value.
     /// </exception>
     public static Error Validation(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
@@ -348,8 +347,7 @@ public record Error
     ///     It can be mapped to the 400 HTTP status code (Bad Request) response.
     /// </remarks>
     /// <exception cref="ArgumentException">
-    ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
-    ///     that is not a valid HTTP/HTTPS <i>URI</i> or a valid <i>URI Tag</i>.
+    ///     If the <paramref name="typeUri" /> resolves to an empty or whitespace-only value.
     /// </exception>
     public static Error Validation(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
@@ -388,8 +386,7 @@ public record Error
     ///     It can be mapped to the 401 HTTP status code (Unauthorized) response.
     /// </remarks>
     /// <exception cref="ArgumentException">
-    ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
-    ///     that is not a valid HTTP/HTTP <i>URI</i> or a valid <i>URI Tag</i>.
+    ///     If the <paramref name="typeUri" /> resolves to an empty or whitespace-only value.
     /// </exception>
     public static Error Unauthenticated(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
@@ -427,8 +424,7 @@ public record Error
     ///     It can be mapped to the 401 HTTP status code (Unauthorized) response.
     /// </remarks>
     /// <exception cref="ArgumentException">
-    ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
-    ///     that is not a valid HTTP/HTTPS <i>URI</i> or a valid <i>URI Tag</i>.
+    ///     If the <paramref name="typeUri" /> resolves to an empty or whitespace-only value.
     /// </exception>
     public static Error Unauthenticated(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
@@ -466,8 +462,7 @@ public record Error
     ///     It can be mapped to the 403 HTTP status code (Forbidden) response.
     /// </remarks>
     /// <exception cref="ArgumentException">
-    ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
-    ///     that is not a valid HTTP/HTTP <i>URI</i> or a valid <i>URI Tag</i>.
+    ///     If the <paramref name="typeUri" /> resolves to an empty or whitespace-only value.
     /// </exception>
     public static Error Unauthorized(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
@@ -504,8 +499,7 @@ public record Error
     ///     It can be mapped to the 403 HTTP status code (Forbidden) response.
     /// </remarks>
     /// <exception cref="ArgumentException">
-    ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
-    ///     that is not a valid HTTP/HTTPS <i>URI</i> or a valid <i>URI Tag</i>.
+    ///     If the <paramref name="typeUri" /> resolves to an empty or whitespace-only value.
     /// </exception>
     public static Error Unauthorized(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
@@ -543,8 +537,7 @@ public record Error
     ///     It can be mapped to the 404 HTTP status code (Not Found) response.
     /// </remarks>
     /// <exception cref="ArgumentException">
-    ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
-    ///     that is not a valid HTTP/HTTP <i>URI</i> or a valid <i>URI Tag</i>.
+    ///     If the <paramref name="typeUri" /> resolves to an empty or whitespace-only value.
     /// </exception>
     public static Error NotFound(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
@@ -582,8 +575,7 @@ public record Error
     ///     It can be mapped to the 404 HTTP status code (Not Found) response.
     /// </remarks>
     /// <exception cref="ArgumentException">
-    ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
-    ///     that is not a valid HTTP/HTTPS <i>URI</i> or a valid <i>URI Tag</i>.
+    ///     If the <paramref name="typeUri" /> resolves to an empty or whitespace-only value.
     /// </exception>
     public static Error NotFound(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
@@ -621,8 +613,7 @@ public record Error
     ///     It can be mapped to the 408 HTTP status code (Request Timeout) response.
     /// </remarks>
     /// <exception cref="ArgumentException">
-    ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
-    ///     that is not a valid HTTP/HTTP <i>URI</i> or a valid <i>URI Tag</i>.
+    ///     If the <paramref name="typeUri" /> resolves to an empty or whitespace-only value.
     /// </exception>
     public static Error Timeout(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
@@ -660,8 +651,7 @@ public record Error
     ///     It can be mapped to the 408 HTTP status code (Request Timeout) response.
     /// </remarks>
     /// <exception cref="ArgumentException">
-    ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
-    ///     that is not a valid HTTP/HTTPS <i>URI</i> or a valid <i>URI Tag</i>.
+    ///     If the <paramref name="typeUri" /> resolves to an empty or whitespace-only value.
     /// </exception>
     public static Error Timeout(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
@@ -699,8 +689,7 @@ public record Error
     ///     It can be mapped to the 409 HTTP status code (Conflict) response.
     /// </remarks>
     /// <exception cref="ArgumentException">
-    ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
-    ///     that is not a valid HTTP/HTTP <i>URI</i> or a valid <i>URI Tag</i>.
+    ///     If the <paramref name="typeUri" /> resolves to an empty or whitespace-only value.
     /// </exception>
     public static Error Conflict(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
@@ -738,8 +727,7 @@ public record Error
     ///     It can be mapped to the 409 HTTP status code (Conflict) response.
     /// </remarks>
     /// <exception cref="ArgumentException">
-    ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
-    ///     that is not a valid HTTP/HTTPS <i>URI</i> or a valid <i>URI Tag</i>.
+    ///     If the <paramref name="typeUri" /> resolves to an empty or whitespace-only value.
     /// </exception>
     public static Error Conflict(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
@@ -777,8 +765,7 @@ public record Error
     ///     It can be mapped to the 422 HTTP status code (Unprocessable Content) response.
     /// </remarks>
     /// <exception cref="ArgumentException">
-    ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
-    ///     that is not a valid HTTP/HTTP <i>URI</i> or a valid <i>URI Tag</i>.
+    ///     If the <paramref name="typeUri" /> resolves to an empty or whitespace-only value.
     /// </exception>
     public static Error Failure(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
@@ -816,8 +803,7 @@ public record Error
     ///     It can be mapped to the 422 HTTP status code (Unprocessable Content) response.
     /// </remarks>
     /// <exception cref="ArgumentException">
-    ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
-    ///     that is not a valid HTTP/HTTPS <i>URI</i> or a valid <i>URI Tag</i>.
+    ///     If the <paramref name="typeUri" /> resolves to an empty or whitespace-only value.
     /// </exception>
     public static Error Failure(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
@@ -855,8 +841,7 @@ public record Error
     ///     It can be mapped to the 500 HTTP status code (Internal Server Error) response.
     /// </remarks>
     /// <exception cref="ArgumentException">
-    ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
-    ///     that is not a valid HTTP/HTTP <i>URI</i> or a valid <i>URI Tag</i>.
+    ///     If the <paramref name="typeUri" /> resolves to an empty or whitespace-only value.
     /// </exception>
     public static Error Critical(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
@@ -894,8 +879,7 @@ public record Error
     ///     It can be mapped to the 500 HTTP status code (Internal Server Error) response.
     /// </remarks>
     /// <exception cref="ArgumentException">
-    ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
-    ///     that is not a valid HTTP/HTTPS <i>URI</i> or a valid <i>URI Tag</i>.
+    ///     If the <paramref name="typeUri" /> resolves to an empty or whitespace-only value.
     /// </exception>
     public static Error Critical(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
@@ -933,8 +917,7 @@ public record Error
     ///     It can be mapped to the 501 HTTP status code (Not Implemented) response.
     /// </remarks>
     /// <exception cref="ArgumentException">
-    ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
-    ///     that is not a valid HTTP/HTTP <i>URI</i> or a valid <i>URI Tag</i>.
+    ///     If the <paramref name="typeUri" /> resolves to an empty or whitespace-only value.
     /// </exception>
     public static Error NotImplemented(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
@@ -972,8 +955,7 @@ public record Error
     ///     It can be mapped to the 501 HTTP status code (Not Implemented) response.
     /// </remarks>
     /// <exception cref="ArgumentException">
-    ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
-    ///     that is not a valid HTTP/HTTPS <i>URI</i> or a valid <i>URI Tag</i>.
+    ///     If the <paramref name="typeUri" /> resolves to an empty or whitespace-only value.
     /// </exception>
     public static Error NotImplemented(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
@@ -1011,8 +993,7 @@ public record Error
     ///     It can be mapped to the 503 HTTP status code (Service Unavailable) response.
     /// </remarks>
     /// <exception cref="ArgumentException">
-    ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
-    ///     that is not a valid HTTP/HTTP <i>URI</i> or a valid <i>URI Tag</i>.
+    ///     If the <paramref name="typeUri" /> resolves to an empty or whitespace-only value.
     /// </exception>
     public static Error Unavailable(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
@@ -1050,8 +1031,7 @@ public record Error
     ///     It can be mapped to the 503 HTTP status code (Service Unavailable) response.
     /// </remarks>
     /// <exception cref="ArgumentException">
-    ///     If the <paramref name="typeUri" /> or <paramref name="instanceUri" /> contains a value
-    ///     that is not a valid HTTP/HTTPS <i>URI</i> or a valid <i>URI Tag</i>.
+    ///     If the <paramref name="typeUri" /> resolves to an empty or whitespace-only value.
     /// </exception>
     public static Error Unavailable(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
