@@ -65,6 +65,52 @@ public class ErrorEqualityUnitTests
     }
 
     [Fact]
+    public void Equals_ErrorsWithTemplatedDetailParamsInDifferentOrder_AreEqual()
+    {
+        // Arrange
+        var first = CreateError()
+            .AddDetail("#/email", "The email is invalid.", "errors.email.length", ("minLength", 3), ("maxLength", 10));
+
+        var second = CreateError()
+            .AddDetail("#/email", "The email is invalid.", "errors.email.length", ("maxLength", 10), ("minLength", 3));
+
+        // Act & Assert
+        first.Equals(second).ShouldBeTrue();
+        (first == second).ShouldBeTrue();
+        first.GetHashCode().ShouldBe(second.GetHashCode());
+    }
+
+    [Fact]
+    public void Equals_ErrorsWithTemplatedDetailDifferentParamValues_AreNotEqual()
+    {
+        // Arrange
+        var first = CreateError()
+            .AddDetail("#/email", "The email is required.", "errors.email.required", ("minLength", 3));
+
+        var second = CreateError()
+            .AddDetail("#/email", "The email is required.", "errors.email.required", ("minLength", 5));
+
+        // Act & Assert
+        first.Equals(second).ShouldBeFalse();
+        (first == second).ShouldBeFalse();
+    }
+
+    [Fact]
+    public void Equals_ErrorsWithTemplatedDetailDifferentParamKeys_AreNotEqual()
+    {
+        // Arrange
+        var first = CreateError()
+            .AddDetail("#/email", "The email is required.", "errors.email.required", ("minLength", 3));
+
+        var second = CreateError()
+            .AddDetail("#/email", "The email is required.", "errors.email.required", ("maxLength", 3));
+
+        // Act & Assert
+        first.Equals(second).ShouldBeFalse();
+        (first == second).ShouldBeFalse();
+    }
+
+    [Fact]
     public void Equals_ErrorsWithDifferentDetailContent_AreNotEqual()
     {
         // Arrange
