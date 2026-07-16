@@ -8,8 +8,8 @@
     <RootNamespace>Maple.Result</RootNamespace>
 
     <PackageId>Maple.Result</PackageId>
-    <Title>An abstraction which contains the value or the error of the operation. It can be mapped to the HTTP reponse if needed.</Title>
-    <Description>An abstraction which contains the value or the error of the operation. It can be mapped to the HTTP reponse if needed.</Description>
+    <Title>Maple.Result — Result pattern with RFC 9457 errors</Title>
+    <Description>An abstraction which contains the value or the error of the operation. It can be mapped to the HTTP response if needed.</Description>
     <Authors>Tom Maple</Authors>
     <PublisherName>Tom Maple</PublisherName>
     <PackageIcon>icon.png</PackageIcon>
