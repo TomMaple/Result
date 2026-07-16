@@ -31,7 +31,7 @@ var error = Error.NotFound(
 This is a mandatory property.
 
 > [!CAUTION]
-> This value should not be assigned via constructor but through the factory methods of the [Error](../Error/Error.md) record (such as [NotFound(ErrorUri, String, String, ErrorUri, String, (String, Object)[])](Error_NotFound.md#notfounderroruri-string-string-erroruri-string-string-object) or [Failure(ErrorUri, String, String, ErrorUri, String, IEnumerable<KeyValuePair<String, Object>>)](Error_Failure.md#failureerroruri-string-string-erroruri-string-ienumerablekeyvaluepairstring-object)) or an object instance method like [AddDetail(String, String, String, (String, Object)[])](Error_AddDetail.md) which use this record internally.
+> This value should not be assigned via constructor but through the factory methods of the [Error](../Error/Error.md) record (such as [NotFound(ErrorUri, String, String, ErrorUri, String, (String, Object)[])](../Error/Error_NotFound.md#notfounderroruri-string-string-erroruri-string-string-object) or [Failure(ErrorUri, String, String, ErrorUri, String, IEnumerable<KeyValuePair<String, Object>>)](../Error/Error_Failure.md#failureerroruri-string-string-erroruri-string-ienumerablekeyvaluepairstring-object)) or an object instance method like [AddDetail(String, String, String, (String, Object)[])](../Error/Error_AddDetail.md) which use this record internally.
 > 
 > For deserialization, the setter is marked as `init` to allow assignment during object initialization.
 

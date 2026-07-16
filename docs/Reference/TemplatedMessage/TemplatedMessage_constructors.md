@@ -13,7 +13,7 @@ public record TemplatedMessage(string TemplateId, IReadOnlyDictionary<string, ob
 > [!NOTE]
 > This constructor is required for deserialization.
 > 
-> Instead of constructor, rather use one of the static methods of an [Error](../Error/Error.md) record (such as [NotFound(ErrorUri, String, String, ErrorUri, String, (String, Object)[])](Error_NotFound.md#notfounderroruri-string-string-erroruri-string-string-object) or [Failure(ErrorUri, String, String, ErrorUri, String, IEnumerable<KeyValuePair<String, Object>>)](Error_Failure.md#failureerroruri-string-string-erroruri-string-ienumerablekeyvaluepairstring-object)) or an object instance method like [AddDetail(String, String, String, (String, Object)[])](Error_AddDetail.md) to create an instance of the [TemplatedMessage](TemplatedMessage.md) record with propriate values.
+> Instead of constructor, rather use one of the static methods of an [Error](../Error/Error.md) record (such as [NotFound(ErrorUri, String, String, ErrorUri, String, (String, Object)[])](../Error/Error_NotFound.md#notfounderroruri-string-string-erroruri-string-string-object) or [Failure(ErrorUri, String, String, ErrorUri, String, IEnumerable<KeyValuePair<String, Object>>)](../Error/Error_Failure.md#failureerroruri-string-string-erroruri-string-ienumerablekeyvaluepairstring-object)) or an object instance method like [AddDetail(String, String, String, (String, Object)[])](../Error/Error_AddDetail.md) to create an instance of the [TemplatedMessage](TemplatedMessage.md) record with propriate values.
 
 ## See also
 * [Error](../Error/Error.md)

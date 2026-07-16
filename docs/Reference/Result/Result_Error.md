@@ -17,7 +17,7 @@ The error, if the result represents a failure; otherwise, `null`.
 
 ## Remarks
 > [!CAUTION]
-> Use the [IsSuccess()](IResult_IsSuccess.md) method to check whether the result represents a success or a failure before accessing this property.
+> Use the [IsSuccess()](Result_IsSuccess.md) method to check whether the result represents a success or a failure before accessing this property.
 
 ## See Also
 * [Error](../Error/Error.md)
