@@ -26,7 +26,9 @@
     <File Path="docs/Reference/Error/Error_Detail.md" />
     <File Path="docs/Reference/Error/Error_DetailTemplated.md" />
     <File Path="docs/Reference/Error/Error_ErrorDetails.md" />
+    <File Path="docs/Reference/Error/Error_Equals.md" />
     <File Path="docs/Reference/Error/Error_Failure.md" />
+    <File Path="docs/Reference/Error/Error_GetHashCode.md" />
     <File Path="docs/Reference/Error/Error_InstanceUri.md" />
     <File Path="docs/Reference/Error/Error_NotFound.md" />
     <File Path="docs/Reference/Error/Error_NotImplemented.md" />

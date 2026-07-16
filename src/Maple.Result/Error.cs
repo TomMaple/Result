@@ -67,6 +67,27 @@ public record Error
             _errorDetails.AddRange(errorDetails);
     }
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="Error" /> record by copying the state of an existing instance.
+    /// </summary>
+    /// <remarks>
+    ///     This copy constructor is used by <c>with</c> expressions. It deep-copies the mutable
+    ///     <see cref="ErrorDetails" /> collection so that a copy and its original do not share the same underlying
+    ///     list; otherwise mutating one (e.g., via <see cref="AddDetail(string?, string, string?, ValueTuple{string, object}[])" />)
+    ///     would also mutate the other.
+    /// </remarks>
+    /// <param name="original">The <see cref="Error" /> instance to copy.</param>
+    protected Error(Error original)
+    {
+        Category = original.Category;
+        TypeUri = original.TypeUri;
+        Title = original.Title;
+        Detail = original.Detail;
+        DetailTemplated = original.DetailTemplated;
+        InstanceUri = original.InstanceUri;
+        _errorDetails = [.. original._errorDetails];
+    }
+
     #endregion
 
     /// <summary>
@@ -208,6 +229,55 @@ public record Error
         _errorDetails.Add(errorDetail);
         return this;
     }
+
+    #region equality
+
+    /// <summary>
+    ///     Determines whether the specified <see cref="Error" /> is equal to the current <see cref="Error" />,
+    ///     comparing the <see cref="ErrorDetails" /> collection by its content rather than by reference.
+    /// </summary>
+    /// <param name="other">The <see cref="Error" /> to compare with the current instance.</param>
+    /// <returns>
+    ///     <see langword="true" /> if the specified <see cref="Error" /> is equal to the current one;
+    ///     otherwise, <see langword="false" />.
+    /// </returns>
+    public virtual bool Equals(Error? other)
+    {
+        return other is not null
+               && EqualityContract == other.EqualityContract
+               && Category == other.Category
+               && TypeUri == other.TypeUri
+               && Title == other.Title
+               && Detail == other.Detail
+               && DetailTemplated == other.DetailTemplated
+               && InstanceUri == other.InstanceUri
+               && _errorDetails.SequenceEqual(other._errorDetails);
+    }
+
+    /// <summary>
+    ///     Returns a hash code that is consistent with <see cref="Equals(Error)" />, incorporating the content
+    ///     of the <see cref="ErrorDetails" /> collection.
+    /// </summary>
+    /// <returns>A hash code for the current <see cref="Error" />.</returns>
+    public override int GetHashCode()
+    {
+        var hashCode = new HashCode();
+
+        hashCode.Add(EqualityContract);
+        hashCode.Add(Category);
+        hashCode.Add(TypeUri);
+        hashCode.Add(Title);
+        hashCode.Add(Detail);
+        hashCode.Add(DetailTemplated);
+        hashCode.Add(InstanceUri);
+
+        foreach (var errorDetail in _errorDetails)
+            hashCode.Add(errorDetail);
+
+        return hashCode.ToHashCode();
+    }
+
+    #endregion
 
     #region factory methods
 

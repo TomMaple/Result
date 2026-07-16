@@ -34,6 +34,12 @@ public Result DeleteUser(int userId)
 ## Remarks
 It follows the [RFC 9457](https://datatracker.ietf.org/doc/html/rfc9457) standard for error responses.
 
+### Equality
+[Error](Error.md) provides value-based equality: two instances are equal when all of their properties are equal, including the [ErrorDetails](Error_ErrorDetails.md) collection, which is compared **by content** (order-sensitive) rather than by reference. See [Equals(Error)](Error_Equals.md) and [GetHashCode()](Error_GetHashCode.md).
+
+### Copying with `with`
+Copying an [Error](Error.md) through a `with` expression produces an **independent** copy: the [ErrorDetails](Error_ErrorDetails.md) collection is deep-copied, so adding a detail (via [AddDetail(String, String, String, (String, Object)[])](Error_AddDetail.md)) to the copy does not affect the original, and vice versa.
+
 ## Constructors
 | Name | Description |
 | ---- | ----------- |
@@ -54,6 +60,8 @@ It follows the [RFC 9457](https://datatracker.ietf.org/doc/html/rfc9457) standar
 | Name | Description |
 | ---- | ----------- |
 | [AddDetail(String, String, String, (String, Object)[])](Error_AddDetail.md) | Adds a new set of error details to the current error and returns the current instance. |
+| [Equals(Error)](Error_Equals.md) | Determines whether the specified error is equal to the current one, comparing the error details by content. |
+| [GetHashCode()](Error_GetHashCode.md) | Returns a hash code consistent with [Equals(Error)](Error_Equals.md), incorporating the error details content. |
 | [Conflict(ErrorUri, String, String, ErrorUri, String, (String, Object)[])](Error_Conflict.md#conflicterroruri-string-string-erroruri-string-string-object) | Creates a new conflict error with specified parameters. |
 | [Conflict(ErrorUri, String, String, ErrorUri, String, IEnumerable&lt;KeyValuePair&lt;String, Object&gt;&gt;)](Error_Conflict.md#conflicterroruri-string-string-erroruri-string-ienumerablekeyvaluepairstring-object) | Creates a new conflict error with specified parameters. |
 | [Critical(ErrorUri, String, String, ErrorUri, String, (String, Object)[])](Error_Critical.md#criticalerroruri-string-string-erroruri-string-string-object) | Creates a new critical error with specified parameters. |
