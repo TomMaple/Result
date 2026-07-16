@@ -9,6 +9,7 @@
  */
 
 using Maple.Result.Tests.Unit.Helpers;
+using System;
 using System.Collections.Generic;
 using Sut = Maple.Result.Error;
 
@@ -124,6 +125,58 @@ public class ErrorUnitTests
         sut.InstanceUri.ShouldBe(ExpectedInstance);
         sut.Title.ShouldBe(ExpectedTitle);
         sut.TypeUri.ShouldBe(ExpectedTypeUri);
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData(" ")]
+    [InlineData("   ")]
+    public void Ctor_BlankTypeUri_ThrowsException(string typeUri)
+    {
+        // Act
+        var exception = Record.Exception(() => new Sut(ErrorCategory.Validation, typeUri, "Test title"));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentException>();
+        exception.Message.ShouldContain("The type URI is required.");
+    }
+
+    [Fact]
+    public void Ctor_NullTypeUri_ThrowsException()
+    {
+        // Act
+        var exception = Record.Exception(() => new Sut(ErrorCategory.Validation, null!, "Test title"));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentException>();
+        exception.Message.ShouldContain("The type URI is required.");
+    }
+
+    [Fact]
+    public void Ctor_DefaultErrorUri_ReturnsErrorWithAboutBlankTypeUri()
+    {
+        // Arrange
+        const string ExpectedTypeUri = "about:blank";
+
+        // Act
+        var sut = Sut.Validation(default, "Test title");
+
+        // Assert
+        sut.TypeUri.ShouldBe(ExpectedTypeUri);
+    }
+
+    [Fact]
+    public void Ctor_BlankErrorUri_ThrowsException()
+    {
+        // Act
+        var exception = Record.Exception(() => Sut.Validation(new ErrorUri("   "), "Test title"));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentException>();
+        exception.Message.ShouldContain("The type URI is required.");
     }
 
     #endregion

@@ -55,6 +55,13 @@ public record Error
         TemplatedMessage? detailTemplated = null, string? instanceUri = null,
         IReadOnlyList<ErrorDetail>? errorDetails = null)
     {
+        if (string.IsNullOrWhiteSpace(typeUri))
+        {
+            throw new ArgumentException(
+                "The type URI is required. Use ErrorUri.None(), ErrorUri.Locator() or ErrorUri.Tag() to create it.",
+                nameof(typeUri));
+        }
+
         Category = category;
         TypeUri = typeUri;
         Title = title;
