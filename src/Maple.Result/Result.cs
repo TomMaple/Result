@@ -69,7 +69,8 @@ public sealed record Result : IResult
 
     internal Result(Error error)
     {
-        Error = error;
+        Error = error
+                ?? throw new ArgumentNullException(nameof(error), "Error cannot be null!");
     }
 
     #endregion

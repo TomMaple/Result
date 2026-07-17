@@ -206,6 +206,31 @@ public class ResultUnitTests
     #region Result, FromError()
 
     [Fact]
+    public void FromError_NullError_ThrowsException()
+    {
+        // Act
+        var exception = Record.Exception(() => Sut.FromError(null!));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentNullException>();
+    }
+
+    [Fact]
+    public void ImplicitOperator_NullError_ThrowsException()
+    {
+        // Act
+        var exception = Record.Exception(() =>
+        {
+            Sut _ = (Error)null!;
+        });
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentNullException>();
+    }
+
+    [Fact]
     public void FromError_Error_ReturnsErrorResult()
     {
         // Arrange
@@ -857,6 +882,31 @@ public class ResultUnitTests
     #endregion
 
     #region Result, FromError()
+
+    [Fact]
+    public void FromError_ValueNullError_ThrowsException()
+    {
+        // Act
+        var exception = Record.Exception(() => Result<TestClass>.FromError(null!));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentNullException>();
+    }
+
+    [Fact]
+    public void ImplicitOperator_ValueNullError_ThrowsException()
+    {
+        // Act
+        var exception = Record.Exception(() =>
+        {
+            Result<TestClass> _ = (Error)null!;
+        });
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentNullException>();
+    }
 
     [Fact]
     public void FromError_ValueWithError_ReturnsErrorResult()
