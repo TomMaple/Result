@@ -74,15 +74,15 @@ public static class LinqTaskAsyncExtensions
         ArgumentNullException.ThrowIfNull(collectionSelector);
         ArgumentNullException.ThrowIfNull(resultSelector);
 
-        var resultValue = await result;
+        var resultValue = await result.ConfigureAwait(false);
 
         if (resultValue is null)
             throw new InvalidOperationException("The asynchronous operation represented by ‘result’ returned null.");
 
         return await resultValue.IfSuccessAsync(async Task<Result<TNext>> (x) =>
         {
-            var collectionResult = await collectionSelector(x);
+            var collectionResult = await collectionSelector(x).ConfigureAwait(false);
             return collectionResult.IfSuccess(y => resultSelector(x, y));
-        });
+        }).ConfigureAwait(false);
     }
 }
