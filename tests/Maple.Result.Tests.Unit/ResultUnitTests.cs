@@ -1192,6 +1192,218 @@ public class ResultUnitTests
 
     #endregion
 
+    #region Result<T>, value type initialization
+
+    [Fact]
+    public void Ctor_ValueTypeErrorWithoutValue_ReturnsErrorResult()
+    {
+        // Arrange
+        var error = Error.NotFound(ErrorUri.Tag("tag:test.com,2024:Test"), "Test title");
+
+        // Act
+        var result = new Result<int> { Error = error };
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.IsSuccess().ShouldBeFalse();
+        result.Error.ShouldBe(error);
+    }
+
+    [Fact]
+    public void Ctor_StructValueTypeErrorWithoutValue_ReturnsErrorResult()
+    {
+        // Arrange
+        var error = Error.NotFound(ErrorUri.Tag("tag:test.com,2024:Test"), "Test title");
+
+        // Act
+        var result = new Result<Guid> { Error = error };
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.IsSuccess().ShouldBeFalse();
+        result.Error.ShouldBe(error);
+    }
+
+    [Fact]
+    public void Ctor_ValueTypeValueAndError_ThrowsException()
+    {
+        // Arrange
+        var error = Error.NotFound(ErrorUri.Tag("tag:test.com,2024:Test"), "Test title");
+
+        // Act
+        var exception = Record.Exception(() => new Result<int> { Value = 43, Error = error });
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<InvalidOperationException>();
+        exception.Message.ShouldBe("Cannot set both Value and Error of the Result!");
+    }
+
+    [Fact]
+    public void Ctor_ValueTypeErrorAndValue_ThrowsException()
+    {
+        // Arrange
+        var error = Error.NotFound(ErrorUri.Tag("tag:test.com,2024:Test"), "Test title");
+
+        // Act
+        var exception = Record.Exception(() => new Result<int>(error) { Value = 43 });
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<InvalidOperationException>();
+        exception.Message.ShouldBe("Cannot set both Value and Error of the Result!");
+    }
+
+    #endregion
+
+    #region Result<T>, value type round-trip
+
+    [Fact]
+    public void RoundTrip_ErrorWithValueTypeAndMicrosoftSerializer_ReturnsErrorResult()
+    {
+        // Arrange
+        const string ExpectedTitle = "Test title";
+        const string ExpectedTypeUri = "tag:test.com,2024:Test";
+
+        var sut = new Result<int>(Error.NotFound(ErrorUri.Tag(ExpectedTypeUri), ExpectedTitle));
+        var json = SerializationHelper.SerializeWithMicrosoft(sut);
+
+        // Act
+        var result = SerializationHelper.DeserializeWithMicrosoft<Result<int>>(json);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.IsSuccess().ShouldBeFalse();
+        result.Error.ShouldNotBeNull();
+        result.Error.Title.ShouldBe(ExpectedTitle);
+        result.Error.TypeUri.ShouldBe(ExpectedTypeUri);
+    }
+
+    [Fact]
+    public void RoundTrip_ErrorWithValueTypeAndNewtonsoftSerializer_ReturnsErrorResult()
+    {
+        // Arrange
+        const string ExpectedTitle = "Test title";
+        const string ExpectedTypeUri = "tag:test.com,2024:Test";
+
+        var sut = new Result<int>(Error.NotFound(ErrorUri.Tag(ExpectedTypeUri), ExpectedTitle));
+        var json = SerializationHelper.SerializeWithNewtonsoft(sut);
+
+        // Act
+        var result = SerializationHelper.DeserializeWithNewtonsoft<Result<int>>(json);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.IsSuccess().ShouldBeFalse();
+        result.Error.ShouldNotBeNull();
+        result.Error.Title.ShouldBe(ExpectedTitle);
+        result.Error.TypeUri.ShouldBe(ExpectedTypeUri);
+    }
+
+    [Fact]
+    public void RoundTrip_ErrorWithStructValueTypeAndMicrosoftSerializer_ReturnsErrorResult()
+    {
+        // Arrange
+        const string ExpectedTitle = "Test title";
+        const string ExpectedTypeUri = "tag:test.com,2024:Test";
+
+        var sut = new Result<Guid>(Error.NotFound(ErrorUri.Tag(ExpectedTypeUri), ExpectedTitle));
+        var json = SerializationHelper.SerializeWithMicrosoft(sut);
+
+        // Act
+        var result = SerializationHelper.DeserializeWithMicrosoft<Result<Guid>>(json);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.IsSuccess().ShouldBeFalse();
+        result.Error.ShouldNotBeNull();
+        result.Error.Title.ShouldBe(ExpectedTitle);
+    }
+
+    [Fact]
+    public void RoundTrip_ErrorWithStructValueTypeAndNewtonsoftSerializer_ReturnsErrorResult()
+    {
+        // Arrange
+        const string ExpectedTitle = "Test title";
+        const string ExpectedTypeUri = "tag:test.com,2024:Test";
+
+        var sut = new Result<Guid>(Error.NotFound(ErrorUri.Tag(ExpectedTypeUri), ExpectedTitle));
+        var json = SerializationHelper.SerializeWithNewtonsoft(sut);
+
+        // Act
+        var result = SerializationHelper.DeserializeWithNewtonsoft<Result<Guid>>(json);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.IsSuccess().ShouldBeFalse();
+        result.Error.ShouldNotBeNull();
+        result.Error.Title.ShouldBe(ExpectedTitle);
+    }
+
+    [Fact]
+    public void RoundTrip_SuccessWithDefaultValueTypeAndMicrosoftSerializer_ReturnsSuccessResult()
+    {
+        // Arrange
+        const int ExpectedValue = 0;
+
+        var sut = Result.FromValue(0);
+        var json = SerializationHelper.SerializeWithMicrosoft(sut);
+
+        // Act
+        var result = SerializationHelper.DeserializeWithMicrosoft<Result<int>>(json);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.IsSuccess().ShouldBeTrue();
+        result.Value.ShouldBe(ExpectedValue);
+    }
+
+    [Fact]
+    public void RoundTrip_SuccessWithDefaultValueTypeAndNewtonsoftSerializer_ReturnsSuccessResult()
+    {
+        // Arrange
+        const int ExpectedValue = 0;
+
+        var sut = Result.FromValue(0);
+        var json = SerializationHelper.SerializeWithNewtonsoft(sut);
+
+        // Act
+        var result = SerializationHelper.DeserializeWithNewtonsoft<Result<int>>(json);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.IsSuccess().ShouldBeTrue();
+        result.Value.ShouldBe(ExpectedValue);
+    }
+
+    [Fact]
+    public void Serialize_ErrorWithValueTypeAndMicrosoftSerializer_DoesNotWritePhantomValue()
+    {
+        // Arrange
+        var sut = new Result<int>(Error.NotFound(ErrorUri.Tag("tag:test.com,2024:Test"), "Test title"));
+
+        // Act
+        var result = SerializationHelper.SerializeWithMicrosoft(sut);
+
+        // Assert
+        result.ShouldNotContain("\"Value\":0");
+    }
+
+    [Fact]
+    public void Serialize_ErrorWithValueTypeAndNewtonsoftSerializer_DoesNotWritePhantomValue()
+    {
+        // Arrange
+        var sut = new Result<int>(Error.NotFound(ErrorUri.Tag("tag:test.com,2024:Test"), "Test title"));
+
+        // Act
+        var result = SerializationHelper.SerializeWithNewtonsoft(sut);
+
+        // Assert
+        result.ShouldNotContain("\"Value\":0");
+    }
+
+    #endregion
+
     #region helper classes
 
     private class TestClass
