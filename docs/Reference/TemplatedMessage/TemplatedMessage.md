@@ -7,7 +7,7 @@ Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/T
 Provides a set of values to generate a message based on the template for the purpose of [ErrorDetail](../ErrorDetail/ErrorDetail.md) type used in the [Error](../Error/Error.md).
 
 ```csharp
-public record TemplatedMessage
+public sealed record TemplatedMessage
 ```
 
 Inheritance [Object](https://learn.microsoft.com/dotnet/api/system.object) → [ValueType](https://learn.microsoft.com/dotnet/api/system.valuetype) → [Record](https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/record) → ErrorDetail

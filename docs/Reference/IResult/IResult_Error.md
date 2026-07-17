@@ -2,7 +2,7 @@
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Result.cs#L30" target="_blank">Result.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Result.cs#L33" target="_blank">Result.cs</a>
 
 Gets the [Error](../Error/Error.md) that caused the operation to fail.
 

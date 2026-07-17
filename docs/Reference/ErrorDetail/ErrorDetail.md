@@ -7,7 +7,7 @@ Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/E
 Represents an individual error occurrence that contains a problem detail in a [Error](../Error/Error.md) record with optional properties for localization and property pointer.
 
 ```csharp
-public record ErrorDetail
+public sealed record ErrorDetail
 ```
 
 Inheritance [Object](https://learn.microsoft.com/dotnet/api/system.object) → [ValueType](https://learn.microsoft.com/dotnet/api/system.valuetype) → [Record](https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/record) → ErrorDetail

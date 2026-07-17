@@ -2,7 +2,7 @@
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Result.cs#L206" target="_blank">Result.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Result.cs#L210" target="_blank">Result.cs</a>
 
 Gets or sets the value associated with a successful operation.
 
@@ -13,11 +13,12 @@ public T? Value { get; init; }
 ### Property Value
 T
 
-The value if the result represents a success; otherwise, `null`.
+The value if the result represents a success; otherwise, the default value of `T`—`null` for a reference type, or `default(T)` for a value type (for example, `0` for a `Result<int>`). Because a failed `Result<int>` reports `0` rather than `null`, use [IsSuccess()](ResultT_IsSuccess.md) to tell success from failure rather than checking this property against `null`.
 
 ## Remarks
 > [!CAUTION]
-> Use the [IsSuccess()](ResultT_IsSuccess.md) method to check whether the result represents a success or a failure before accessing this property.
+> Always call the [IsSuccess()](ResultT_IsSuccess.md) method and confirm it returns `true` before reading the [Value](ResultT_Value.md) property. On a failed result, [Value](ResultT_Value.md) holds the default value of `T`, which for a value type is not `null` (for example, `0` for a `Result<int>`), so a `null` check alone cannot tell success from failure.
+
 
 > [!NOTE]
 > The setter is `init`-only and intended for deserialization. A `null` assignment is **ignored** rather than throwing, so that deserializing a failed result (where the value is absent) leaves the value unset instead of overwriting an already-populated member. Assigning a non-null value while an [Error](ResultT_Error.md) is already set throws an [InvalidOperationException](https://learn.microsoft.com/dotnet/api/system.invalidoperationexception), because a result can never hold both a value and an error.

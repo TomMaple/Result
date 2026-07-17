@@ -7,7 +7,7 @@ Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/E
 Initializes a new instance of the [ErrorDetail](ErrorDetail.md) record.
 
 ```csharp
-public record ErrorDetail(string? PropertyPointer, string Detail, TemplatedMessage? DetailTemplated = null);
+public sealed record ErrorDetail(string? PropertyPointer, string Detail, TemplatedMessage? DetailTemplated = null);
 ```
 
 ## Remarks

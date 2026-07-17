@@ -9,7 +9,10 @@
  */
 
 using System;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
+using Maple.Result.Serialization;
 
 namespace Maple.Result;
 
@@ -140,6 +143,7 @@ public sealed record Result : IResult
 /// </summary>
 /// <typeparam name="T">The type of the successful value.</typeparam>
 /// <inheritdoc cref="IResult" />
+[JsonConverter(typeof(ResultJsonConverterFactory))]
 public sealed record Result<T> : IResult
 {
     #region read-only fields
@@ -246,12 +250,57 @@ public sealed record Result<T> : IResult
             if (value is null)
                 return;
 
-            // A result is either successful (a value) or failed (an error), never both.
-            if (_value is not null)
+            // A result is either successful (a value) or failed (an error), never both. Test _hasValue rather
+            // than the value itself: for a non-nullable value type `_value is not null` is always true, which
+            // would reject every error assigned to, say, a Result<int>.
+            if (_hasValue)
                 throw new InvalidOperationException("Cannot set both Value and Error of the Result!");
 
             _error = value;
         }
+    }
+
+    /// <summary>
+    ///     Returns an indicator of whether a <see cref="Value" /> is present, telling an unset value apart from
+    ///     one that happens to equal the default of <typeparamref name="T" />.
+    /// </summary>
+    internal bool HasValue => _hasValue;
+
+    /// <summary>
+    ///     Returns an indicator of whether an absent <see cref="Value" /> can be written as <see langword="null" />.
+    /// </summary>
+    /// <remarks>
+    ///     A non-nullable value type has no null to stand in for an absent value, so the member is omitted from
+    ///     the payload instead. Shared with <see cref="ResultJsonConverter{T}" /> so that both serializers apply
+    ///     the same rule.
+    /// </remarks>
+    internal static bool CanWriteNullValue { get; } =
+        !typeof(T).IsValueType || Nullable.GetUnderlyingType(typeof(T)) is not null;
+
+    /// <summary>
+    ///     Returns an indicator of whether <i>Newtonsoft.Json</i> should write the <see cref="Value" /> member.
+    /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///         <i>Newtonsoft.Json</i> discovers this method by convention and does not honour the
+    ///         <see cref="JsonConverterAttribute" /> that governs <i>System.Text.Json</i>. Without it, a failed
+    ///         <see cref="Result{T}" /> of a non-nullable value type would write its default value (e.g., <c>0</c>),
+    ///         which is indistinguishable from a successful result carrying that default and cannot be read back.
+    ///     </para>
+    ///     <para>
+    ///         This method mirrors the rule applied by <i>System.Text.Json</i>, so both serializers produce the same
+    ///         payload. It is public only because <i>Newtonsoft.Json</i> requires it to be; it is not intended to be
+    ///         called directly.
+    ///     </para>
+    /// </remarks>
+    /// <returns>
+    ///     <see langword="true" /> if a value is present, or if an absent value can be written
+    ///     as <see langword="null" />; otherwise, <see langword="false" />.
+    /// </returns>
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public bool ShouldSerializeValue()
+    {
+        return _hasValue || CanWriteNullValue;
     }
 
     /// <summary>
@@ -269,6 +318,9 @@ public sealed record Result<T> : IResult
     [MemberNotNullWhen(true, nameof(Value))]
     public bool IsSuccess()
     {
+        if (_error is not null && _hasValue)
+            throw new InvalidOperationException("A Result<T> cannot have both a value and an error.");
+
         // A Result<T> is either successful (a value) or failed (an error). An instance holding neither cannot honour
         // the MemberNotNullWhen contract below, so report the broken state instead of returning a misleading `true`.
         if (_error is null && !_hasValue)

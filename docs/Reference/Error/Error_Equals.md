@@ -7,7 +7,7 @@ Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/E
 Determines whether the specified [Error](Error.md) is equal to the current [Error](Error.md), comparing the [ErrorDetails](Error_ErrorDetails.md) collection by its content rather than by reference.
 
 ```csharp
-public virtual bool Equals(Error? other);
+public bool Equals(Error? other);
 ```
 
 ### Parameters

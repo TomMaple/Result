@@ -21,7 +21,7 @@ namespace Maple.Result;
 ///     Based on the <i>RFC 9457</i>;
 ///     for more information, see: <seealso href="https://datatracker.ietf.org/doc/html/rfc9457" />.
 /// </remarks>
-public record Error
+public sealed record Error
 {
     private readonly List<ErrorDetail> _errorDetails = [];
 
@@ -84,7 +84,7 @@ public record Error
     ///     would also mutate the other.
     /// </remarks>
     /// <param name="original">The <see cref="Error" /> instance to copy.</param>
-    protected Error(Error original)
+    private Error(Error original)
     {
         Category = original.Category;
         TypeUri = original.TypeUri;
@@ -262,7 +262,7 @@ public record Error
     ///     <see langword="true" /> if the specified <see cref="Error" /> is equal to the current one;
     ///     otherwise, <see langword="false" />.
     /// </returns>
-    public virtual bool Equals(Error? other)
+    public bool Equals(Error? other)
     {
         return other is not null
                && EqualityContract == other.EqualityContract
