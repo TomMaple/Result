@@ -24,7 +24,7 @@ namespace Maple.Result;
 ///     The optional collection of parameters (names and values) that might be required
 ///     to generate a message from the specific template.
 /// </param>
-public record TemplatedMessage(string TemplateId, IReadOnlyDictionary<string, object>? Params = null)
+public sealed record TemplatedMessage(string TemplateId, IReadOnlyDictionary<string, object>? Params = null)
 {
     /// <summary>
     ///     Determines whether the specified <see cref="TemplatedMessage" /> is equal to the current one,
@@ -35,7 +35,7 @@ public record TemplatedMessage(string TemplateId, IReadOnlyDictionary<string, ob
     ///     <see langword="true" /> if the specified <see cref="TemplatedMessage" /> is equal to the current one;
     ///     otherwise, <see langword="false" />.
     /// </returns>
-    public virtual bool Equals(TemplatedMessage? other)
+    public bool Equals(TemplatedMessage? other)
     {
         return other is not null
                && EqualityContract == other.EqualityContract

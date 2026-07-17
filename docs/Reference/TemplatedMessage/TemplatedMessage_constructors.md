@@ -6,7 +6,7 @@ Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/T
 Initializes a new instance of the [TemplatedMessage](TemplatedMessage.md) record.
 
 ```csharp
-public record TemplatedMessage(string TemplateId, IReadOnlyDictionary<string, object>? Params = null);
+public sealed record TemplatedMessage(string TemplateId, IReadOnlyDictionary<string, object>? Params = null);
 ```
 
 ## Remarks
