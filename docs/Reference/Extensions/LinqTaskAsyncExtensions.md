@@ -15,6 +15,7 @@ Inheritance [Object](https://learn.microsoft.com/dotnet/api/system.object) → L
 ## Methods
 | Name | Description |
 | ---- | ----------- |
+| [Select(Task&lt;Result&lt;T&gt;&gt;, Func&lt;T, TNext&gt;)](LinqTaskAsyncExtensions_Select.md) | Projects the value of a successful [Result&lt;T&gt;](../ResultT/ResultT.md) produced by the awaited result into a new [Task](https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1)&lt;[Result&lt;TNext&gt;](../ResultT/ResultT.md)&gt; by applying the provided selector function; or returns a new [Task](https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1)&lt;[Result&lt;TNext&gt;](../ResultT/ResultT.md)&gt; with the same error, otherwise. |
 | [SelectMany(Task&lt;Result&lt;T&gt;&gt;, Func&lt;T, Task&lt;Result&lt;TMiddle&gt;&gt;&gt;, Func&lt;T, TMiddle, TNext&gt;)](LinqTaskAsyncExtensions_SelectMany.md) | Returns a new instance of [Task](https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1)&lt;[Result&lt;TNext&gt;](../ResultT/ResultT.md)&gt; instance by applying the provided selector functions if the current [Result&lt;T&gt;](../ResultT/ResultT.md) if it is successful; or a new [Task](https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1)&lt;[Result&lt;TNext&gt;](../ResultT/ResultT.md)&gt; instance with the same error, otherwise. |
 
 ## See Also
