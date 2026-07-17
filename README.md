@@ -432,7 +432,7 @@ It is to a developer to draw a line between the errors that are critical and are
 ## Why do methods like `Bind()`, `Else()`, `Map()`, `Switch`, `Then()` and others are not available?
 This library minimizes the amount of extension methods:
 * `Bind()`can be replaced with e.g., `IfSuccess<T, TNext>(Result<T>, Func<T, TNext>)`,
-* `Else()` can be replaced with e.g., `IfError<T>(Result, Func<Error, T>)`,
+* `Else()` can be replaced with e.g., `IfError<TResult>(TResult, Func<Error, TResult>)`,
 * `Map()` can be replaced with e.g., `IfSuccess<T, TNext>(Result<T>, Func<T, TNext>)`,
 * `Switch()` can be replaced with e.g., `Match<T>(Result<T>, Action<T>, Action<Error>)`,
 * `Then()` can be replaced with e.g., `IfSuccess<T, TNext>(Result<T>, Func<T, TNext>)`.
