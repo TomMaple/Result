@@ -129,6 +129,11 @@ public sealed record Result : IResult
     ///     Creates a successful <see cref="Result{T}" /> instance containing the specified value.
     /// </summary>
     /// <typeparam name="T">The type of the <paramref name="value" />.</typeparam>
+    /// <remarks>
+    ///     A <see langword="null" /> <paramref name="value" /> is permitted when <typeparamref name="T" /> is nullable
+    ///     (a nullable reference type or <see cref="Nullable{T}" />); the resulting <see cref="Result{T}" /> is
+    ///     successful and its <see cref="Result{T}.Value" /> is <see langword="null" />.
+    /// </remarks>
     public static Result<T> FromValue<T>(T value)
     {
         return new Result<T>(value);
@@ -178,9 +183,9 @@ public sealed record Result<T> : IResult
 
     internal Result(T value)
     {
-        if (value is null)
-            throw new ArgumentNullException(nameof(value), "Value cannot be null!");
-
+        // A successful result carries a value, and that value may itself be null when T is nullable
+        // (a nullable reference type or Nullable<U>). A non-nullable value type has no null to pass here.
+        // Record that a value is present so it is told apart from an absent one (a failed or unpopulated result).
         _value = value;
         _hasValue = true;
     }
@@ -198,29 +203,27 @@ public sealed record Result<T> : IResult
     ///     otherwise, returns <see langword="null" />.
     /// </summary>
     /// <remarks>
-    ///     The setter is <see langword="init" />-only and intended for deserialization. A <see langword="null" />
-    ///     assignment is ignored rather than throwing, so that deserializing a failed <see cref="Result{T}" />
-    ///     (where the value is absent) leaves the value unset instead of overwriting an already-populated member.
-    ///     Assigning a non-null value while an <see cref="Error" /> is already set throws, because a
-    ///     <see cref="Result{T}" /> can never hold both a value and an error.
+    ///     A successful <see cref="Result{T}" /> carries a value, which may itself be <see langword="null" /> when
+    ///     <typeparamref name="T" /> is nullable (a nullable reference type or <see cref="Nullable{T}" />). A
+    ///     <see langword="null" /> here therefore does not by itself indicate failure—use <see cref="IsSuccess" />
+    ///     to distinguish a successful null value from a failure.
+    ///     The setter is <see langword="init" />-only and intended for deserialization. Assigning a value while an
+    ///     <see cref="Error" /> is already set throws, because a <see cref="Result{T}" /> can never hold both.
     /// </remarks>
     /// <exception cref="InvalidOperationException">
-    ///     If a non-null value is assigned while an <see cref="Error" /> is already set.
+    ///     If a value is assigned while an <see cref="Error" /> is already set.
     /// </exception>
     public T? Value
     {
         get => _value;
         init
         {
-            // Ignore a null assignment (e.g., the absent value when deserializing a failed result) instead of
-            // throwing, so object/deserialization initializers can set only the relevant member.
-            if (value is null)
-                return;
-
             // A result is either successful (a value) or failed (an error), never both.
             if (_error is not null)
                 throw new InvalidOperationException("Cannot set both Value and Error of the Result!");
 
+            // A null is a valid successful value when T is nullable; mark the value present either way so that
+            // it is told apart from an absent one (a failed or not-yet-populated result).
             _value = value;
             _hasValue = true;
         }
@@ -267,14 +270,16 @@ public sealed record Result<T> : IResult
     internal bool HasValue => _hasValue;
 
     /// <summary>
-    ///     Returns an indicator of whether an absent <see cref="Value" /> can be written as <see langword="null" />.
+    ///     Returns an indicator of whether <typeparamref name="T" /> can hold <see langword="null" />—that is,
+    ///     whether it is a reference type or a <see cref="Nullable{T}" />.
     /// </summary>
     /// <remarks>
-    ///     A non-nullable value type has no null to stand in for an absent value, so the member is omitted from
-    ///     the payload instead. Shared with <see cref="ResultJsonConverter{T}" /> so that both serializers apply
-    ///     the same rule.
+    ///     Used when reading JSON to tell a present <see langword="null"/> value (a successful result of a nullable
+    ///     <typeparamref name="T" />) apart from an absent one (a non-nullable value type has no null to hold,
+    ///     so a null token there denotes absence). Shared with <see cref="ResultJsonConverter{T}" /> so that both
+    ///     serializers apply the same rule.
     /// </remarks>
-    internal static bool CanWriteNullValue { get; } =
+    internal static bool CanHoldNull { get; } =
         !typeof(T).IsValueType || Nullable.GetUnderlyingType(typeof(T)) is not null;
 
     /// <summary>
@@ -283,9 +288,11 @@ public sealed record Result<T> : IResult
     /// <remarks>
     ///     <para>
     ///         <i>Newtonsoft.Json</i> discovers this method by convention and does not honour the
-    ///         <see cref="JsonConverterAttribute" /> that governs <i>System.Text.Json</i>. Without it, a failed
-    ///         <see cref="Result{T}" /> of a non-nullable value type would write its default value (e.g., <c>0</c>),
-    ///         which is indistinguishable from a successful result carrying that default and cannot be read back.
+    ///         <see cref="JsonConverterAttribute" /> that governs <i>System.Text.Json</i>. The member is written only
+    ///         when a value is present (<see cref="HasValue" />)—including a successful <see langword="null"/> value,
+    ///         which is written as <see langword="null" />. A failed result has no value, so the member is omitted
+    ///         rather than written as a default (e.g., <c>0</c>) or a <see langword="null"/> that
+    ///         would be mistaken for a successful null value when read back.
     ///     </para>
     ///     <para>
     ///         This method mirrors the rule applied by <i>System.Text.Json</i>, so both serializers produce the same
@@ -294,18 +301,25 @@ public sealed record Result<T> : IResult
     ///     </para>
     /// </remarks>
     /// <returns>
-    ///     <see langword="true" /> if a value is present, or if an absent value can be written
-    ///     as <see langword="null" />; otherwise, <see langword="false" />.
+    ///     <see langword="true" /> if a value is present (even if that value is <see langword="null" />);
+    ///     otherwise, <see langword="false" />.
     /// </returns>
     [EditorBrowsable(EditorBrowsableState.Never)]
     public bool ShouldSerializeValue()
     {
-        return _hasValue || CanWriteNullValue;
+        return _hasValue;
     }
 
     /// <summary>
     ///     Returns an indicator of whether the operation was successful.
     /// </summary>
+    /// <remarks>
+    ///     The <see cref="MemberNotNullWhenAttribute" /> on <see cref="Value" /> reflects the common case where a
+    ///     successful result carries a non-null value. When <typeparamref name="T" /> is nullable (a nullable
+    ///     reference type or <see cref="Nullable{T}" />) a successful result may legitimately carry a
+    ///     <see langword="null" /> value, so the flow-analysis hint is a best effort rather than a guarantee for
+    ///     those types; access <see cref="Value" /> accordingly.
+    /// </remarks>
     /// <returns>
     ///     <see langword="true" /> if the operation was successful; otherwise, <see langword="false" />.
     /// </returns>
@@ -338,6 +352,11 @@ public sealed record Result<T> : IResult
     /// <summary>
     ///     Converts a value of type <typeparamref name="T" /> to a <see cref="Result{T}" /> representing a successful result.
     /// </summary>
+    /// <remarks>
+    ///     A <see langword="null" /> <paramref name="value" /> is permitted when <typeparamref name="T" /> is nullable
+    ///     (a nullable reference type or <see cref="Nullable{T}" />); the resulting <see cref="Result{T}" /> is
+    ///     successful and its <see cref="Value" /> is <see langword="null" />.
+    /// </remarks>
     public static implicit operator Result<T>(T value)
     {
         return new Result<T>(value);
@@ -358,6 +377,11 @@ public sealed record Result<T> : IResult
     /// <summary>
     ///     Returns a successful <see cref="Result{T}" /> instance containing the specified value.
     /// </summary>
+    /// <remarks>
+    ///     A <see langword="null" /> <paramref name="value" /> is permitted when <typeparamref name="T" /> is nullable
+    ///     (a nullable reference type or <see cref="Nullable{T}" />); the resulting <see cref="Result{T}" /> is
+    ///     successful and its <see cref="Value" /> is <see langword="null" />.
+    /// </remarks>
     public static Result<T> FromValue(T value)
     {
         return new Result<T>(value);

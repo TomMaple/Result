@@ -35,18 +35,20 @@ internal sealed class ResultJsonConverterFactory : JsonConverterFactory
 }
 
 /// <summary>
-///     Writes an absent <see cref="Result{T}.Value" /> as <see langword="null" />, or omits it entirely when
-///     <typeparamref name="T" /> is a non-nullable value type that has no null to write.
+///     Writes the <see cref="Result{T}.Value" /> member only when a value is present, so that
+///     a present <see langword="null"/> value (a successful result of a nullable <typeparamref name="T" />) is
+///     told apart from an absent one on the way back.
 /// </summary>
 /// <remarks>
 ///     <para>
-///         The default reflection-based contract cannot express "no value" for a non-nullable value type: a failed
-///         <c>Result&lt;int&gt;</c> is written as <c>"Value": 0</c>, which is indistinguishable from a successful
-///         result carrying zero and which the <see cref="Result{T}.Error" /> initializer rejects on the way back in.
+///         The default reflection-based contract cannot express presence: a failed <c>Result&lt;int&gt;</c> is written
+///         as <c>"Value": 0</c>, indistinguishable from a successful result carrying zero; a failed reference-type
+///         result is written as <c>"Value": null</c>, indistinguishable from a successful <see langword="null" /> value.
 ///     </para>
 ///     <para>
-///         Omitting the member is applied only where a null cannot be written, so the payload of every
-///         <typeparamref name="T" /> that already round-tripped is unchanged.
+///         This converter instead omits the member for a failed (or not-yet-populated) result and writes it—<c>null</c>
+///         included—only for a successful one. So <c>{"Value":null,"Error":null}</c> denotes a successful null value,
+///         while a failed result carries no <c>Value</c> member at all.
 ///     </para>
 /// </remarks>
 internal sealed class ResultJsonConverter<T> : JsonConverter<Result<T>>
@@ -77,15 +79,21 @@ internal sealed class ResultJsonConverter<T> : JsonConverter<Result<T>>
             var propertyName = reader.GetString();
             reader.Read();
 
-            // A null token means the member is absent, which is how a failed result reports its value
-            // (and a successful one its error). Leave the member unset rather than materializing it.
             if (string.Equals(propertyName, valueName, comparison))
             {
                 if (reader.TokenType == JsonTokenType.Null)
+                {
+                    // A null token is a present null value when T can hold null (a nullable reference type or
+                    // Nullable<U>). For a non-nullable value type there is no null to hold, so it denotes an
+                    // absent value (how a failed result reports it)—leave the member unset.
+                    if (Result<T>.CanHoldNull)
+                        hasValue = true;
+
                     continue;
+                }
 
                 value = JsonSerializer.Deserialize<T>(ref reader, options);
-                hasValue = value is not null;
+                hasValue = true;
             }
             else if (string.Equals(propertyName, errorName, comparison))
             {
@@ -116,14 +124,13 @@ internal sealed class ResultJsonConverter<T> : JsonConverter<Result<T>>
 
         var valueName = ResolveName(ValuePropertyName, options);
 
+        // Write the value only when one is present. A present value may itself be null (a successful result of a
+        // nullable T), written as null. An absent value (a failed or not-yet-populated result) is omitted so it is
+        // not mistaken for a successful null value when read back.
         if (value.HasValue)
         {
             writer.WritePropertyName(valueName);
             JsonSerializer.Serialize(writer, value.Value, options);
-        }
-        else if (Result<T>.CanWriteNullValue)
-        {
-            writer.WriteNull(valueName);
         }
 
         var errorName = ResolveName(ErrorPropertyName, options);

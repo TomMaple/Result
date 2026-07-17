@@ -193,6 +193,9 @@ var result = userResult.ToResult();
 ```
 to convert `Result<T>` to `Result` if you need to return a non-generic result without a value.
 
+> [!NOTE]
+> A successful `Result<T>` normally carries a non-null value. When `T` is nullable—a nullable reference type or `Nullable<T>` (e.g., `Result<string?>` or `Result<int?>`)—a `null` is a valid successful value. Because a successful `null` value and a default value carried by a failed result (e.g., `0` for a `Result<int>`) can both look “empty”, always use `IsSuccess()` to distinguish success from failure rather than checking the value against `null`.
+
 ### Example
 ```csharp
 public async Task<Result<User>> GetUserAsync(int userId)
