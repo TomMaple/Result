@@ -1099,7 +1099,7 @@ public class ResultUnitTests
     #region Result<T>, Serialize
 
     [Fact]
-    public void Serialize_SuccessWithValueAndMicrosoftSerializer_ReturnsSerializedValueWithAllProperties()
+    public void Serialize_SuccessWithReferenceTypeValueAndMicrosoftSerializer_ReturnsSerializedValueWithAllProperties()
     {
         // Arrange
         const string ExpectedText = """{"Value":{"Text":"Test text","Number":137},"Error":null}""";
@@ -1110,7 +1110,7 @@ public class ResultUnitTests
             Text = "Test text"
         };
 
-        var sut = new Result<TestClass>(value);
+        var sut = Sut.FromValue(value);
 
         // Act
         var result = SerializationHelper.SerializeWithMicrosoft(sut);
@@ -1120,7 +1120,7 @@ public class ResultUnitTests
     }
 
     [Fact]
-    public void Serialize_SuccessWithValueAndNewtonsoftSerializer_ReturnsSerializedValueWithAllProperties()
+    public void Serialize_SuccessWithReferenceTypeValueAndNewtonsoftSerializer_ReturnsSerializedValueWithAllProperties()
     {
         // Arrange
         const string ExpectedText = """{"Value":{"Text":"Test text","Number":137},"Error":null}""";
@@ -1131,7 +1131,7 @@ public class ResultUnitTests
             Text = "Test text"
         };
 
-        var sut = new Result<TestClass>(value);
+        var sut = Sut.FromValue(value);
 
         // Act
         var result = SerializationHelper.SerializeWithNewtonsoft(sut);
@@ -1141,7 +1141,41 @@ public class ResultUnitTests
     }
 
     [Fact]
-    public void Serialize_ErrorAllPropertiesAndMicrosoftSerializer_ReturnsSerializedValueWithAllProperties()
+    public void Serialize_SuccessWithValueTypeValueAndMicrosoftSerializer_ReturnsSerializedValueWithAllProperties()
+    {
+        // Arrange
+        const string ExpectedText = """{"Value":128,"Error":null}""";
+
+        const int Value = 128;
+
+        var sut = Sut.FromValue(Value);
+
+        // Act
+        var result = SerializationHelper.SerializeWithMicrosoft(sut);
+
+        // Assert
+        result.ShouldBe(ExpectedText);
+    }
+
+    [Fact]
+    public void Serialize_SuccessWithValueTypeValueAndNewtonsoftSerializer_ReturnsSerializedValueWithAllProperties()
+    {
+        // Arrange
+        const string ExpectedText = """{"Value":128,"Error":null}""";
+
+        const int Value = 128;
+
+        var sut = Sut.FromValue(Value);
+
+        // Act
+        var result = SerializationHelper.SerializeWithNewtonsoft(sut);
+
+        // Assert
+        result.ShouldBe(ExpectedText);
+    }
+
+    [Fact]
+    public void Serialize_ReferenceTypeAndErrorAllPropertiesAndMicrosoftSerializer_ReturnsSerializedValueWithAllProperties()
     {
         // Arrange
         const string ExpectedText = """{"Value":null,"Error":{"Category":3,"TypeUri":"tag:test.com,2024:Test","Title":"Test title","Detail":"Test description.","DetailTemplated":{"TemplateId":"messageId","Params":{"key1":"value1","key2":"value2"}},"InstanceUri":"http://test.com/instance/1013","ErrorDetails":[{"PropertyPointer":"#/property1","Detail":"Property 1 test detail","DetailTemplated":{"TemplateId":"message-property-id","Params":{"pk1":"pv1","pk2":"pv2"}}}]}}""";
@@ -1166,7 +1200,7 @@ public class ResultUnitTests
     }
 
     [Fact]
-    public void Serialize_ErrorAllPropertiesAndNewtonsoftSerializer_ReturnsSerializedValueWithAllProperties()
+    public void Serialize_ReferenceTypeAndErrorAllPropertiesAndNewtonsoftSerializer_ReturnsSerializedValueWithAllProperties()
     {
         // Arrange
         const string ExpectedText = """{"Value":null,"Error":{"Category":3,"TypeUri":"tag:test.com,2024:Test","Title":"Test title","Detail":"Test description.","DetailTemplated":{"TemplateId":"messageId","Params":{"key1":"value1","key2":"value2"}},"InstanceUri":"http://test.com/instance/1013","ErrorDetails":[{"PropertyPointer":"#/property1","Detail":"Property 1 test detail","DetailTemplated":{"TemplateId":"message-property-id","Params":{"pk1":"pv1","pk2":"pv2"}}}]}}""";
@@ -1182,6 +1216,56 @@ public class ResultUnitTests
         error.AddDetail("#/property1", "Property 1 test detail", "message-property-id", ("pk1", "pv1"), ("pk2", "pv2"));
 
         var sut = new Result<TestClass>(error);
+
+        // Act
+        var result = SerializationHelper.SerializeWithNewtonsoft(sut);
+
+        // Assert
+        result.ShouldBe(ExpectedText);
+    }
+
+    [Fact]
+    public void Serialize_ValueTypeAndErrorAllPropertiesAndMicrosoftSerializer_ReturnsSerializedValueWithAllProperties()
+    {
+        // Arrange
+        const string ExpectedText = """{"Error":{"Category":3,"TypeUri":"tag:test.com,2024:Test","Title":"Test title","Detail":"Test description.","DetailTemplated":{"TemplateId":"messageId","Params":{"key1":"value1","key2":"value2"}},"InstanceUri":"http://test.com/instance/1013","ErrorDetails":[{"PropertyPointer":"#/property1","Detail":"Property 1 test detail","DetailTemplated":{"TemplateId":"message-property-id","Params":{"pk1":"pv1","pk2":"pv2"}}}]}}""";
+
+        var error = Error.NotFound(
+            ErrorUri.Tag("tag:test.com,2024:Test"),
+            "Test title",
+            "Test description.",
+            ErrorUri.Locator("http://test.com/instance/1013"),
+            "messageId",
+            ("key1", "value1"), ("key2", "value2"));
+
+        error.AddDetail("#/property1", "Property 1 test detail", "message-property-id", ("pk1", "pv1"), ("pk2", "pv2"));
+
+        var sut = new Result<int>(error);
+
+        // Act
+        var result = SerializationHelper.SerializeWithMicrosoft(sut);
+
+        // Assert
+        result.ShouldBe(ExpectedText);
+    }
+
+    [Fact]
+    public void Serialize_ValueTypeAndErrorAllPropertiesAndNewtonsoftSerializer_ReturnsSerializedValueWithAllProperties()
+    {
+        // Arrange
+        const string ExpectedText = """{"Error":{"Category":3,"TypeUri":"tag:test.com,2024:Test","Title":"Test title","Detail":"Test description.","DetailTemplated":{"TemplateId":"messageId","Params":{"key1":"value1","key2":"value2"}},"InstanceUri":"http://test.com/instance/1013","ErrorDetails":[{"PropertyPointer":"#/property1","Detail":"Property 1 test detail","DetailTemplated":{"TemplateId":"message-property-id","Params":{"pk1":"pv1","pk2":"pv2"}}}]}}""";
+
+        var error = Error.NotFound(
+            ErrorUri.Tag("tag:test.com,2024:Test"),
+            "Test title",
+            "Test description.",
+            ErrorUri.Locator("http://test.com/instance/1013"),
+            "messageId",
+            ("key1", "value1"), ("key2", "value2"));
+
+        error.AddDetail("#/property1", "Property 1 test detail", "message-property-id", ("pk1", "pv1"), ("pk2", "pv2"));
+
+        var sut = new Result<int>(error);
 
         // Act
         var result = SerializationHelper.SerializeWithNewtonsoft(sut);
