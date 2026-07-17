@@ -2,7 +2,7 @@
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Result.cs#L143" target="_blank">Result.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Result.cs#L147" target="_blank">Result.cs</a>
 
 Represents the outcome of an operation that can either succeed or fail with an [Error](../Error/Error.md).
 
@@ -20,7 +20,10 @@ Implements [IResult](../IResult/IResult.md)
 > 
 > For operations that does not return a value, consider using [Result](../Result/Result.md) record.
 
-If the operation is successful, the [IsSuccess](ResultT_IsSuccess.md) property will be `true` and the [Value](ResultT_Value.md) property will hold the returned value. If the operation has failed, the [IsSuccess](ResultT_IsSuccess.md) property will be `false`, and the [Error](ResultT_Error.md) property will contain details about the failure.
+If the operation is successful, the [IsSuccess()](ResultT_IsSuccess.md) method will be `true` and the [Value](ResultT_Value.md) property will hold the returned value. If the operation has failed, the [IsSuccess()](ResultT_IsSuccess.md) method will be `false`, and the [Error](ResultT_Error.md) property will contain details about the failure.
+
+> [!CAUTION]
+> Always call the [IsSuccess()](ResultT_IsSuccess.md) method and confirm it returns `true` before reading the [Value](ResultT_Value.md) property. On a failed result, [Value](ResultT_Value.md) holds the default value of `T`, which for a value type is not `null` (for example, `0` for a `Result<int>`), so a `null` check alone cannot tell success from failure.
 
 > [!CAUTION]
 > Use static factory methods to create instances of this record, such as [Result.FromValue(T)](ResultT_FromValue.md) and [Result.FromError(Error)](ResultT_FromError.md), or the operator [Implicit(Error to Result&lt;T&gt;)](ResultT_implicit_Error_to_ResultT.md) or the [Implicit(T to Result&lt;T&gt;)](ResultT_implicit_T_to_ResultT.md) rather than using the constructor directly.
@@ -79,6 +82,14 @@ public Result<User> GetUser(int userId)
         return Result<User>.FromError(error);
     }
 ```
+
+## Serialization
+[Result&lt;T&gt;](ResultT.md) round-trips through both [System.Text.Json](https://learn.microsoft.com/dotnet/api/system.text.json.jsonserializer) and [Newtonsoft.Json](https://www.newtonsoft.com/json), for any `T`—including non-nullable value types such as `int`, `Guid` or `bool`.
+
+Only the member the result actually holds is written: a successful result writes its [Value](ResultT_Value.md), and a failed one writes its [Error](ResultT_Error.md). When deserializing a payload that carries both (which a producer can emit for a value type, whose absent value has no `null` to stand in for it), the [Error](ResultT_Error.md) wins and the phantom default value is discarded.
+
+> [!NOTE]
+> A non-nullable value type has no `null` to represent an absent value, so a failed `Result<int>` must not be written as `"Value": 0`—that is indistinguishable from a successful result carrying `0`, and cannot be read back. To prevent this, the value member is omitted from the payload of a failed result of such a type. For System.Text.Json this is handled by an internal [JsonConverter](https://learn.microsoft.com/dotnet/api/system.text.json.serialization.jsonconverter); for Newtonsoft.Json, which does not honour that converter, the equivalent rule is applied through a conventional `ShouldSerializeValue()` method. Both serializers therefore produce identical output. `ShouldSerializeValue()` is public only because Newtonsoft.Json requires it to be; it is hidden from IntelliSense and not intended to be called directly.
 
 ## Constructors
 | Name | Description |

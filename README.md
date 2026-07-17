@@ -268,7 +268,7 @@ Although, mapping to HTTP responses is not part of this library and can be done 
 | Category | Description | Solution | Example error | Corresponding HTTP status code |
 | -------- | ----------- | -------- | ------------- | ------------------------------ |
 | **Conflict** | The operation failed due to the data or state conflict (such as a unique constraint violation). Refresh data and try again. | Refresh the data, then try again if applicable. May require repeating the whole process. | Details have been modified. Please refresh the page. | `409` (Conflict) |
-| **Critical Error** | Unexpected, critical error. | Contact customer support. | Payment failed.&#xA;3rd party API is not available. | `500` (Internal Server Error) |
+| **Critical** | Unexpected, critical error. | Contact customer support. | Payment failed.&#xA;3rd party API is not available. | `500` (Internal Server Error) |
 | **Failure** | An expected error that is not critical to the operation. Might be related to e.g., a business logic rules, or the data that passes the validation, but still incorrect. | Even if the data is correct, the operation is not. | Invalid file format.&#xA;Cannot delete the payment which processing has started. | `422` (Unprocessable Content) |
 | **Not Found** | The resource was not found. | Invalid identifier. Try a different one. | Company with that name has not been found. | `404` (Not Found) |
 | **Not Implemented** | The operation, feature or case is not implemented yet. | To be implemented in the future. | We don’t support debit cards yet. | `501` (Not Implemented) |
