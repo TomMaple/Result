@@ -121,6 +121,7 @@
     <File Path="docs/Reference/TemplatedMessage/TemplatedMessage_TemplateId.md" />
   </Folder>
   <Folder Name="/root/">
+    <File Path=".gitattributes" />
     <File Path=".gitignore" />
     <File Path="LICENSE" />
     <File Path="README.md" />
