@@ -10,7 +10,7 @@ Represents the outcome of an operation that can either succeed or fail with an [
 public sealed record Result : IResult
 ```
 
-Inheritance [Object](https://learn.microsoft.com/dotnet/api/system.object) → [ValueType](https://learn.microsoft.com/dotnet/api/system.valuetype) → [Record](https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/record) → Result
+Inheritance [Object](https://learn.microsoft.com/dotnet/api/system.object) → Result
 
 Implements [IResult](../IResult/IResult.md)
 
@@ -20,7 +20,7 @@ Implements [IResult](../IResult/IResult.md)
 > 
 > For operations that return a value, consider using the generic [Result&lt;T&gt;](../ResultT/ResultT.md) record.
 
-If the operation is successful, the [IsSuccess](Result_IsSuccess.md) property will be `true`, otherwise, it will be `false`, and the [Error](Result_Error.md) property will contain details about the failure.
+If the operation is successful, the [IsSuccess()](Result_IsSuccess.md) method will return `true`; otherwise, it will return `false`, and the [Error](Result_Error.md) property will contain details about the failure.
 
 > [!CAUTION]
 > Use static factory methods to create instances of this record, such as [Result.Success()](Result_Success.md) and [Result.FromError(Error)](Result_FromError.md), or the [Implicit(Error to Result)](Result_implicit_Error_to_Result.md) operator rather than using the constructor directly.
@@ -86,10 +86,10 @@ public Result DeleteUser(int userId)
 | [IfSuccessAsync(Result, Func&lt;Task&lt;Result&gt;&gt;, Boolean)](../Extensions/IfSuccessTaskAsyncExtensions_IfSuccessAsync.md#ifsuccessasyncresult-functaskresult-boolean) | Executes the specified asynchronous function, if the [Result](../Result/Result.md) represents a successful operation, as an asynchronous operation. |
 | [IfSuccessAsync&lt;T&gt;(Result, Func&lt;Task&lt;T&gt;&gt;, Boolean)](../Extensions/IfSuccessTaskAsyncExtensions_IfSuccessAsync.md#ifsuccessasynctresult-functaskt-boolean) | Executes the specified asynchronous function, if the [Result](../Result/Result.md) represents a successful operation, as an asynchronous operation. |
 | [IfSuccessAsync&lt;T&gt;(Result, Func&lt;Task&lt;Result&lt;T&gt;&gt;&gt;, Boolean)](../Extensions/IfSuccessTaskAsyncExtensions_IfSuccessAsync.md#ifsuccessasynctresult-functaskresultt-boolean) | Executes the specified asynchronous function, if the [Result](../Result/Result.md) represents a successful operation, as an asynchronous operation. |
-| [IfSuccessAsync(Task&lt;Result&gt;, Func&lt;Task&gt;, Boolean)](../Extensions/IfSuccessTaskAsyncExtensions_IfSuccessAsync.md#ifsuccessasynctaskresult-functask-boolean) | Executes the specified asynchronous action, if the provided asynchronous operation returns a successful [Result](../Result/Result.md) represents a successful operation. |
-| [IfSuccessAsync(Task&lt;Result&gt;, Func&lt;Task&lt;Result&gt;&gt;, Boolean)](../Extensions/IfSuccessTaskAsyncExtensions_IfSuccessAsync.md#ifsuccessasynctaskresult-functaskresult-boolean) | Executes the specified asynchronous function, if the provided asynchronous operation returns a successful [Result](../Result/Result.md) represents a successful operation. |
-| [IfSuccessAsync&lt;T&gt;(Task&lt;Result&gt;, Func&lt;Task&lt;T&gt;&gt;, Boolean)](../Extensions/IfSuccessTaskAsyncExtensions_IfSuccessAsync.md#ifsuccessasyncttaskresult-functaskt-boolean) | Executes the specified asynchronous function, if the provided asynchronous operation returns a successful [Result](../Result/Result.md) represents a successful operation. |
-| [IfSuccessAsync&lt;T&gt;(Task&lt;Result&gt;, Func&lt;Task&lt;Result&lt;T&gt;&gt;&gt;, Boolean)](../Extensions/IfSuccessTaskAsyncExtensions_IfSuccessAsync.md#ifsuccessasyncttaskresult-functaskresultt-boolean) | Executes the specified asynchronous function, if the provided asynchronous operation returns a successful [Result](../Result/Result.md) represents a successful operation. |
+| [IfSuccessAsync(Task&lt;Result&gt;, Func&lt;Task&gt;, Boolean)](../Extensions/IfSuccessTaskAsyncExtensions_IfSuccessAsync.md#ifsuccessasynctaskresult-functask-boolean) | Executes the specified asynchronous action, if the provided asynchronous operation returns a successful [Result](../Result/Result.md), as an asynchronous operation. |
+| [IfSuccessAsync(Task&lt;Result&gt;, Func&lt;Task&lt;Result&gt;&gt;, Boolean)](../Extensions/IfSuccessTaskAsyncExtensions_IfSuccessAsync.md#ifsuccessasynctaskresult-functaskresult-boolean) | Executes the specified asynchronous function, if the provided asynchronous operation returns a successful [Result](../Result/Result.md), as an asynchronous operation. |
+| [IfSuccessAsync&lt;T&gt;(Task&lt;Result&gt;, Func&lt;Task&lt;T&gt;&gt;, Boolean)](../Extensions/IfSuccessTaskAsyncExtensions_IfSuccessAsync.md#ifsuccessasyncttaskresult-functaskt-boolean) | Executes the specified asynchronous function, if the provided asynchronous operation returns a successful [Result](../Result/Result.md), as an asynchronous operation. |
+| [IfSuccessAsync&lt;T&gt;(Task&lt;Result&gt;, Func&lt;Task&lt;Result&lt;T&gt;&gt;&gt;, Boolean)](../Extensions/IfSuccessTaskAsyncExtensions_IfSuccessAsync.md#ifsuccessasyncttaskresult-functaskresultt-boolean) | Executes the specified asynchronous function, if the provided asynchronous operation returns a successful [Result](../Result/Result.md), as an asynchronous operation. |
 | [Match(Result, Action, Action&lt;Error&gt;)](../Extensions/MatchExtensions_Match.md#matchresult-action-actionerror) | Executes one of the specified actions depending on whether the [Result](../Result/Result.md) represents a success or a failure. |
 | [Match(Result, Func&lt;Result&gt;, Action&lt;Error&gt;)](../Extensions/MatchExtensions_Match.md#matchresult-actionresult-actionerror) | Executes the specified function or action depending on whether the [Result](../Result/Result.md) represents a success or a failure. |
 | [Match(Result, Func&lt;Result&gt;, Func&lt;Error, Result&gt;)](../Extensions/MatchExtensions_Match.md#matchresult-funcresult-funcerror-result) | Executes one of the specified functions depending on whether the [Result](../Result/Result.md) represents a success or a failure. |

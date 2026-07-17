@@ -185,9 +185,173 @@ public class LinqValueTaskAsyncExtensionsUnitTests
 
     #endregion
 
+    #region Select(ValueTask<Result<T>>, Func<T, TNext>)
+
+    [Fact]
+    public async Task Select_NoResultValueWithSelector_ThrowsException()
+    {
+        // Arrange
+        var sut = ValueTask.FromResult<Result<int>>(null!);
+
+        // Act
+        var exception = await Record.ExceptionAsync(() => sut.Select(x => x.ToString()).AsTask());
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<InvalidOperationException>();
+        exception.Message.ShouldStartWith("The asynchronous operation represented by ‘result’ returned null.");
+    }
+
+    [Fact]
+    public async Task Select_SuccessfulResultWithNoSelector_ThrowsException()
+    {
+        // Arrange
+        const Func<int, string>? Selector = null;
+
+        var sut = ValueTask.FromResult(Result.FromValue(5));
+
+        // Act
+        var exception = await Record.ExceptionAsync(() => sut.Select(Selector!).AsTask());
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentNullException>();
+        exception.Message.ShouldStartWith("Value cannot be null.");
+    }
+
+    [Fact]
+    public async Task Select_ErrorResultWithNoSelector_ThrowsException()
+    {
+        // Arrange
+        const Func<int, string>? Selector = null;
+
+        var sut = GetErrorResultValueTask<int>();
+
+        // Act
+        var exception = await Record.ExceptionAsync(() => sut.Select(Selector!).AsTask());
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentNullException>();
+        exception.Message.ShouldStartWith("Value cannot be null.");
+    }
+
+    [Fact]
+    public async Task Select_SuccessfulResultWithSelector_CallsSelector()
+    {
+        // Arrange
+        const int InitialValue = 4839;
+        const string ExpectedValue = "4839";
+
+        var selectorMock = new Mock<Func<int, string>>();
+        selectorMock
+            .Setup(x => x.Invoke(InitialValue))
+            .Returns(ExpectedValue);
+
+        var sut = ValueTask.FromResult(Result.FromValue(InitialValue));
+
+        // Act
+        await sut.Select(selectorMock.Object);
+
+        // Assert
+        selectorMock.Verify(x => x.Invoke(InitialValue), Times.Once);
+    }
+
+    [Fact]
+    public async Task Select_SuccessfulResultWithSelector_ReturnsValue()
+    {
+        // Arrange
+        const int InitialValue = 4839;
+        const string ExpectedValue = "4839";
+
+        var sut = ValueTask.FromResult(Result.FromValue(InitialValue));
+
+        // Act
+        var result = await sut.Select(x => x.ToString());
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<Result<string>>();
+        result.IsSuccess().ShouldBeTrue();
+        result.Value.ShouldBe(ExpectedValue);
+    }
+
+    [Fact]
+    public async Task Select_ErrorResultWithSelector_DoesNotCallSelector()
+    {
+        // Arrange
+        var selectorMock = new Mock<Func<int, string>>();
+
+        var sut = GetErrorResultValueTask<int>();
+
+        // Act
+        await sut.Select(selectorMock.Object);
+
+        // Assert
+        selectorMock.Verify(x => x.Invoke(It.IsAny<int>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task Select_ErrorResultWithSelector_ReturnsOriginalValueResultWithError()
+    {
+        // Arrange
+        var errorResult = GetErrorResult<int>();
+        var sut = ValueTask.FromResult(errorResult);
+
+        // Act
+        var result = await sut.Select(x => x.ToString());
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<Result<string>>();
+        result.IsSuccess().ShouldBeFalse();
+        result.Error.ShouldBeSameAs(errorResult.Error);
+    }
+
+    #endregion
+
     #region LINQ query syntax
 
     // ReSharper disable RedundantAssignment
+
+    [Fact]
+    public async Task LinqQueryAsyncSyntax_SingleClauseSuccessfulResult_ReturnsProjectedValueResult()
+    {
+        // Arrange
+        const string ExpectedValue = "90";
+
+        var sut = ValueTask.FromResult(Result.FromValue(90));
+
+        // Act
+        var result = await (
+            from initialValue in sut
+            select initialValue.ToString());
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<Result<string>>();
+        result.IsSuccess().ShouldBeTrue();
+        result.Value.ShouldBe(ExpectedValue);
+    }
+
+    [Fact]
+    public async Task LinqQueryAsyncSyntax_SingleClauseErrorResult_ReturnsOriginalValueResultWithError()
+    {
+        // Arrange
+        var errorResult = GetErrorResult<int>();
+        var sut = ValueTask.FromResult(errorResult);
+
+        // Act
+        var result = await (
+            from initialValue in sut
+            select initialValue.ToString());
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<Result<string>>();
+        result.IsSuccess().ShouldBeFalse();
+        result.Error.ShouldBeSameAs(errorResult.Error);
+    }
 
     [Fact]
     public async Task LinqQueryAsyncSyntax_SuccessfulResult_CallsFunctions()

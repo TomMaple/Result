@@ -2,7 +2,7 @@
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Result.cs#L175" target="_blank">Result.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Result.cs#L180" target="_blank">Result.cs</a>
 
 Initializes a new instance of the [Result&lt;T&gt;](ResultT.md) record that holds neither a [Value](ResultT_Value.md) nor an [Error](ResultT_Error.md), so that a deserializer can populate one of them afterwards.
 

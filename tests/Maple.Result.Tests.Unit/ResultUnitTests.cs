@@ -206,6 +206,31 @@ public class ResultUnitTests
     #region Result, FromError()
 
     [Fact]
+    public void FromError_NullError_ThrowsException()
+    {
+        // Act
+        var exception = Record.Exception(() => Sut.FromError(null!));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentNullException>();
+    }
+
+    [Fact]
+    public void ImplicitOperator_NullError_ThrowsException()
+    {
+        // Act
+        var exception = Record.Exception(() =>
+        {
+            Sut _ = (Error)null!;
+        });
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentNullException>();
+    }
+
+    [Fact]
     public void FromError_Error_ReturnsErrorResult()
     {
         // Arrange
@@ -859,6 +884,31 @@ public class ResultUnitTests
     #region Result, FromError()
 
     [Fact]
+    public void FromError_ValueNullError_ThrowsException()
+    {
+        // Act
+        var exception = Record.Exception(() => Result<TestClass>.FromError(null!));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentNullException>();
+    }
+
+    [Fact]
+    public void ImplicitOperator_ValueNullError_ThrowsException()
+    {
+        // Act
+        var exception = Record.Exception(() =>
+        {
+            Result<TestClass> _ = (Error)null!;
+        });
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentNullException>();
+    }
+
+    [Fact]
     public void FromError_ValueWithError_ReturnsErrorResult()
     {
         // Arrange
@@ -1178,7 +1228,7 @@ public class ResultUnitTests
     public void Serialize_ReferenceTypeAndErrorAllPropertiesAndMicrosoftSerializer_ReturnsSerializedValueWithAllProperties()
     {
         // Arrange
-        const string ExpectedText = """{"Value":null,"Error":{"Category":3,"TypeUri":"tag:test.com,2024:Test","Title":"Test title","Detail":"Test description.","DetailTemplated":{"TemplateId":"messageId","Params":{"key1":"value1","key2":"value2"}},"InstanceUri":"http://test.com/instance/1013","ErrorDetails":[{"PropertyPointer":"#/property1","Detail":"Property 1 test detail","DetailTemplated":{"TemplateId":"message-property-id","Params":{"pk1":"pv1","pk2":"pv2"}}}]}}""";
+        const string ExpectedText = """{"Error":{"Category":3,"TypeUri":"tag:test.com,2024:Test","Title":"Test title","Detail":"Test description.","DetailTemplated":{"TemplateId":"messageId","Params":{"key1":"value1","key2":"value2"}},"InstanceUri":"http://test.com/instance/1013","ErrorDetails":[{"PropertyPointer":"#/property1","Detail":"Property 1 test detail","DetailTemplated":{"TemplateId":"message-property-id","Params":{"pk1":"pv1","pk2":"pv2"}}}]}}""";
 
         var error = Error.NotFound(
             ErrorUri.Tag("tag:test.com,2024:Test"),
@@ -1203,7 +1253,7 @@ public class ResultUnitTests
     public void Serialize_ReferenceTypeAndErrorAllPropertiesAndNewtonsoftSerializer_ReturnsSerializedValueWithAllProperties()
     {
         // Arrange
-        const string ExpectedText = """{"Value":null,"Error":{"Category":3,"TypeUri":"tag:test.com,2024:Test","Title":"Test title","Detail":"Test description.","DetailTemplated":{"TemplateId":"messageId","Params":{"key1":"value1","key2":"value2"}},"InstanceUri":"http://test.com/instance/1013","ErrorDetails":[{"PropertyPointer":"#/property1","Detail":"Property 1 test detail","DetailTemplated":{"TemplateId":"message-property-id","Params":{"pk1":"pv1","pk2":"pv2"}}}]}}""";
+        const string ExpectedText = """{"Error":{"Category":3,"TypeUri":"tag:test.com,2024:Test","Title":"Test title","Detail":"Test description.","DetailTemplated":{"TemplateId":"messageId","Params":{"key1":"value1","key2":"value2"}},"InstanceUri":"http://test.com/instance/1013","ErrorDetails":[{"PropertyPointer":"#/property1","Detail":"Property 1 test detail","DetailTemplated":{"TemplateId":"message-property-id","Params":{"pk1":"pv1","pk2":"pv2"}}}]}}""";
 
         var error = Error.NotFound(
             ErrorUri.Tag("tag:test.com,2024:Test"),
@@ -1572,6 +1622,233 @@ public class ResultUnitTests
         result.Error.ShouldNotBeNull();
         result.Error.Title.ShouldBe(ExpectedTitle);
         result.Error.TypeUri.ShouldBe(ExpectedTypeUri);
+    }
+
+    #endregion
+
+    #region Result<T>, nullable value
+
+    [Fact]
+    public void FromValue_NullNullableReferenceType_ReturnsSuccessResultWithNullValue()
+    {
+        // Act
+        var result = Result.FromValue<string?>(null);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.IsSuccess().ShouldBeTrue();
+        result.Value.ShouldBeNull();
+        result.Error.ShouldBeNull();
+    }
+
+    [Fact]
+    public void FromValue_NullReferenceType_ReturnsSuccessResultWithNullValue()
+    {
+        // Act
+        var result = Result.FromValue<string>(null!);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.IsSuccess().ShouldBeTrue();
+        result.Value.ShouldBeNull();
+        result.Error.ShouldBeNull();
+    }
+
+    [Fact]
+    public void FromValue_NullNullableValueType_ReturnsSuccessResultWithNullValue()
+    {
+        // Act
+        var result = Result.FromValue<int?>(null);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.IsSuccess().ShouldBeTrue();
+        result.Value.ShouldBeNull();
+        result.Error.ShouldBeNull();
+    }
+
+    [Fact]
+    public void ImplicitOperator_NullReferenceType_ReturnsSuccessResultWithNullValue()
+    {
+        // Arrange
+        string? value = null;
+
+        // Act
+        Result<string?> result = value;
+
+        // Assert
+        result.IsSuccess().ShouldBeTrue();
+        result.Value.ShouldBeNull();
+    }
+
+    [Fact]
+    public void Value_NullAssignedViaInitializer_ReturnsSuccessResultWithNullValue()
+    {
+        // Act
+        var result = new Result<string?> { Value = null };
+
+        // Assert
+        result.IsSuccess().ShouldBeTrue();
+        result.Value.ShouldBeNull();
+    }
+
+    [Fact]
+    public void NullValueSuccess_DistinctFromFailure()
+    {
+        // Arrange
+        var success = Result.FromValue<string?>(null);
+        var failure = Result<string?>.FromError(Error.NotFound(ErrorUri.Tag("tag:test.com,2024:Test"), "Test title"));
+
+        // Assert
+        success.IsSuccess().ShouldBeTrue();
+        failure.IsSuccess().ShouldBeFalse();
+        success.ShouldNotBe(failure);
+    }
+
+    [Fact]
+    public void Serialize_NullReferenceTypeValueAndMicrosoftSerializer_WritesNullValue()
+    {
+        // Arrange
+        const string ExpectedText = """{"Value":null,"Error":null}""";
+        var sut = Result.FromValue<string?>(null);
+
+        // Act
+        var result = SerializationHelper.SerializeWithMicrosoft(sut);
+
+        // Assert
+        result.ShouldBe(ExpectedText);
+    }
+
+    [Fact]
+    public void Serialize_NullReferenceTypeValueAndNewtonsoftSerializer_WritesNullValue()
+    {
+        // Arrange
+        const string ExpectedText = """{"Value":null,"Error":null}""";
+        var sut = Result.FromValue<string?>(null);
+
+        // Act
+        var result = SerializationHelper.SerializeWithNewtonsoft(sut);
+
+        // Assert
+        result.ShouldBe(ExpectedText);
+    }
+
+    [Fact]
+    public void Serialize_NullNullableValueTypeValueAndMicrosoftSerializer_WritesNullValue()
+    {
+        // Arrange
+        const string ExpectedText = """{"Value":null,"Error":null}""";
+        var sut = Result.FromValue<int?>(null);
+
+        // Act
+        var result = SerializationHelper.SerializeWithMicrosoft(sut);
+
+        // Assert
+        result.ShouldBe(ExpectedText);
+    }
+
+    [Fact]
+    public void Serialize_NullNullableValueTypeValueAndNewtonsoftSerializer_WritesNullValue()
+    {
+        // Arrange
+        const string ExpectedText = """{"Value":null,"Error":null}""";
+        var sut = Result.FromValue<int?>(null);
+
+        // Act
+        var result = SerializationHelper.SerializeWithNewtonsoft(sut);
+
+        // Assert
+        result.ShouldBe(ExpectedText);
+    }
+
+    [Fact]
+    public void Deserialize_NullReferenceTypeValueAndMicrosoftSerializer_ReturnsSuccessResultWithNullValue()
+    {
+        // Arrange
+        const string Json = """{"Value":null,"Error":null}""";
+
+        // Act
+        var result = SerializationHelper.DeserializeWithMicrosoft<Result<string?>>(Json);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.IsSuccess().ShouldBeTrue();
+        result.Value.ShouldBeNull();
+    }
+
+    [Fact]
+    public void Deserialize_NullReferenceTypeValueAndNewtonsoftSerializer_ReturnsSuccessResultWithNullValue()
+    {
+        // Arrange
+        const string Json = """{"Value":null,"Error":null}""";
+
+        // Act
+        var result = SerializationHelper.DeserializeWithNewtonsoft<Result<string?>>(Json);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.IsSuccess().ShouldBeTrue();
+        result.Value.ShouldBeNull();
+    }
+
+    [Fact]
+    public void RoundTrip_NullReferenceTypeValueAndMicrosoftSerializer_ReturnsSuccessResultWithNullValue()
+    {
+        // Arrange
+        var sut = Result.FromValue<string?>(null);
+        var json = SerializationHelper.SerializeWithMicrosoft(sut);
+
+        // Act
+        var result = SerializationHelper.DeserializeWithMicrosoft<Result<string?>>(json);
+
+        // Assert
+        result.IsSuccess().ShouldBeTrue();
+        result.Value.ShouldBeNull();
+    }
+
+    [Fact]
+    public void RoundTrip_NullReferenceTypeValueAndNewtonsoftSerializer_ReturnsSuccessResultWithNullValue()
+    {
+        // Arrange
+        var sut = Result.FromValue<string?>(null);
+        var json = SerializationHelper.SerializeWithNewtonsoft(sut);
+
+        // Act
+        var result = SerializationHelper.DeserializeWithNewtonsoft<Result<string?>>(json);
+
+        // Assert
+        result.IsSuccess().ShouldBeTrue();
+        result.Value.ShouldBeNull();
+    }
+
+    [Fact]
+    public void RoundTrip_NullNullableValueTypeValueAndMicrosoftSerializer_ReturnsSuccessResultWithNullValue()
+    {
+        // Arrange
+        var sut = Result.FromValue<int?>(null);
+        var json = SerializationHelper.SerializeWithMicrosoft(sut);
+
+        // Act
+        var result = SerializationHelper.DeserializeWithMicrosoft<Result<int?>>(json);
+
+        // Assert
+        result.IsSuccess().ShouldBeTrue();
+        result.Value.ShouldBeNull();
+    }
+
+    [Fact]
+    public void RoundTrip_NullNullableValueTypeValueAndNewtonsoftSerializer_ReturnsSuccessResultWithNullValue()
+    {
+        // Arrange
+        var sut = Result.FromValue<int?>(null);
+        var json = SerializationHelper.SerializeWithNewtonsoft(sut);
+
+        // Act
+        var result = SerializationHelper.DeserializeWithNewtonsoft<Result<int?>>(json);
+
+        // Assert
+        result.IsSuccess().ShouldBeTrue();
+        result.Value.ShouldBeNull();
     }
 
     #endregion

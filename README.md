@@ -117,8 +117,15 @@ var userTokenResult =
     select token;
 ```
 
+A single-clause query that only projects a successful value (via `Select()`) is supported too—the projection runs only on success, while an error is propagated unchanged:
+```csharp
+var displayNameResult =
+    from user in _userService.GetUser(userId)
+    select $"{user.FirstName} {user.LastName}";
+```
+
 > [!NOTE]
-> The asynchronous extension methods (`IfSuccessAsync()`, `IfErrorAsync()`, `MatchAsync()`, `ToResultAsync()` and the LINQ `SelectMany()`) support both `Task` and `ValueTask`, so you can chain and `await` results regardless of which one your methods return.
+> The asynchronous extension methods (`IfSuccessAsync()`, `IfErrorAsync()`, `MatchAsync()`, `ToResultAsync()` and the LINQ `Select()` and `SelectMany()`) support both `Task` and `ValueTask`, so you can chain and `await` results regardless of which one your methods return.
 
 See more: [Maple.Result.Extensions](https://github.com/TomMaple/Result/blob/main/docs/Reference/Extensions/namespace.md)
 
@@ -192,6 +199,9 @@ Use
 var result = userResult.ToResult();
 ```
 to convert `Result<T>` to `Result` if you need to return a non-generic result without a value.
+
+> [!NOTE]
+> A successful `Result<T>` normally carries a non-null value. When `T` is nullable—a nullable reference type or `Nullable<T>` (e.g., `Result<string?>` or `Result<int?>`)—a `null` is a valid successful value. Because a successful `null` value and a default value carried by a failed result (e.g., `0` for a `Result<int>`) can both look “empty”, always use `IsSuccess()` to distinguish success from failure rather than checking the value against `null`.
 
 ### Example
 ```csharp
@@ -432,7 +442,7 @@ It is to a developer to draw a line between the errors that are critical and are
 ## Why do methods like `Bind()`, `Else()`, `Map()`, `Switch`, `Then()` and others are not available?
 This library minimizes the amount of extension methods:
 * `Bind()`can be replaced with e.g., `IfSuccess<T, TNext>(Result<T>, Func<T, TNext>)`,
-* `Else()` can be replaced with e.g., `IfError<T>(Result, Func<Error, T>)`,
+* `Else()` can be replaced with e.g., `IfError<TResult>(TResult, Func<Error, TResult>)`,
 * `Map()` can be replaced with e.g., `IfSuccess<T, TNext>(Result<T>, Func<T, TNext>)`,
 * `Switch()` can be replaced with e.g., `Match<T>(Result<T>, Action<T>, Action<Error>)`,
 * `Then()` can be replaced with e.g., `IfSuccess<T, TNext>(Result<T>, Func<T, TNext>)`.

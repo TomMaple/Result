@@ -1,5 +1,5 @@
 # Maple.Result.Extensions Namespace
-Provides classes with extension methods for the [Result](../Result/Result.md) and and [Result&lt;T&gt;](../ResultT/ResultT.md) types.
+Provides classes with extension methods for the [Result](../Result/Result.md) and [Result&lt;T&gt;](../ResultT/ResultT.md) types.
 
 ## Classes
 | Name | Description |

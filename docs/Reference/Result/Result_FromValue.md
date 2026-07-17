@@ -2,7 +2,7 @@
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Result.cs#L132" target="_blank">Result.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Result.cs#L137" target="_blank">Result.cs</a>
 
 Creates a new instance of the generic [Result&lt;T&gt;](../ResultT/ResultT.md) record that represents a successful operation with the specified value.
 
@@ -26,6 +26,8 @@ A new instance of the generic [Result&lt;T&gt;](../ResultT/ResultT.md) record wi
 ## Remarks
 > [!NOTE]
 > This is a recommended way to create a new [Result&lt;T&gt;](../ResultT/ResultT.md) instance with a value. Another way is to use the implicit operator.
+
+A `null` *value* is permitted when `T` is nullable (a nullable reference type or `Nullable<T>`); the resulting [Result&lt;T&gt;](../ResultT/ResultT.md) is successful and its [Value](../ResultT/ResultT_Value.md) is `null`.
 
 ## Examples
 ```csharp

@@ -2,7 +2,7 @@
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Result.cs#L147" target="_blank">Result.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Result.cs#L152" target="_blank">Result.cs</a>
 
 Represents the outcome of an operation that can either succeed or fail with an [Error](../Error/Error.md).
 
@@ -10,7 +10,7 @@ Represents the outcome of an operation that can either succeed or fail with an [
 public sealed record Result<T> : IResult
 ```
 
-Inheritance [Object](https://learn.microsoft.com/dotnet/api/system.object) → [ValueType](https://learn.microsoft.com/dotnet/api/system.valuetype) → [Record](https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/record) → Result&lt;T&gt;
+Inheritance [Object](https://learn.microsoft.com/dotnet/api/system.object) → Result&lt;T&gt;
 
 Implements [IResult](../IResult/IResult.md)
 
@@ -84,12 +84,12 @@ public Result<User> GetUser(int userId)
 ```
 
 ## Serialization
-[Result&lt;T&gt;](ResultT.md) round-trips through both [System.Text.Json](https://learn.microsoft.com/dotnet/api/system.text.json.jsonserializer) and [Newtonsoft.Json](https://www.newtonsoft.com/json), for any `T`—including non-nullable value types such as `int`, `Guid` or `bool`.
+[Result&lt;T&gt;](ResultT.md) round-trips through both [System.Text.Json](https://learn.microsoft.com/dotnet/api/system.text.json.jsonserializer) and [Newtonsoft.Json](https://www.newtonsoft.com/json), for any `T`—including non-nullable value types such as `int`, `Guid` or `bool`, and nullable types such as `string?` or `int?`.
 
-Only the member the result actually holds is written: a successful result writes its [Value](ResultT_Value.md), and a failed one writes its [Error](ResultT_Error.md). When deserializing a payload that carries both (which a producer can emit for a value type, whose absent value has no `null` to stand in for it), the [Error](ResultT_Error.md) wins and the phantom default value is discarded.
+The [Value](ResultT_Value.md) member is written only when the result is successful and holds a value; a failed result omits it and writes only its [Error](ResultT_Error.md). A successful result of a nullable `T` (a nullable reference type or `Nullable<T>`) may carry a `null` value, which is written as `"Value": null`—so `{"Value":null,"Error":null}` denotes a successful `null` value, while a failed result carries no `Value` member at all. When deserializing a payload that carries both a value and an error, the [Error](ResultT_Error.md) wins and the value is discarded.
 
 > [!NOTE]
-> A non-nullable value type has no `null` to represent an absent value, so a failed `Result<int>` must not be written as `"Value": 0`—that is indistinguishable from a successful result carrying `0`, and cannot be read back. To prevent this, the value member is omitted from the payload of a failed result of such a type. For System.Text.Json this is handled by an internal [JsonConverter](https://learn.microsoft.com/dotnet/api/system.text.json.serialization.jsonconverter); for Newtonsoft.Json, which does not honour that converter, the equivalent rule is applied through a conventional `ShouldSerializeValue()` method. Both serializers therefore produce identical output. `ShouldSerializeValue()` is public only because Newtonsoft.Json requires it to be; it is hidden from IntelliSense and not intended to be called directly.
+> Omitting the value member from a failed result is what lets any `T` round-trip. A non-nullable value type has no `null` to represent an absent value (a failed `Result<int>` written as `"Value": 0` is indistinguishable from a successful `0`), and a nullable type's `null` would otherwise be mistaken for a successful `null` value. For System.Text.Json this is handled by an internal [JsonConverter](https://learn.microsoft.com/dotnet/api/system.text.json.serialization.jsonconverter); for Newtonsoft.Json, which does not honour that converter, the equivalent rule is applied through a conventional `ShouldSerializeValue()` method. Both serializers therefore produce identical output. `ShouldSerializeValue()` is public only because Newtonsoft.Json requires it to be; it is hidden from IntelliSense and not intended to be called directly.
 
 ## Constructors
 | Name | Description |

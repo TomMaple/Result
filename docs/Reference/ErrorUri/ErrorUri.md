@@ -10,14 +10,25 @@ Provides a validated *URI* for the purpose of the *Error* record properties like
 public readonly record struct ErrorUri
 ```
 
-Inheritance [Object](https://learn.microsoft.com/dotnet/api/system.object) → [ValueType](https://learn.microsoft.com/dotnet/api/system.valuetype) → [Record](https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/record) → ErrorDetail
+Inheritance [Object](https://learn.microsoft.com/dotnet/api/system.object) → [ValueType](https://learn.microsoft.com/dotnet/api/system.valuetype) → ErrorUri
 
 
 ## Examples
 ```csharp
-var error = Error.Validation("tag:test.com,2024:SignupErrors-InvalidData", "Provided data is invalid.");
+// A URI Tag identifies the problem type; a URI Locator points to its documentation.
+var error = Error.Validation(
+    ErrorUri.Tag("tag:exampleapp.com,2026:errors:signup:invalid-data"),
+    "Provided data is invalid.",
+    "Address the validation errors and try again.",
+    ErrorUri.Locator("https://api.exampleapp.com/errors/7894375839/details"));
+
 error.AddDetail("#/email", "Email is invalid", "errors-email-invalid",
     ("required_format", "address@domain.com"), ("min_length", "9"));
+```
+
+```csharp
+// Use ErrorUri.None() when the problem type is not specified (it resolves to about:blank).
+var error = Error.Failure(ErrorUri.None(), "The operation could not be completed.");
 ```
 
 ## Constructors

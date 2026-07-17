@@ -183,7 +183,169 @@ public class LinqExtensionsUnitTests
 
     #endregion
 
+    #region Select(Result<T>, Func<T, TNext>)
+
+    [Fact]
+    public void Select_NoResultWithSelector_ThrowsException()
+    {
+        // Arrange
+        const Result<int>? Sut = null;
+
+        // Act
+        var exception = Record.Exception(() => Sut!.Select(x => x.ToString()));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentNullException>();
+        exception.Message.ShouldStartWith("Value cannot be null.");
+    }
+
+    [Fact]
+    public void Select_SuccessfulResultWithNoSelector_ThrowsException()
+    {
+        // Arrange
+        const Func<int, string>? Selector = null;
+
+        Result<int> sut = 5;
+
+        // Act
+        var exception = Record.Exception(() => sut.Select(Selector!));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentNullException>();
+        exception.Message.ShouldStartWith("Value cannot be null.");
+    }
+
+    [Fact]
+    public void Select_ErrorResultWithNoSelector_ThrowsException()
+    {
+        // Arrange
+        const Func<int, string>? Selector = null;
+
+        var sut = GetErrorResult<int>();
+
+        // Act
+        var exception = Record.Exception(() => sut.Select(Selector!));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentNullException>();
+        exception.Message.ShouldStartWith("Value cannot be null.");
+    }
+
+    [Fact]
+    public void Select_SuccessfulResultWithSelector_CallsSelector()
+    {
+        // Arrange
+        const int InitialValue = 4839;
+        const string ExpectedValue = "4839";
+
+        var selectorMock = new Mock<Func<int, string>>();
+        selectorMock
+            .Setup(x => x.Invoke(InitialValue))
+            .Returns(ExpectedValue);
+
+        Result<int> sut = InitialValue;
+
+        // Act
+        sut.Select(selectorMock.Object);
+
+        // Assert
+        selectorMock.Verify(x => x.Invoke(InitialValue), Times.Once);
+    }
+
+    [Fact]
+    public void Select_SuccessfulResultWithSelector_ReturnsValue()
+    {
+        // Arrange
+        const int InitialValue = 4839;
+        const string ExpectedValue = "4839";
+
+        Result<int> sut = InitialValue;
+
+        // Act
+        var result = sut.Select(x => x.ToString());
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<Result<string>>();
+        result.IsSuccess().ShouldBeTrue();
+        result.Value.ShouldBe(ExpectedValue);
+    }
+
+    [Fact]
+    public void Select_ErrorResultWithSelector_DoesNotCallSelector()
+    {
+        // Arrange
+        var selectorMock = new Mock<Func<int, string>>();
+
+        var sut = GetErrorResult<int>();
+
+        // Act
+        sut.Select(selectorMock.Object);
+
+        // Assert
+        selectorMock.Verify(x => x.Invoke(It.IsAny<int>()), Times.Never);
+    }
+
+    [Fact]
+    public void Select_ErrorResultWithSelector_ReturnsOriginalValueResultWithError()
+    {
+        // Arrange
+        var sut = GetErrorResult<int>();
+
+        // Act
+        var result = sut.Select(x => x.ToString());
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<Result<string>>();
+        result.IsSuccess().ShouldBeFalse();
+        result.Error.ShouldBeSameAs(sut.Error);
+    }
+
+    #endregion
+
     #region LINQ query syntax
+
+    [Fact]
+    public void LinqQuerySyntax_SingleClauseSuccessfulResult_ReturnsProjectedValueResult()
+    {
+        // Arrange
+        const string ExpectedValue = "90";
+
+        Result<int> sut = 90;
+
+        // Act
+        var result =
+            from initialValue in sut
+            select initialValue.ToString();
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<Result<string>>();
+        result.IsSuccess().ShouldBeTrue();
+        result.Value.ShouldBe(ExpectedValue);
+    }
+
+    [Fact]
+    public void LinqQuerySyntax_SingleClauseErrorResult_ReturnsOriginalValueResultWithError()
+    {
+        // Arrange
+        var sut = GetErrorResult<int>();
+
+        // Act
+        var result =
+            from initialValue in sut
+            select initialValue.ToString();
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<Result<string>>();
+        result.IsSuccess().ShouldBeFalse();
+        result.Error.ShouldBeSameAs(sut.Error);
+    }
 
     [Fact]
     public void LinqQuerySyntax_SuccessfulResult_CallsFunctions()

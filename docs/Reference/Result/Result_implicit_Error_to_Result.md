@@ -26,7 +26,7 @@ A new instance of the [Result](Result.md) record (without a value) that represen
 ## Examples
 ```csharp
 Result result = Error.Failure(
-                    new ErrorUri("https://example.com/errors/invalid-operation"),
+                    ErrorUri.Locator("https://example.com/errors/invalid-operation"),
                     "Invalid operation",
                     "The requested operation is invalid in the current context.");
 ```
