@@ -1488,6 +1488,94 @@ public class ResultUnitTests
 
     #endregion
 
+    #region Result<T>, reference type round-trip
+
+    [Fact]
+    public void RoundTrip_SuccessWithReferenceTypeAndMicrosoftSerializer_ReturnsSuccessResult()
+    {
+        // Arrange
+        const string ExpectedText = "Test text";
+        const int ExpectedNumber = 38;
+
+        var sut = new Result<TestClass>(new TestClass { Text = ExpectedText, Number = ExpectedNumber });
+        var json = SerializationHelper.SerializeWithMicrosoft(sut);
+
+        // Act
+        var result = SerializationHelper.DeserializeWithMicrosoft<Result<TestClass>>(json);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.IsSuccess().ShouldBeTrue();
+        result.Value.ShouldNotBeNull();
+        result.Value.Text.ShouldBe(ExpectedText);
+        result.Value.Number.ShouldBe(ExpectedNumber);
+    }
+
+    [Fact]
+    public void RoundTrip_SuccessWithReferenceTypeAndNewtonsoftSerializer_ReturnsSuccessResult()
+    {
+        // Arrange
+        const string ExpectedText = "Test text";
+        const int ExpectedNumber = 38;
+
+        var sut = new Result<TestClass>(new TestClass { Text = ExpectedText, Number = ExpectedNumber });
+        var json = SerializationHelper.SerializeWithNewtonsoft(sut);
+
+        // Act
+        var result = SerializationHelper.DeserializeWithNewtonsoft<Result<TestClass>>(json);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.IsSuccess().ShouldBeTrue();
+        result.Value.ShouldNotBeNull();
+        result.Value.Text.ShouldBe(ExpectedText);
+        result.Value.Number.ShouldBe(ExpectedNumber);
+    }
+
+    [Fact]
+    public void RoundTrip_ErrorWithReferenceTypeAndMicrosoftSerializer_ReturnsErrorResult()
+    {
+        // Arrange
+        const string ExpectedTitle = "Test title";
+        const string ExpectedTypeUri = "tag:test.com,2024:Test";
+
+        var sut = new Result<TestClass>(Error.NotFound(ErrorUri.Tag(ExpectedTypeUri), ExpectedTitle));
+        var json = SerializationHelper.SerializeWithMicrosoft(sut);
+
+        // Act
+        var result = SerializationHelper.DeserializeWithMicrosoft<Result<TestClass>>(json);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.IsSuccess().ShouldBeFalse();
+        result.Error.ShouldNotBeNull();
+        result.Error.Title.ShouldBe(ExpectedTitle);
+        result.Error.TypeUri.ShouldBe(ExpectedTypeUri);
+    }
+
+    [Fact]
+    public void RoundTrip_ErrorWithReferenceTypeAndNewtonsoftSerializer_ReturnsErrorResult()
+    {
+        // Arrange
+        const string ExpectedTitle = "Test title";
+        const string ExpectedTypeUri = "tag:test.com,2024:Test";
+
+        var sut = new Result<TestClass>(Error.NotFound(ErrorUri.Tag(ExpectedTypeUri), ExpectedTitle));
+        var json = SerializationHelper.SerializeWithNewtonsoft(sut);
+
+        // Act
+        var result = SerializationHelper.DeserializeWithNewtonsoft<Result<TestClass>>(json);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.IsSuccess().ShouldBeFalse();
+        result.Error.ShouldNotBeNull();
+        result.Error.Title.ShouldBe(ExpectedTitle);
+        result.Error.TypeUri.ShouldBe(ExpectedTypeUri);
+    }
+
+    #endregion
+
     #region helper classes
 
     private class TestClass
