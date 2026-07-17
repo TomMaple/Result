@@ -19,7 +19,7 @@ Provides records and interfaces with the types to use as a returned value of an 
 ## Enums
 | Name | Description |
 | ---- | ----------- |
-| [ErrorCategory](ErrorCategory.md) | Specified the category of the error that occurred during an operation. |
+| [ErrorCategory](ErrorCategory.md) | Specifies the category of the error that occurred during an operation. |
 
 ## See Also
 * [Maple.Result.Extensions namespace](Extensions/namespace.md)

@@ -10,7 +10,7 @@ Represents an individual error occurrence that contains a problem detail in a [E
 public sealed record ErrorDetail
 ```
 
-Inheritance [Object](https://learn.microsoft.com/dotnet/api/system.object) → [ValueType](https://learn.microsoft.com/dotnet/api/system.valuetype) → [Record](https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/record) → ErrorDetail
+Inheritance [Object](https://learn.microsoft.com/dotnet/api/system.object) → ErrorDetail
 
 
 ## Examples

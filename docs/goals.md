@@ -14,4 +14,4 @@
 1. Minimize code degradation:
 	1. Well-organized.
 	1. Consistent.
-	1. Supporting standard scenarious so there is no need to “reinvent the wheel”.
+	1. Supporting standard scenarios so there is no need to “reinvent the wheel”.

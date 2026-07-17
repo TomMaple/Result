@@ -21,7 +21,7 @@ Inheritance [Object](https://learn.microsoft.com/dotnet/api/system.object) → [
 | NotFound        | 3     | The resource was not found. The requested resource does not exist.<br>It relates to the `404` HTTP status code (Not Found). |
 | Timeout         | 4     | A timeout error. The operation timed out before it could complete.<br>It relates to the `408` HTTP status code (Request Timeout). |
 | Conflict        | 5     | A conflict error. The operation failed due to the data or state conflict (such as a unique constraint violation).<br>It relates to the `409` HTTP status code (Conflict). |
-| Failure         | 6     | An expected error that is not critical to the operation. Do not use for authentication, authorization, validation, data conflict or unexpected errors.<br>It relates to the `422` HTTP status code (Unprocessable Entity). |
+| Failure         | 6     | An expected error that is not critical to the operation. Do not use for authentication, authorization, validation, data conflict or unexpected errors.<br>It relates to the `422` HTTP status code (Unprocessable Content). |
 | Critical        | 7     | An unexpected, critical error.<br>It relates to the `500` HTTP status code (Internal Server Error). |
 | NotImplemented  | 8     | The not implemented error. The operation, feature or case is not implemented.<br>It relates to the `501` HTTP status code (Not Implemented). |
 | Unavailable     | 9     | The resource is not available. Try again later.<br>It relates to the `503` HTTP status code (Service Unavailable). |

@@ -10,7 +10,7 @@ Represents an error in a [Result](../Result/Result.md) with optional properties 
 public sealed record Error
 ```
 
-Inheritance [Object](https://learn.microsoft.com/dotnet/api/system.object) → [ValueType](https://learn.microsoft.com/dotnet/api/system.valuetype) → [Record](https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/record) → Error
+Inheritance [Object](https://learn.microsoft.com/dotnet/api/system.object) → Error
 
 ## Examples
 ```csharp
@@ -28,6 +28,8 @@ public Result DeleteUser(int userId)
     }
 
     // Proceed with user deletion
+
+    return Result.Success();
 }
 ```
 
