@@ -185,11 +185,29 @@ public class ErrorUriUnitTests
     [InlineData("tag:example.com,2004:1234")]
     [InlineData("tag:example.com,2004-01:1234")]
     [InlineData("tag:example.com,2004-01-01:1234")]
+    // Examples from RFC 4151 (https://datatracker.ietf.org/doc/html/rfc4151#section-2.1) and its Wikipedia article.
     [InlineData("tag:timothy@hpl.hp.com,2001:web/externalHome")]
     [InlineData("tag:sandro@w3.org,2004-05:Sandro")]
     [InlineData("tag:my-ids.com,2001-09-15:TimKindberg:presentations:UBath2004-05-19")]
     [InlineData("tag:blogger.com,1999:blog-555")]
+    [InlineData("tag:yaml.org,2002:int")]
     [InlineData("tag:yaml.org,2002:int#section1")]
+    // RFC 4151 section 2.4: the specific part may be empty (specific = *( pchar / "/" / "?" )).
+    [InlineData("tag:example.com,2000:")]
+    [InlineData("tag:example.com,2000-01-01:")]
+    // RFC 4151 section 2.4: the authority name is case-sensitive but upper-case letters are syntactically allowed.
+    [InlineData("tag:EXAMPLE.com,2000:")]
+    // RFC 4151 section 2.4: a future date is syntactically well-formed; the "date held" rule is a semantic
+    // constraint this syntactic validator does not (and cannot) enforce.
+    [InlineData("tag:hp.com,2999:")]
+    // RFC 3986 pchar: non-ASCII must be percent-encoded UTF-8, and an internationalized domain name must use its
+    // punycode (xn--) form. Both are pure ASCII and therefore valid.
+    [InlineData("tag:example.com,2004:caf%C3%A9")]        // "café" with the "é" percent-encoded
+    [InlineData("tag:example.com,2004:%F0%9F%98%80")]     // an emoji percent-encoded
+    [InlineData("tag:xn--mnchen-3ya.de,2004:x")]          // "münchen.de" in punycode
+    [InlineData("tag:example.com,2004:a?q/b")]            // "?" and "/" are allowed in the specific part
+    [InlineData("tag:example.com,2004:a=b&c;d")]          // sub-delims are allowed in the specific part
+    [InlineData("tag:example.com,2004:~a.b_c-d")]         // unreserved marks are allowed in the specific part
     public void Tag_ValidUriTag_ReturnsErrorUriWithUriTag(string tagValue)
     {
         // Act
@@ -230,6 +248,31 @@ public class ErrorUriUnitTests
     [InlineData("error")]
     [InlineData("mailto:email@company.com")]
     [InlineData("https://www.company.com")]
+    // Well-formed "tag:" scheme but structurally invalid taggingEntity.
+    [InlineData("tag:")]
+    [InlineData("tag:@@@")]
+    [InlineData("tag:no-date-here")]
+    [InlineData("tag:example.com:1234")]
+    [InlineData("tag:,2004:1234")]
+    [InlineData("tag:example.com,2004")]
+    // Invalid date components: year not starting with 1 or 2, wrong digit count, or out-of-range month/day.
+    [InlineData("tag:example.com,204:1234")]
+    [InlineData("tag:example.com,0204:1234")]
+    [InlineData("tag:example.com,3004:1234")]
+    [InlineData("tag:example.com,2004-13:1234")]
+    [InlineData("tag:example.com,2004-00:1234")]
+    [InlineData("tag:example.com,2004-1:1234")]
+    [InlineData("tag:example.com,2004-01-32:1234")]
+    [InlineData("tag:example.com,2004-01-00:1234")]
+    [InlineData("tag:example.com,2004-01-1:1234")]
+    // Raw (non-percent-encoded) Unicode is outside the ASCII-only RFC 4151 / RFC 3986 grammar, whether in the
+    // specific part or the authority (which would need its punycode form). The emoji uses a \U escape as it is
+    // outside the Basic Multilingual Plane; the file is saved as UTF-8, so the other literals are safe.
+    [InlineData("tag:example.com,2004:café")]        // "café" with a literal "é"
+    [InlineData("tag:example.com,2004:日本")]         // literal CJK ("日本") in the specific part
+    [InlineData("tag:example.com,2004:\U0001F600")]  // a literal emoji in the specific part
+    [InlineData("tag:münchen.de,2004:x")]            // literal "ü" in the authority (needs punycode instead)
+    [InlineData("tag:例.com,2004:x")]                // literal CJK ("例") in the authority
     public void Tag_InvalidUriTag_ThrowsException(string value)
     {
         // Act
