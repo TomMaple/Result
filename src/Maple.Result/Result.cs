@@ -289,10 +289,11 @@ public sealed record Result<T> : IResult
     ///     <para>
     ///         <i>Newtonsoft.Json</i> discovers this method by convention and does not honour the
     ///         <see cref="JsonConverterAttribute" /> that governs <i>System.Text.Json</i>. The member is written only
-    ///         when a value is present (<see cref="HasValue" />)—including a successful <see langword="null"/> value,
-    ///         which is written as <see langword="null" />. A failed result has no value, so the member is omitted
-    ///         rather than written as a default (e.g., <c>0</c>) or a <see langword="null"/> that
-    ///         would be mistaken for a successful null value when read back.
+    ///         when a value is present (<see cref="HasValue" />) and no <see cref="Error" /> is set—including a
+    ///         successful <see langword="null"/> value, which is written as <see langword="null" />. A failed result
+    ///         has no value, so the member is omitted rather than written as a default (e.g., <c>0</c>) or a
+    ///         <see langword="null"/> that would be mistaken for a successful null value when read back; the
+    ///         <see cref="Error" /> guard also ensures a failed result never emits a value.
     ///     </para>
     ///     <para>
     ///         This method mirrors the rule applied by <i>System.Text.Json</i>, so both serializers produce the same
@@ -301,13 +302,13 @@ public sealed record Result<T> : IResult
     ///     </para>
     /// </remarks>
     /// <returns>
-    ///     <see langword="true" /> if a value is present (even if that value is <see langword="null" />);
-    ///     otherwise, <see langword="false" />.
+    ///     <see langword="true" /> if a value is present (even if that value is <see langword="null" />)
+    ///     and no <see cref="Error" /> is set; otherwise, <see langword="false" />.
     /// </returns>
     [EditorBrowsable(EditorBrowsableState.Never)]
     public bool ShouldSerializeValue()
     {
-        return _hasValue;
+        return _hasValue && _error is null;
     }
 
     /// <summary>

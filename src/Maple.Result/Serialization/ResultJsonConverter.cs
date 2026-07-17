@@ -124,10 +124,11 @@ internal sealed class ResultJsonConverter<T> : JsonConverter<Result<T>>
 
         var valueName = ResolveName(ValuePropertyName, options);
 
-        // Write the value only when one is present. A present value may itself be null (a successful result of a
-        // nullable T), written as null. An absent value (a failed or not-yet-populated result) is omitted so it is
-        // not mistaken for a successful null value when read back.
-        if (value.HasValue)
+        // Write the value only when one is present and no error is set. A present value may itself be null
+        // (a successful result of a nullable T), written as null. An absent value (a failed or not-yet-populated
+        // result) is omitted so it is not mistaken for a successful null value when read back; the error guard
+        // additionally ensures a failed result never emits a value.
+        if (value.HasValue && value.Error is null)
         {
             writer.WritePropertyName(valueName);
             JsonSerializer.Serialize(writer, value.Value, options);
