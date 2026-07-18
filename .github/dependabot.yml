@@ -1,0 +1,25 @@
+# Dependabot configuration for automated dependency updates.
+# For more information, see: https://docs.github.com/en/code-security/dependabot
+
+version: 2
+updates:
+  # NuGet packages across src/ and tests/ project files.
+  - package-ecosystem: "nuget"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    groups:
+      nuget-dependencies:
+        patterns:
+          - "*"
+
+  # GitHub Actions used by the workflows.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      github-actions:
+        patterns:
+          - "*"
