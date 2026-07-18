@@ -1,4 +1,4 @@
-﻿# This workflow will build and publish a NuGet library
+# This workflow will build and publish a NuGet library
 # For more information, see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
 
 name: Build and publish
@@ -21,12 +21,12 @@ jobs:
       id-token: write
     steps:
     - name: Checkout
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
       with:
         fetch-depth: 0
 
     - name: Get semantic version
-      uses: paulhatch/semantic-version@v5.4.0
+      uses: paulhatch/semantic-version@v6.0.3
       id: semantic_version
       with:
         tag_prefix: "v"
@@ -56,7 +56,7 @@ jobs:
       shell: bash
 
     - name: Setup .NET 10
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v6
       with:
         dotnet-version: 10.0.x
 
