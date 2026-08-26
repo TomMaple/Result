@@ -1,4 +1,4 @@
-﻿# Error.Unavailable Method
+# Error.Unavailable Method
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>

@@ -1,4 +1,4 @@
-﻿# Conventions
+# Conventions
 ## Git
 1. Workflow: [GitHub flow](https://docs.github.com/en/get-started/using-github/github-flow)
 1. Branch naming:

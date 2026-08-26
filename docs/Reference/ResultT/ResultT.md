@@ -1,4 +1,4 @@
-﻿# Result&lt;T&gt; Record
+# Result&lt;T&gt; Record
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>

@@ -1,4 +1,4 @@
-﻿# Result&lt;T&gt;.FromError(Error) Method
+# Result&lt;T&gt;.FromError(Error) Method
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>

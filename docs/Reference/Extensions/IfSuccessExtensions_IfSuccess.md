@@ -1,4 +1,4 @@
-﻿# IfSuccessExtensions.IfSuccess Methods
+# IfSuccessExtensions.IfSuccess Methods
 ## Definition
 Namespace: [Maple.Result.Extensions](namespace.md)<br>
 Assembly: Maple.Result.dll<br>

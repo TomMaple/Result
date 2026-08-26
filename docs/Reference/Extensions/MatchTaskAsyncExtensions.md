@@ -1,4 +1,4 @@
-﻿# MatchTaskAsyncExtensions Class
+# MatchTaskAsyncExtensions Class
 ## Definition
 Namespace: [Maple.Result.Extensions](namespace.md)<br>
 Assembly: Maple.Result.dll<br>

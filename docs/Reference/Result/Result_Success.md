@@ -1,4 +1,4 @@
-﻿# Result.Success() Method
+# Result.Success() Method
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>

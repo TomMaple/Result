@@ -1,4 +1,4 @@
-﻿# ResultExtensions.ToResult(Result&lt;T&gt;) Method
+# ResultExtensions.ToResult(Result&lt;T&gt;) Method
 ## Definition
 Namespace: [Maple.Result.Extensions](namespace.md)<br>
 Assembly: Maple.Result.dll<br>

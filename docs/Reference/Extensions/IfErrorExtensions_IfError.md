@@ -1,4 +1,4 @@
-﻿# IfErrorExtensions.IfError Methods
+# IfErrorExtensions.IfError Methods
 ## Definition
 Namespace: [Maple.Result.Extensions](namespace.md)<br>
 Assembly: Maple.Result.dll<br>

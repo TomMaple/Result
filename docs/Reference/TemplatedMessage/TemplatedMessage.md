@@ -1,4 +1,4 @@
-﻿# TemplatedMessage record
+# TemplatedMessage record
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>

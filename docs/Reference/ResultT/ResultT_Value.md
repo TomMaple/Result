@@ -1,4 +1,4 @@
-﻿# Result&lt;T&gt;.Value Property
+# Result&lt;T&gt;.Value Property
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>

@@ -1,4 +1,4 @@
-﻿# Error.Timeout Method
+# Error.Timeout Method
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>

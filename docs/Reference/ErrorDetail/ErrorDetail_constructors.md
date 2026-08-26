@@ -1,4 +1,4 @@
-﻿# ErrorDetail Constructor
+# ErrorDetail Constructor
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>

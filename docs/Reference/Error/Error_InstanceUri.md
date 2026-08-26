@@ -1,4 +1,4 @@
-﻿# Error.InstanceUri Property
+# Error.InstanceUri Property
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>

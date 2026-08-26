@@ -1,4 +1,4 @@
-﻿![NuGet Version](https://img.shields.io/nuget/v/Maple.Result?label=Maple.Result%20%E2%80%94%20nuget&link=https%3A%2F%2Fwww.nuget.org%2Fpackages%2FMaple.Result%2F)
+![NuGet Version](https://img.shields.io/nuget/v/Maple.Result?label=Maple.Result%20%E2%80%94%20nuget&link=https%3A%2F%2Fwww.nuget.org%2Fpackages%2FMaple.Result%2F)
 ![NuGet Downloads](https://img.shields.io/nuget/dt/Maple.Result)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/TomMaple/Result/build-and-publish.yml)
 ![GitHub last commit](https://img.shields.io/github/last-commit/TomMaple/Result)

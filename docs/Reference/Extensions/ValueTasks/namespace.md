@@ -1,4 +1,4 @@
-﻿# Maple.Result.Extensions.ValueTasks Namespace
+# Maple.Result.Extensions.ValueTasks Namespace
 Provides classes with the [ValueTask](https://learn.microsoft.com/dotnet/api/system.threading.tasks.valuetask)-based asynchronous extension methods for the [Result](../../Result/Result.md) and [Result&lt;T&gt;](../../ResultT/ResultT.md) types.
 
 These extension methods are kept in a separate namespace on purpose. Their [Task](https://learn.microsoft.com/dotnet/api/system.threading.tasks.task)-based counterparts in the [Maple.Result.Extensions](../namespace.md) namespace declare the same method names, and an `async` lambda passed to them is convertible to both a `Func<Task>` and a `Func<ValueTask>` delegate—so having both sets in scope makes such a call ambiguous (*CS0121*). Import the namespace matching the style you use:

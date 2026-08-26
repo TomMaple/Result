@@ -1,4 +1,4 @@
-﻿# ResultTaskAsyncExtensions.ToResultAsync(Task&lt;Result&lt;T&gt;&gt;) Method
+# ResultTaskAsyncExtensions.ToResultAsync(Task&lt;Result&lt;T&gt;&gt;) Method
 ## Definition
 Namespace: [Maple.Result.Extensions](namespace.md)<br>
 Assembly: Maple.Result.dll<br>

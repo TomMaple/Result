@@ -1,4 +1,4 @@
-﻿# Error.Failure Method
+# Error.Failure Method
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>

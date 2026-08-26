@@ -1,4 +1,4 @@
-﻿# IResult.IsSuccess() Method
+# IResult.IsSuccess() Method
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>

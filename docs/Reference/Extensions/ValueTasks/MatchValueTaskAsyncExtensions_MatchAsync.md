@@ -1,4 +1,4 @@
-﻿# MatchValueTaskAsyncExtensions.MatchAsync Methods
+# MatchValueTaskAsyncExtensions.MatchAsync Methods
 ## Definition
 Namespace: [Maple.Result.Extensions.ValueTasks](namespace.md)<br>
 Assembly: Maple.Result.dll<br>

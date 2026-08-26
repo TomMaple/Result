@@ -1,4 +1,4 @@
-﻿# Error.NotImplemented Method
+# Error.NotImplemented Method
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>

@@ -1,4 +1,4 @@
-﻿# Error.Unauthenticated Method
+# Error.Unauthenticated Method
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>

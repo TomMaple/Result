@@ -1,4 +1,4 @@
-﻿# IfSuccessValueTaskAsyncExtensions.IfSuccessAsync Methods
+# IfSuccessValueTaskAsyncExtensions.IfSuccessAsync Methods
 ## Definition
 Namespace: [Maple.Result.Extensions.ValueTasks](namespace.md)<br>
 Assembly: Maple.Result.dll<br>
