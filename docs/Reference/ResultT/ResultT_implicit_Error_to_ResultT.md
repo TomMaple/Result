@@ -1,4 +1,4 @@
-﻿# Result&lt;T&gt;.Implicit(Error to Result&lt;T&gt;) Method
+# Result&lt;T&gt;.Implicit(Error to Result&lt;T&gt;) Method
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>

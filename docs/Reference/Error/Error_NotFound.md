@@ -1,4 +1,4 @@
-﻿# Error.NotFound Method
+# Error.NotFound Method
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>

@@ -1,4 +1,4 @@
-﻿# ErrorUri.Locator(String) Method
+# ErrorUri.Locator(String) Method
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>

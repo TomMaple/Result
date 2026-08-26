@@ -1,4 +1,4 @@
-﻿# Error.AddDetail(String, String, String, (String, Object)[]) Method
+# Error.AddDetail(String, String, String, (String, Object)[]) Method
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>

@@ -1,4 +1,4 @@
-﻿# MatchExtensions Class
+# MatchExtensions Class
 ## Definition
 Namespace: [Maple.Result.Extensions](namespace.md)<br>
 Assembly: Maple.Result.dll<br>

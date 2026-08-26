@@ -1,4 +1,4 @@
-﻿# Result&lt;T&gt;.FromValue(T) Method
+# Result&lt;T&gt;.FromValue(T) Method
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>

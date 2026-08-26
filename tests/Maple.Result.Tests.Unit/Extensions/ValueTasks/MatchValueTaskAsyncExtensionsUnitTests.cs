@@ -1,4 +1,4 @@
-﻿// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: MIT
 /*
  * This code is a part of a Maple.Result library project.
  * https://github.com/TomMaple/Result/
@@ -8,12 +8,12 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-using Maple.Result.Extensions;
+using Maple.Result.Extensions.ValueTasks;
 using Moq;
 using System;
 using System.Threading.Tasks;
 
-namespace Maple.Result.Tests.Unit.Extensions;
+namespace Maple.Result.Tests.Unit.Extensions.ValueTasks;
 
 public class MatchValueTaskAsyncExtensionsUnitTests
 {

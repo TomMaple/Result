@@ -1,4 +1,4 @@
-﻿// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: MIT
 /*
  * This code is a part of a Maple.Result library project.
  * https://github.com/TomMaple/Result/

@@ -1,4 +1,4 @@
-﻿# Result&lt;T&gt; Constructor
+# Result&lt;T&gt; Constructor
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>

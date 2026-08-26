@@ -1,4 +1,4 @@
-﻿# Maple.Result Namespace
+# Maple.Result Namespace
 Provides records and interfaces with the types to use as a returned value of an operation—that can be either successful (with a value or without) or failure (with an error).
 
 ## Records
@@ -23,3 +23,4 @@ Provides records and interfaces with the types to use as a returned value of an 
 
 ## See Also
 * [Maple.Result.Extensions namespace](Extensions/namespace.md)
+* [Maple.Result.Extensions.ValueTasks namespace](Extensions/ValueTasks/namespace.md)

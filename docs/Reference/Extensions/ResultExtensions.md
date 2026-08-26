@@ -1,4 +1,4 @@
-﻿# ResultExtensions Class
+# ResultExtensions Class
 ## Definition
 Namespace: [Maple.Result.Extensions](namespace.md)<br>
 Assembly: Maple.Result.dll<br>

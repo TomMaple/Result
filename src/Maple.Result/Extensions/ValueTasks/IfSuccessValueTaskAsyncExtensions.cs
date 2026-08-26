@@ -11,7 +11,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace Maple.Result.Extensions;
+namespace Maple.Result.Extensions.ValueTasks;
 
 /// <summary>
 ///     The collection of extension methods for executing asynchronous actions or functions, represented by
@@ -21,6 +21,13 @@ namespace Maple.Result.Extensions;
 ///     These methods enable fluent chaining of operations that should only be performed if a preceding
 ///     <see cref="Result" /> indicates success. They help simplify error handling and reduce boilerplate code
 ///     when working with <see cref="Result" />-based workflows.
+///     <para>
+///         These methods are declared in the <c>Maple.Result.Extensions.ValueTasks</c> namespace, separately from
+///         their <see cref="System.Threading.Tasks.Task" />-based counterparts in <c>Maple.Result.Extensions</c>,
+///         because both sets declare the same method names and an asynchronous lambda is convertible to a
+///         <c>Func&lt;Task&gt;</c> as well as to a <c>Func&lt;ValueTask&gt;</c> delegate. Importing only one of these
+///         namespaces keeps such calls unambiguous.
+///     </para>
 /// </remarks>
 public static class IfSuccessValueTaskAsyncExtensions
 {

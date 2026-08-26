@@ -1,4 +1,4 @@
-﻿# Error.Title Property
+# Error.Title Property
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>
