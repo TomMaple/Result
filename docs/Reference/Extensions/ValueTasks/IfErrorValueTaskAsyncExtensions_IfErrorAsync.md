@@ -1,9 +1,9 @@
 # IfErrorValueTaskAsyncExtensions.IfErrorAsync Methods
 ## Definition
-Namespace: [Maple.Result.Extensions](namespace.md)<br>
+Namespace: [Maple.Result.Extensions.ValueTasks](namespace.md)<br>
 Assembly: Maple.Result.dll<br>
 
-Runs a specific asynchronous action or function, if the instance of `TResult` represents a failed operation (i.e., contains an [Error](../Error/Error.md)), as an asynchronous operation.
+Runs a specific asynchronous action or function, if the instance of `TResult` represents a failed operation (i.e., contains an [Error](../../Error/Error.md)), as an asynchronous operation.
 
 ## Overloads
 | Name | Description |
@@ -25,9 +25,9 @@ Runs a specific asynchronous action or function, if the instance of `TResult` re
 
 
 ## IfErrorAsync&lt;TResult&gt;(TResult, Func&lt;Error, ValueTask&gt;, Boolean)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/IfErrorValueTaskAsyncExtensions.cs#L56" target="_blank">IfErrorValueTaskAsyncExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/ValueTasks/IfErrorValueTaskAsyncExtensions.cs#L56" target="_blank">IfErrorValueTaskAsyncExtensions.cs</a>
 
-Executes the provided asynchronous action, only if the instance of `TResult` represents a failed operation (i.e., contains an [Error](../Error/Error.md)), as an asynchronous operation.
+Executes the provided asynchronous action, only if the instance of `TResult` represents a failed operation (i.e., contains an [Error](../../Error/Error.md)), as an asynchronous operation.
 
 ```csharp
 public static async ValueTask<TResult> IfErrorAsync<TResult>(this TResult result, Func<Error, ValueTask> ifErrorAction, bool continueOnCapturedContext = false)
@@ -36,14 +36,14 @@ public static async ValueTask<TResult> IfErrorAsync<TResult>(this TResult result
 
 ### Type Parameters
 #### `TResult`
-The type of the `result` that implements the [IResult](../IResult/IResult.md) interface—[Result](../Result/Result.md) or [Result&lt;T&gt;](../ResultT/ResultT.md) record.
+The type of the `result` that implements the [IResult](../../IResult/IResult.md) interface—[Result](../../Result/Result.md) or [Result&lt;T&gt;](../../ResultT/ResultT.md) record.
 
 ### Parameters
 #### `result` TResult
-The instance of `TResult` (that implements [IResult](../IResult/IResult.md) interface—[Result](../Result/Result.md) or [Result&lt;T&gt;](../ResultT/ResultT.md) record) that represents the result of the operation to be evaluated.
+The instance of `TResult` (that implements [IResult](../../IResult/IResult.md) interface—[Result](../../Result/Result.md) or [Result&lt;T&gt;](../../ResultT/ResultT.md) record) that represents the result of the operation to be evaluated.
 
-#### `ifErrorAction` [Func](https://learn.microsoft.com/dotnet/api/system.func-2)&lt;[Error](../Error/Error.md), [ValueTask](https://learn.microsoft.com/dotnet/api/system.threading.tasks.valuetask)&gt;
-The asynchronous action to be executed only if the current instance of `TResult` represents a failed operation. The [Error](../Error/Error.md) instance contained in the `TResult` will be passed as a parameter to this action.
+#### `ifErrorAction` [Func](https://learn.microsoft.com/dotnet/api/system.func-2)&lt;[Error](../../Error/Error.md), [ValueTask](https://learn.microsoft.com/dotnet/api/system.threading.tasks.valuetask)&gt;
+The asynchronous action to be executed only if the current instance of `TResult` represents a failed operation. The [Error](../../Error/Error.md) instance contained in the `TResult` will be passed as a parameter to this action.
 
 #### `continueOnCapturedContext` [Boolean](https://learn.microsoft.com/dotnet/api/system.boolean)
 `true` to attempt to marshal the continuation back to the original context captured; otherwise, `false`.
@@ -71,9 +71,9 @@ await createUserResult.IfErrorAsync(async error =>
 
 
 ## IfErrorAsync&lt;TResult&gt;(TResult, Func&lt;Error, ValueTask&lt;TResult&gt;&gt;, Boolean)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/IfErrorValueTaskAsyncExtensions.cs#L103" target="_blank">IfErrorValueTaskAsyncExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/ValueTasks/IfErrorValueTaskAsyncExtensions.cs#L103" target="_blank">IfErrorValueTaskAsyncExtensions.cs</a>
 
-Executes the provided asynchronous function, only if the instance of `TResult` represents a failed operation (i.e., contains an [Error](../Error/Error.md)), as an asynchronous operation.
+Executes the provided asynchronous function, only if the instance of `TResult` represents a failed operation (i.e., contains an [Error](../../Error/Error.md)), as an asynchronous operation.
 
 ```csharp
 public static async ValueTask<TResult> IfErrorAsync<TResult>(this TResult result, Func<Error, ValueTask<TResult>> ifErrorFunction, bool continueOnCapturedContext = false)
@@ -82,14 +82,14 @@ public static async ValueTask<TResult> IfErrorAsync<TResult>(this TResult result
 
 ### Type Parameters
 #### `TResult`
-The type of the `result` that implements the [IResult](../IResult/IResult.md) interface—[Result](../Result/Result.md) or [Result&lt;T&gt;](../ResultT/ResultT.md) record.
+The type of the `result` that implements the [IResult](../../IResult/IResult.md) interface—[Result](../../Result/Result.md) or [Result&lt;T&gt;](../../ResultT/ResultT.md) record.
 
 ### Parameters
 #### `result` TResult
-The instance of `TResult` (that implements [IResult](../IResult/IResult.md) interface—[Result](../Result/Result.md) or [Result&lt;T&gt;](../ResultT/ResultT.md) record) that represents the result of the operation to be evaluated.
+The instance of `TResult` (that implements [IResult](../../IResult/IResult.md) interface—[Result](../../Result/Result.md) or [Result&lt;T&gt;](../../ResultT/ResultT.md) record) that represents the result of the operation to be evaluated.
 
-#### `ifErrorFunction` [Func](https://learn.microsoft.com/dotnet/api/system.func-2)&lt;[Error](../Error/Error.md), [ValueTask](https://learn.microsoft.com/dotnet/api/system.threading.tasks.valuetask-1)&lt;TResult&gt;&gt;
-The asynchronous function to be executed, only if the current instance of `TResult` represents a failed operation, as an asynchronous operation. The [Error](../Error/Error.md) instance contained in the `TResult` will be passed as a parameter to this function.
+#### `ifErrorFunction` [Func](https://learn.microsoft.com/dotnet/api/system.func-2)&lt;[Error](../../Error/Error.md), [ValueTask](https://learn.microsoft.com/dotnet/api/system.threading.tasks.valuetask-1)&lt;TResult&gt;&gt;
+The asynchronous function to be executed, only if the current instance of `TResult` represents a failed operation, as an asynchronous operation. The [Error](../../Error/Error.md) instance contained in the `TResult` will be passed as a parameter to this function.
 
 #### `continueOnCapturedContext` [Boolean](https://learn.microsoft.com/dotnet/api/system.boolean)
 `true` to attempt to marshal the continuation back to the original context captured; otherwise, `false`.
@@ -125,9 +125,9 @@ await userResult.IfErrorAsync(async error =>
 
 
 ## IfErrorAsync&lt;TResult&gt;(ValueTask&lt;TResult&gt;, Func&lt;Error, ValueTask&gt;, Boolean)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/IfErrorValueTaskAsyncExtensions.cs#L157" target="_blank">IfErrorValueTaskAsyncExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/ValueTasks/IfErrorValueTaskAsyncExtensions.cs#L157" target="_blank">IfErrorValueTaskAsyncExtensions.cs</a>
 
-Executes the provided asynchronous function, if the provided asynchronous operation returns a failed`TResult` instance (i.e., contains an [Error](../Error/Error.md)), and returns its result as an asynchronous operation.
+Executes the provided asynchronous function, if the provided asynchronous operation returns a failed`TResult` instance (i.e., contains an [Error](../../Error/Error.md)), and returns its result as an asynchronous operation.
 
 ```csharp
 public static async ValueTask<TResult> IfErrorAsync<TResult>(
@@ -139,14 +139,14 @@ public static async ValueTask<TResult> IfErrorAsync<TResult>(
 
 ### Type Parameters
 #### `TResult`
-The type of the `resultTask` that implements the [IResult](../IResult/IResult.md) interface—[Result](../Result/Result.md) or [Result&lt;T&gt;](../ResultT/ResultT.md) record.
+The type of the `resultTask` that implements the [IResult](../../IResult/IResult.md) interface—[Result](../../Result/Result.md) or [Result&lt;T&gt;](../../ResultT/ResultT.md) record.
 
 ### Parameters
 #### `resultTask` TResult
-The asynchronous operation that represents an instance of `TResult` (that implements [IResult](../IResult/IResult.md) interface—[Result](../Result/Result.md) or [Result&lt;T&gt;](../ResultT/ResultT.md) record) to be executed and which result is to be evaluated.
+The asynchronous operation that represents an instance of `TResult` (that implements [IResult](../../IResult/IResult.md) interface—[Result](../../Result/Result.md) or [Result&lt;T&gt;](../../ResultT/ResultT.md) record) to be executed and which result is to be evaluated.
 
-#### `ifErrorAction` [Func](https://learn.microsoft.com/dotnet/api/system.func-2)&lt;[Error](../Error/Error.md), [ValueTask](https://learn.microsoft.com/dotnet/api/system.threading.tasks.valuetask)&gt;
-The asynchronous action to be executed only if the `resultTask` represents a failed operation. The [Error](../Error/Error.md) instance contained in the outcome will be passed as a parameter to this action.
+#### `ifErrorAction` [Func](https://learn.microsoft.com/dotnet/api/system.func-2)&lt;[Error](../../Error/Error.md), [ValueTask](https://learn.microsoft.com/dotnet/api/system.threading.tasks.valuetask)&gt;
+The asynchronous action to be executed only if the `resultTask` represents a failed operation. The [Error](../../Error/Error.md) instance contained in the outcome will be passed as a parameter to this action.
 
 #### `continueOnCapturedContext` [Boolean](https://learn.microsoft.com/dotnet/api/system.boolean)
 `true` to attempt to marshal the continuation back to the original context captured; otherwise, `false`.
@@ -179,9 +179,9 @@ var createUserResult = await _userService.CreateUserAsync(userData)
 
 
 ## IfErrorAsync&lt;TResult&gt;(ValueTask&lt;TResult&gt;, Func&lt;Error, ValueTask&lt;TResult&gt;&gt;, Boolean)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/IfErrorValueTaskAsyncExtensions.cs#L216" target="_blank">IfErrorValueTaskAsyncExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/ValueTasks/IfErrorValueTaskAsyncExtensions.cs#L216" target="_blank">IfErrorValueTaskAsyncExtensions.cs</a>
 
-Executes the provided asynchronous function, if the provided asynchronous operation returns a failed`TResult` instance (i.e., contains an [Error](../Error/Error.md)), and returns its result as an asynchronous operation.
+Executes the provided asynchronous function, if the provided asynchronous operation returns a failed`TResult` instance (i.e., contains an [Error](../../Error/Error.md)), and returns its result as an asynchronous operation.
 
 ```csharp
 public static async ValueTask<TResult> IfErrorAsync<TResult>(this ValueTask<TResult> resultTask,
@@ -191,14 +191,14 @@ public static async ValueTask<TResult> IfErrorAsync<TResult>(this ValueTask<TRes
 
 ### Type Parameters
 #### `TResult`
-The type of the `resultTask` that implements the [IResult](../IResult/IResult.md) interface—[Result](../Result/Result.md) or [Result&lt;T&gt;](../ResultT/ResultT.md) record.
+The type of the `resultTask` that implements the [IResult](../../IResult/IResult.md) interface—[Result](../../Result/Result.md) or [Result&lt;T&gt;](../../ResultT/ResultT.md) record.
 
 ### Parameters
 #### `resultTask` TResult
-The asynchronous operation that represents an instance of `TResult` (that implements [IResult](../IResult/IResult.md) interface—[Result](../Result/Result.md) or [Result&lt;T&gt;](../ResultT/ResultT.md) record) to be executed and which result is to be evaluated.
+The asynchronous operation that represents an instance of `TResult` (that implements [IResult](../../IResult/IResult.md) interface—[Result](../../Result/Result.md) or [Result&lt;T&gt;](../../ResultT/ResultT.md) record) to be executed and which result is to be evaluated.
 
-#### `ifErrorFunction` [Func](https://learn.microsoft.com/dotnet/api/system.func-2)&lt;[Error](../Error/Error.md), [ValueTask](https://learn.microsoft.com/en-ca/dotnet/api/system.threading.tasks.valuetask-1)&lt;TResult&gt;&gt;
-The asynchronous function to be executed, only if the current instance of `TResult` represents a failed operation, as an asynchronous operation. The [Error](../Error/Error.md) instance contained in the outcome will be passed as a parameter to this function.
+#### `ifErrorFunction` [Func](https://learn.microsoft.com/dotnet/api/system.func-2)&lt;[Error](../../Error/Error.md), [ValueTask](https://learn.microsoft.com/en-ca/dotnet/api/system.threading.tasks.valuetask-1)&lt;TResult&gt;&gt;
+The asynchronous function to be executed, only if the current instance of `TResult` represents a failed operation, as an asynchronous operation. The [Error](../../Error/Error.md) instance contained in the outcome will be passed as a parameter to this function.
 
 #### `continueOnCapturedContext` [Boolean](https://learn.microsoft.com/dotnet/api/system.boolean)
 `true` to attempt to marshal the continuation back to the original context captured; otherwise, `false`.
@@ -238,6 +238,6 @@ var userResult = await _userService.GetUserAsync(userData)
 ```
 
 ## See Also
-* [Error](../Error/Error.md)
-* [Result](../Result/Result.md)
-* [Result&lt;T&gt;](../ResultT/ResultT.md)
+* [Error](../../Error/Error.md)
+* [Result](../../Result/Result.md)
+* [Result&lt;T&gt;](../../ResultT/ResultT.md)

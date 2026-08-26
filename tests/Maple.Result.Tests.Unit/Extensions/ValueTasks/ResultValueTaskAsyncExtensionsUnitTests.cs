@@ -10,9 +10,9 @@
 
 using System;
 using System.Threading.Tasks;
-using Maple.Result.Extensions;
+using Maple.Result.Extensions.ValueTasks;
 
-namespace Maple.Result.Tests.Unit.Extensions;
+namespace Maple.Result.Tests.Unit.Extensions.ValueTasks;
 
 public class ResultValueTaskAsyncExtensionsUnitTests
 {
