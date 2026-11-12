@@ -1003,7 +1003,7 @@ public sealed record Error
     /// </param>
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
     /// <remarks>
-    ///     Indicates that the resource is not available and the operation can be retried later.<br />
+    ///     Indicates that the service is not available and the operation can be retried later.<br />
     ///     It can be mapped to the 503 HTTP status code (Service Unavailable) response.
     /// </remarks>
     /// <exception cref="ArgumentException">
@@ -1041,7 +1041,7 @@ public sealed record Error
     /// </param>
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
     /// <remarks>
-    ///     Indicates that the resource is not available and the operation can be retried later.<br />
+    ///     Indicates that the service is not available and the operation can be retried later.<br />
     ///     It can be mapped to the 503 HTTP status code (Service Unavailable) response.
     /// </remarks>
     /// <exception cref="ArgumentException">
@@ -1053,6 +1053,84 @@ public sealed record Error
     {
         return new Error(
             ErrorCategory.Unavailable,
+            typeUri.Value,
+            title,
+            detail,
+            detailTemplateId is null
+                ? null
+                : new TemplatedMessage(detailTemplateId, detailNamedValues?.ToDictionary(x => x.Key, x => x.Value)),
+            instanceUri?.Value);
+    }
+
+    /// <summary>
+    ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.LimitExceeded" /> category.
+    /// </summary>
+    /// <param name="typeUri">A record containing a <i>URI</i> reference that identifies the problem type.</param>
+    /// <param name="title">A short, human-readable summary of the problem.</param>
+    /// <param name="detail">A human-readable explanation specific to this occurrence of the problem.</param>
+    /// <param name="instanceUri">A <i>URI</i> reference that identifies the specific occurrence of the problem.</param>
+    /// <param name="detailTemplateId">
+    ///     A message template identifier to generate a localized detail message
+    ///     (the human-readable explanation specific to this occurrence of the problem).
+    /// </param>
+    /// <param name="detailNamedValues">
+    ///     An optional collection of parameters (names and values) to generate a localized detail
+    ///     message (the human-readable explanation specific to this occurrence of the problem).
+    /// </param>
+    /// <returns>A new instance of the <see cref="Error" /> object.</returns>
+    /// <remarks>
+    ///     Indicates that the request is valid and permitted, but a usage limit, quota or rate has been exhausted.
+    ///     The operation may succeed later or once the limit is raised.<br />
+    ///     It can be mapped to the 429 HTTP status code (Too Many Requests) response.
+    /// </remarks>
+    /// <exception cref="ArgumentException">
+    ///     If the <paramref name="typeUri" /> resolves to an empty or whitespace-only value.
+    /// </exception>
+    public static Error LimitExceeded(ErrorUri typeUri, string title, string? detail = null,
+        ErrorUri? instanceUri = null, string? detailTemplateId = null,
+        params (string Key, object Value)[] detailNamedValues)
+    {
+        return new Error(
+            ErrorCategory.LimitExceeded,
+            typeUri.Value,
+            title,
+            detail,
+            detailTemplateId is null
+                ? null
+                : new TemplatedMessage(detailTemplateId, detailNamedValues.ToDictionary(x => x.Key, x => x.Value)),
+            instanceUri?.Value);
+    }
+
+    /// <summary>
+    ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.LimitExceeded" /> category.
+    /// </summary>
+    /// <param name="typeUri">A record containing a <i>URI</i> reference that identifies the problem type.</param>
+    /// <param name="title">A short, human-readable summary of the problem.</param>
+    /// <param name="detail">A human-readable explanation specific to this occurrence of the problem.</param>
+    /// <param name="instanceUri">A <i>URI</i> reference that identifies the specific occurrence of the problem.</param>
+    /// <param name="detailTemplateId">
+    ///     A message template identifier to generate a localized detail message
+    ///     (the human-readable explanation specific to this occurrence of the problem).
+    /// </param>
+    /// <param name="detailNamedValues">
+    ///     An optional sequence of parameters (names and values) to generate a localized detail
+    ///     message (the human-readable explanation specific to this occurrence of the problem).
+    /// </param>
+    /// <returns>A new instance of the <see cref="Error" /> object.</returns>
+    /// <remarks>
+    ///     Indicates that the request is valid and permitted, but a usage limit, quota or rate has been exhausted.
+    ///     The operation may succeed later or once the limit is raised.<br />
+    ///     It can be mapped to the 429 HTTP status code (Too Many Requests) response.
+    /// </remarks>
+    /// <exception cref="ArgumentException">
+    ///     If the <paramref name="typeUri" /> resolves to an empty or whitespace-only value.
+    /// </exception>
+    public static Error LimitExceeded(ErrorUri typeUri, string title, string? detail = null,
+        ErrorUri? instanceUri = null, string? detailTemplateId = null,
+        IEnumerable<KeyValuePair<string, object>>? detailNamedValues = null)
+    {
+        return new Error(
+            ErrorCategory.LimitExceeded,
             typeUri.Value,
             title,
             detail,

@@ -12,9 +12,11 @@ Creates a new instance of the [Error](Error.md) object of the *Unavailable* cate
 | [Unavailable(ErrorUri, String, String, ErrorUri, String, IEnumerable<KeyValuePair<String, Object>>)](#unavailableerroruri-string-string-erroruri-string-ienumerablekeyvaluepairstring-object) | Creates a new unavailable error with specified parameters. |
 
 ## Remarks
-This error category is used when one or more resources to complete the operation was/were not available.
+This error category is used when the service (or a resource it depends on) is temporarily unavailable, e.g. it is down or overloaded. The operation can be retried later.
 
-It relates to `503` HTTP status code (Service Unavailable), but can also be used in other contexts where a resource was unavailable and needs to be reported.
+It relates to `503` HTTP status code (Service Unavailable), but can also be used in other contexts where a service was unavailable and needs to be reported.
+
+Do not use it when a usage limit, quota or rate has been exhausted; use [LimitExceeded](Error_LimitExceeded.md) instead.
 
 
 ## Unavailable(ErrorUri, String, String, ErrorUri, String, (String, Object)[])

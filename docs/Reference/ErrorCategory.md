@@ -24,7 +24,8 @@ Inheritance [Object](https://learn.microsoft.com/dotnet/api/system.object) → [
 | Failure         | 6     | An expected error that is not critical to the operation. Do not use for authentication, authorization, validation, data conflict or unexpected errors.<br>It relates to the `422` HTTP status code (Unprocessable Content). |
 | Critical        | 7     | An unexpected, critical error.<br>It relates to the `500` HTTP status code (Internal Server Error). |
 | NotImplemented  | 8     | The not implemented error. The operation, feature or case is not implemented.<br>It relates to the `501` HTTP status code (Not Implemented). |
-| Unavailable     | 9     | The resource is not available. Try again later.<br>It relates to the `503` HTTP status code (Service Unavailable). |
+| Unavailable     | 9     | The service is not available (e.g. it is down or overloaded). Try again later. Do not use when a usage limit has been exhausted (use `LimitExceeded`).<br>It relates to the `503` HTTP status code (Service Unavailable). |
+| LimitExceeded   | 10    | The request is valid and permitted, but a usage limit, quota or rate has been exhausted. It may succeed later or once the limit is raised. Applies to business limits as well as throttling. Do not use for input-size checks (use `Validation`).<br>It relates to the `429` HTTP status code (Too Many Requests). |
 
 ## See Also
 * [HTTP Status Codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status)
