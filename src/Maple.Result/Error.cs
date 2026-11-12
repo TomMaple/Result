@@ -28,9 +28,14 @@ namespace Maple.Result;
 /// </remarks>
 public sealed record Error
 {
-    private readonly List<ErrorDetail> _errorDetails = [];
+    #region consts
+
     private static readonly ReadOnlyDictionary<string, object> EmptyMetadata =
         new(new Dictionary<string, object>(StringComparer.Ordinal));
+
+    #endregion
+
+    private readonly List<ErrorDetail> _errorDetails = [];
 
     // Never modified after construction, so instances (e.g., `with` copies) can share it safely.
     private readonly ReadOnlyDictionary<string, object> _metadata = EmptyMetadata;
