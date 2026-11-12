@@ -302,6 +302,7 @@ Although, mapping to HTTP responses is not part of this library and can be done 
 | `DetailTemplated` | `TemplatedMessage` | A structure to generate a localized detail message. | No | `{ "templateId": "errors.signup.email.specialcharacters", "params": { "invalidCharacter": "/" }}` |
 | `InstanceUri` | `string` | A *URI* that identifies the specific occurrence of the problem. | No | `https://api.exampleapp.com/errors/8783927589734857/details` |
 | `ErrorDetails` | `IReadOnlyList<ErrorDetail>` | The collection of additional error details. | No | `[{ "propertyPointer": "#/email", "detail": "Invalid format", "detailTemplated": { "templateId": "errors.signup.email.invalidFormat" }}]` |
+| `Metadata` | `IReadOnlyDictionary<string, object>` | Additional, machine-readable members of the problem (RFC 9457 *extension members*). | No | `{ "limit": 100, "resetAt": "2026-12-01T00:00:00Z" }` |
 
 ### Type URI
 It is a mandatory URI that identifies the type of the problem. It can be:
@@ -342,6 +343,30 @@ where the parameters are:
 | `detail` | `string` | A human-readable explanation of this error detail. | yes | `Mininum 5 characters are required.` |
 | `messageId` | `string` | A message template ID. | no | `errors.signup.validation.firstName.minLength` |
 | `namedValues` | `(string, object)[]` | The collection of named values for the message template. | no | `("minLength", 5)` |
+
+### Metadata
+`Metadata` holds machine-readable, response-level values—the *extension members* of [RFC 9457](https://datatracker.ietf.org/doc/html/rfc9457#section-3.2)—that a client can read instead of parsing the `Detail` text. The library does not define any well-known keys.
+
+```csharp
+var error = Error.LimitExceeded(
+        ErrorUri.Tag("tag:exampleapp.com,2026:errors:reports:limit-exceeded"),
+        "Cannot generate the report.",
+        "The monthly limit of 100 reports has been reached.")
+    .WithMetadata("limit", 100)
+    .WithMetadata("resetAt", "2026-12-01T00:00:00Z");
+
+// Works also after deserialization, when the value is a JsonElement, a long or a JValue.
+if (error.TryGetMetadata<int>("limit", out var limit))
+{
+    // ...
+}
+```
+
+* `WithMetadata()` and `WithoutMetadata()` return a **copy**; the original error is not modified.
+* Keys should be *camelCase*, use letters, digits and `_`, be at least 3 characters long, and not collide with the standard members (`type`, `title`, `status`, `detail`, `instance`, `errors`, `detailTemplated`).
+* Values should be JSON primitives (strings, numbers, booleans).
+
+See more: [Metadata](https://github.com/TomMaple/Maple.Result/blob/main/docs/Reference/Error/Error_Metadata.md)
 
 ### Support for localization
 The localization can be achieved by generating messages based on the template.
@@ -425,6 +450,12 @@ Check:
 
 > [!WARNING]
 > **Breaking change:** exhaustive `switch` statements and expressions over `ErrorCategory` (e.g. mapping categories to HTTP status codes) must handle the new `LimitExceeded` member. The numeric values of existing members have not changed.
+
+## New `Error.Metadata` property
+`Error` has a new `Metadata` dictionary for machine-readable values (RFC 9457 *extension members*), with the `WithMetadata()`, `WithoutMetadata()` and `TryGetMetadata<T>()` methods. See [Metadata](#metadata).
+
+* Serialized errors now always contain a `Metadata` member (`"Metadata":{}` when empty). Deserializing JSON without it (or with `"Metadata":null`) produces an empty dictionary.
+* `Equals()` and `GetHashCode()` of `Error` take the metadata into account.
 
 # FAQ
 ## When to use a Result and when an Exception?

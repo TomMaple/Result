@@ -20,7 +20,7 @@ Do not use it when a usage limit, quota or rate has been exhausted; use [LimitEx
 
 
 ## Unavailable(ErrorUri, String, String, ErrorUri, String, (String, Object)[])
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L1012" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L1242" target="_blank">Error.cs</a>
 
 Creates a new instance of the [Error](Error.md) object of the *Unavailable* category with specified parameters.
 
@@ -80,7 +80,7 @@ var error = Error.Unavailable(
 
 
 ## Unavailable(ErrorUri, String, String, ErrorUri, String, IEnumerable&lt;KeyValuePair&lt;String, Object&gt;&gt;)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L1050" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L1280" target="_blank">Error.cs</a>
 
 Creates a new instance of the [Error](Error.md) object of the *Unavailable* category with specified parameters.
 

@@ -37,10 +37,13 @@ public Result DeleteUser(int userId)
 It follows the [RFC 9457](https://datatracker.ietf.org/doc/html/rfc9457) standard for error responses.
 
 ### Equality
-[Error](Error.md) provides value-based equality: two instances are equal when all of their properties are equal, including the [ErrorDetails](Error_ErrorDetails.md) collection, which is compared **by content** (order-sensitive) rather than by reference. See [Equals(Error)](Error_Equals.md) and [GetHashCode()](Error_GetHashCode.md).
+[Error](Error.md) provides value-based equality: two instances are equal when all of their properties are equal, including the [ErrorDetails](Error_ErrorDetails.md) collection, which is compared **by content** (order-sensitive) rather than by reference, and the [Metadata](Error_Metadata.md) dictionary, which is compared **by content** independent of the order of its entries. See [Equals(Error)](Error_Equals.md) and [GetHashCode()](Error_GetHashCode.md).
 
 ### Copying with `with`
-Copying an [Error](Error.md) through a `with` expression produces an **independent** copy: the [ErrorDetails](Error_ErrorDetails.md) collection is deep-copied, so adding a detail (via [AddDetail(String, String, String, (String, Object)[])](Error_AddDetail.md)) to the copy does not affect the original, and vice versa.
+Copying an [Error](Error.md) through a `with` expression produces an **independent** copy: the [ErrorDetails](Error_ErrorDetails.md) collection is deep-copied, so adding a detail (via [AddDetail(String, String, String, (String, Object)[])](Error_AddDetail.md)) to the copy does not affect the original, and vice versa. The [Metadata](Error_Metadata.md) dictionary is copied as well.
+
+### Metadata
+[Metadata](Error_Metadata.md) holds machine-readable, response-level values (the *extension members* of RFC 9457). Use [WithMetadata(String, Object)](Error_WithMetadata.md) and [WithoutMetadata(String)](Error_WithoutMetadata.md) to obtain a changed copy, and [TryGetMetadata&lt;T&gt;(String, T)](Error_TryGetMetadata.md) to read a value as a specific type, also after a JSON round-trip.
 
 ## Constructors
 | Name | Description |
@@ -55,6 +58,7 @@ Copying an [Error](Error.md) through a `with` expression produces an **independe
 | [DetailTemplated](Error_DetailTemplated.md) | Gets or sets a templated explanation of the specific occurrence of the problem. |
 | [ErrorDetails](Error_ErrorDetails.md) | Gets or sets a collection of error details. |
 | [InstanceUri](Error_InstanceUri.md) | Gets or sets a *URI* that identifies the specific occurrence of the problem. |
+| [Metadata](Error_Metadata.md) | Gets or sets the additional, machine-readable members of the problem. |
 | [Title](Error_Title.md) | Gets or sets a short, human-readable summary of the problem type. |
 | [TypeUri](Error_TypeUri.md) | Gets or sets a *URI* that identifies the type of the problem. |
 
@@ -62,8 +66,12 @@ Copying an [Error](Error.md) through a `with` expression produces an **independe
 | Name | Description |
 | ---- | ----------- |
 | [AddDetail(String, String, String, (String, Object)[])](Error_AddDetail.md) | Adds a new set of error details to the current error and returns the current instance. |
-| [Equals(Error)](Error_Equals.md) | Determines whether the specified error is equal to the current one, comparing the error details by content. |
-| [GetHashCode()](Error_GetHashCode.md) | Returns a hash code consistent with [Equals(Error)](Error_Equals.md), incorporating the error details content. |
+| [Equals(Error)](Error_Equals.md) | Determines whether the specified error is equal to the current one, comparing the error details and the metadata by content. |
+| [GetHashCode()](Error_GetHashCode.md) | Returns a hash code consistent with [Equals(Error)](Error_Equals.md), incorporating the error details and the metadata content. |
+| [TryGetMetadata&lt;T&gt;(String, T)](Error_TryGetMetadata.md) | Gets the metadata value of the specified key, converted to the requested type. |
+| [WithMetadata(String, Object)](Error_WithMetadata.md#withmetadatastring-object) | Returns a copy of the error with the specified metadata entry added or replaced. |
+| [WithMetadata(IEnumerable&lt;KeyValuePair&lt;String, Object&gt;&gt;)](Error_WithMetadata.md#withmetadataienumerablekeyvaluepairstring-object) | Returns a copy of the error with the specified metadata entries added or replaced. |
+| [WithoutMetadata(String)](Error_WithoutMetadata.md) | Returns a copy of the error without the metadata entry of the specified key. |
 | [Conflict(ErrorUri, String, String, ErrorUri, String, (String, Object)[])](Error_Conflict.md#conflicterroruri-string-string-erroruri-string-string-object) | Creates a new conflict error with specified parameters. |
 | [Conflict(ErrorUri, String, String, ErrorUri, String, IEnumerable&lt;KeyValuePair&lt;String, Object&gt;&gt;)](Error_Conflict.md#conflicterroruri-string-string-erroruri-string-ienumerablekeyvaluepairstring-object) | Creates a new conflict error with specified parameters. |
 | [Critical(ErrorUri, String, String, ErrorUri, String, (String, Object)[])](Error_Critical.md#criticalerroruri-string-string-erroruri-string-string-object) | Creates a new critical error with specified parameters. |

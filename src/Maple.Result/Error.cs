@@ -10,7 +10,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
+using System.Text.Json;
 
 namespace Maple.Result;
 
@@ -24,6 +27,7 @@ namespace Maple.Result;
 public sealed record Error
 {
     private readonly List<ErrorDetail> _errorDetails = [];
+    private readonly Dictionary<string, object> _metadata = new(StringComparer.Ordinal);
 
     #region constructors
 
@@ -49,11 +53,13 @@ public sealed record Error
         InstanceUri = null;
         DetailTemplated = null;
         _errorDetails = [];
+        _metadata = new Dictionary<string, object>(StringComparer.Ordinal);
     }
 
     internal Error(ErrorCategory category, string typeUri, string title, string? detail = null,
         TemplatedMessage? detailTemplated = null, string? instanceUri = null,
-        IReadOnlyList<ErrorDetail>? errorDetails = null)
+        IReadOnlyList<ErrorDetail>? errorDetails = null,
+        IEnumerable<KeyValuePair<string, object>>? metadata = null)
     {
         if (string.IsNullOrWhiteSpace(typeUri))
         {
@@ -69,6 +75,7 @@ public sealed record Error
         InstanceUri = instanceUri;
         DetailTemplated = detailTemplated;
         _errorDetails = [];
+        _metadata = CopyMetadata(metadata);
 
         if (errorDetails is not null)
             _errorDetails.AddRange(errorDetails);
@@ -81,7 +88,7 @@ public sealed record Error
     ///     This copy constructor is used by <c>with</c> expressions. It deep-copies the mutable
     ///     <see cref="ErrorDetails" /> collection so that a copy and its original do not share the same underlying
     ///     list; otherwise mutating one (e.g., via <see cref="AddDetail(string?, string, string?, ValueTuple{string, object}[])" />)
-    ///     would also mutate the other.
+    ///     would also mutate the other. The same applies to the <see cref="Metadata" /> dictionary.
     /// </remarks>
     /// <param name="original">The <see cref="Error" /> instance to copy.</param>
     private Error(Error original)
@@ -93,6 +100,7 @@ public sealed record Error
         DetailTemplated = original.DetailTemplated;
         InstanceUri = original.InstanceUri;
         _errorDetails = [.. original._errorDetails];
+        _metadata = CopyMetadata(original._metadata);
     }
 
     #endregion
@@ -203,6 +211,41 @@ public sealed record Error
     }
 
     /// <summary>
+    ///     The additional, machine-readable members of the problem (never <see langword="null" />; empty by default).
+    /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///         It corresponds to the <i>extension members</i> of <i>RFC 9457</i> (section 3.2): response-level values
+    ///         that consumers can read instead of parsing <see cref="Detail" /> (e.g., a retry delay). The library
+    ///         does not define any well-known keys.
+    ///     </para>
+    ///     <para>
+    ///         Keys are compared ordinally (case-sensitive). They should consist of letters, digits and <c>_</c>, use
+    ///         camelCase and be at least 3 characters long (<i>RFC 9457</i>, section 4), and should not collide with
+    ///         the standard members: <c>type</c>, <c>title</c>, <c>status</c>, <c>detail</c>, <c>instance</c>,
+    ///         <c>errors</c> and <c>detailTemplated</c>.
+    ///     </para>
+    ///     <para>
+    ///         Values should be JSON primitives (strings, numbers, booleans). After deserialization, values are
+    ///         returned as <see cref="JsonElement" /> (System.Text.Json) or as <see cref="long" />, <see cref="double" />,
+    ///         <see cref="string" />, <see cref="bool" /> or a <c>JToken</c> (Newtonsoft.Json); use
+    ///         <see cref="TryGetMetadata{T}" /> to read them as a specific type. <see cref="JsonElement" /> values have no
+    ///         value equality, so an error can be not equal to its original after a JSON round-trip (the same limitation
+    ///         applies to <see cref="TemplatedMessage.Params" />).
+    ///     </para>
+    ///     <para>
+    ///         Use <see cref="WithMetadata(string, object)" /> and <see cref="WithoutMetadata" /> to obtain a copy with
+    ///         changed metadata. The setter is <c>init</c>-only to allow deserialization; it copies the provided entries
+    ///         and treats <see langword="null" /> as empty.
+    ///     </para>
+    /// </remarks>
+    public IReadOnlyDictionary<string, object> Metadata
+    {
+        get => _metadata;
+        init => _metadata = CopyMetadata(value);
+    }
+
+    /// <summary>
     ///     Adds details of an individual error occurrence found.
     /// </summary>
     /// <param name="propertyPointer">The JSON Pointer which identifies the invalid value in the input data.</param>
@@ -251,11 +294,194 @@ public sealed record Error
         return this;
     }
 
+    #region metadata
+
+    /// <summary>
+    ///     Returns a copy of the current error with the specified metadata entry added, or replaced if the key
+    ///     already exists.
+    /// </summary>
+    /// <param name="key">The key of the metadata entry.</param>
+    /// <param name="value">The value of the metadata entry; it should be a JSON primitive.</param>
+    /// <returns>A new instance of the <see cref="Error" /> object; the current instance is not modified.</returns>
+    /// <exception cref="ArgumentException">If the <paramref name="key" /> is empty or whitespace-only.</exception>
+    /// <exception cref="ArgumentNullException">
+    ///     If the <paramref name="key" /> or the <paramref name="value" /> is <see langword="null" />.
+    /// </exception>
+    public Error WithMetadata(string key, object value)
+    {
+        ValidateMetadataEntry(key, value);
+
+        var metadata = CopyMetadata(_metadata);
+        metadata[key] = value;
+
+        return this with { Metadata = metadata };
+    }
+
+    /// <summary>
+    ///     Returns a copy of the current error with the specified metadata entries added; entries with existing keys
+    ///     are replaced and the other existing entries are kept.
+    /// </summary>
+    /// <param name="metadata">The metadata entries to add or replace.</param>
+    /// <returns>A new instance of the <see cref="Error" /> object; the current instance is not modified.</returns>
+    /// <exception cref="ArgumentException">If any key is empty or whitespace-only.</exception>
+    /// <exception cref="ArgumentNullException">
+    ///     If the <paramref name="metadata" />, any key or any value is <see langword="null" />.
+    /// </exception>
+    public Error WithMetadata(IEnumerable<KeyValuePair<string, object>> metadata)
+    {
+        ArgumentNullException.ThrowIfNull(metadata);
+
+        var result = CopyMetadata(_metadata);
+        foreach (var pair in metadata)
+        {
+            ValidateMetadataEntry(pair.Key, pair.Value);
+            result[pair.Key] = pair.Value;
+        }
+
+        return this with { Metadata = result };
+    }
+
+    /// <summary>
+    ///     Returns a copy of the current error without the metadata entry of the specified key.
+    /// </summary>
+    /// <param name="key">The key of the metadata entry to remove.</param>
+    /// <returns>
+    ///     A new instance of the <see cref="Error" /> object (equal to the current one if the key is absent);
+    ///     the current instance is not modified.
+    /// </returns>
+    /// <exception cref="ArgumentException">If the <paramref name="key" /> is empty or whitespace-only.</exception>
+    /// <exception cref="ArgumentNullException">If the <paramref name="key" /> is <see langword="null" />.</exception>
+    public Error WithoutMetadata(string key)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(key);
+
+        var metadata = CopyMetadata(_metadata);
+        metadata.Remove(key);
+
+        return this with { Metadata = metadata };
+    }
+
+    /// <summary>
+    ///     Gets the metadata value of the specified key, converted to the type <typeparamref name="T" />.
+    /// </summary>
+    /// <typeparam name="T">The expected type of the value.</typeparam>
+    /// <param name="key">The key of the metadata entry.</param>
+    /// <param name="value">
+    ///     The value if the entry exists and can be converted; otherwise, the default value of <typeparamref name="T" />.
+    /// </param>
+    /// <returns>
+    ///     <see langword="true" /> if the entry exists and its value is, or can be converted to,
+    ///     <typeparamref name="T" />; otherwise, <see langword="false" />.
+    /// </returns>
+    /// <remarks>
+    ///     <para>This method never throws.</para>
+    ///     <para>
+    ///         A value that already is a <typeparamref name="T" /> is returned as is. A <see cref="JsonElement" />
+    ///         (System.Text.Json) is converted to <see cref="string" />, <see cref="bool" />, an integer or
+    ///         floating-point type, <see cref="DateTimeOffset" /> or <see cref="Guid" />, and otherwise deserialized to
+    ///         <typeparamref name="T" />. An <see cref="IConvertible" /> value (such as <see cref="long" />,
+    ///         <see cref="double" /> or a Newtonsoft.Json <c>JValue</c>) is converted with
+    ///         <see cref="Convert.ChangeType(object, Type, IFormatProvider)" /> using the invariant culture.
+    ///     </para>
+    /// </remarks>
+    public bool TryGetMetadata<T>(string key, [MaybeNullWhen(false)] out T value)
+    {
+        value = default;
+
+        if (key is null || !_metadata.TryGetValue(key, out var raw) || raw is null)
+            return false;
+
+        try
+        {
+            object? converted = raw switch
+            {
+                T typed => typed,
+                JsonElement element => ConvertJsonElement<T>(element),
+                IConvertible convertible => Convert.ChangeType(convertible,
+                    Nullable.GetUnderlyingType(typeof(T)) ?? typeof(T), CultureInfo.InvariantCulture),
+                _ => null
+            };
+
+            if (converted is not T result)
+                return false;
+
+            value = result;
+            return true;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+    }
+
+    private static object? ConvertJsonElement<T>(JsonElement element)
+    {
+        var type = Nullable.GetUnderlyingType(typeof(T)) ?? typeof(T);
+
+        if (type == typeof(string))
+            return element.ValueKind == JsonValueKind.String ? element.GetString() : null;
+
+        if (type == typeof(bool))
+            return element.ValueKind is JsonValueKind.True or JsonValueKind.False ? element.GetBoolean() : null;
+
+        if (type == typeof(DateTimeOffset))
+            return element.ValueKind == JsonValueKind.String && element.TryGetDateTimeOffset(out var dateTimeOffset)
+                ? dateTimeOffset
+                : null;
+
+        if (type == typeof(Guid))
+            return element.ValueKind == JsonValueKind.String && element.TryGetGuid(out var guid) ? guid : null;
+
+        if (Type.GetTypeCode(type) is >= TypeCode.SByte and <= TypeCode.Decimal && !type.IsEnum)
+        {
+            if (element.ValueKind != JsonValueKind.Number)
+                return null;
+
+            return Type.GetTypeCode(type) switch
+            {
+                TypeCode.SByte => element.TryGetSByte(out var number) ? number : null,
+                TypeCode.Byte => element.TryGetByte(out var number) ? number : null,
+                TypeCode.Int16 => element.TryGetInt16(out var number) ? number : null,
+                TypeCode.UInt16 => element.TryGetUInt16(out var number) ? number : null,
+                TypeCode.Int32 => element.TryGetInt32(out var number) ? number : null,
+                TypeCode.UInt32 => element.TryGetUInt32(out var number) ? number : null,
+                TypeCode.Int64 => element.TryGetInt64(out var number) ? number : null,
+                TypeCode.UInt64 => element.TryGetUInt64(out var number) ? number : null,
+                TypeCode.Single => element.TryGetSingle(out var number) ? number : null,
+                TypeCode.Double => element.TryGetDouble(out var number) ? number : null,
+                _ => element.TryGetDecimal(out var number) ? number : null
+            };
+        }
+
+        return element.Deserialize<T>();
+    }
+
+    private static Dictionary<string, object> CopyMetadata(IEnumerable<KeyValuePair<string, object>>? metadata)
+    {
+        var copy = new Dictionary<string, object>(StringComparer.Ordinal);
+        if (metadata is null)
+            return copy;
+
+        foreach (var pair in metadata)
+            copy[pair.Key] = pair.Value;
+
+        return copy;
+    }
+
+    private static void ValidateMetadataEntry(string key, object value)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(key);
+        ArgumentNullException.ThrowIfNull(value);
+    }
+
+    #endregion
+
     #region equality
 
     /// <summary>
     ///     Determines whether the specified <see cref="Error" /> is equal to the current <see cref="Error" />,
-    ///     comparing the <see cref="ErrorDetails" /> collection by its content rather than by reference.
+    ///     comparing the <see cref="ErrorDetails" /> collection and the <see cref="Metadata" /> dictionary by their
+    ///     content rather than by reference.
     /// </summary>
     /// <param name="other">The <see cref="Error" /> to compare with the current instance.</param>
     /// <returns>
@@ -272,12 +498,14 @@ public sealed record Error
                && Detail == other.Detail
                && DetailTemplated == other.DetailTemplated
                && InstanceUri == other.InstanceUri
-               && _errorDetails.SequenceEqual(other._errorDetails);
+               && _errorDetails.SequenceEqual(other._errorDetails)
+               && DictionaryContent.Equal(_metadata, other._metadata);
     }
 
     /// <summary>
     ///     Returns a hash code that is consistent with <see cref="Equals(Error)" />, incorporating the content
-    ///     of the <see cref="ErrorDetails" /> collection.
+    ///     of the <see cref="ErrorDetails" /> collection and of the <see cref="Metadata" /> dictionary (independent of
+    ///     the order of its entries).
     /// </summary>
     /// <returns>A hash code for the current <see cref="Error" />.</returns>
     public override int GetHashCode()
@@ -294,6 +522,8 @@ public sealed record Error
 
         foreach (var errorDetail in _errorDetails)
             hashCode.Add(errorDetail);
+
+        hashCode.Add(DictionaryContent.GetHashCode(_metadata));
 
         return hashCode.ToHashCode();
     }
