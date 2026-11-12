@@ -3,8 +3,10 @@
     <File Path=".github/dependabot.yml" />
   </Folder>
   <Folder Name="/.github/workflows/">
-    <File Path=".github/workflows/build-and-publish.yml" />
+    <File Path=".github/workflows/ci.yml" />
     <File Path=".github/workflows/codeql.yml" />
+    <File Path=".github/workflows/draft-release.yml" />
+    <File Path=".github/workflows/publish.yml" />
   </Folder>
   <Folder Name="/.resources/">
     <File Path=".resources/icon.png" />
