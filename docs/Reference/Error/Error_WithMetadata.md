@@ -12,13 +12,13 @@ Returns a copy of the [Error](Error.md) with the specified [Metadata](Error_Meta
 | [WithMetadata(IEnumerable<KeyValuePair<String, Object>>)](#withmetadataienumerablekeyvaluepairstring-object) | Returns a copy of the error with the specified metadata entries added or replaced. |
 
 ## Remarks
-These methods **do not modify** the current instance; they return a new [Error](Error.md) (created with a `with` expression) that has an independent copy of the [Metadata](Error_Metadata.md) dictionary. This is different from [AddDetail(String, String, String, (String, Object)[])](Error_AddDetail.md), which mutates the current instance.
+These methods **do not modify** the current instance; they return a new [Error](Error.md) with a new, read-only [Metadata](Error_Metadata.md) dictionary. New keys are appended; replaced keys keep their position. This is different from [AddDetail(String, String, String, (String, Object)[])](Error_AddDetail.md), which mutates the current instance.
 
 Keys are compared ordinally (case-sensitive). See [Metadata](Error_Metadata.md) for the recommended format of keys and values.
 
 
 ## WithMetadata(String, Object)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L317" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L337" target="_blank">Error.cs</a>
 
 Returns a copy of the current error with the specified metadata entry added, or replaced if the key already exists.
 
@@ -58,7 +58,7 @@ var error = Error.LimitExceeded(
 
 
 ## WithMetadata(IEnumerable&lt;KeyValuePair&lt;String, Object&gt;&gt;)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L341" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L363" target="_blank">Error.cs</a>
 
 Returns a copy of the current error with the specified metadata entries added. Entries with existing keys are replaced; the other existing entries are kept.
 

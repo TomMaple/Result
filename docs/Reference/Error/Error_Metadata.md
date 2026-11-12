@@ -2,7 +2,7 @@
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L245" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L265" target="_blank">Error.cs</a>
 
 Gets or sets the additional, machine-readable members of the problem.
 
@@ -48,6 +48,11 @@ Use [TryGetMetadata&lt;T&gt;(String, T)](Error_TryGetMetadata.md) to read a valu
 > Use [WithMetadata(String, Object)](Error_WithMetadata.md) and [WithoutMetadata(String)](Error_WithoutMetadata.md) to obtain a copy of the error with changed metadata. They never modify the current instance.
 >
 > The setter is marked as `init` to allow deserialization. It copies the provided entries (so later changes to the source dictionary are not reflected) and treats `null` (e.g., `"Metadata": null` in JSON) as an empty dictionary.
+>
+> The returned dictionary is a read-only wrapper that is never modified, so copies of an error (e.g., created by a `with` expression) share it safely. Casting it to `IDictionary<string, object>` does not allow changes: modifying methods throw a [NotSupportedException](https://learn.microsoft.com/dotnet/api/system.notsupportedexception).
+
+### Order
+Entries are enumerated, and serialized, in the order they were added. Replacing the value of an existing key keeps its position.
 
 ## Examples
 ```csharp

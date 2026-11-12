@@ -2,7 +2,7 @@
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L365" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L387" target="_blank">Error.cs</a>
 
 Returns a copy of the current error without the [Metadata](Error_Metadata.md) entry of the specified key.
 
@@ -29,7 +29,7 @@ The `key` is `null`.
 The `key` is empty or consists only of white-space characters.
 
 ## Remarks
-This method **does not modify** the current instance; it returns a new [Error](Error.md) (created with a `with` expression) that has an independent copy of the [Metadata](Error_Metadata.md) dictionary.
+This method **does not modify** the current instance; it returns a new [Error](Error.md) with a new, read-only [Metadata](Error_Metadata.md) dictionary (or, if the key is absent, sharing the current one). The order of the remaining entries is kept.
 
 Keys are compared ordinally (case-sensitive).
 

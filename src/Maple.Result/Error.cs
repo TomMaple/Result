@@ -10,6 +10,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
@@ -28,7 +29,11 @@ namespace Maple.Result;
 public sealed record Error
 {
     private readonly List<ErrorDetail> _errorDetails = [];
-    private readonly Dictionary<string, object> _metadata = new(StringComparer.Ordinal);
+    private static readonly ReadOnlyDictionary<string, object> EmptyMetadata =
+        new(new Dictionary<string, object>(StringComparer.Ordinal));
+
+    // Never modified after construction, so instances (e.g., `with` copies) can share it safely.
+    private readonly ReadOnlyDictionary<string, object> _metadata = EmptyMetadata;
 
     #region constructors
 
@@ -54,7 +59,7 @@ public sealed record Error
         InstanceUri = null;
         DetailTemplated = null;
         _errorDetails = [];
-        _metadata = new Dictionary<string, object>(StringComparer.Ordinal);
+        _metadata = EmptyMetadata;
     }
 
     internal Error(ErrorCategory category, string typeUri, string title, string? detail = null,
@@ -76,7 +81,7 @@ public sealed record Error
         InstanceUri = instanceUri;
         DetailTemplated = detailTemplated;
         _errorDetails = [];
-        _metadata = CopyMetadata(metadata);
+        _metadata = CreateMetadata(metadata);
 
         if (errorDetails is not null)
             _errorDetails.AddRange(errorDetails);
@@ -89,7 +94,8 @@ public sealed record Error
     ///     This copy constructor is used by <c>with</c> expressions. It deep-copies the mutable
     ///     <see cref="ErrorDetails" /> collection so that a copy and its original do not share the same underlying
     ///     list; otherwise mutating one (e.g., via <see cref="AddDetail(string?, string, string?, ValueTuple{string, object}[])" />)
-    ///     would also mutate the other. The same applies to the <see cref="Metadata" /> dictionary.
+    ///     would also mutate the other. The <see cref="Metadata" /> dictionary is read-only and never modified, so it is
+    ///     shared rather than copied.
     /// </remarks>
     /// <param name="original">The <see cref="Error" /> instance to copy.</param>
     private Error(Error original)
@@ -101,7 +107,16 @@ public sealed record Error
         DetailTemplated = original.DetailTemplated;
         InstanceUri = original.InstanceUri;
         _errorDetails = [.. original._errorDetails];
-        _metadata = CopyMetadata(original._metadata);
+        _metadata = original._metadata;
+    }
+
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="Error" /> record as a copy of an existing instance with
+    ///     the specified metadata, without copying the metadata again.
+    /// </summary>
+    private Error(Error original, ReadOnlyDictionary<string, object> metadata) : this(original)
+    {
+        _metadata = metadata;
     }
 
     #endregion
@@ -239,13 +254,18 @@ public sealed record Error
     ///     <para>
     ///         Use <see cref="WithMetadata(string, object)" /> and <see cref="WithoutMetadata" /> to obtain a copy with
     ///         changed metadata. The setter is <c>init</c>-only to allow deserialization; it copies the provided entries
-    ///         and treats <see langword="null" /> as empty.
+    ///         (so later changes to the source are not reflected) and treats <see langword="null" /> as empty.
+    ///     </para>
+    ///     <para>
+    ///         The returned dictionary is a read-only wrapper that is never modified, so copies of an error
+    ///         (e.g., created by a <c>with</c> expression) share it safely. Entries are enumerated (and serialized) in
+    ///         the order they were added.
     ///     </para>
     /// </remarks>
     public IReadOnlyDictionary<string, object> Metadata
     {
         get => _metadata;
-        init => _metadata = CopyMetadata(value);
+        init => _metadata = CreateMetadata(value);
     }
 
     /// <summary>
@@ -318,10 +338,12 @@ public sealed record Error
     {
         ValidateMetadataEntry(key, value);
 
-        var metadata = CopyMetadata(_metadata);
-        metadata[key] = value;
+        var metadata = new Dictionary<string, object>(_metadata, StringComparer.Ordinal)
+        {
+            [key] = value
+        };
 
-        return this with { Metadata = metadata };
+        return new Error(this, new ReadOnlyDictionary<string, object>(metadata));
     }
 
     /// <summary>
@@ -342,14 +364,14 @@ public sealed record Error
     {
         ArgumentNullException.ThrowIfNull(metadata);
 
-        var result = CopyMetadata(_metadata);
+        var result = new Dictionary<string, object>(_metadata, StringComparer.Ordinal);
         foreach (var pair in metadata)
         {
             ValidateMetadataEntry(pair.Key, pair.Value);
             result[pair.Key] = pair.Value;
         }
 
-        return this with { Metadata = result };
+        return new Error(this, new ReadOnlyDictionary<string, object>(result));
     }
 
     /// <summary>
@@ -366,10 +388,13 @@ public sealed record Error
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(key);
 
-        var metadata = CopyMetadata(_metadata);
+        if (!_metadata.ContainsKey(key))
+            return new Error(this);
+
+        var metadata = new Dictionary<string, object>(_metadata, StringComparer.Ordinal);
         metadata.Remove(key);
 
-        return this with { Metadata = metadata };
+        return new Error(this, metadata.Count == 0 ? EmptyMetadata : new ReadOnlyDictionary<string, object>(metadata));
     }
 
     /// <summary>
@@ -408,8 +433,7 @@ public sealed record Error
             {
                 T typed => typed,
                 JsonElement element => ConvertJsonElement<T>(element),
-                IConvertible convertible => Convert.ChangeType(convertible,
-                    Nullable.GetUnderlyingType(typeof(T)) ?? typeof(T), CultureInfo.InvariantCulture),
+                IConvertible convertible => Convert.ChangeType(convertible, Nullable.GetUnderlyingType(typeof(T)) ?? typeof(T), CultureInfo.InvariantCulture),
                 _ => null
             };
 
@@ -467,16 +491,17 @@ public sealed record Error
         return element.Deserialize<T>();
     }
 
-    private static Dictionary<string, object> CopyMetadata(IEnumerable<KeyValuePair<string, object>>? metadata)
+    private static ReadOnlyDictionary<string, object> CreateMetadata(
+        IEnumerable<KeyValuePair<string, object>>? metadata)
     {
-        var copy = new Dictionary<string, object>(StringComparer.Ordinal);
         if (metadata is null)
-            return copy;
+            return EmptyMetadata;
 
+        var copy = new Dictionary<string, object>(StringComparer.Ordinal);
         foreach (var pair in metadata)
             copy[pair.Key] = pair.Value;
 
-        return copy;
+        return copy.Count == 0 ? EmptyMetadata : new ReadOnlyDictionary<string, object>(copy);
     }
 
     private static void ValidateMetadataEntry(string key, object value)

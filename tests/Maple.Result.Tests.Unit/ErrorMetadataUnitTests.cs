@@ -80,7 +80,7 @@ public class ErrorMetadataUnitTests
     }
 
     [Fact]
-    public void Metadata_WithExpression_DoesNotShareDictionary()
+    public void Metadata_WithExpression_SharesReadOnlyDictionary()
     {
         // Arrange
         var original = CreateError().WithMetadata("limit", 100);
@@ -89,8 +89,57 @@ public class ErrorMetadataUnitTests
         var copy = original with { Title = "Changed title" };
 
         // Assert
-        copy.Metadata.ShouldNotBeSameAs(original.Metadata);
+        copy.Metadata.ShouldBeSameAs(original.Metadata);
         copy.Metadata["limit"].ShouldBe(100);
+    }
+
+    [Fact]
+    public void Metadata_CastToMutableDictionary_CannotBeModified()
+    {
+        // Arrange
+        var sut = CreateError().WithMetadata("limit", 100);
+
+        // Act & Assert
+        sut.Metadata.ShouldNotBeAssignableTo<Dictionary<string, object>>();
+        var dictionary = sut.Metadata.ShouldBeAssignableTo<IDictionary<string, object>>();
+        dictionary.ShouldNotBeNull();
+        dictionary.IsReadOnly.ShouldBeTrue();
+        Should.Throw<NotSupportedException>(() => dictionary["limit"] = 200);
+        sut.Metadata["limit"].ShouldBe(100);
+    }
+
+    [Fact]
+    public void Metadata_Entries_KeepInsertionOrder()
+    {
+        // Act
+        var sut = CreateError()
+            .WithMetadata("zeta", 1)
+            .WithMetadata("alpha", 2)
+            .WithMetadata("middle", 3)
+            .WithMetadata("zeta", 4);
+
+        // Assert
+        sut.Metadata.Keys.ShouldBe(["zeta", "alpha", "middle"]);
+        sut.Metadata["zeta"].ShouldBe(4);
+    }
+
+    [Fact]
+    public void Metadata_Serialized_KeepsInsertionOrder()
+    {
+        // Arrange
+        var sut = CreateError().WithMetadata("zeta", 1).WithMetadata("alpha", 2);
+
+        // Act
+        var microsoft = SerializationHelper.SerializeWithMicrosoft(sut);
+        var newtonsoft = SerializationHelper.SerializeWithNewtonsoft(sut);
+
+        // Assert
+        microsoft.ShouldEndWith("""
+                                "Metadata":{"zeta":1,"alpha":2}}
+                                """);
+        newtonsoft.ShouldEndWith("""
+                                 "Metadata":{"zeta":1,"alpha":2}}
+                                 """);
     }
 
     #endregion
