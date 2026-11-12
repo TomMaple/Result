@@ -2,7 +2,7 @@
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L270" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L272" target="_blank">Error.cs</a>
 
 Gets or sets the additional, machine-readable members of the problem.
 
@@ -35,9 +35,9 @@ Values should be JSON primitives (strings, numbers and booleans).
 
 After deserialization, values of type `object` are returned as:
 * [JsonElement](https://learn.microsoft.com/dotnet/api/system.text.json.jsonelement) by *System.Text.Json*,
-* `long`, `double`, `string`, `bool` or a `JToken` by *Newtonsoft.Json*.
+* `long`, `double`, `string`, `bool`, `DateTime` (for ISO 8601 date strings, by default) or a `JToken` by *Newtonsoft.Json*.
 
-Use [TryGetMetadata&lt;T&gt;(String, T)](Error_TryGetMetadata.md) to read a value as a specific type regardless of the serializer used.
+Use [TryGetMetadata&lt;T&gt;(String, T)](Error_TryGetMetadata.md) to read a value as a specific type; it gives the same result for errors created in memory and for errors deserialized with either serializer.
 
 > [!NOTE]
 > This dictionary participates in the value-based equality of [Error](Error.md): it is compared **by content**, independent of the order of the entries. See [Equals(Error)](Error_Equals.md).

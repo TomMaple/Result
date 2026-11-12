@@ -542,6 +542,140 @@ public class ErrorMetadataUnitTests
         value.ShouldBe([1, 2, 3]);
     }
 
+    [Fact]
+    public void TryGetMetadata_EnumValueAsInteger_ReturnsNumber()
+    {
+        // Arrange
+        var sut = CreateError().WithMetadata("level", TestLevel.High);
+
+        // Act
+        var found = sut.TryGetMetadata<int>("level", out var value);
+
+        // Assert
+        found.ShouldBeTrue();
+        value.ShouldBe(2);
+    }
+
+    [Fact]
+    public void TryGetMetadata_IntegerOutOfEnumUnderlyingRange_ReturnsFalse()
+    {
+        // Arrange
+        var sut = CreateError().WithMetadata("level", 300);
+
+        // Act
+        var found = sut.TryGetMetadata<TestByteLevel>("level", out _);
+
+        // Assert
+        found.ShouldBeFalse();
+    }
+
+    [Fact]
+    public void TryGetMetadata_NotFiniteDouble_ReturnsFalse()
+    {
+        // Arrange
+        var sut = CreateError().WithMetadata("ratio", double.NaN);
+
+        // Act
+        var found = sut.TryGetMetadata<decimal>("ratio", out _);
+
+        // Assert
+        found.ShouldBeFalse();
+    }
+
+    #endregion
+
+    #region TryGetMetadata consistency across transports
+
+    [Fact]
+    public void TryGetMetadata_DateStringAsDateTimeOffset_ReturnsSameValueForAllTransports()
+    {
+        AssertSameResultForAllTransports("2026-12-01T00:00:00Z", true,
+            new DateTimeOffset(2026, 12, 1, 0, 0, 0, TimeSpan.Zero));
+    }
+
+    [Fact]
+    public void TryGetMetadata_DateStringAsDateTime_ReturnsSameValueForAllTransports()
+    {
+        AssertSameResultForAllTransports("2026-12-01T00:00:00Z", true,
+            new DateTime(2026, 12, 1, 0, 0, 0, DateTimeKind.Utc));
+    }
+
+    [Fact]
+    public void TryGetMetadata_DateStringAsString_ReturnsOriginalStringForAllTransports()
+    {
+        AssertSameResultForAllTransports("2026-12-01T00:00:00Z", true, "2026-12-01T00:00:00Z");
+    }
+
+    [Fact]
+    public void TryGetMetadata_DateTimeOffsetValueAsDateTimeOffset_ReturnsSameInstantForAllTransports()
+    {
+        var value = new DateTimeOffset(2026, 12, 1, 10, 30, 0, TimeSpan.FromHours(2));
+
+        AssertSameResultForAllTransports(value, true, value);
+    }
+
+    [Fact]
+    public void TryGetMetadata_GuidStringAsGuid_ReturnsSameValueForAllTransports()
+    {
+        AssertSameResultForAllTransports("8f0c6f7e-2d3b-4b8a-9a35-0d4bb1d6f1a2", true,
+            Guid.Parse("8f0c6f7e-2d3b-4b8a-9a35-0d4bb1d6f1a2"));
+    }
+
+    [Fact]
+    public void TryGetMetadata_GuidValueAsString_ReturnsSameValueForAllTransports()
+    {
+        AssertSameResultForAllTransports(Guid.Parse("8f0c6f7e-2d3b-4b8a-9a35-0d4bb1d6f1a2"), true,
+            "8f0c6f7e-2d3b-4b8a-9a35-0d4bb1d6f1a2");
+    }
+
+    [Fact]
+    public void TryGetMetadata_FractionalNumberAsInteger_ReturnsFalseForAllTransports()
+    {
+        AssertSameResultForAllTransports(1.5, false, 0);
+    }
+
+    [Fact]
+    public void TryGetMetadata_FractionalNumberAsDecimal_ReturnsSameValueForAllTransports()
+    {
+        AssertSameResultForAllTransports(1.5, true, 1.5m);
+    }
+
+    [Fact]
+    public void TryGetMetadata_NumberAsString_ReturnsFalseForAllTransports()
+    {
+        AssertSameResultForAllTransports(100L, false, (string?)null);
+    }
+
+    [Fact]
+    public void TryGetMetadata_BooleanStringAsBoolean_ReturnsFalseForAllTransports()
+    {
+        AssertSameResultForAllTransports("true", false, false);
+    }
+
+    [Fact]
+    public void TryGetMetadata_NumericStringAsInteger_ReturnsFalseForAllTransports()
+    {
+        AssertSameResultForAllTransports("100", false, 0);
+    }
+
+    [Fact]
+    public void TryGetMetadata_EnumValueAsEnum_ReturnsSameValueForAllTransports()
+    {
+        AssertSameResultForAllTransports(TestLevel.High, true, TestLevel.High);
+    }
+
+    [Fact]
+    public void TryGetMetadata_IntegerAsEnum_ReturnsSameValueForAllTransports()
+    {
+        AssertSameResultForAllTransports(2L, true, TestLevel.High);
+    }
+
+    [Fact]
+    public void TryGetMetadata_IntegerAsNullableInteger_ReturnsSameValueForAllTransports()
+    {
+        AssertSameResultForAllTransports(100L, true, (int?)100);
+    }
+
     #endregion
 
     #region serialization round-trip
@@ -631,6 +765,42 @@ public class ErrorMetadataUnitTests
     #endregion
 
     #region helper methods
+
+    private enum TestLevel
+    {
+        Low = 1,
+        High = 2
+    }
+
+    private enum TestByteLevel : byte
+    {
+        Low = 1
+    }
+
+    /// <summary>
+    ///     Asserts that reading the stored value gives the same result in memory and after a round-trip through
+    ///     System.Text.Json and Newtonsoft.Json.
+    /// </summary>
+    private static void AssertSameResultForAllTransports<T>(object stored, bool expectedFound, T expectedValue)
+    {
+        var original = CreateError().WithMetadata("value", stored);
+        var microsoft = SerializationHelper.DeserializeWithMicrosoft<Sut>(
+            SerializationHelper.SerializeWithMicrosoft(original));
+        var newtonsoft = SerializationHelper.DeserializeWithNewtonsoft<Sut>(
+            SerializationHelper.SerializeWithNewtonsoft(original));
+
+        foreach (var (transport, sut) in new[]
+                 {
+                     ("in memory", original), ("System.Text.Json", microsoft), ("Newtonsoft.Json", newtonsoft)
+                 })
+        {
+            var found = sut.TryGetMetadata<T>("value", out var value);
+
+            found.ShouldBe(expectedFound, transport);
+            if (expectedFound)
+                value.ShouldBe(expectedValue, transport);
+        }
+    }
 
     private static Sut CreateError()
     {

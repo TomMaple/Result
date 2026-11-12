@@ -9,6 +9,7 @@
  */
 
 using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
@@ -251,8 +252,9 @@ public sealed record Error
     ///     <para>
     ///         Values should be JSON primitives (strings, numbers, booleans). After deserialization, values are
     ///         returned as <see cref="JsonElement" /> (System.Text.Json) or as <see cref="long" />, <see cref="double" />,
-    ///         <see cref="string" />, <see cref="bool" /> or a <c>JToken</c> (Newtonsoft.Json); use
-    ///         <see cref="TryGetMetadata{T}" /> to read them as a specific type. <see cref="JsonElement" /> values have no
+    ///         <see cref="string" />, <see cref="bool" />, <see cref="DateTime" /> (for ISO 8601 date strings, by default)
+    ///         or a <c>JToken</c> (Newtonsoft.Json); use <see cref="TryGetMetadata{T}" /> to read them as a specific type
+    ///         with the same result regardless of the serializer. <see cref="JsonElement" /> values have no
     ///         value equality, so an error can be not equal to its original after a JSON round-trip (the same limitation
     ///         applies to <see cref="TemplatedMessage.Params" />).
     ///     </para>
@@ -417,18 +419,25 @@ public sealed record Error
     /// <remarks>
     ///     <para>This method never throws.</para>
     ///     <para>
-    ///         A value that already is a <typeparamref name="T" /> is returned as is. A <see cref="JsonElement" />
-    ///         (System.Text.Json) is converted to <see cref="string" />, <see cref="bool" />, an integer or
-    ///         floating-point type, <see cref="DateTimeOffset" /> or <see cref="Guid" />, and otherwise deserialized to
-    ///         <typeparamref name="T" />. An <see cref="IConvertible" /> value (such as <see cref="long" />,
-    ///         <see cref="double" /> or a Newtonsoft.Json <c>JValue</c>) is converted with
-    ///         <see cref="Convert.ChangeType(object, Type, IFormatProvider)" /> using the invariant culture.
+    ///         A value that already is a <typeparamref name="T" /> is returned as is. Any other value is converted
+    ///         through a single path, so the result depends only on the value, not on whether the error was created in
+    ///         memory or deserialized with System.Text.Json or Newtonsoft.Json: a value that is not a
+    ///         <see cref="JsonElement" /> is first written as a JSON primitive (a string, a number or a boolean, exactly
+    ///         as System.Text.Json would serialize it), and the resulting <see cref="JsonElement" /> is converted to
+    ///         <typeparamref name="T" />.
     ///     </para>
     ///     <para>
-    ///         Deserializing a <see cref="JsonElement" /> to other types (e.g., arrays or objects) uses reflection-based
-    ///         serialization, which is not available in Native AOT and trimmed applications (when
-    ///         <c>JsonSerializerIsReflectionEnabledByDefault</c> is <see langword="false" />); in that case this method
-    ///         returns <see langword="false" /> for such types. The conversions listed above do not use reflection.
+    ///         The conversion is strict: <see cref="string" />, <see cref="DateTime" />, <see cref="DateTimeOffset" />
+    ///         and <see cref="Guid" /> are read from JSON strings (dates in the ISO 8601-1 extended format),
+    ///         <see cref="bool" /> from JSON booleans, and integer, floating-point and enum types from JSON numbers
+    ///         that fit the target type exactly. Other types are deserialized with
+    ///         <see cref="JsonSerializer.Deserialize{TValue}(JsonElement, JsonSerializerOptions)" />.
+    ///     </para>
+    ///     <para>
+    ///         Deserializing to other types (e.g., arrays or objects) uses reflection-based serialization, which is not
+    ///         available in Native AOT and trimmed applications (when <c>JsonSerializerIsReflectionEnabledByDefault</c>
+    ///         is <see langword="false" />); in that case this method returns <see langword="false" /> for such types.
+    ///         The conversions listed above do not use reflection.
     ///     </para>
     /// </remarks>
     public bool TryGetMetadata<T>(string key, [MaybeNullWhen(false)] out T value)
@@ -438,15 +447,17 @@ public sealed record Error
         if (key is null || !_metadata.TryGetValue(key, out var raw) || raw is null)
             return false;
 
+        if (raw is T typed)
+        {
+            value = typed;
+            return true;
+        }
+
         try
         {
-            object? converted = raw switch
-            {
-                T typed => typed,
-                JsonElement element => ConvertJsonElement<T>(element),
-                IConvertible convertible => Convert.ChangeType(convertible, Nullable.GetUnderlyingType(typeof(T)) ?? typeof(T), CultureInfo.InvariantCulture),
-                _ => null
-            };
+            var converted = raw is JsonElement element
+                ? ConvertJsonElement<T>(element)
+                : ConvertPrimitive<T>(raw);
 
             if (converted is not T result)
                 return false;
@@ -460,6 +471,74 @@ public sealed record Error
         }
     }
 
+    /// <summary>
+    ///     Converts a non-<see cref="JsonElement" /> value by writing it as a JSON primitive first, so that it follows
+    ///     the same conversion rules as a deserialized value.
+    /// </summary>
+    private static object? ConvertPrimitive<T>(object raw)
+    {
+        var buffer = new ArrayBufferWriter<byte>();
+        using (var writer = new Utf8JsonWriter(buffer))
+        {
+            if (!TryWritePrimitive(writer, raw))
+                return null;
+        }
+
+        using var document = JsonDocument.Parse(buffer.WrittenMemory);
+        return ConvertJsonElement<T>(document.RootElement);
+    }
+
+    /// <summary>
+    ///     Writes a primitive value as System.Text.Json serializes it. <see cref="IConvertible" /> values are
+    ///     recognized by their <see cref="TypeCode" />, which also covers enums (as numbers) and Newtonsoft.Json
+    ///     <c>JValue</c> instances, without referencing Newtonsoft.Json.
+    /// </summary>
+    private static bool TryWritePrimitive(Utf8JsonWriter writer, object raw)
+    {
+        switch (raw)
+        {
+            case DateTimeOffset dateTimeOffset:
+                writer.WriteStringValue(dateTimeOffset);
+                return true;
+            case Guid guid:
+                writer.WriteStringValue(guid);
+                return true;
+            case IConvertible convertible:
+                var provider = CultureInfo.InvariantCulture;
+                switch (convertible.GetTypeCode())
+                {
+                    case TypeCode.Boolean:
+                        writer.WriteBooleanValue(convertible.ToBoolean(provider));
+                        return true;
+                    case TypeCode.Char or TypeCode.String:
+                        writer.WriteStringValue(convertible.ToString(provider));
+                        return true;
+                    case TypeCode.DateTime:
+                        writer.WriteStringValue(convertible.ToDateTime(provider));
+                        return true;
+                    case TypeCode.SByte or TypeCode.Int16 or TypeCode.Int32 or TypeCode.Int64:
+                        writer.WriteNumberValue(convertible.ToInt64(provider));
+                        return true;
+                    case TypeCode.Byte or TypeCode.UInt16 or TypeCode.UInt32 or TypeCode.UInt64:
+                        writer.WriteNumberValue(convertible.ToUInt64(provider));
+                        return true;
+                    case TypeCode.Single:
+                        writer.WriteNumberValue(convertible.ToSingle(provider));
+                        return true;
+                    case TypeCode.Double:
+                        writer.WriteNumberValue(convertible.ToDouble(provider));
+                        return true;
+                    case TypeCode.Decimal:
+                        writer.WriteNumberValue(convertible.ToDecimal(provider));
+                        return true;
+                    default:
+                        return false;
+                }
+            default:
+                return false;
+        }
+    }
+
     private static object? ConvertJsonElement<T>(JsonElement element)
     {
         var type = Nullable.GetUnderlyingType(typeof(T)) ?? typeof(T);
@@ -470,6 +549,11 @@ public sealed record Error
         if (type == typeof(bool))
             return element.ValueKind is JsonValueKind.True or JsonValueKind.False ? element.GetBoolean() : null;
 
+        if (type == typeof(DateTime))
+            return element.ValueKind == JsonValueKind.String && element.TryGetDateTime(out var dateTime)
+                ? dateTime
+                : null;
+
         if (type == typeof(DateTimeOffset))
             return element.ValueKind == JsonValueKind.String && element.TryGetDateTimeOffset(out var dateTimeOffset)
                 ? dateTimeOffset
@@ -478,28 +562,38 @@ public sealed record Error
         if (type == typeof(Guid))
             return element.ValueKind == JsonValueKind.String && element.TryGetGuid(out var guid) ? guid : null;
 
-        if (Type.GetTypeCode(type) is >= TypeCode.SByte and <= TypeCode.Decimal && !type.IsEnum)
+        if (type.IsEnum)
         {
-            if (element.ValueKind != JsonValueKind.Number)
-                return null;
-
-            return Type.GetTypeCode(type) switch
-            {
-                TypeCode.SByte => element.TryGetSByte(out var number) ? number : null,
-                TypeCode.Byte => element.TryGetByte(out var number) ? number : null,
-                TypeCode.Int16 => element.TryGetInt16(out var number) ? number : null,
-                TypeCode.UInt16 => element.TryGetUInt16(out var number) ? number : null,
-                TypeCode.Int32 => element.TryGetInt32(out var number) ? number : null,
-                TypeCode.UInt32 => element.TryGetUInt32(out var number) ? number : null,
-                TypeCode.Int64 => element.TryGetInt64(out var number) ? number : null,
-                TypeCode.UInt64 => element.TryGetUInt64(out var number) ? number : null,
-                TypeCode.Single => element.TryGetSingle(out var number) ? number : null,
-                TypeCode.Double => element.TryGetDouble(out var number) ? number : null,
-                _ => element.TryGetDecimal(out var number) ? number : null
-            };
+            var number = ConvertJsonNumber(element, Type.GetTypeCode(type));
+            return number is null ? null : Enum.ToObject(type, number);
         }
 
+        if (Type.GetTypeCode(type) is >= TypeCode.SByte and <= TypeCode.Decimal)
+            return ConvertJsonNumber(element, Type.GetTypeCode(type));
+
         return element.Deserialize<T>();
+    }
+
+    private static object? ConvertJsonNumber(JsonElement element, TypeCode typeCode)
+    {
+        if (element.ValueKind != JsonValueKind.Number)
+            return null;
+
+        return typeCode switch
+        {
+            TypeCode.SByte => element.TryGetSByte(out var number) ? number : null,
+            TypeCode.Byte => element.TryGetByte(out var number) ? number : null,
+            TypeCode.Int16 => element.TryGetInt16(out var number) ? number : null,
+            TypeCode.UInt16 => element.TryGetUInt16(out var number) ? number : null,
+            TypeCode.Int32 => element.TryGetInt32(out var number) ? number : null,
+            TypeCode.UInt32 => element.TryGetUInt32(out var number) ? number : null,
+            TypeCode.Int64 => element.TryGetInt64(out var number) ? number : null,
+            TypeCode.UInt64 => element.TryGetUInt64(out var number) ? number : null,
+            TypeCode.Single => element.TryGetSingle(out var number) ? number : null,
+            TypeCode.Double => element.TryGetDouble(out var number) ? number : null,
+            TypeCode.Decimal => element.TryGetDecimal(out var number) ? number : null,
+            _ => null
+        };
     }
 
     private static ReadOnlyDictionary<string, object> CreateMetadata(
