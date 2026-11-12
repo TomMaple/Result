@@ -61,8 +61,8 @@ internal static class MetadataKeyValidator
         if (IsReserved(key))
         {
             throw new ArgumentException(
-                $"The metadata key '{key}' is reserved. Keys must not match (case-insensitively) the standard " +
-                "problem details members: type, title, status, detail, instance, errors, detailTemplated.",
+                $"The metadata key ‘{key}’ is reserved. Keys must not match (case-insensitively) the standard " +
+                "problem details members: ‘type’, ‘title’, ‘status’, ‘detail’, ‘instance’, ‘errors’, ‘detailTemplated’.",
                 nameof(key));
         }
     }

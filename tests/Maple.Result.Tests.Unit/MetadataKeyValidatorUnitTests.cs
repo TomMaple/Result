@@ -58,6 +58,17 @@ public class MetadataKeyValidatorUnitTests
     }
 
     [Fact]
+    public void Validate_ReservedKey_ThrowsArgumentExceptionWithQuotedKey()
+    {
+        // Act
+        var exception = Should.Throw<ArgumentException>(() => MetadataKeyValidator.Validate("Title"));
+
+        // Assert
+        exception.Message.ShouldStartWith("The metadata key ‘Title’ is reserved.");
+        exception.Message.ShouldContain("‘detailTemplated’");
+    }
+
+    [Fact]
     public void Validate_NullKey_ThrowsArgumentNullException()
     {
         // Act & Assert
