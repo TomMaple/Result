@@ -2,7 +2,7 @@
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/TemplatedMessage.cs" target="_blank">TemplatedMessage.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/TemplatedMessage.cs" target="_blank">TemplatedMessage.cs</a>
 
 Provides a set of values to generate a message based on the template for the purpose of [ErrorDetail](../ErrorDetail/ErrorDetail.md) type used in the [Error](../Error/Error.md).
 

@@ -2,7 +2,7 @@
 ## Definition
 Namespace: [Maple.Result.Extensions](namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/ResultTaskAsyncExtensions.csL50" target="_blank">ResultTaskAsyncExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/ResultTaskAsyncExtensions.csL50" target="_blank">ResultTaskAsyncExtensions.cs</a>
 
 Asynchronously converts the outcome of the asynchronous operation represented by the [Result&lt;T&gt;](../ResultT/ResultT.md) to the non-generic [Result](../Result/Result.md).
 

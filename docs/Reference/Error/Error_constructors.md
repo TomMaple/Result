@@ -2,7 +2,7 @@
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Error.cs#L43" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L43" target="_blank">Error.cs</a>
 
 Initializes a new instance of the [Error](Error.md) record of the Critical type (if not specified otherwise).
 

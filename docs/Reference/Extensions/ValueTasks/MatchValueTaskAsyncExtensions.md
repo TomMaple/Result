@@ -2,7 +2,7 @@
 ## Definition
 Namespace: [Maple.Result.Extensions.ValueTasks](namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/ValueTasks/MatchValueTaskAsyncExtensions.cs" target="_blank">MatchValueTaskAsyncExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/ValueTasks/MatchValueTaskAsyncExtensions.cs" target="_blank">MatchValueTaskAsyncExtensions.cs</a>
 
 Provides extension methods for the [Result](../../Result/Result.md) and [Result&lt;T&gt;](../../ResultT/ResultT.md) records to handle both successful and failure scenarios.
 

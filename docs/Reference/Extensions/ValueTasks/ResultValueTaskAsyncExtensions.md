@@ -2,7 +2,7 @@
 ## Definition
 Namespace: [Maple.Result.Extensions.ValueTasks](namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/ValueTasks/ResultValueTaskAsyncExtensions.cs" target="_blank">ResultValueTaskAsyncExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/ValueTasks/ResultValueTaskAsyncExtensions.cs" target="_blank">ResultValueTaskAsyncExtensions.cs</a>
 
 Provides asynchronous extension methods, represented by [ValueTask](https://learn.microsoft.com/dotnet/api/system.threading.tasks.valuetask), for the [Result&lt;T&gt;](../../ResultT/ResultT.md) records.
 

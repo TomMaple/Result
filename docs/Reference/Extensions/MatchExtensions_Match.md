@@ -22,7 +22,7 @@ Runs a specific action or function depending on whether the instance of [Result]
 | [Match&lt;T, TNext&gt;(Result&lt;T&gt;, Func&lt;T, Result&lt;TNext&gt;&gt;, Func&lt;Error, Result&lt;TNext&gt;&gt;)](#matcht-tnextresultt-result-funct-resulttnext-funcerror-resulttnext) |  Executes one of the specified functions depending on whether the [Result&lt;T&gt;](../ResultT/ResultT.md) represents a success or a failure. |
 
 ## Match(Result, Action, Action&lt;Error&gt;)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchExtensions.cs#L53" target="_blank">MatchExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/MatchExtensions.cs#L53" target="_blank">MatchExtensions.cs</a>
 
 Executes the provided `ifSuccessAction`, only if the instance of [Result](../Result/Result.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)), or the provided `ifErrorAction` otherwise.
 
@@ -59,7 +59,7 @@ createUserResult.Match(
 
 
 ## Match(Result, Action&lt;Result&gt;, Action&lt;Error&gt;)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchExtensions.cs#L91" target="_blank">MatchExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/MatchExtensions.cs#L91" target="_blank">MatchExtensions.cs</a>
 
 Executes the provided `ifSuccessFunction`, only if the instance of [Result](../Result/Result.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)), or the provided `ifErrorAction` otherwise.
 
@@ -97,7 +97,7 @@ var userAddedResult = createUserResult.Match(
 
 
 ## Match(Result, Func&lt;Result&gt;, Func&lt;Error, Result&gt;)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchExtensions.cs#L127" target="_blank">MatchExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/MatchExtensions.cs#L127" target="_blank">MatchExtensions.cs</a>
 
 Executes the provided `ifSuccessFunction`, only if the instance of [Result](../Result/Result.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)), or the provided `ifErrorFunction` otherwise.
 
@@ -139,7 +139,7 @@ var userAddedResult = authenticationResult.Match(
 
 
 ## Match&lt;T&gt;(Result, Func&lt;T&gt;, Action&lt;Error&gt;)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchExtensions.cs#L167" target="_blank">MatchExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/MatchExtensions.cs#L167" target="_blank">MatchExtensions.cs</a>
 
 Executes the provided `ifSuccessFunction`, only if the instance of [Result](../Result/Result.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)), or the provided `ifErrorAction` otherwise.
 
@@ -180,7 +180,7 @@ var companyResult = createUserResult.Match(
 
 
 ## Match&lt;T&gt;(Result, Func&lt;T&gt;, Func&lt;Error, T&gt;)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchExtensions.cs#L206" target="_blank">MatchExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/MatchExtensions.cs#L206" target="_blank">MatchExtensions.cs</a>
 
 Executes the provided `ifSuccessFunction`, only if the instance of [Result](../Result/Result.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)), or the provided `ifErrorFunction` otherwise.
 
@@ -225,7 +225,7 @@ var viewModel = createUserResult.Match(
 
 
 ## Match&lt;T&gt;(Result, Func&lt;Result&lt;T&gt;&gt;, Action&lt;Error&gt;)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchExtensions.cs#L245" target="_blank">MatchExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/MatchExtensions.cs#L245" target="_blank">MatchExtensions.cs</a>
 
 Executes the provided `ifSuccessFunction`, only if the instance of [Result](../Result/Result.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)), or the provided `ifErrorAction` otherwise.
 
@@ -267,7 +267,7 @@ var userDetailsResult = createUserResult.Match(
 
 
 ## Match&lt;T&gt;(Result, Func&lt;Result&lt;T&gt;&gt;, Func&lt;Error, Result&lt;T&gt;&gt;)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchExtensions.cs#L285" target="_blank">MatchExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/MatchExtensions.cs#L285" target="_blank">MatchExtensions.cs</a>
 
 Executes the provided `ifSuccessFunction`, only if the instance of [Result](../Result/Result.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)), or the provided `ifErrorFunction` otherwise.
 
@@ -309,7 +309,7 @@ var userDetailsResult = createUserResult.Match(
 
 
 ## Match&lt;T&gt;(Result&lt;T&gt;, Action&lt;T&gt;, Action&lt;Error&gt;)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchExtensions.cs#L328" target="_blank">MatchExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/MatchExtensions.cs#L328" target="_blank">MatchExtensions.cs</a>
 
 Executes the provided `ifSuccessAction`, only if the instance of [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)), or the provided `ifErrorAction` otherwise.
 
@@ -350,7 +350,7 @@ userResult.Match(
 
 
 ## Match&lt;T, TNext&gt;(Result&lt;T&gt;, Func&lt;T, TNext&gt;, Action&lt;Error&gt;)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchExtensions.cs#L372" target="_blank">MatchExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/MatchExtensions.cs#L372" target="_blank">MatchExtensions.cs</a>
 
 Executes the provided `ifSuccessFunction`, only if the instance of [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)), or the provided `ifErrorAction` otherwise.
 
@@ -395,7 +395,7 @@ var userAddedResult = createUserResult.Match(
 
 
 ## Match&lt;T, TNext&gt;(Result&lt;T&gt;, Func&lt;T, TNext&gt;, Func&lt;Error, TNext&gt;)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchExtensions.cs#L414" target="_blank">MatchExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/MatchExtensions.cs#L414" target="_blank">MatchExtensions.cs</a>
 
 Executes the provided `ifSuccessFunction`, only if the instance of [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)), or the provided `ifErrorFunction` otherwise.
 
@@ -444,7 +444,7 @@ var companyResult = createUserResult.Match(
 
 
 ## Match&lt;T, TNext&gt;(Result&lt;T&gt;, Func&lt;T, Result&lt;TNext&gt;&gt;, Action&lt;Error&gt;)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchExtensions.cs#L456" target="_blank">MatchExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/MatchExtensions.cs#L456" target="_blank">MatchExtensions.cs</a>
 
 Executes the provided `ifSuccessFunction`, only if the instance of [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)), or the provided `ifErrorAction` otherwise.
 
@@ -489,7 +489,7 @@ var companyResult = createUserResult.Match(
 
 
 ## Match&lt;T, TNext&gt;(Result&lt;T&gt; result, Func&lt;T, Result&lt;TNext&gt;&gt;, Func&lt;Error, Result&lt;TNext&gt;&gt;)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/MatchExtensions.cs#L498" target="_blank">MatchExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/MatchExtensions.cs#L498" target="_blank">MatchExtensions.cs</a>
 
 Executes the provided `ifSuccessFunction`, only if the instance of [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)), or the provided `ifErrorFunction` otherwise.
 

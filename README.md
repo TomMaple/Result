@@ -1,7 +1,7 @@
 ![NuGet Version](https://img.shields.io/nuget/v/Maple.Result?label=Maple.Result%20%E2%80%94%20nuget&link=https%3A%2F%2Fwww.nuget.org%2Fpackages%2FMaple.Result%2F)
 ![NuGet Downloads](https://img.shields.io/nuget/dt/Maple.Result)
-![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/TomMaple/Result/ci.yml)
-![GitHub last commit](https://img.shields.io/github/last-commit/TomMaple/Result)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/TomMaple/Maple.Result/ci.yml)
+![GitHub last commit](https://img.shields.io/github/last-commit/TomMaple/Maple.Result)
 
 
 
@@ -33,12 +33,12 @@ Although, there are many existing implementation of the *Result* pattern in C#, 
 * following standards ([RFC 9457](https://datatracker.ietf.org/doc/html/rfc9457)).
 
 # Quick Links
-* [Quick Start](https://github.com/TomMaple/Result#quick-start)
-* [The Result Pattern](https://github.com/TomMaple/Result#the-result-pattern)
-* [How To Use Result library](https://github.com/TomMaple/Result#how-to-use-result-library)
-* [Mapping to HTTP responses](https://github.com/TomMaple/Result#mapping-to-http-responses)
-* [FAQ](https://github.com/TomMaple/Result#faq)
-* [Learn More & Documentation](https://github.com/TomMaple/Result#learn-more)
+* [Quick Start](https://github.com/TomMaple/Maple.Result#quick-start)
+* [The Result Pattern](https://github.com/TomMaple/Maple.Result#the-result-pattern)
+* [How To Use Result library](https://github.com/TomMaple/Maple.Result#how-to-use-result-library)
+* [Mapping to HTTP responses](https://github.com/TomMaple/Maple.Result#mapping-to-http-responses)
+* [FAQ](https://github.com/TomMaple/Maple.Result#faq)
+* [Learn More & Documentation](https://github.com/TomMaple/Maple.Result#learn-more)
 
 # Quick Start 
 ## Adding the *NuGet* Package
@@ -130,7 +130,7 @@ var displayNameResult =
 > [!IMPORTANT]
 > The `Task`-based methods live in the `Maple.Result.Extensions` namespace and the `ValueTask`-based ones in `Maple.Result.Extensions.ValueTasks`—import the one matching the style you use, as having both in scope makes a call with an `async` lambda ambiguous.
 
-See more: [Maple.Result.Extensions](https://github.com/TomMaple/Result/blob/main/docs/Reference/Extensions/namespace.md)
+See more: [Maple.Result.Extensions](https://github.com/TomMaple/Maple.Result/blob/main/docs/Reference/Extensions/namespace.md)
 
 # The Result Pattern
 ## Key Benefits
@@ -180,7 +180,7 @@ return Result.Success();
 
 to return successful `Result` without a value.
 
-See more: [Result](https://github.com/TomMaple/Result/blob/main/docs/Reference/Result/Result.md)
+See more: [Result](https://github.com/TomMaple/Maple.Result/blob/main/docs/Reference/Result/Result.md)
 
 ### Result&lt;T&gt;
 Use
@@ -242,7 +242,7 @@ public async Task<Result<User>> GetUserAsync(int userId)
 }
 ```
 
-See more: [Result&lt;T&gt;](https://github.com/TomMaple/Result/blob/main/docs/Reference/ResultT/ResultT.md)
+See more: [Result&lt;T&gt;](https://github.com/TomMaple/Maple.Result/blob/main/docs/Reference/ResultT/ResultT.md)
 
 ## Error
 Use proper static methods to create an `Error` instance, e.g.
@@ -365,7 +365,7 @@ It uses:
 | Template | `The ‘{requiredPermission}’ permission is required to delete a contact.` | `L’autorisation «{requiredPermission}» est requise pour supprimer un contact.` | `Se requiere el permiso «{requiredPermission}» para eliminar un contacto.` | `删除联系人需要“{requiredPermission}”权限。` |
 | Localized message | `The ‘contact_delete’ permission is required to delete a contact.` | `L’autorisation «contact_delete» est requise pour supprimer un contact.` | `Se requiere el permiso «contact_delete» para eliminar un contacto.` | `删除联系人需要“contact_delete”权限。` |
 
-See more: [Error](https://github.com/TomMaple/Result/blob/main/docs/Reference/Error/Error.md)
+See more: [Error](https://github.com/TomMaple/Maple.Result/blob/main/docs/Reference/Error/Error.md)
 
 ## Controlling the execution flow
 You can use:
@@ -405,7 +405,7 @@ var userTokenResult =
     select token;
 ```
 
-See more: [Maple.Result.Extensions](https://github.com/TomMaple/Result/blob/main/docs/Reference/Extensions/namespace.md)
+See more: [Maple.Result.Extensions](https://github.com/TomMaple/Maple.Result/blob/main/docs/Reference/Extensions/namespace.md)
 
 # Mapping to HTTP responses
 Check:
@@ -452,9 +452,9 @@ This library minimizes the amount of extension methods:
 
 # Learn More
 ## Documentation
-* [Maple.Result](https://github.com/TomMaple/Result/blob/main/docs/Reference/namespace.md) — `Result`, `Error`, and other types
-* [Maple.Result.Extensions](https://github.com/TomMaple/Result/blob/main/docs/Reference/Extensions/namespace.md) — extension methods
-* [Maple.Result.Extensions.ValueTasks](https://github.com/TomMaple/Result/blob/main/docs/Reference/Extensions/ValueTasks/namespace.md) — `ValueTask`-based extension methods
+* [Maple.Result](https://github.com/TomMaple/Maple.Result/blob/main/docs/Reference/namespace.md) — `Result`, `Error`, and other types
+* [Maple.Result.Extensions](https://github.com/TomMaple/Maple.Result/blob/main/docs/Reference/Extensions/namespace.md) — extension methods
+* [Maple.Result.Extensions.ValueTasks](https://github.com/TomMaple/Maple.Result/blob/main/docs/Reference/Extensions/ValueTasks/namespace.md) — `ValueTask`-based extension methods
 
 ## See also
 * [Problem Details for HTTP APIs - RFC 7807 is dead, long live RFC 9457](https://blog.frankel.ch/problem-details-http-apis/)
