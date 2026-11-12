@@ -14,6 +14,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Text.Json;
+using Maple.Result.Validators;
 
 namespace Maple.Result;
 
@@ -220,10 +221,12 @@ public sealed record Error
     ///         does not define any well-known keys.
     ///     </para>
     ///     <para>
-    ///         Keys are compared ordinally (case-sensitive). They should consist of letters, digits and <c>_</c>, use
-    ///         camelCase and be at least 3 characters long (<i>RFC 9457</i>, section 4), and should not collide with
-    ///         the standard members: <c>type</c>, <c>title</c>, <c>status</c>, <c>detail</c>, <c>instance</c>,
-    ///         <c>errors</c> and <c>detailTemplated</c>.
+    ///         Keys are compared ordinally (case-sensitive). They should start with a letter, consist of letters,
+    ///         digits and <c>_</c>, and be at least 3 characters long (<i>RFC 9457</i>, section 4); this is a
+    ///         recommendation and is not enforced. Keys must not match the standard members (case-insensitively):
+    ///         <c>type</c>, <c>title</c>, <c>status</c>, <c>detail</c>, <c>instance</c>, <c>errors</c> and
+    ///         <c>detailTemplated</c>; <see cref="WithMetadata(string, object)" /> rejects them. The <c>init</c> setter
+    ///         does not validate keys, so that problem details received from other services can always be deserialized.
     ///     </para>
     ///     <para>
     ///         Values should be JSON primitives (strings, numbers, booleans). After deserialization, values are
@@ -303,7 +306,11 @@ public sealed record Error
     /// <param name="key">The key of the metadata entry.</param>
     /// <param name="value">The value of the metadata entry; it should be a JSON primitive.</param>
     /// <returns>A new instance of the <see cref="Error" /> object; the current instance is not modified.</returns>
-    /// <exception cref="ArgumentException">If the <paramref name="key" /> is empty or whitespace-only.</exception>
+    /// <exception cref="ArgumentException">
+    ///     If the <paramref name="key" /> is empty, whitespace-only or matches (case-insensitively) a standard problem
+    ///     details member: <c>type</c>, <c>title</c>, <c>status</c>, <c>detail</c>, <c>instance</c>, <c>errors</c> or
+    ///     <c>detailTemplated</c>.
+    /// </exception>
     /// <exception cref="ArgumentNullException">
     ///     If the <paramref name="key" /> or the <paramref name="value" /> is <see langword="null" />.
     /// </exception>
@@ -323,7 +330,11 @@ public sealed record Error
     /// </summary>
     /// <param name="metadata">The metadata entries to add or replace.</param>
     /// <returns>A new instance of the <see cref="Error" /> object; the current instance is not modified.</returns>
-    /// <exception cref="ArgumentException">If any key is empty or whitespace-only.</exception>
+    /// <exception cref="ArgumentException">
+    ///     If any key is empty, whitespace-only or matches (case-insensitively) a standard problem details member:
+    ///     <c>type</c>, <c>title</c>, <c>status</c>, <c>detail</c>, <c>instance</c>, <c>errors</c> or
+    ///     <c>detailTemplated</c>.
+    /// </exception>
     /// <exception cref="ArgumentNullException">
     ///     If the <paramref name="metadata" />, any key or any value is <see langword="null" />.
     /// </exception>
@@ -470,7 +481,7 @@ public sealed record Error
 
     private static void ValidateMetadataEntry(string key, object value)
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(key);
+        MetadataKeyValidator.Validate(key);
         ArgumentNullException.ThrowIfNull(value);
     }
 

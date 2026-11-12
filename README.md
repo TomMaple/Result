@@ -363,7 +363,8 @@ if (error.TryGetMetadata<int>("limit", out var limit))
 ```
 
 * `WithMetadata()` and `WithoutMetadata()` return a **copy**; the original error is not modified.
-* Keys should be *camelCase*, use letters, digits and `_`, be at least 3 characters long, and not collide with the standard members (`type`, `title`, `status`, `detail`, `instance`, `errors`, `detailTemplated`).
+* Keys must not match the standard members `type`, `title`, `status`, `detail`, `instance`, `errors` and `detailTemplated` (case-insensitive); `WithMetadata()` throws an `ArgumentException` for them.
+* Keys should start with a letter, use letters, digits and `_`, and be at least 3 characters long (RFC 9457 recommendation, not enforced).
 * Values should be JSON primitives (strings, numbers, booleans).
 
 See more: [Metadata](https://github.com/TomMaple/Maple.Result/blob/main/docs/Reference/Error/Error_Metadata.md)

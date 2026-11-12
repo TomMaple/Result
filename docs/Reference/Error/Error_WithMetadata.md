@@ -18,7 +18,7 @@ Keys are compared ordinally (case-sensitive). See [Metadata](Error_Metadata.md) 
 
 
 ## WithMetadata(String, Object)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L310" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L317" target="_blank">Error.cs</a>
 
 Returns a copy of the current error with the specified metadata entry added, or replaced if the key already exists.
 
@@ -45,7 +45,7 @@ The `key` or the `value` is `null`.
 
 [ArgumentException](https://learn.microsoft.com/dotnet/api/system.argumentexception)
 
-The `key` is empty or consists only of white-space characters.
+The `key` is empty, consists only of white-space characters, or is [reserved](Error_Metadata.md#keys).
 
 ### Examples
 ```csharp
@@ -58,7 +58,7 @@ var error = Error.LimitExceeded(
 
 
 ## WithMetadata(IEnumerable&lt;KeyValuePair&lt;String, Object&gt;&gt;)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L330" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L341" target="_blank">Error.cs</a>
 
 Returns a copy of the current error with the specified metadata entries added. Entries with existing keys are replaced; the other existing entries are kept.
 
@@ -82,7 +82,7 @@ The `metadata` sequence, any of its keys or any of its values is `null`.
 
 [ArgumentException](https://learn.microsoft.com/dotnet/api/system.argumentexception)
 
-Any key is empty or consists only of white-space characters.
+Any key is empty, consists only of white-space characters, or is [reserved](Error_Metadata.md#keys).
 
 ### Examples
 ```csharp

@@ -2,7 +2,7 @@
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L242" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L245" target="_blank">Error.cs</a>
 
 Gets or sets the additional, machine-readable members of the problem.
 
@@ -26,8 +26,9 @@ The library does **not** define any well-known keys; they are defined by the pac
 
 ### Keys
 * Keys are compared ordinally (case-sensitive).
-* They should consist of letters, digits and `_`, use *camelCase* and be at least 3 characters long ([RFC 9457, section 4](https://datatracker.ietf.org/doc/html/rfc9457#section-4)).
-* They should not collide with the standard members: `type`, `title`, `status`, `detail`, `instance`, `errors` and `detailTemplated`.
+* **Reserved (enforced):** keys must not match the standard problem details members `type`, `title`, `status`, `detail`, `instance`, `errors` and `detailTemplated`. The check **ignores case** (e.g., `Title` is also rejected), because clients often read JSON case-insensitively and serializer naming policies can change the case of a key. [WithMetadata(String, Object)](Error_WithMetadata.md) throws an [ArgumentException](https://learn.microsoft.com/dotnet/api/system.argumentexception) for such a key.
+* **Recommended (not enforced):** keys should start with a letter, consist of ASCII letters, digits and `_`, and be at least 3 characters long ([RFC 9457, section 4](https://datatracker.ietf.org/doc/html/rfc9457#section-4)). The RFC states these as recommendations (*SHOULD*), and many APIs use other names (e.g., `id` or `trace-id`), so they are not checked.
+* The `init` setter (used by deserialization) does not validate keys, so problem details received from other services can always be read.
 
 ### Values
 Values should be JSON primitives (strings, numbers and booleans).

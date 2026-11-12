@@ -2,7 +2,7 @@
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L491" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L502" target="_blank">Error.cs</a>
 
 Determines whether the specified [Error](Error.md) is equal to the current [Error](Error.md), comparing the [ErrorDetails](Error_ErrorDetails.md) collection and the [Metadata](Error_Metadata.md) dictionary by their content rather than by reference.
 

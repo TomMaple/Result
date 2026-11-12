@@ -168,6 +168,81 @@ public class ErrorMetadataUnitTests
         Should.Throw<ArgumentException>(() => sut.WithMetadata(null!, 1));
     }
 
+    [Theory]
+    [InlineData("type")]
+    [InlineData("title")]
+    [InlineData("status")]
+    [InlineData("detail")]
+    [InlineData("instance")]
+    [InlineData("errors")]
+    [InlineData("detailTemplated")]
+    [InlineData("Title")]
+    [InlineData("STATUS")]
+    [InlineData("DetailTemplated")]
+    public void WithMetadata_ReservedKey_ThrowsArgumentException(string key)
+    {
+        // Arrange
+        var sut = CreateError();
+
+        // Act & Assert
+        var exception = Should.Throw<ArgumentException>(() => sut.WithMetadata(key, 1));
+        exception.ShouldNotBeOfType<ArgumentNullException>();
+        exception.ParamName.ShouldBe("key");
+    }
+
+    [Theory]
+    [InlineData("metadata")]
+    [InlineData("traceId")]
+    [InlineData("id")]
+    [InlineData("retry-after")]
+    [InlineData("titles")]
+    public void WithMetadata_NotReservedKey_AddsEntry(string key)
+    {
+        // Act
+        var sut = CreateError().WithMetadata(key, 1);
+
+        // Assert
+        sut.Metadata[key].ShouldBe(1);
+    }
+
+    [Fact]
+    public void WithMetadata_SequenceWithReservedKey_ThrowsArgumentException()
+    {
+        // Arrange
+        var sut = CreateError();
+
+        // Act & Assert
+        Should.Throw<ArgumentException>(() =>
+            sut.WithMetadata([new KeyValuePair<string, object>("limit", 1), new KeyValuePair<string, object>("Type", 1)]));
+    }
+
+    [Fact]
+    public void Metadata_InitWithReservedKey_IsAccepted()
+    {
+        // Act
+        var sut = CreateError() with { Metadata = new Dictionary<string, object> { ["title"] = "foreign" } };
+
+        // Assert
+        sut.Metadata["title"].ShouldBe("foreign");
+    }
+
+    [Fact]
+    public void Deserialize_ReservedKey_IsAccepted()
+    {
+        // Arrange
+        const string Json = """{"Category":10,"TypeUri":"about:blank","Title":"Test title","Metadata":{"status":429}}""";
+
+        // Act
+        var microsoft = SerializationHelper.DeserializeWithMicrosoft<Sut>(Json);
+        var newtonsoft = SerializationHelper.DeserializeWithNewtonsoft<Sut>(Json);
+
+        // Assert
+        microsoft.TryGetMetadata<int>("status", out var microsoftStatus).ShouldBeTrue();
+        microsoftStatus.ShouldBe(429);
+        newtonsoft.TryGetMetadata<int>("status", out var newtonsoftStatus).ShouldBeTrue();
+        newtonsoftStatus.ShouldBe(429);
+    }
+
     [Fact]
     public void WithMetadata_NullValue_ThrowsArgumentNullException()
     {
