@@ -2,7 +2,7 @@
 ## Definition
 Namespace: [Maple.Result.Extensions.ValueTasks](namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/ValueTasks/ResultValueTaskAsyncExtensions.cs#L45" target="_blank">ResultValueTaskAsyncExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/ValueTasks/ResultValueTaskAsyncExtensions.cs#L45" target="_blank">ResultValueTaskAsyncExtensions.cs</a>
 
 Asynchronously converts the outcome of the asynchronous operation represented by the [Result&lt;T&gt;](../../ResultT/ResultT.md) to the non-generic [Result](../../Result/Result.md).
 

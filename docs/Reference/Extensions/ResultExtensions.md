@@ -2,7 +2,7 @@
 ## Definition
 Namespace: [Maple.Result.Extensions](namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/ResultExtensions.cs" target="_blank">ResultExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/ResultExtensions.cs" target="_blank">ResultExtensions.cs</a>
 
 Provides extension methods for the [Result&lt;T&gt;](../ResultT/ResultT.md) records.
 

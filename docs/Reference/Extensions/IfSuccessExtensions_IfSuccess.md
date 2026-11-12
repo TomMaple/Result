@@ -21,7 +21,7 @@ Runs a specific action or function, if the instance of [Result](../Result/Result
 
 
 ## IfSuccess(Result, Action)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L48" target="_blank">IfSuccessExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L48" target="_blank">IfSuccessExtensions.cs</a>
 
 Executes the provided action, only if the instance of [Result](../Result/Result.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)).
 
@@ -56,7 +56,7 @@ createUserResult.IfSuccess(() =>
 
 
 ## IfSuccess(Result, Func&lt;Result&gt;)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L80" target="_blank">IfSuccessExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L80" target="_blank">IfSuccessExtensions.cs</a>
 
 Executes the provided function only if the instance of [Result](../Result/Result.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)).
 
@@ -91,7 +91,7 @@ var userAddedResult = createUserResult.IfSuccess(() =>
 
 
 ## IfSuccess&lt;T&gt;(Result, Func&lt;T&gt;)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L115" target="_blank">IfSuccessExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L115" target="_blank">IfSuccessExtensions.cs</a>
 
 Executes the provided function only if the instance of [Result](../Result/Result.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)).
 
@@ -130,7 +130,7 @@ var companyResult = createUserResult.IfSuccess(() =>
 
 
 ## IfSuccess&lt;T&gt;(Result, Func&lt;Result&lt;T&gt;&gt;)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L150" target="_blank">IfSuccessExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L150" target="_blank">IfSuccessExtensions.cs</a>
 
 Executes the provided function only if the instance of [Result](../Result/Result.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)).
 
@@ -169,7 +169,7 @@ var companyResult = createUserResult.IfSuccess(() =>
 
 
 ## IfSuccess&lt;T&gt;(Result&lt;T&gt;, Action&lt;T&gt;)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L186" target="_blank">IfSuccessExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L186" target="_blank">IfSuccessExtensions.cs</a>
 
 Executes the provided action, only if the instance of [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)).
 
@@ -208,7 +208,7 @@ userResult.IfSuccess(user =>
 
 
 ## IfSuccess&lt;T&gt;(Result&lt;T&gt;, Func&lt;T, Result&gt;)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L219" target="_blank">IfSuccessExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L219" target="_blank">IfSuccessExtensions.cs</a>
 
 Executes the provided function only if the instance of [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)).
 
@@ -247,7 +247,7 @@ var userAddedResult = createUserResult.IfSuccess(user =>
 
 
 ## IfSuccess&lt;T, TNext&gt;(Result&lt;T&gt;, Func&lt;T, TNext&gt;)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L264" target="_blank">IfSuccessExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L264" target="_blank">IfSuccessExtensions.cs</a>
 
 Executes the provided function only if the instance of [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)).
 
@@ -289,7 +289,7 @@ var companyResult = createUserResult.IfSuccess(user =>
 
 
 ## IfSuccess&lt;T, TNext&gt;(Result&lt;T&gt;, Func&lt;T, Result&lt;TNext&gt;&gt;)
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L309" target="_blank">IfSuccessExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L309" target="_blank">IfSuccessExtensions.cs</a>
 
 Executes the provided function only if the instance of [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)).
 

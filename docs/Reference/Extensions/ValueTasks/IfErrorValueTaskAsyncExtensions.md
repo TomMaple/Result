@@ -2,7 +2,7 @@
 ## Definition
 Namespace: [Maple.Result.Extensions.ValueTasks](namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/ValueTasks/IfErrorValueTaskAsyncExtensions.cs" target="_blank">IfErrorValueTaskAsyncExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/ValueTasks/IfErrorValueTaskAsyncExtensions.cs" target="_blank">IfErrorValueTaskAsyncExtensions.cs</a>
 
 Provides extension methods, represented by [ValueTask](https://learn.microsoft.com/dotnet/api/system.threading.tasks.valuetask), for the [IResult](../../IResult/IResult.md) interface implementations to handle error scenarios.
 

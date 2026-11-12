@@ -2,7 +2,7 @@
 ## Definition
 Namespace: [Maple.Result.Extensions](namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Result/blob/main/src/Maple.Result/Extensions/IfErrorTaskAsyncExtensions.cs" target="_blank">IfErrorExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfErrorTaskAsyncExtensions.cs" target="_blank">IfErrorExtensions.cs</a>
 
 Provides extension methods for the [IResult](../IResult/IResult.md) interface implementations to handle error scenarios.
 
