@@ -1,0 +1,57 @@
+# git-cliff configuration: release notes and next-version calculation.
+# https://git-cliff.org/docs/configuration
+#
+# Local preview:
+#   git cliff --unreleased --strip all      # notes for the next release
+#   git cliff --bumped-version              # next version
+
+[changelog]
+# Only the body is used: the GitHub Release supplies the title.
+header = ""
+body = """
+{%- if version -%}
+{%- if commits | length == 0 %}
+No consumer-facing changes. Build and test dependency updates only.
+{% endif -%}
+{%- for group, commits in commits | group_by(attribute="group") %}
+### {{ group | striptags | trim }}
+{% for commit in commits %}
+- {% if commit.scope %}**{{ commit.scope }}:** {% endif %}{{ commit.message | split(pat="\n") | first | trim | upper_first }} \
+  ([{{ commit.id | truncate(length=7, end="") }}](https://github.com/TomMaple/Maple.Result/commit/{{ commit.id }}))
+{%- endfor %}
+{% endfor %}
+{% if previous and previous.version -%}
+**Full changelog**: https://github.com/TomMaple/Maple.Result/compare/{{ previous.version }}...{{ version }}
+{% endif %}
+📦 NuGet: https://www.nuget.org/packages/Maple.Result/{{ version | trim_start_matches(pat="v") }}
+{%- endif %}
+"""
+footer = ""
+trim = true
+
+[git]
+conventional_commits = true
+filter_unconventional = true
+split_commits = false
+protect_breaking_commits = true
+filter_commits = false
+tag_pattern = "v[0-9]+\\.[0-9]+\\.[0-9]+.*"
+topo_order = false
+sort_commits = "oldest"
+# The first parser that matches wins.
+# Group names carry an HTML comment to fix the order; it is stripped in the template.
+commit_parsers = [
+  # Before the merge-commit rule: a PR merge commit is often the only commit marked breaking (`fix!: ... `).
+  { field = "breaking", pattern = "true", group = "<!-- 0 -->⚠ Breaking changes" },
+  # Other merge commits: the PR's branch commits are listed instead, so the PR is not listed twice.
+  { field = "merge_commit", pattern = "true", skip = true },
+  { message = "^feat", group = "<!-- 1 -->Features" },
+  { message = "^fix", group = "<!-- 2 -->Fixes" },
+  { message = "^perf", group = "<!-- 3 -->Performance" },
+  # Everything else (docs, chore, chore(deps), test, ci, build, style, refactor, ...) is not consumer-facing.
+  { message = ".*", skip = true },
+]
+
+[bump]
+features_always_bump_minor = true
+breaking_always_bump_major = true

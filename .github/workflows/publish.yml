@@ -1,0 +1,86 @@
+# Publishes the NuGet package when a GitHub Release is published.
+# The version comes from the release tag (vX.Y.Z or vX.Y.Z-pre). Releases are drafted by "Draft release".
+#
+# NuGet trusted publishing: the policy on nuget.org is bound to this workflow file name (publish.yml).
+
+name: Publish
+
+on:
+  release:
+    types: [ published ]
+
+concurrency:
+  group: publish-${{ github.event.release.tag_name }}
+  cancel-in-progress: false
+
+env:
+  ARTIFACTS_PATH: ${{ github.workspace }}/artifacts
+  TAG: ${{ github.event.release.tag_name }}
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write   # upload release assets
+      id-token: write   # NuGet trusted publishing
+    steps:
+    - name: Validate tag
+      id: version
+      run: |
+        if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]; then
+          echo "::error::Release tag '$TAG' is not a version tag (vX.Y.Z or vX.Y.Z-pre)."
+          exit 1
+        fi
+        echo "version=${TAG#v}" >> "$GITHUB_OUTPUT"
+
+    - name: Checkout
+      uses: actions/checkout@v7
+      with:
+        ref: ${{ env.TAG }}
+
+    - name: Calculate version
+      id: calculate_version
+      run: |
+        VERSION='${{ steps.version.outputs.version }}'
+        COMMIT=$(git rev-parse HEAD)
+        echo "package_version=${VERSION}" >> "$GITHUB_OUTPUT"
+        echo "informational_version=${VERSION}+${COMMIT}" >> "$GITHUB_OUTPUT"
+        echo "Package version: ${VERSION}"
+        echo "Informational version: ${VERSION}+${COMMIT}"
+
+    - name: Setup .NET 10
+      uses: actions/setup-dotnet@v6
+      with:
+        dotnet-version: 10.0.x
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --no-restore -p:Version=${{ steps.calculate_version.outputs.package_version }} -p:InformationalVersion=${{ steps.calculate_version.outputs.informational_version }} --configuration Release --verbosity normal
+
+    - name: Test
+      run: dotnet test --no-build --configuration Release --verbosity normal
+
+    - name: Generate NuGet package
+      run: >-
+        dotnet pack src/Maple.Result/Maple.Result.csproj --no-build -o ${{ env.ARTIFACTS_PATH }}
+        -p:Version=${{ steps.calculate_version.outputs.package_version }}
+        -p:InformationalVersion=${{ steps.calculate_version.outputs.informational_version }}
+        "-p:PackageReleaseNotes=https://github.com/${{ github.repository }}/releases/tag/${{ env.TAG }}"
+        --configuration Release
+
+    - name: NuGet login
+      uses: NuGet/login@v1
+      id: nuget_login
+      with:
+        user: ${{ secrets.NUGET_USER }}
+
+    # Pushes the .snupkg next to the .nupkg as well. --skip-duplicate makes a re-run after a partial failure safe.
+    - name: NuGet push
+      run: dotnet nuget push "${{ env.ARTIFACTS_PATH }}/*.nupkg" --api-key ${{ steps.nuget_login.outputs.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+
+    - name: Attach packages to the release
+      run: gh release upload "$TAG" "$ARTIFACTS_PATH"/*.nupkg "$ARTIFACTS_PATH"/*.snupkg --clobber
+      env:
+        GH_TOKEN: ${{ github.token }}
