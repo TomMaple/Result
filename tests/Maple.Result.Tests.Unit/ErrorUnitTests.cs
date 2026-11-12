@@ -1491,6 +1491,160 @@ public class ErrorUnitTests
 
     #endregion
 
+    #region LimitExceeded
+
+    [Fact]
+    public void LimitExceeded_OnlyRequiredDetails_ReturnsError()
+    {
+        // Arrange
+        const ErrorCategory ExpectedCategory = ErrorCategory.LimitExceeded;
+        const int ExpectedErrorDetailsCount = 0;
+        const string ExpectedTitle = "Test title";
+        const string ExpectedTypeUri = "tag:test.com,2024:Test";
+
+        // Act
+        var sut = Sut.LimitExceeded(
+            ErrorUri.Tag("tag:test.com,2024:Test"),
+            "Test title");
+
+        // Assert
+        sut.ShouldNotBeNull();
+        sut.Category.ShouldBe(ExpectedCategory);
+        sut.Detail.ShouldBeNull();
+        sut.DetailTemplated.ShouldBeNull();
+        sut.ErrorDetails.ShouldNotBeNull();
+        sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
+        sut.InstanceUri.ShouldBeNull();
+        sut.Title.ShouldBe(ExpectedTitle);
+        sut.TypeUri.ShouldBe(ExpectedTypeUri);
+    }
+
+    [Fact]
+    public void LimitExceeded_WithDetailsCollection_ReturnsError()
+    {
+        // Arrange
+        const ErrorCategory ExpectedCategory = ErrorCategory.LimitExceeded;
+        const string ExpectedDetail = "Test description.";
+        const string ExpectedDetailTemplateId = "message-id";
+        const int ExpectedDetailParamsCount = 2;
+        const string ExpectedDetailParam1Key = "key1";
+        const string ExpectedDetailParam1Value = "value1";
+        const string ExpectedDetailParam2Key = "key2";
+        const string ExpectedDetailParam2Value = "value2";
+        const int ExpectedErrorDetailsCount = 0;
+        const string ExpectedInstance = "http://test.com/instance/1013";
+        const string ExpectedTitle = "Test title";
+        const string ExpectedTypeUri = "tag:test.com,2024:Test";
+
+        // Act
+        var sut = Sut.LimitExceeded(
+            ErrorUri.Tag("tag:test.com,2024:Test"),
+            "Test title",
+            "Test description.",
+            ErrorUri.Locator("http://test.com/instance/1013"),
+            "message-id",
+            ("key1", "value1"), ("key2", "value2"));
+
+        // Assert
+        sut.ShouldNotBeNull();
+        sut.Category.ShouldBe(ExpectedCategory);
+        sut.Detail.ShouldBe(ExpectedDetail);
+        sut.DetailTemplated.ShouldNotBeNull();
+        sut.DetailTemplated.TemplateId.ShouldBe(ExpectedDetailTemplateId);
+        sut.DetailTemplated.Params.ShouldNotBeNull();
+        sut.DetailTemplated.Params.Count.ShouldBe(ExpectedDetailParamsCount);
+        sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam1Key);
+        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ToString().ShouldBe(ExpectedDetailParam1Value);
+        sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam2Key);
+        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ToString().ShouldBe(ExpectedDetailParam2Value);
+        sut.ErrorDetails.ShouldNotBeNull();
+        sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
+        sut.InstanceUri.ShouldBe(ExpectedInstance);
+        sut.Title.ShouldBe(ExpectedTitle);
+        sut.TypeUri.ShouldBe(ExpectedTypeUri);
+    }
+
+    [Fact]
+    public void LimitExceeded_WithDetailsDictionary_ReturnsError()
+    {
+        // Arrange
+        const ErrorCategory ExpectedCategory = ErrorCategory.LimitExceeded;
+        const string ExpectedDetail = "Test description.";
+        const string ExpectedDetailTemplateId = "message-id";
+        const int ExpectedDetailParamsCount = 2;
+        const string ExpectedDetailParam1Key = "key1";
+        const string ExpectedDetailParam1Value = "value1";
+        const string ExpectedDetailParam2Key = "key2";
+        const string ExpectedDetailParam2Value = "value2";
+        const int ExpectedErrorDetailsCount = 0;
+        const string ExpectedInstance = "http://test.com/instance/1013";
+        const string ExpectedTitle = "Test title";
+        const string ExpectedTypeUri = "tag:test.com,2024:Test";
+
+        // Act
+        var sut = Sut.LimitExceeded(
+            ErrorUri.Tag("tag:test.com,2024:Test"),
+            "Test title",
+            "Test description.",
+            ErrorUri.Locator("http://test.com/instance/1013"),
+            "message-id",
+            new Dictionary<string, object>
+            {
+                ["key1"] = "value1",
+                ["key2"] = "value2"
+            });
+
+        // Assert
+        sut.ShouldNotBeNull();
+        sut.Category.ShouldBe(ExpectedCategory);
+        sut.Detail.ShouldBe(ExpectedDetail);
+        sut.DetailTemplated.ShouldNotBeNull();
+        sut.DetailTemplated.TemplateId.ShouldBe(ExpectedDetailTemplateId);
+        sut.DetailTemplated.Params.ShouldNotBeNull();
+        sut.DetailTemplated.Params.Count.ShouldBe(ExpectedDetailParamsCount);
+        sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam1Key);
+        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ToString().ShouldBe(ExpectedDetailParam1Value);
+        sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam2Key);
+        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ToString().ShouldBe(ExpectedDetailParam2Value);
+        sut.ErrorDetails.ShouldNotBeNull();
+        sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
+        sut.InstanceUri.ShouldBe(ExpectedInstance);
+        sut.Title.ShouldBe(ExpectedTitle);
+        sut.TypeUri.ShouldBe(ExpectedTypeUri);
+    }
+
+    #endregion
+
+    #region ErrorCategory values
+
+    [Fact]
+    public void ErrorCategory_Unavailable_HasUnchangedNumericValue()
+    {
+        // Arrange
+        const int ExpectedValue = 9;
+
+        // Act
+        var value = (int)ErrorCategory.Unavailable;
+
+        // Assert
+        value.ShouldBe(ExpectedValue);
+    }
+
+    [Fact]
+    public void ErrorCategory_LimitExceeded_IsAppendedAfterUnavailable()
+    {
+        // Arrange
+        const int ExpectedValue = 10;
+
+        // Act
+        var value = (int)ErrorCategory.LimitExceeded;
+
+        // Assert
+        value.ShouldBe(ExpectedValue);
+    }
+
+    #endregion
+
     #endregion
 
     #region Deserialize

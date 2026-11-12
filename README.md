@@ -283,11 +283,12 @@ Although, mapping to HTTP responses is not part of this library and can be done 
 | **Conflict** | The operation failed due to the data or state conflict (such as a unique constraint violation). Refresh data and try again. | Refresh the data, then try again if applicable. May require repeating the whole process. | Details have been modified. Please refresh the page. | `409` (Conflict) |
 | **Critical** | Unexpected, critical error. | Contact customer support. | Payment failed.&#xA;3rd party API is not available. | `500` (Internal Server Error) |
 | **Failure** | An expected error that is not critical to the operation. Might be related to e.g., a business logic rules, or the data that passes the validation, but still incorrect. | Even if the data is correct, the operation is not. | Invalid file format.&#xA;Cannot delete the payment which processing has started. | `422` (Unprocessable Content) |
+| **Limit Exceeded** | The request is valid and permitted, but a usage limit, quota or rate has been exhausted. Applies to business limits as well as throttling. Not for input-size checks (use **Validation**). | Wait and try again later, or raise the limit (e.g. upgrade the plan). | Too many requests—please try again in 30 seconds.&#xA;The monthly limit of 100 reports has been reached. | `429` (Too Many Requests) |
 | **Not Found** | The resource was not found. | Invalid identifier. Try a different one. | Company with that name has not been found. | `404` (Not Found) |
 | **Not Implemented** | The operation, feature or case is not implemented yet. | To be implemented in the future. | We don’t support debit cards yet. | `501` (Not Implemented) |
 | **Unauthorized** | The authentication might be valid, but the identity does not have the required permissions. | Ask for permissions, or, a different user is required. | Action is not allowed for that user. | `403` (Forbidden) |
 | **Timeout** | The operation timed out. | Heavy load. Try again later. | Server did not respond within 30 seconds. Try again later. | `408` (Request Timeout) |
-| **Unavailable** | The resource is not available, but please try again later. | Some service is down. Please again later. | Report is not available—please try again later. | `503` (Service Unavailable) |
+| **Unavailable** | The service is not available (e.g. it is down or overloaded), but please try again later. Not for exhausted usage limits (use **Limit Exceeded**). | Some service is down. Please try again later. | Report is not available—please try again later. | `503` (Service Unavailable) |
 | **Unauthenticated** | The authentication is either missing or invalid. | Log in. | User is not logged in. | `401` (Unauthorized) |
 | **Validation** | User input data is invalid. | Update the data and try again. | Email is required. | `400` (Bad Request) |
 
@@ -417,6 +418,13 @@ Check:
 # Mapping from HTTP responses
 Check:
 * [Maple.Result.Extensions.HttpClient](https://github.com/TomMaple/Maple.Result.Extensions.HttpClient) library for mapping *HTTP Client* responses to *Result* objects.
+
+# Upgrading to 3.0
+## New `LimitExceeded` error category
+`ErrorCategory.LimitExceeded` (numeric value `10`) and the `Error.LimitExceeded(...)` factory methods have been added. Use the category when the request is valid and permitted, but a usage limit, quota or rate has been exhausted (it corresponds to the `429` HTTP status code). `Unavailable` (`503`) is now limited to a service that is unavailable.
+
+> [!WARNING]
+> **Breaking change:** exhaustive `switch` statements and expressions over `ErrorCategory` (e.g. mapping categories to HTTP status codes) must handle the new `LimitExceeded` member. The numeric values of existing members have not changed.
 
 # FAQ
 ## When to use a Result and when an Exception?
