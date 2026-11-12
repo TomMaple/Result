@@ -8,6 +8,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+using Maple.Json.ObjectAsPrimitiveConverter;
 using Maple.Result.Tests.Unit.Helpers;
 using System;
 using System.Collections.Generic;
@@ -570,6 +571,32 @@ public class ErrorMetadataUnitTests
         var sut = SerializationHelper.DeserializeWithNewtonsoft<Sut>(json);
 
         // Assert
+        AssertMetadata(sut);
+    }
+
+    [Fact]
+    public void RoundTrip_MicrosoftSerializerWithObjectAsPrimitiveConverter_ReturnsPrimitivesAndEqualError()
+    {
+        // Arrange
+        var options = new JsonSerializerOptions();
+        options.Converters.Add(new ObjectAsPrimitiveConverter());
+
+        var original = CreateError()
+            .WithMetadata("limit", 100)
+            .WithMetadata("bigNumber", 5_000_000_000L)
+            .WithMetadata("policy", "monthly")
+            .WithMetadata("upgradable", true);
+
+        // Act
+        var json = JsonSerializer.Serialize(original, options);
+        var sut = JsonSerializer.Deserialize<Sut>(json, options)!;
+
+        // Assert
+        sut.Metadata["limit"].ShouldBeOfType<int>();
+        sut.Metadata["bigNumber"].ShouldBeOfType<long>();
+        sut.Metadata["policy"].ShouldBeOfType<string>();
+        sut.Metadata["upgradable"].ShouldBeOfType<bool>();
+        sut.ShouldBe(original);
         AssertMetadata(sut);
     }
 

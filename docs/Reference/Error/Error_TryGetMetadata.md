@@ -2,7 +2,7 @@
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L423" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L429" target="_blank">Error.cs</a>
 
 Gets the [Metadata](Error_Metadata.md) value of the specified key, converted to the type `T`.
 
@@ -42,6 +42,12 @@ Nullable value types (e.g., `int?`) are supported.
 
 > [!NOTE]
 > A [JsonElement](https://learn.microsoft.com/dotnet/api/system.text.json.jsonelement) number is converted only if it fits the target type exactly (e.g., `3000000000` is not converted to `int`, and `1.5` is not converted to `int`). [Convert.ChangeType](https://learn.microsoft.com/dotnet/api/system.convert.changetype) rounds a floating-point value converted to an integer type.
+
+> [!NOTE]
+> **Native AOT and trimming:** the fallback `JsonElement.Deserialize<T>()` (used for types other than `string`, `bool`, integer and floating-point types, `DateTimeOffset` and `Guid`, e.g., arrays or objects) relies on reflection-based serialization. It is not available in Native AOT and trimmed applications (when `JsonSerializerIsReflectionEnabledByDefault` is `false`), so this method returns `false` for such types there. The conversions of the types listed above do not use reflection and work everywhere.
+
+> [!TIP]
+> To get primitive values instead of [JsonElement](https://learn.microsoft.com/dotnet/api/system.text.json.jsonelement) instances from *System.Text.Json*, register the [ObjectAsPrimitiveConverter](https://www.nuget.org/packages/Maple.Json.ObjectAsPrimitiveConverter) in the `JsonSerializerOptions` used to deserialize the error. See [Metadata](Error_Metadata.md#values).
 
 ## Examples
 ```csharp

@@ -44,6 +44,18 @@ Use [TryGetMetadata&lt;T&gt;(String, T)](Error_TryGetMetadata.md) to read a valu
 >
 > [JsonElement](https://learn.microsoft.com/dotnet/api/system.text.json.jsonelement) values have no value equality, so an error may be *not equal* to its original after a JSON round-trip (the same limitation applies to [TemplatedMessage](../TemplatedMessage/TemplatedMessage.md) parameters).
 
+> [!TIP]
+> With *System.Text.Json*, the optional [Maple.Json.ObjectAsPrimitiveConverter](https://www.nuget.org/packages/Maple.Json.ObjectAsPrimitiveConverter) package makes values of type `object` deserialize as primitives (`int`, `long`, `decimal`, `string`, `bool`, …) instead of [JsonElement](https://learn.microsoft.com/dotnet/api/system.text.json.jsonelement). Values then compare by value, so an error with integer, string and boolean values is equal to its original after a round-trip. It also applies to [TemplatedMessage](../TemplatedMessage/TemplatedMessage.md) parameters.
+>
+> ```csharp
+> var options = new JsonSerializerOptions();
+> options.Converters.Add(new ObjectAsPrimitiveConverter());
+>
+> var error = JsonSerializer.Deserialize<Error>(json, options);
+> ```
+>
+> Floating-point numbers are deserialized as `decimal` by default; a `double` value is therefore not equal to its original unless the converter is created with `FloatFormat.Double`. Arrays and objects are deserialized as `object?[]` and dictionaries, which compare by reference.
+
 > [!CAUTION]
 > Use [WithMetadata(String, Object)](Error_WithMetadata.md) and [WithoutMetadata(String)](Error_WithoutMetadata.md) to obtain a copy of the error with changed metadata. They never modify the current instance.
 >

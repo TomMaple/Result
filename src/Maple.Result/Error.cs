@@ -419,6 +419,12 @@ public sealed record Error
     ///         <see cref="double" /> or a Newtonsoft.Json <c>JValue</c>) is converted with
     ///         <see cref="Convert.ChangeType(object, Type, IFormatProvider)" /> using the invariant culture.
     ///     </para>
+    ///     <para>
+    ///         Deserializing a <see cref="JsonElement" /> to other types (e.g., arrays or objects) uses reflection-based
+    ///         serialization, which is not available in Native AOT and trimmed applications (when
+    ///         <c>JsonSerializerIsReflectionEnabledByDefault</c> is <see langword="false" />); in that case this method
+    ///         returns <see langword="false" /> for such types. The conversions listed above do not use reflection.
+    ///     </para>
     /// </remarks>
     public bool TryGetMetadata<T>(string key, [MaybeNullWhen(false)] out T value)
     {
