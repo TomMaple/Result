@@ -246,10 +246,12 @@ public sealed record Error
     ///         digits and <c>_</c>, and be at least 3 characters long (<i>RFC 9457</i>, section 4); this is a
     ///         recommendation and is not enforced. Keys must not match the standard members (case-insensitively):
     ///         <c>type</c>, <c>title</c>, <c>status</c>, <c>detail</c>, <c>instance</c>, <c>errors</c> and
-    ///         <c>detailTemplated</c>; <see cref="WithMetadata(string, object)" /> rejects them. The <c>init</c> setter
-    ///         does not validate keys, so that problem details received from other services can always be deserialized.
+    ///         <c>detailTemplated</c>; <see cref="WithMetadata(string, object)" /> and the <c>init</c> setter (also during
+    ///         deserialization) reject them.
     ///     </para>
     ///     <para>
+    ///         Values must not be <see langword="null" />; <see cref="WithMetadata(string, object)" /> and the
+    ///         <c>init</c> setter (also during deserialization, e.g., <c>{"key": null}</c>) reject them.
     ///         Values should be JSON primitives (strings, numbers, booleans). After deserialization, values are
     ///         returned as <see cref="JsonElement" /> (System.Text.Json) or as <see cref="long" />, <see cref="double" />,
     ///         <see cref="string" />, <see cref="bool" />, <see cref="DateTime" /> (for ISO 8601 date strings, by default)
@@ -261,7 +263,8 @@ public sealed record Error
     ///     <para>
     ///         Use <see cref="WithMetadata(string, object)" /> and <see cref="WithoutMetadata" /> to obtain a copy with
     ///         changed metadata. The setter is <c>init</c>-only to allow deserialization; it copies the provided entries
-    ///         (so later changes to the source are not reflected) and treats <see langword="null" /> as empty.
+    ///         (so later changes to the source are not reflected), validates them as
+    ///         <see cref="WithMetadata(string, object)" /> does, and treats <see langword="null" /> as empty.
     ///     </para>
     ///     <para>
     ///         The returned dictionary is a read-only wrapper that is never modified, so copies of an error
@@ -269,6 +272,12 @@ public sealed record Error
     ///         the order they were added.
     ///     </para>
     /// </remarks>
+    /// <exception cref="ArgumentException">
+    ///     When set with a key that is empty, whitespace-only or matches (case-insensitively) a standard problem
+    ///     details member: <c>type</c>, <c>title</c>, <c>status</c>, <c>detail</c>, <c>instance</c>, <c>errors</c> or
+    ///     <c>detailTemplated</c>.
+    /// </exception>
+    /// <exception cref="ArgumentNullException">When set with a <see langword="null" /> key or value.</exception>
     public IReadOnlyDictionary<string, object> Metadata
     {
         get => _metadata;
@@ -604,7 +613,10 @@ public sealed record Error
 
         var copy = new Dictionary<string, object>(StringComparer.Ordinal);
         foreach (var pair in metadata)
+        {
+            ValidateMetadataEntry(pair.Key, pair.Value);
             copy[pair.Key] = pair.Value;
+        }
 
         return copy.Count == 0 ? EmptyMetadata : new ReadOnlyDictionary<string, object>(copy);
     }
@@ -612,7 +624,9 @@ public sealed record Error
     private static void ValidateMetadataEntry(string key, object value)
     {
         MetadataKeyValidator.Validate(key);
-        ArgumentNullException.ThrowIfNull(value);
+
+        if (value is null)
+            throw new ArgumentNullException(nameof(value), $"The value of the metadata key ‘{key}’ must not be null.");
     }
 
     #endregion

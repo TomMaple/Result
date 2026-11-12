@@ -266,31 +266,89 @@ public class ErrorMetadataUnitTests
             sut.WithMetadata([new KeyValuePair<string, object>("limit", 1), new KeyValuePair<string, object>("Type", 1)]));
     }
 
-    [Fact]
-    public void Metadata_InitWithReservedKey_IsAccepted()
+    [Theory]
+    [InlineData("title")]
+    [InlineData("Status")]
+    [InlineData(" ")]
+    public void Metadata_InitWithInvalidKey_ThrowsArgumentException(string key)
     {
-        // Act
-        var sut = CreateError() with { Metadata = new Dictionary<string, object> { ["title"] = "foreign" } };
+        // Arrange
+        var sut = CreateError();
 
-        // Assert
-        sut.Metadata["title"].ShouldBe("foreign");
+        // Act & Assert
+        Should.Throw<ArgumentException>(() =>
+            sut with { Metadata = new Dictionary<string, object> { ["limit"] = 100, [key] = "foreign" } });
     }
 
     [Fact]
-    public void Deserialize_ReservedKey_IsAccepted()
+    public void Metadata_InitWithNullValue_ThrowsArgumentNullException()
+    {
+        // Arrange
+        var sut = CreateError();
+
+        // Act
+        var exception = Should.Throw<ArgumentNullException>(() =>
+            sut with { Metadata = new Dictionary<string, object> { ["limit"] = null! } });
+
+        // Assert
+        exception.Message.ShouldContain("‘limit’");
+    }
+
+    [Fact]
+    public void Deserialize_MicrosoftSerializerWithReservedKey_ThrowsArgumentException()
     {
         // Arrange
         const string Json = """{"Category":10,"TypeUri":"about:blank","Title":"Test title","Metadata":{"status":429}}""";
 
+        // Act & Assert
+        Should.Throw<ArgumentException>(() => SerializationHelper.DeserializeWithMicrosoft<Sut>(Json));
+    }
+
+    [Fact]
+    public void Deserialize_NewtonsoftSerializerWithReservedKey_ThrowsWrappedArgumentException()
+    {
+        // Arrange
+        const string Json = """{"Category":10,"TypeUri":"about:blank","Title":"Test title","Metadata":{"status":429}}""";
+
+        // Act & Assert
+        Should.Throw<Newtonsoft.Json.JsonSerializationException>(() => SerializationHelper.DeserializeWithNewtonsoft<Sut>(Json))
+            .GetBaseException().ShouldBeOfType<ArgumentException>();
+    }
+
+    [Fact]
+    public void Deserialize_MicrosoftSerializerWithNullValue_ThrowsArgumentNullException()
+    {
+        // Arrange
+        const string Json = """{"Category":10,"TypeUri":"about:blank","Title":"Test title","Metadata":{"limit":null}}""";
+
+        // Act & Assert
+        Should.Throw<ArgumentNullException>(() => SerializationHelper.DeserializeWithMicrosoft<Sut>(Json));
+    }
+
+    [Fact]
+    public void Deserialize_NewtonsoftSerializerWithNullValue_ThrowsWrappedArgumentNullException()
+    {
+        // Arrange
+        const string Json = """{"Category":10,"TypeUri":"about:blank","Title":"Test title","Metadata":{"limit":null}}""";
+
+        // Act & Assert
+        Should.Throw<Newtonsoft.Json.JsonSerializationException>(() => SerializationHelper.DeserializeWithNewtonsoft<Sut>(Json))
+            .GetBaseException().ShouldBeOfType<ArgumentNullException>();
+    }
+
+    [Fact]
+    public void WithMetadata_MetadataOfDeserializedError_CopiesEntries()
+    {
+        // Arrange
+        const string Json = """{"Category":10,"TypeUri":"about:blank","Title":"Test title","Metadata":{"limit":100}}""";
+        var source = SerializationHelper.DeserializeWithMicrosoft<Sut>(Json);
+
         // Act
-        var microsoft = SerializationHelper.DeserializeWithMicrosoft<Sut>(Json);
-        var newtonsoft = SerializationHelper.DeserializeWithNewtonsoft<Sut>(Json);
+        var sut = CreateError().WithMetadata(source.Metadata);
 
         // Assert
-        microsoft.TryGetMetadata<int>("status", out var microsoftStatus).ShouldBeTrue();
-        microsoftStatus.ShouldBe(429);
-        newtonsoft.TryGetMetadata<int>("status", out var newtonsoftStatus).ShouldBeTrue();
-        newtonsoftStatus.ShouldBe(429);
+        sut.TryGetMetadata<int>("limit", out var limit).ShouldBeTrue();
+        limit.ShouldBe(100);
     }
 
     [Fact]

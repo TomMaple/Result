@@ -18,7 +18,7 @@ It relates to `500` HTTP status code (Internal Server Error), but can also be us
 
 
 ## Critical(ErrorUri, String, String, ErrorUri, String, (String, Object)[])
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L1231" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L1245" target="_blank">Error.cs</a>
 
 Creates a new instance of the [Error](Error.md) object of the *Critical* category with specified parameters.
 
@@ -78,7 +78,7 @@ var error = Error.Critical(
 
 
 ## Critical(ErrorUri, String, String, ErrorUri, String, IEnumerable&lt;KeyValuePair&lt;String, Object&gt;&gt;)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L1269" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L1283" target="_blank">Error.cs</a>
 
 Creates a new instance of the [Error](Error.md) object of the *Critical* category with specified parameters.
 

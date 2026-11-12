@@ -18,7 +18,7 @@ Keys are compared ordinally (case-sensitive). See [Metadata](Error_Metadata.md) 
 
 
 ## WithMetadata(String, Object)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L344" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L353" target="_blank">Error.cs</a>
 
 Returns a copy of the current error with the specified metadata entry added, or replaced if the key already exists.
 
@@ -58,7 +58,7 @@ var error = Error.LimitExceeded(
 
 
 ## WithMetadata(IEnumerable&lt;KeyValuePair&lt;String, Object&gt;&gt;)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L370" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L379" target="_blank">Error.cs</a>
 
 Returns a copy of the current error with the specified metadata entries added. Entries with existing keys are replaced; the other existing entries are kept.
 

@@ -363,9 +363,9 @@ if (error.TryGetMetadata<int>("limit", out var limit))
 ```
 
 * `WithMetadata()` and `WithoutMetadata()` return a **copy**; the original error is not modified.
-* Keys must not match the standard members `type`, `title`, `status`, `detail`, `instance`, `errors` and `detailTemplated` (case-insensitive); `WithMetadata()` throws an `ArgumentException` for them.
+* Keys must not match the standard members `type`, `title`, `status`, `detail`, `instance`, `errors` and `detailTemplated` (case-insensitive); `WithMetadata()`, the `init` setter and deserialization throw an `ArgumentException` for them.
 * Keys should start with a letter, use letters, digits and `_`, and be at least 3 characters long (RFC 9457 recommendation, not enforced).
-* Values should be JSON primitives (strings, numbers, booleans).
+* Values must not be `null` and should be JSON primitives (strings, numbers, booleans).
 * With *System.Text.Json*, values come back as `JsonElement`; register the [ObjectAsPrimitiveConverter](https://www.nuget.org/packages/Maple.Json.ObjectAsPrimitiveConverter) to get primitive values instead.
 
 See more: [Metadata](https://github.com/TomMaple/Maple.Result/blob/main/docs/Reference/Error/Error_Metadata.md)
@@ -457,6 +457,7 @@ Check:
 `Error` has a new `Metadata` dictionary for machine-readable values (RFC 9457 *extension members*), with the `WithMetadata()`, `WithoutMetadata()` and `TryGetMetadata<T>()` methods. See [Metadata](#metadata).
 
 * Serialized errors now always contain a `Metadata` member (`"Metadata":{}` when empty). Deserializing JSON without it (or with `"Metadata":null`) produces an empty dictionary.
+* Deserializing a `Metadata` object with a reserved key (e.g., `"status"`) or a `null` value throws (an `ArgumentException`, wrapped in a `JsonSerializationException` by *Newtonsoft.Json*).
 * `Equals()` and `GetHashCode()` of `Error` take the metadata into account.
 
 # FAQ
