@@ -11,6 +11,11 @@ Provides records and interfaces with the types to use as a returned value of an 
 | [Result&lt;T&gt;](ResultT/ResultT.md) | Represents the result of an operation with a value that can either be successful (with the value) or failed (with an error). |
 | [TemplatedMessage](TemplatedMessage/TemplatedMessage.md) | Represents a message template with named values to be used for rendering a localized message. |
 
+## Classes
+| Name | Description |
+| ---- | ----------- |
+| [ErrorBuilder](ErrorBuilder/ErrorBuilder.md) | A mutable builder of an immutable [Error](Error/Error.md), for assembling an error step by step. |
+
 ## Interfaces
 | Name | Description |
 | ---- | ----------- |

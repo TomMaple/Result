@@ -18,7 +18,7 @@ It relates to `409` HTTP status code (Conflict), but can also be used in other c
 
 
 ## Conflict(ErrorUri, String, String, ErrorUri, String, (String, Object)[])
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L1093" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L530" target="_blank">Error.cs</a>
 
 Creates a new instance of the [Error](Error.md) object of the *Conflict* category with specified parameters.
 
@@ -29,7 +29,7 @@ public static Error Conflict(
         string? detail = null,
         ErrorUri? instanceUri = null,
         string? detailTemplateId = null,
-        params (string Key, object Value)[] detailNamedValues);
+        params (string Key, object? Value)[] detailNamedValues);
 ```
 
 ### Parameters
@@ -49,7 +49,7 @@ An optional *URI* reference that identifies the specific occurrence of the probl
 An optional identifier of the message template to generate custom, localized message.
 
 #### `detailNamedValues` ([String](https://learn.microsoft.com/dotnet/api/system.string), [Object](https://learn.microsoft.com/en-us/dotnet/api/system.object))[]
-An optional array of named values to be used when rendering the templated message. This parameter will be ignored if `detailTemplateId` is `null`.
+An optional array of named values to be used when rendering the templated message. Values can be `null`. This parameter will be ignored if `detailTemplateId` is `null`.
 
 ### Returns
 [Error](Error.md)
@@ -57,13 +57,17 @@ An optional array of named values to be used when rendering the templated messag
 A new instance of the [Error](Error.md) record of the *Conflict* [ErrorCategory](../ErrorCategory.md) initialized with provided parameters.
 
 ### Exceptions
+[ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
+
+The `title` is `null`.
+
 [ArgumentException](https://learn.microsoft.com/dotnet/api/system.argumentexception)
 
-The `typeUri` parameter resolves to an empty or whitespace-only value.
+The `title` is empty or consists only of white-space characters, or the `detailTemplateId` is empty or consists only of white-space characters.
 
 ### Remarks
 > [!NOTE]
-> To add individual error details to an error instance, use the [AddDetail(string, string, string, (string, object)[])](Error_AddDetail.md) method.
+> To add individual error details, use [WithErrorDetail](Error_WithErrorDetail.md), which returns a copy, or build the error with an [ErrorBuilder](../ErrorBuilder/ErrorBuilder.md) when adding several.
 
 ### Examples
 ```csharp
@@ -78,7 +82,7 @@ var error = Error.Conflict(
 
 
 ## Conflict(ErrorUri, String, String, ErrorUri, String, IEnumerable&lt;KeyValuePair&lt;String, Object&gt;&gt;)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L1131" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L563" target="_blank">Error.cs</a>
 
 Creates a new instance of the [Error](Error.md) object of the *Conflict* category with specified parameters.
 
@@ -89,7 +93,7 @@ public static Error Conflict(
         string? detail = null,
         ErrorUri? instanceUri = null,
         string? detailTemplateId = null,
-        IEnumerable<KeyValuePair<string, object>>? detailNamedValues = null);
+        IEnumerable<KeyValuePair<string, object?>>? detailNamedValues = null);
 ```
 
 ### Parameters
@@ -109,7 +113,7 @@ An optional *URI* reference that identifies the specific occurrence of the probl
 An optional identifier of the message template to generate custom, localized message.
 
 #### `detailNamedValues` [IEnumerable](https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1)&lt;[KeyValuePair](https://learn.microsoft.com/dotnet/api/system.collections.generic.keyvaluepair-2)&lt;[String](https://learn.microsoft.com/dotnet/api/system.string), [Object](https://learn.microsoft.com/en-us/dotnet/api/system.object)&gt;&gt;
-An optional sequence of key-value pairs to be used when rendering the templated message. This parameter will be ignored if `detailTemplateId` is `null`.
+An optional sequence of key-value pairs to be used when rendering the templated message. Values can be `null`. This parameter will be ignored if `detailTemplateId` is `null`.
 
 ### Returns
 [Error](Error.md)
@@ -117,13 +121,17 @@ An optional sequence of key-value pairs to be used when rendering the templated 
 A new instance of the [Error](Error.md) record of the *Conflict* [ErrorCategory](../ErrorCategory.md) initialized with provided parameters.
 
 ### Exceptions
+[ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
+
+The `title` is `null`.
+
 [ArgumentException](https://learn.microsoft.com/dotnet/api/system.argumentexception)
 
-The `typeUri` parameter resolves to an empty or whitespace-only value.
+The `title` is empty or consists only of white-space characters, or the `detailTemplateId` is empty or consists only of white-space characters.
 
 ### Remarks
 > [!NOTE]
-> To add individual error details to an error instance, use the [AddDetail(string, string, string, (string, object)[])](Error_AddDetail.md) method.
+> To add individual error details, use [WithErrorDetail](Error_WithErrorDetail.md), which returns a copy, or build the error with an [ErrorBuilder](../ErrorBuilder/ErrorBuilder.md) when adding several.
 
 ### Examples
 ```csharp
@@ -133,7 +141,7 @@ var error = Error.Conflict(
                 "The account was modified in the meantime. Please refresh the data before updating.",
                 ErrorUri.Locator("https://api.exampleapp.com/errors/6283365904847834/details"),
                 "errors.account.update.conflict",
-                new Dictionary<string, object> { ["accountId"] = "D12345", ["action"] = "account:update" });
+                new Dictionary<string, object?> { ["accountId"] = "D12345", ["action"] = "account:update" });
 ```
 
 ## See Also

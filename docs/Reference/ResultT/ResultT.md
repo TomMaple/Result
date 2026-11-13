@@ -2,7 +2,7 @@
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Result.cs#L152" target="_blank">Result.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Result.cs#L149" target="_blank">Result.cs</a>
 
 Represents the outcome of an operation that can either succeed or fail with an [Error](../Error/Error.md).
 
@@ -25,8 +25,7 @@ If the operation is successful, the [IsSuccess()](ResultT_IsSuccess.md) method w
 > [!CAUTION]
 > Always call the [IsSuccess()](ResultT_IsSuccess.md) method and confirm it returns `true` before reading the [Value](ResultT_Value.md) property. On a failed result, [Value](ResultT_Value.md) holds the default value of `T`, which for a value type is not `null` (for example, `0` for a `Result<int>`), so a `null` check alone cannot tell success from failure.
 
-> [!CAUTION]
-> Use static factory methods to create instances of this record, such as [Result.FromValue(T)](ResultT_FromValue.md) and [Result.FromError(Error)](ResultT_FromError.md), or the operator [Implicit(Error to Result&lt;T&gt;)](ResultT_implicit_Error_to_ResultT.md) or the [Implicit(T to Result&lt;T&gt;)](ResultT_implicit_T_to_ResultT.md) rather than using the constructor directly.
+The record is immutable and has no public constructor. Create it with [Result&lt;T&gt;.FromValue(T)](ResultT_FromValue.md), [Result&lt;T&gt;.FromError(Error)](ResultT_FromError.md), or the [Implicit(Error to Result&lt;T&gt;)](ResultT_implicit_Error_to_ResultT.md) or [Implicit(T to Result&lt;T&gt;)](ResultT_implicit_T_to_ResultT.md) operator. A result is successful exactly when it has no [Error](ResultT_Error.md); a successful result of a nullable `T` can carry a `null` value.
 
 ## Examples
 ```csharp
@@ -84,23 +83,15 @@ public Result<User> GetUser(int userId)
 ```
 
 ## Serialization
-[Result&lt;T&gt;](ResultT.md) round-trips through both [System.Text.Json](https://learn.microsoft.com/dotnet/api/system.text.json.jsonserializer) and [Newtonsoft.Json](https://www.newtonsoft.com/json), for any `T`—including non-nullable value types such as `int`, `Guid` or `bool`, and nullable types such as `string?` or `int?`.
+The default serializers ([System.Text.Json](https://learn.microsoft.com/dotnet/api/system.text.json.jsonserializer) and [Newtonsoft.Json](https://www.newtonsoft.com/json)) can write a [Result&lt;T&gt;](ResultT.md) as JSON. Both members are always written: a successful result writes `"Error":null`, and a failed result writes the default value of `T` as its [Value](ResultT_Value.md) (e.g., `{"Value":0,"Error":{…}}` for a `Result<int>`, or `"Value":null` for a reference type).
 
-The [Value](ResultT_Value.md) member is written only when the result is successful and holds a value; a failed result omits it and writes only its [Error](ResultT_Error.md). A successful result of a nullable `T` (a nullable reference type or `Nullable<T>`) may carry a `null` value, which is written as `"Value": null`—so `{"Value":null,"Error":null}` denotes a successful `null` value, while a failed result carries no `Value` member at all. When deserializing a payload that carries both a value and an error, the [Error](ResultT_Error.md) wins and the value is discarded.
-
-> [!NOTE]
-> Omitting the value member from a failed result is what lets any `T` round-trip. A non-nullable value type has no `null` to represent an absent value (a failed `Result<int>` written as `"Value": 0` is indistinguishable from a successful `0`), and a nullable type's `null` would otherwise be mistaken for a successful `null` value. For System.Text.Json this is handled by an internal [JsonConverter](https://learn.microsoft.com/dotnet/api/system.text.json.serialization.jsonconverter); for Newtonsoft.Json, which does not honour that converter, the equivalent rule is applied through a conventional `ShouldSerializeValue()` method. Both serializers therefore produce identical output. `ShouldSerializeValue()` is public only because Newtonsoft.Json requires it to be; it is hidden from IntelliSense and not intended to be called directly.
-
-## Constructors
-| Name | Description |
-| ---- | ----------- |
-| [Result()](ResultT_constructors.md) | Initializes a new instance of the [Result&lt;T&gt;](ResultT.md) record. |
+Reading a [Result&lt;T&gt;](ResultT.md) back requires a dedicated converter, because the type has no public constructor or setters. Without one, deserialization fails.
 
 ## Properties
 | Name | Description |
 | ---- | ----------- |
-| [Error](ResultT_Error.md) | Gets or sets the error details if the result represents a failure. |
-| [Value](ResultT_Value.md) | Gets or sets the operation value if the result represents a successful operation. |
+| [Error](ResultT_Error.md) | Gets the error details if the result represents a failure. |
+| [Value](ResultT_Value.md) | Gets the operation value if the result represents a successful operation. |
 
 ## Methods
 | Name | Description |

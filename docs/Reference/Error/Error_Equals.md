@@ -2,7 +2,7 @@
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L646" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L408" target="_blank">Error.cs</a>
 
 Determines whether the specified [Error](Error.md) is equal to the current [Error](Error.md), comparing the [ErrorDetails](Error_ErrorDetails.md) collection and the [Metadata](Error_Metadata.md) dictionary by their content rather than by reference.
 
@@ -30,22 +30,22 @@ Two [Error](Error.md) instances are equal when all of their properties are equal
 This override is consistent with [GetHashCode()](Error_GetHashCode.md): equal [Error](Error.md) instances always produce the same hash code.
 
 > [!NOTE]
-> Details that carry a [TemplatedMessage](../TemplatedMessage/TemplatedMessage.md) with parameters (i.e., added via [AddDetail(String, String, String, (String, Object)[])](Error_AddDetail.md) with a `messageId` and `namedValues`) are also compared by value: [TemplatedMessage](../TemplatedMessage/TemplatedMessage.md) compares its `Params` collection by content, so two identically-built templated details are equal.
+> Details that carry a [TemplatedMessage](../TemplatedMessage/TemplatedMessage.md) with parameters (i.e., added via [WithErrorDetail](Error_WithErrorDetail.md) with a `messageId` and `namedValues`) are also compared by value: [TemplatedMessage](../TemplatedMessage/TemplatedMessage.md) compares its `Params` collection by content, so two identically-built templated details are equal.
 
 > [!NOTE]
-> After deserialization with *System.Text.Json*, [Metadata](Error_Metadata.md) values (like [TemplatedMessage](../TemplatedMessage/TemplatedMessage.md) parameters) are [JsonElement](https://learn.microsoft.com/dotnet/api/system.text.json.jsonelement) instances, which have no value equality. An error may therefore be *not equal* to its original after a JSON round-trip.
+> [Metadata](Error_Metadata.md) values and [TemplatedMessage](../TemplatedMessage/TemplatedMessage.md) parameters are compared with `object.Equals`. Values without value equality (e.g., arrays or most classes) are compared by reference.
 
 ## Examples
 ```csharp
 var first = Error.Validation(
                 ErrorUri.Tag("tag:exampleapp.com,2026:errors:user:create:invalid"),
                 "Invalid data to register a new user.")
-            .AddDetail("#/email", "The email address is required.");
+            .WithErrorDetail("#/email", "The email address is required.");
 
 var second = Error.Validation(
                 ErrorUri.Tag("tag:exampleapp.com,2026:errors:user:create:invalid"),
                 "Invalid data to register a new user.")
-            .AddDetail("#/email", "The email address is required.");
+            .WithErrorDetail("#/email", "The email address is required.");
 
 // true — the errors are compared by value, including their details.
 var areEqual = first == second;

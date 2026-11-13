@@ -2,12 +2,12 @@
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/TemplatedMessage.cs#L27" target="_blank">TemplatedMessage.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/TemplatedMessage.cs#L40" target="_blank">TemplatedMessage.cs</a>
 
-Gets or sets a template identifier to be used when rendering the templated message.
+Gets a template identifier to be used when rendering the templated message.
 
 ```csharp
-public string TemplateId { get; init; }
+public string TemplateId { get; }
 ```
 
 ### Property Value
@@ -28,12 +28,10 @@ var error = Error.NotFound(
 
 
 ## Remarks
-This is a mandatory property.
+This is a mandatory property. It is never `null`, empty or white-space only: the [constructor](TemplatedMessage_constructors.md) rejects such a value.
 
-> [!CAUTION]
-> This value should not be assigned via constructor but through the factory methods of the [Error](../Error/Error.md) record (such as [NotFound(ErrorUri, String, String, ErrorUri, String, (String, Object)[])](../Error/Error_NotFound.md#notfounderroruri-string-string-erroruri-string-string-object) or [Failure(ErrorUri, String, String, ErrorUri, String, IEnumerable<KeyValuePair<String, Object>>)](../Error/Error_Failure.md#failureerroruri-string-string-erroruri-string-ienumerablekeyvaluepairstring-object)) or an object instance method like [AddDetail(String, String, String, (String, Object)[])](../Error/Error_AddDetail.md) which use this record internally.
-> 
-> For deserialization, the setter is marked as `init` to allow assignment during object initialization.
+> [!NOTE]
+> An instance is usually created by the factory methods of the [Error](../Error/Error.md) record (the `detailTemplateId` and `detailNamedValues` parameters, e.g., [NotFound](../Error/Error_NotFound.md)), by [Error.WithErrorDetail](../Error/Error_WithErrorDetail.md), or by the [ErrorBuilder](../ErrorBuilder/ErrorBuilder.md) methods [WithDetailTemplated](../ErrorBuilder/ErrorBuilder_WithDetailTemplated.md) and [AddErrorDetail](../ErrorBuilder/ErrorBuilder_AddErrorDetail.md).
 
 ## See Also
 * [Error](../Error/Error.md)

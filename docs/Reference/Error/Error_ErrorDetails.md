@@ -2,18 +2,18 @@
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L229" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L177" target="_blank">Error.cs</a>
 
-Gets or sets a collection of error details.
+Gets a collection of error details.
 
 ```csharp
-public IReadOnlyList<ErrorDetail> ErrorDetails { get; init; }
+public IReadOnlyList<ErrorDetail> ErrorDetails { get; }
 ```
 
 ### Property Value
-[ErrorDetail](../ErrorDetail/ErrorDetail.md)
+[IReadOnlyList](https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1)&lt;[ErrorDetail](../ErrorDetail/ErrorDetail.md)&gt;
 
-A collection of error details that provide more context about the problem.
+A collection of error details that provide more context about the problem. Never `null`; empty by default.
 
 ## Remarks
 This is an optional property that contains a collection of error details—more granular description of multiple issues that may have contributed to the overall error condition.
@@ -22,39 +22,39 @@ This is a collection of individual error occurrences found, or an empty collecti
 
 Each item is a [ErrorDetail](../ErrorDetail/ErrorDetail.md) object that describes a specific aspect of the overall error condition. It contains properties that provide a human-readable message, and optionally a templated message (so than the client can localize it) and a property path indicating the specific part of the request that caused the error.
 
-> [!CAUTION]
-> This property should be used for read-only purposes.
-> 
-> It should not be assigned directly (i.e., via the property setter) but rather through the [AddDetail(String, String, String, (String, Object)[])](Error_AddDetail.md) method of the [Error](Error.md) record, which uses [TemplatedMessage](../TemplatedMessage/TemplatedMessage.md) to validate and provide the value. For deserialization, the setter is marked as `init` to allow assignment during object initialization.
+The collection is read-only and cannot be modified, also through a cast (modifying methods of `IList<ErrorDetail>` throw a [NotSupportedException](https://learn.microsoft.com/dotnet/api/system.notsupportedexception)). To add details:
+* use [WithErrorDetail](Error_WithErrorDetail.md), which returns a copy of the error with the detail appended, or
+* use an [ErrorBuilder](../ErrorBuilder/ErrorBuilder.md) and its [AddErrorDetail](../ErrorBuilder/ErrorBuilder_AddErrorDetail.md) method to add several details without copying the error for each one.
 
 > [!NOTE]
 > This collection participates in the value-based equality of [Error](Error.md): it is compared **by content** (order-sensitive), so two errors with identically-built details are considered equal. See [Equals(Error)](Error_Equals.md).
->
-> Copying an [Error](Error.md) with a `with` expression deep-copies this collection, producing an independent copy. Adding a detail to the copy does not affect the original, and vice versa.
-
-> [!CAUTION]
-> This collection is mutable through [AddDetail(String, String, String, (String, Object)[])](Error_AddDetail.md), which appends to it in place rather than returning a copy. Because the collection also feeds [GetHashCode()](Error_GetHashCode.md), an [Error](Error.md) changes its hash code whenever a detail is added, and every holder of a shared instance observes the new detail. See [AddDetail(String, String, String, (String, Object)[])](Error_AddDetail.md) for the consequences and how to avoid them.
 
 ## Examples
 ```csharp
-var error = Error.Validation(
+var error = ErrorBuilder.Validation(
                 ErrorUri.Tag("tag:exampleapp.com,2026:errors:user:create:invalid"),
-                "Invalid data to register a new user.");
+                "Invalid data to register a new user.")
+            .AddErrorDetail(
+                "#/username",
+                "The username is already taken.",
+                "error:user:create:username-taken",
+                ("username", "john_doe"))
+            .AddErrorDetail(
+                "#/email",
+                "The email address is required.",
+                "error:user:create:email-required",
+                ("email", ""))
+            .Build();
 
-error.AddDetail(
-    "#/username",
-    "The username is already taken.",
-    "error:user:create:username-taken",
-    ("username", "john_doe"));
-
-error.AddDetail(
-    "#/email",
-    "The email address is required.",
-    "error:user:create:email-required",
-    ("email", ""));
+foreach (var errorDetail in error.ErrorDetails)
+{
+    Console.WriteLine($"{errorDetail.PropertyPointer}: {errorDetail.Detail}");
+}
 ```
 
 ## See Also
 * [ErrorDetail](../ErrorDetail/ErrorDetail.md)
+* [WithErrorDetail](Error_WithErrorDetail.md)
+* [ErrorBuilder](../ErrorBuilder/ErrorBuilder.md)
 * [RFC 9457: Problem Details for HTTP APIs](https://datatracker.ietf.org/doc/html/rfc9457)
 * [Tag URI scheme](https://en.wikipedia.org/wiki/Tag_URI_scheme)

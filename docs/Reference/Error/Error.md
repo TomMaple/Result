@@ -39,39 +39,49 @@ It follows the [RFC 9457](https://datatracker.ietf.org/doc/html/rfc9457) standar
 ### Equality
 [Error](Error.md) provides value-based equality: two instances are equal when all of their properties are equal, including the [ErrorDetails](Error_ErrorDetails.md) collection, which is compared **by content** (order-sensitive) rather than by reference, and the [Metadata](Error_Metadata.md) dictionary, which is compared **by content** independent of the order of its entries. See [Equals(Error)](Error_Equals.md) and [GetHashCode()](Error_GetHashCode.md).
 
-### Copying with `with`
-Copying an [Error](Error.md) through a `with` expression produces an **independent** copy: the [ErrorDetails](Error_ErrorDetails.md) collection is deep-copied, so adding a detail (via [AddDetail(String, String, String, (String, Object)[])](Error_AddDetail.md)) to the copy does not affect the original, and vice versa. The [Metadata](Error_Metadata.md) dictionary is read-only and never modified, so the copy shares it safely.
+### Immutability
+[Error](Error.md) is immutable: all its properties are get-only, and the [ErrorDetails](Error_ErrorDetails.md) and [Metadata](Error_Metadata.md) collections are read-only. It has no public constructor. Create it with:
+* one of the factory methods named after the categories (e.g., [Validation](Error_Validation.md)), or
+* an [ErrorBuilder](../ErrorBuilder/ErrorBuilder.md), when the error is assembled step by step (e.g., one error detail per invalid field).
+
+Methods such as [WithErrorDetail](Error_WithErrorDetail.md), [WithMetadata](Error_WithMetadata.md) and [WithoutMetadata](Error_WithoutMetadata.md) return a changed copy. To change any other member, or several at once, use [ToBuilder()](Error_ToBuilder.md) and [ErrorBuilder.Build()](../ErrorBuilder/ErrorBuilder_Build.md).
+
+An [Error](Error.md) is not validated again after it is created: the title is never `null` or blank, and the category is always a defined [ErrorCategory](../ErrorCategory.md) value.
+
+### Serialization
+The default serializers (*System.Text.Json* and *Newtonsoft.Json*) can write an [Error](Error.md) as JSON. Reading it back requires a dedicated converter, because the type has no public constructor or setters.
 
 ### Metadata
-[Metadata](Error_Metadata.md) holds machine-readable, response-level values (the *extension members* of RFC 9457). Use [WithMetadata(String, Object)](Error_WithMetadata.md) and [WithoutMetadata(String)](Error_WithoutMetadata.md) to obtain a changed copy, and [TryGetMetadata&lt;T&gt;(String, T)](Error_TryGetMetadata.md) to read a value as a specific type, also after a JSON round-trip.
+[Metadata](Error_Metadata.md) holds machine-readable, response-level values (the *extension members* of RFC 9457). Use [WithMetadata(String, Object)](Error_WithMetadata.md) and [WithoutMetadata](Error_WithoutMetadata.md) to obtain a changed copy, and [TryGetMetadata&lt;T&gt;(String, T)](Error_TryGetMetadata.md) to read a value of a specific type.
 
-## Constructors
-| Name | Description |
-| ---- | ----------- |
-| [Error()](Error_constructors.md) | Initializes a new instance of the [Error](Error.md) record. |
+### Text representation
+`ToString()` writes all members, including the contents of [ErrorDetails](Error_ErrorDetails.md) and [Metadata](Error_Metadata.md), e.g., `Error { Category = NotFound, TypeUri = about:blank, Title = Missing, …, ErrorDetails = [], Metadata = {} }`.
 
 ## Properties
 | Name | Description |
 | ---- | ----------- |
-| [Category](Error_Category.md) | Gets or sets the category of the error. |
-| [Detail](Error_Detail.md) | Gets or sets a human-readable explanation of the specific occurrence of the problem. |
-| [DetailTemplated](Error_DetailTemplated.md) | Gets or sets a templated explanation of the specific occurrence of the problem. |
-| [ErrorDetails](Error_ErrorDetails.md) | Gets or sets a collection of error details. |
-| [InstanceUri](Error_InstanceUri.md) | Gets or sets a *URI* that identifies the specific occurrence of the problem. |
-| [Metadata](Error_Metadata.md) | Gets or sets the additional, machine-readable members of the problem. |
-| [Title](Error_Title.md) | Gets or sets a short, human-readable summary of the problem type. |
-| [TypeUri](Error_TypeUri.md) | Gets or sets a *URI* that identifies the type of the problem. |
+| [Category](Error_Category.md) | Gets the category of the error. |
+| [Detail](Error_Detail.md) | Gets a human-readable explanation of the specific occurrence of the problem. |
+| [DetailTemplated](Error_DetailTemplated.md) | Gets a templated explanation of the specific occurrence of the problem. |
+| [ErrorDetails](Error_ErrorDetails.md) | Gets a collection of error details. |
+| [InstanceUri](Error_InstanceUri.md) | Gets a *URI* that identifies the specific occurrence of the problem. |
+| [Metadata](Error_Metadata.md) | Gets the additional, machine-readable members of the problem. |
+| [Title](Error_Title.md) | Gets a short, human-readable summary of the problem type. |
+| [TypeUri](Error_TypeUri.md) | Gets a *URI* that identifies the type of the problem. |
 
 ## Methods
 | Name | Description |
 | ---- | ----------- |
-| [AddDetail(String, String, String, (String, Object)[])](Error_AddDetail.md) | Adds a new set of error details to the current error and returns the current instance. |
 | [Equals(Error)](Error_Equals.md) | Determines whether the specified error is equal to the current one, comparing the error details and the metadata by content. |
 | [GetHashCode()](Error_GetHashCode.md) | Returns a hash code consistent with [Equals(Error)](Error_Equals.md), incorporating the error details and the metadata content. |
-| [TryGetMetadata&lt;T&gt;(String, T)](Error_TryGetMetadata.md) | Gets the metadata value of the specified key, converted to the requested type. |
+| [ToBuilder()](Error_ToBuilder.md) | Returns a new [ErrorBuilder](../ErrorBuilder/ErrorBuilder.md) initialized with the members of the current error. |
+| [TryGetMetadata&lt;T&gt;(String, T)](Error_TryGetMetadata.md) | Gets the metadata value of the specified key if it is of the requested type. |
+| [WithErrorDetail(ErrorDetail)](Error_WithErrorDetail.md#witherrordetailerrordetail) | Returns a copy of the error with the specified error detail appended. |
+| [WithErrorDetail(String, String, String, (String, Object)[])](Error_WithErrorDetail.md#witherrordetailstring-string-string-string-object) | Returns a copy of the error with a new error detail appended. |
 | [WithMetadata(String, Object)](Error_WithMetadata.md#withmetadatastring-object) | Returns a copy of the error with the specified metadata entry added or replaced. |
 | [WithMetadata(IEnumerable&lt;KeyValuePair&lt;String, Object&gt;&gt;)](Error_WithMetadata.md#withmetadataienumerablekeyvaluepairstring-object) | Returns a copy of the error with the specified metadata entries added or replaced. |
-| [WithoutMetadata(String)](Error_WithoutMetadata.md) | Returns a copy of the error without the metadata entry of the specified key. |
+| [WithoutMetadata()](Error_WithoutMetadata.md#withoutmetadata) | Returns a copy of the error without any metadata. |
+| [WithoutMetadata(String)](Error_WithoutMetadata.md#withoutmetadatastring) | Returns a copy of the error without the metadata entry of the specified key. |
 | [Conflict(ErrorUri, String, String, ErrorUri, String, (String, Object)[])](Error_Conflict.md#conflicterroruri-string-string-erroruri-string-string-object) | Creates a new conflict error with specified parameters. |
 | [Conflict(ErrorUri, String, String, ErrorUri, String, IEnumerable&lt;KeyValuePair&lt;String, Object&gt;&gt;)](Error_Conflict.md#conflicterroruri-string-string-erroruri-string-ienumerablekeyvaluepairstring-object) | Creates a new conflict error with specified parameters. |
 | [Critical(ErrorUri, String, String, ErrorUri, String, (String, Object)[])](Error_Critical.md#criticalerroruri-string-string-erroruri-string-string-object) | Creates a new critical error with specified parameters. |
@@ -96,6 +106,7 @@ Copying an [Error](Error.md) through a `with` expression produces an **independe
 | [Validation(ErrorUri, String, String, ErrorUri, String, IEnumerable&lt;KeyValuePair&lt;String, Object&gt;&gt;)](Error_Validation.md#validationerroruri-string-string-erroruri-string-ienumerablekeyvaluepairstring-object) | Creates a new validation error with specified parameters. |
 
 ## See Also
+* [ErrorBuilder](../ErrorBuilder/ErrorBuilder.md)
 * [ErrorCategory](../ErrorCategory.md)
 * [ErrorDetail](../ErrorDetail/ErrorDetail.md)
 * [RFC 9457: Problem Details for HTTP APIs](https://datatracker.ietf.org/doc/html/rfc9457)

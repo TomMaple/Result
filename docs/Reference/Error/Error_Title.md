@@ -2,12 +2,12 @@
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L176" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L119" target="_blank">Error.cs</a>
 
-Gets or sets a short, human-readable summary of the problem type.
+Gets a short, human-readable summary of the problem type.
 
 ```csharp
-public string Title { get; init; }
+public string Title { get; }
 ```
 
 ### Property Value
@@ -16,15 +16,15 @@ public string Title { get; init; }
 A short, human-readable summary of the problem type.
 
 ## Remarks
-This is a mandatory property.
+This is a mandatory property. It is never `null`, empty or white-space only: the factory methods and [ErrorBuilder](../ErrorBuilder/ErrorBuilder.md) reject such a title.
 
 > [!NOTE]
 > It **SHOULD NOT** change from occurrence to occurrence of the problem, except for localization.
 
 The value is advisory and is included only for users who are unaware of and cannot discover the semantics of the type *URI* (e.g., during offline log analysis).
 
-> [!CAUTION]
-> It should not be assigned directly (i.e., via the property setter) but rather through the factory methods of the [Error](Error.md) record, which use [ErrorUri](../ErrorUri/ErrorUri.md) to validate and provide the value. For deserialization, the setter is marked as `init` to allow assignment during object initialization.
+> [!NOTE]
+> [Error](Error.md) is immutable, so this property is set when the error is created: by the factory methods (e.g., [Validation](Error_Validation.md)) or an [ErrorBuilder](../ErrorBuilder/ErrorBuilder.md). To change it, use [ToBuilder()](Error_ToBuilder.md).
 
 ## Examples
 ```csharp

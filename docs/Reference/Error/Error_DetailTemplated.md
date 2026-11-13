@@ -2,12 +2,12 @@
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L196" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L139" target="_blank">Error.cs</a>
 
-Gets or sets a template to generate a localized, human-readable explanation specific to this occurrence of the problem.
+Gets a template to generate a localized, human-readable explanation specific to this occurrence of the problem.
 
 ```csharp
-public TemplatedMessage? DetailTemplated { get; init; }
+public TemplatedMessage? DetailTemplated { get; }
 ```
 
 ### Property Value
@@ -24,8 +24,8 @@ It allows clients to localize the error detail message based on the user’s loc
 
 It should contain equivalent information to the [Detail](Error_Detail.md) property but in a structured format suitable for localization and dynamic content generation.
 
-> [!CAUTION]
-> It should not be assigned directly (i.e., via the property setter) but through the factory methods of the [Error](Error.md) record, which use [TemplatedMessage](../TemplatedMessage/TemplatedMessage.md) to validate and build the value. For deserialization, the setter is marked as `init` to allow assignment during object initialization.
+> [!NOTE]
+> [Error](Error.md) is immutable, so this property is set when the error is created: by the factory methods (e.g., [Validation](Error_Validation.md)) or an [ErrorBuilder](../ErrorBuilder/ErrorBuilder.md). To change it, use [ToBuilder()](Error_ToBuilder.md).
 
 ## Examples
 ```csharp

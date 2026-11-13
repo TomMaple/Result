@@ -2,16 +2,16 @@
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/TemplatedMessage.cs#L27" target="_blank">TemplatedMessage.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/TemplatedMessage.cs#L50" target="_blank">TemplatedMessage.cs</a>
 
-Gets or sets a read-only dictionary of named values to be used when rendering the templated message.
+Gets a read-only dictionary of named values to be used when rendering the templated message.
 
 ```csharp
-public IReadOnlyDictionary<string, object>? Params { get; init; }
+public IReadOnlyDictionary<string, object?>? Params { get; }
 ```
 
 ### Property Value
-[IReadOnlyDictionary<String, Object>?](https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2)&lt;[String](https://learn.microsoft.com/dotnet/api/system.string), [Object](https://learn.microsoft.com/en-us/dotnet/api/system.object)&gt;?
+[IReadOnlyDictionary](https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2)&lt;[String](https://learn.microsoft.com/dotnet/api/system.string), [Object](https://learn.microsoft.com/en-us/dotnet/api/system.object)&gt;?
 
 A collection of named values to be used when rendering the templated message.
 
@@ -30,10 +30,10 @@ var error = Error.NotFound(
 ## Remarks
 This is an optional property.
 
-> [!CAUTION]
-> This value should not be assigned via constructor but through the factory methods of the [Error](../Error/Error.md) record (such as [NotFound(ErrorUri, String, String, ErrorUri, String, (String, Object)[])](../Error/Error_NotFound.md#notfounderroruri-string-string-erroruri-string-string-object) or [Failure(ErrorUri, String, String, ErrorUri, String, IEnumerable<KeyValuePair<String, Object>>)](../Error/Error_Failure.md#failureerroruri-string-string-erroruri-string-ienumerablekeyvaluepairstring-object)) or an object instance method like [AddDetail(String, String, String, (String, Object)[])](../Error/Error_AddDetail.md) which use this record internally.
-> 
-> For deserialization, the setter is marked as `init` to allow assignment during object initialization.
+It is a read-only copy of the dictionary passed to the [constructor](TemplatedMessage_constructors.md), with keys compared ordinally (case-sensitive), or `null` when none was passed. Later changes to the source dictionary are not reflected, and the copy cannot be modified, also through a cast. Values can be `null`.
+
+> [!NOTE]
+> An instance is usually created by the factory methods of the [Error](../Error/Error.md) record (the `detailTemplateId` and `detailNamedValues` parameters, e.g., [NotFound](../Error/Error_NotFound.md)), by [Error.WithErrorDetail](../Error/Error_WithErrorDetail.md), or by the [ErrorBuilder](../ErrorBuilder/ErrorBuilder.md) methods [WithDetailTemplated](../ErrorBuilder/ErrorBuilder_WithDetailTemplated.md) and [AddErrorDetail](../ErrorBuilder/ErrorBuilder_AddErrorDetail.md).
 
 
 ## See Also

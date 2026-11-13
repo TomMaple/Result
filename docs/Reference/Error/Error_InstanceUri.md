@@ -2,12 +2,12 @@
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L223" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L166" target="_blank">Error.cs</a>
 
-Gets or sets a *URI* that identifies the specific occurrence of the problem.
+Gets a *URI* that identifies the specific occurrence of the problem.
 
 ```csharp
-public string? InstanceUri { get; init; }
+public string? InstanceUri { get; }
 ```
 
 ### Property Value
@@ -18,8 +18,8 @@ A text value of a *URI* that identifies the specific occurrence of the problem.
 ## Remarks
 This is an optional property that contains a text value of a *URI* that identifies the type of the problem.
 
-> [!CAUTION]
-> It should not be assigned directly (i.e., via the property setter) but rather through the factory methods of the [Error](Error.md) record, which use [ErrorUri](../ErrorUri/ErrorUri.md) to validate and provide the value. For deserialization, the setter is marked as `init` to allow assignment during object initialization.
+> [!NOTE]
+> [Error](Error.md) is immutable, so this property is set when the error is created: by the factory methods (e.g., [Validation](Error_Validation.md)) or an [ErrorBuilder](../ErrorBuilder/ErrorBuilder.md). To change it, use [ToBuilder()](Error_ToBuilder.md).
 
 The value of this property should be:
 * a *URI Locator*, or
