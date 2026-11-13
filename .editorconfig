@@ -41,6 +41,7 @@ resharper_keep_blank_lines_in_declarations = 1
 #
 csharp_style_namespace_declarations = file_scoped
 csharp_style_var_when_type_is_apparent = true
+csharp_style_prefer_primary_constructors = false
 
 #
 # Naming: symbols
