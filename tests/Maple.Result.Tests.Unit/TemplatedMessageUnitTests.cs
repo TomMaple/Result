@@ -8,7 +8,6 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-using Maple.Json.ObjectAsPrimitiveConverter;
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
@@ -29,79 +28,146 @@ public class TemplatedMessageUnitTests
 
     #endregion
 
-    #region Deserialize
+    #region ctor
 
     [Fact]
-    public void Deserialize_OnlyTemplateId_ReturnsTemplateMessageWithMessageId()
+    public void Ctor_NullTemplateId_ThrowsArgumentNullException()
     {
-        // Arrange
-        const string ExpectedTemplateId = "user.account.activated";
-
-        const string Json = "{\"templateId\":\"user.account.activated\"}";
-
         // Act
-        var sut = Deserialize(Json);
+        var exception = Record.Exception(() => new TemplatedMessage(null!));
 
         // Assert
-        sut.TemplateId.ShouldBe(ExpectedTemplateId);
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentNullException>();
+        ((ArgumentNullException)exception).ParamName.ShouldBe("TemplateId");
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData(" ")]
+    [InlineData("   ")]
+    public void Ctor_BlankTemplateId_ThrowsArgumentException(string templateId)
+    {
+        // Act
+        var exception = Record.Exception(() => new TemplatedMessage(templateId));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentException>();
+        ((ArgumentException)exception).ParamName.ShouldBe("TemplateId");
+    }
+
+    [Fact]
+    public void Ctor_NullParams_KeepsNullParams()
+    {
+        // Act
+        var sut = new TemplatedMessage("message-id");
+
+        // Assert
+        sut.TemplateId.ShouldBe("message-id");
         sut.Params.ShouldBeNull();
     }
 
     [Fact]
-    public void Deserialize_TemplateIdAndEmptyParameters_ReturnsTemplatedMessageWithMessageIdAndEmptyParameters()
+    public void Ctor_SourceDictionaryChangedLater_ParamsAreNotAffected()
     {
         // Arrange
-        const string ExpectedTemplateId = "user.account.activated";
-
-        const string Json = "{\"templateId\":\"user.account.activated\",\"params\":{}}";
+        var source = new Dictionary<string, object?> { ["min"] = 3 };
 
         // Act
-        var sut = Deserialize(Json);
+        var sut = new TemplatedMessage("message-id", source);
+        source["min"] = 5;
+        source["max"] = 10;
 
         // Assert
-        sut.TemplateId.ShouldBe(ExpectedTemplateId);
-        sut.Params.ShouldBeEmpty();
+        sut.Params.ShouldNotBeNull();
+        sut.Params.Count.ShouldBe(1);
+        sut.Params["min"].ShouldBe(3);
+        sut.Params.ShouldNotBeSameAs(source);
     }
 
     [Fact]
-    public void Deserialize_TemplateIdAndParameters_ReturnsTemplatedMessageWithMessageIdAndParameters()
+    public void Ctor_NullParamValue_KeepsNullValue()
     {
-        // Arrange
-        _jsonSerializerOptions.Converters.Add(new ObjectAsPrimitiveConverter());
-
-        const string ExpectedTemplateId = "user.account.activated";
-        const int ExpectedParametersCount = 5;
-        const string Parameter1Name = "userName";
-        const string Parameter2Name = "isSuccessful";
-        const string Parameter3Name = "bonusPoints";
-        const string Parameter4Name = "weight";
-        const string Parameter5Name = "dob";
-        const string ExpectedParameter1Value = "johnny";
-        const bool ExpectedParameter2Value = true;
-        const int ExpectedParameter3Value = 100;
-        const decimal ExpectedParameter4Value = 78.3m;
-        const string ExpectedParameter5Value = "1980-04-19";
-
-        const string Json =
-            "{\"templateId\":\"user.account.activated\",\"params\":{\"userName\":\"johnny\",\"isSuccessful\":true,\"bonusPoints\":100,\"weight\":78.3,\"dob\":\"1980-04-19\"}}";
-
         // Act
-        var sut = Deserialize(Json);
+        var sut = new TemplatedMessage("message-id", new Dictionary<string, object?> { ["name"] = null });
 
         // Assert
-        sut.TemplateId.ShouldBe(ExpectedTemplateId);
         sut.Params.ShouldNotBeNull();
-        sut.Params.Count.ShouldBe(ExpectedParametersCount);
-        sut.Params.Keys.ShouldContain(Parameter1Name);
-        sut.Params.Keys.ShouldContain(Parameter2Name);
-        sut.Params.Keys.ShouldContain(Parameter3Name);
-        sut.Params.Keys.ShouldContain(Parameter4Name);
-        sut.Params.Keys.ShouldContain(Parameter5Name);
-        sut.Params[Parameter1Name].ShouldBe(ExpectedParameter1Value);
-        sut.Params[Parameter2Name].ShouldBe(ExpectedParameter2Value);
-        sut.Params[Parameter3Name].ShouldBe(ExpectedParameter3Value);
-        sut.Params[Parameter4Name].ShouldBe(ExpectedParameter4Value);
-        sut.Params[Parameter5Name].ShouldBe(ExpectedParameter5Value);
+        sut.Params.ShouldContainKey("name");
+        sut.Params["name"].ShouldBeNull();
+    }
+
+    [Fact]
+    public void Params_CastToMutableDictionary_CannotBeModified()
+    {
+        // Arrange
+        var sut = new TemplatedMessage("message-id", new Dictionary<string, object?> { ["min"] = 3 });
+
+        // Act & Assert
+        var dictionary = sut.Params.ShouldBeAssignableTo<IDictionary<string, object?>>();
+        dictionary.ShouldNotBeNull();
+        dictionary.IsReadOnly.ShouldBeTrue();
+        Should.Throw<NotSupportedException>(() => dictionary["min"] = 5);
+        sut.Params!["min"].ShouldBe(3);
+    }
+
+    [Fact]
+    public void Params_Keys_AreCaseSensitive()
+    {
+        // Arrange
+        var source = new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase) { ["min"] = 3 };
+
+        // Act
+        var sut = new TemplatedMessage("message-id", source);
+
+        // Assert
+        sut.Params.ShouldNotBeNull();
+        sut.Params.ContainsKey("min").ShouldBeTrue();
+        sut.Params.ContainsKey("MIN").ShouldBeFalse();
+    }
+
+    #endregion
+
+    #region ToString
+
+    [Fact]
+    public void ToString_WithParams_WritesTheirContent()
+    {
+        // Arrange
+        var sut = new TemplatedMessage("message-id", new Dictionary<string, object?> { ["min"] = 3 });
+
+        // Act
+        var result = sut.ToString();
+
+        // Assert
+        result.ShouldBe("TemplatedMessage { TemplateId = message-id, Params = { min = 3 } }");
+    }
+
+    [Fact]
+    public void ToString_EmptyParams_WritesEmptyDictionary()
+    {
+        // Arrange
+        var sut = new TemplatedMessage("message-id", new Dictionary<string, object?>());
+
+        // Act
+        var result = sut.ToString();
+
+        // Assert
+        result.ShouldBe("TemplatedMessage { TemplateId = message-id, Params = {} }");
+    }
+
+    [Fact]
+    public void ToString_NullParams_WritesNothingForParams()
+    {
+        // Arrange
+        var sut = new TemplatedMessage("message-id");
+
+        // Act
+        var result = sut.ToString();
+
+        // Assert
+        result.ShouldBe("TemplatedMessage { TemplateId = message-id, Params =  }");
     }
 
     #endregion
@@ -131,7 +197,7 @@ public class TemplatedMessageUnitTests
         const string ExpectedText = "{\"templateId\":\"user.account.activated\",\"params\":{}}";
 
         const string TemplateId = "user.account.activated";
-        var sut = new TemplatedMessage(TemplateId, new Dictionary<string, object>());
+        var sut = new TemplatedMessage(TemplateId, new Dictionary<string, object?>());
 
         // Act
         var result = Serialize(sut);
@@ -148,7 +214,7 @@ public class TemplatedMessageUnitTests
             "{\"templateId\":\"user.account.activated\",\"params\":{\"userName\":\"johnny\",\"isSuccessful\":true,\"bonusPoints\":100,\"weight\":78.3,\"dob\":\"1980-04-19\",\"registered\":\"2022-04-15T12:17:58-05:00\"}}";
 
         const string TemplateId = "user.account.activated";
-        var parameters = new Dictionary<string, object>
+        var parameters = new Dictionary<string, object?>
         {
             ["userName"] = "johnny",
             ["isSuccessful"] = true,
@@ -169,81 +235,7 @@ public class TemplatedMessageUnitTests
 
     #endregion
 
-    #region DoubleSerialize
-
-    [Fact]
-    public void DoubleSerialize_OnlyTemplateId_ReturnsSerializedValueWithoutParams()
-    {
-        // Arrange
-        const string ExpectedText = "{\"templateId\":\"user.account.activated\"}";
-
-        const string TemplateId = "user.account.activated";
-        var sut = new TemplatedMessage(TemplateId);
-
-        // Act
-        var json = Serialize(sut);
-        var obj = Deserialize(json);
-        var result = Serialize(obj);
-
-        // Assert
-        result.ShouldBe(ExpectedText);
-    }
-
-    [Fact]
-    public void DoubleSerialize_EmptyParams_ReturnsSerializedValueWithEmptyParams()
-    {
-        // Arrange
-        const string ExpectedText = "{\"templateId\":\"user.account.activated\",\"params\":{}}";
-
-        const string TemplateId = "user.account.activated";
-        var sut = new TemplatedMessage(TemplateId, new Dictionary<string, object>());
-
-        // Act
-        var json = Serialize(sut);
-        var obj = Deserialize(json);
-        var result = Serialize(obj);
-
-        // Assert
-        result.ShouldBe(ExpectedText);
-    }
-
-    [Fact]
-    public void DoubleSerialize_NotEmptyParams_ReturnsSerializedValueWithParams()
-    {
-        // Arrange
-        const string ExpectedText =
-            "{\"templateId\":\"user.account.activated\",\"params\":{\"userName\":\"johnny\",\"isSuccessful\":true,\"bonusPoints\":100,\"weight\":78.3,\"dob\":\"1980-04-19\"}}";
-
-        const string TemplateId = "user.account.activated";
-        var parameters = new Dictionary<string, object>
-        {
-            ["userName"] = "johnny",
-            ["isSuccessful"] = true,
-            ["bonusPoints"] = 100,
-            ["weight"] = 78.3m,
-            ["dob"] = new DateOnly(1980, 4, 19)
-        };
-
-        var sut = new TemplatedMessage(TemplateId, parameters);
-
-        // Act
-        var json = Serialize(sut);
-        var obj = Deserialize(json);
-        var result = Serialize(obj);
-
-        // Assert
-        result.ShouldBe(ExpectedText);
-    }
-
-    #endregion
-
     #region helper methods
-
-    private TemplatedMessage Deserialize(string json)
-    {
-        var result = JsonSerializer.Deserialize<TemplatedMessage>(json, _jsonSerializerOptions);
-        return result!;
-    }
 
     private string Serialize(TemplatedMessage templatedMessage)
     {

@@ -17,145 +17,10 @@ namespace Maple.Result.Tests.Unit;
 
 public class ErrorUnitTests
 {
-    #region ctor
+    #region construction checks
 
     [Fact]
-    public void Ctor_OnlyRequiredDetails_ReturnsError()
-    {
-        // Arrange
-        const ErrorCategory ExpectedCategory = ErrorCategory.Timeout;
-        const int ExpectedErrorDetailsCount = 0;
-        const string ExpectedTitle = "Test title";
-        const string ExpectedTypeUri = "tag:test.com,2024:Test";
-
-        // Act
-        var sut = new Sut(
-            ErrorCategory.Timeout,
-            "tag:test.com,2024:Test",
-            "Test title");
-
-        // Assert
-        sut.ShouldNotBeNull();
-        sut.Category.ShouldBe(ExpectedCategory);
-        sut.Detail.ShouldBeNull();
-        sut.DetailTemplated.ShouldBeNull();
-        sut.ErrorDetails.ShouldNotBeNull();
-        sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
-        sut.InstanceUri.ShouldBeNull();
-        sut.Title.ShouldBe(ExpectedTitle);
-        sut.TypeUri.ShouldBe(ExpectedTypeUri);
-    }
-
-    [Fact]
-    public void Ctor_WithOptionalDetails_ReturnsError()
-    {
-        // Arrange
-        const ErrorCategory ExpectedCategory = ErrorCategory.Unauthenticated;
-        const string ExpectedDetail = "Test description.";
-        const string ExpectedDetailTemplateId = "message-id";
-        const int ExpectedDetailParamsCount = 2;
-        const string ExpectedDetailParam1Key = "key1";
-        const string ExpectedDetailParam1Value = "value1";
-        const string ExpectedDetailParam2Key = "key2";
-        const string ExpectedDetailParam2Value = "value2";
-        const int ExpectedErrorDetailsCount = 1;
-        const string ExpectedErrorDetail1PropertyPointer = "#/property1";
-        const string ExpectedErrorDetail1Detail = "Property 1 test detail";
-        const string ExpectedErrorDetail1DetailTemplateId = "message-property-id";
-        const int ExpectedErrorDetail1DetailParamsCount = 2;
-        const string ExpectedErrorDetail1DetailParam1Key = "pk1";
-        const string ExpectedErrorDetail1DetailParam1Value = "pv1";
-        const string ExpectedErrorDetail1DetailParam2Key = "pk2";
-        const string ExpectedErrorDetail1DetailParam2Value = "pv2";
-        const string ExpectedInstance = "http://test.com/instance/1013";
-        const string ExpectedTitle = "Test title";
-        const string ExpectedTypeUri = "tag:test.com,2024:Test";
-
-        // Act
-        var sut = new Sut(
-            ErrorCategory.Unauthenticated,
-            "tag:test.com,2024:Test",
-            "Test title",
-            "Test description.",
-            new TemplatedMessage(
-                "message-id",
-                new Dictionary<string, object>
-                {
-                    ["key1"] = "value1",
-                    ["key2"] = "value2"
-                }),
-            "http://test.com/instance/1013",
-            [
-                new ErrorDetail(
-                    "#/property1",
-                    "Property 1 test detail",
-                    new TemplatedMessage(
-                        "message-property-id",
-                        new Dictionary<string, object>
-                        {
-                            ["pk1"] = "pv1",
-                            ["pk2"] = "pv2"
-                        }))
-            ]);
-
-        // Assert
-        sut.ShouldNotBeNull();
-        sut.Category.ShouldBe(ExpectedCategory);
-        sut.Detail.ShouldBe(ExpectedDetail);
-        sut.DetailTemplated.ShouldNotBeNull();
-        sut.DetailTemplated.TemplateId.ShouldBe(ExpectedDetailTemplateId);
-        sut.DetailTemplated.Params.ShouldNotBeNull();
-        sut.DetailTemplated.Params.Count.ShouldBe(ExpectedDetailParamsCount);
-        sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam1Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ToString().ShouldBe(ExpectedDetailParam1Value);
-        sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam2Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ToString().ShouldBe(ExpectedDetailParam2Value);
-        sut.ErrorDetails.ShouldNotBeNull();
-        sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
-        sut.ErrorDetails[0].PropertyPointer.ShouldBe(ExpectedErrorDetail1PropertyPointer);
-        sut.ErrorDetails[0].Detail.ShouldBe(ExpectedErrorDetail1Detail);
-        sut.ErrorDetails[0].DetailTemplated.ShouldNotBeNull();
-        sut.ErrorDetails[0].DetailTemplated!.TemplateId.ShouldBe(ExpectedErrorDetail1DetailTemplateId);
-        sut.ErrorDetails[0].DetailTemplated!.Params.ShouldNotBeNull();
-        sut.ErrorDetails[0].DetailTemplated!.Params!.Count.ShouldBe(ExpectedErrorDetail1DetailParamsCount);
-        sut.ErrorDetails[0].DetailTemplated!.Params!.Keys.ShouldContain(ExpectedErrorDetail1DetailParam1Key);
-        sut.ErrorDetails[0].DetailTemplated!.Params![ExpectedErrorDetail1DetailParam1Key].ToString().ShouldBe(ExpectedErrorDetail1DetailParam1Value);
-        sut.ErrorDetails[0].DetailTemplated!.Params!.Keys.ShouldContain(ExpectedErrorDetail1DetailParam2Key);
-        sut.ErrorDetails[0].DetailTemplated!.Params![ExpectedErrorDetail1DetailParam2Key].ToString().ShouldBe(ExpectedErrorDetail1DetailParam2Value);
-        sut.InstanceUri.ShouldBe(ExpectedInstance);
-        sut.Title.ShouldBe(ExpectedTitle);
-        sut.TypeUri.ShouldBe(ExpectedTypeUri);
-    }
-
-    [Theory]
-    [InlineData("")]
-    [InlineData(" ")]
-    [InlineData("   ")]
-    public void Ctor_BlankTypeUri_ThrowsException(string typeUri)
-    {
-        // Act
-        var exception = Record.Exception(() => new Sut(ErrorCategory.Validation, typeUri, "Test title"));
-
-        // Assert
-        exception.ShouldNotBeNull();
-        exception.ShouldBeOfType<ArgumentException>();
-        exception.Message.ShouldContain("The type URI is required.");
-    }
-
-    [Fact]
-    public void Ctor_NullTypeUri_ThrowsException()
-    {
-        // Act
-        var exception = Record.Exception(() => new Sut(ErrorCategory.Validation, null!, "Test title"));
-
-        // Assert
-        exception.ShouldNotBeNull();
-        exception.ShouldBeOfType<ArgumentException>();
-        exception.Message.ShouldContain("The type URI is required.");
-    }
-
-    [Fact]
-    public void Ctor_DefaultErrorUri_ReturnsErrorWithAboutBlankTypeUri()
+    public void Validation_DefaultErrorUri_ReturnsErrorWithAboutBlankTypeUri()
     {
         // Arrange
         const string ExpectedTypeUri = "about:blank";
@@ -168,47 +33,84 @@ public class ErrorUnitTests
     }
 
     [Fact]
-    public void Ctor_BlankErrorUri_ThrowsException()
+    public void Validation_NullTitle_ThrowsArgumentNullException()
     {
         // Act
-        var exception = Record.Exception(() => Sut.Validation(new ErrorUri("   "), "Test title"));
+        var exception = Record.Exception(() => Sut.Validation(ErrorUri.None(), null!));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentNullException>();
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData(" ")]
+    [InlineData("   ")]
+    public void Validation_BlankTitle_ThrowsArgumentException(string title)
+    {
+        // Act
+        var exception = Record.Exception(() => Sut.Validation(ErrorUri.None(), title));
 
         // Assert
         exception.ShouldNotBeNull();
         exception.ShouldBeOfType<ArgumentException>();
-        exception.Message.ShouldContain("The type URI is required.");
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData(" ")]
+    public void Validation_BlankDetailTemplateId_ThrowsArgumentException(string detailTemplateId)
+    {
+        // Act
+        var exception = Record.Exception(() => Sut.Validation(ErrorUri.None(), "Test title",
+            detailTemplateId: detailTemplateId));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentException>();
+    }
+
+    [Fact]
+    public void Validation_NullNamedValue_KeepsNullValue()
+    {
+        // Act
+        var sut = Sut.Validation(ErrorUri.None(), "Test title", detailTemplateId: "message-id",
+            detailNamedValues: ("key", null));
+
+        // Assert
+        sut.DetailTemplated.ShouldNotBeNull();
+        sut.DetailTemplated.Params.ShouldNotBeNull();
+        sut.DetailTemplated.Params.ShouldContainKey("key");
+        sut.DetailTemplated.Params["key"].ShouldBeNull();
     }
 
     #endregion
 
-    #region AddDetail
+    #region WithErrorDetail
 
     [Fact]
-    public void AddDetail_DetailTextOnly_AddsDetail()
+    public void WithErrorDetail_DetailTextOnly_ReturnsCopyWithDetail()
     {
         // Arrange
         const int ExpectedErrorDetailsCount = 1;
         const string ExpectedErrorDetail1Detail = "Property 1 test detail";
 
-        var sut = new Sut(
-            ErrorCategory.Timeout,
-            "tag:test.com,2024:Test",
-            "Test title");
+        var sut = Sut.Timeout(ErrorUri.Tag("tag:test.com,2024:Test"), "Test title");
 
         // Act
-        sut.AddDetail(null, "Property 1 test detail");
+        var result = sut.WithErrorDetail(null, "Property 1 test detail");
 
         // Assert
-        sut.ShouldNotBeNull();
-        sut.ErrorDetails.ShouldNotBeNull();
-        sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
-        sut.ErrorDetails[0].PropertyPointer.ShouldBeNull();
-        sut.ErrorDetails[0].Detail.ShouldBe(ExpectedErrorDetail1Detail);
-        sut.ErrorDetails[0].DetailTemplated.ShouldBeNull();
+        result.ShouldNotBeNull();
+        result.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
+        result.ErrorDetails[0].PropertyPointer.ShouldBeNull();
+        result.ErrorDetails[0].Detail.ShouldBe(ExpectedErrorDetail1Detail);
+        result.ErrorDetails[0].DetailTemplated.ShouldBeNull();
     }
 
     [Fact]
-    public void AddDetail_AllDetails_AddsDetail()
+    public void WithErrorDetail_AllDetails_ReturnsCopyWithDetail()
     {
         // Arrange
         const int ExpectedErrorDetailsCount = 1;
@@ -221,30 +123,176 @@ public class ErrorUnitTests
         const string ExpectedErrorDetail1DetailParam2Key = "pk2";
         const string ExpectedErrorDetail1DetailParam2Value = "pv2";
 
-        var sut = new Sut(
-            ErrorCategory.Timeout,
-            "tag:test.com,2024:Test",
-            "Test title");
+        var sut = Sut.Timeout(ErrorUri.Tag("tag:test.com,2024:Test"), "Test title");
 
         // Act
-        sut.AddDetail("#/property1", "Property 1 test detail", "message-property-id",
+        var result = sut.WithErrorDetail("#/property1", "Property 1 test detail", "message-property-id",
             ("pk1", "pv1"), ("pk2", "pv2"));
 
         // Assert
-        sut.ShouldNotBeNull();
-        sut.ErrorDetails.ShouldNotBeNull();
-        sut.ErrorDetails.ShouldNotBeNull();
-        sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
-        sut.ErrorDetails[0].PropertyPointer.ShouldBe(ExpectedErrorDetail1PropertyPointer);
-        sut.ErrorDetails[0].Detail.ShouldBe(ExpectedErrorDetail1Detail);
-        sut.ErrorDetails[0].DetailTemplated.ShouldNotBeNull();
-        sut.ErrorDetails[0].DetailTemplated!.TemplateId.ShouldBe(ExpectedErrorDetail1DetailTemplateId);
-        sut.ErrorDetails[0].DetailTemplated!.Params.ShouldNotBeNull();
-        sut.ErrorDetails[0].DetailTemplated!.Params!.Count.ShouldBe(ExpectedErrorDetail1DetailParamsCount);
-        sut.ErrorDetails[0].DetailTemplated!.Params!.Keys.ShouldContain(ExpectedErrorDetail1DetailParam1Key);
-        sut.ErrorDetails[0].DetailTemplated!.Params![ExpectedErrorDetail1DetailParam1Key].ToString().ShouldBe(ExpectedErrorDetail1DetailParam1Value);
-        sut.ErrorDetails[0].DetailTemplated!.Params!.Keys.ShouldContain(ExpectedErrorDetail1DetailParam2Key);
-        sut.ErrorDetails[0].DetailTemplated!.Params![ExpectedErrorDetail1DetailParam2Key].ToString().ShouldBe(ExpectedErrorDetail1DetailParam2Value);
+        result.ShouldNotBeNull();
+        result.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
+        result.ErrorDetails[0].PropertyPointer.ShouldBe(ExpectedErrorDetail1PropertyPointer);
+        result.ErrorDetails[0].Detail.ShouldBe(ExpectedErrorDetail1Detail);
+        result.ErrorDetails[0].DetailTemplated.ShouldNotBeNull();
+        result.ErrorDetails[0].DetailTemplated!.TemplateId.ShouldBe(ExpectedErrorDetail1DetailTemplateId);
+        result.ErrorDetails[0].DetailTemplated!.Params.ShouldNotBeNull();
+        result.ErrorDetails[0].DetailTemplated!.Params!.Count.ShouldBe(ExpectedErrorDetail1DetailParamsCount);
+        result.ErrorDetails[0].DetailTemplated!.Params![ExpectedErrorDetail1DetailParam1Key].ShouldBe(ExpectedErrorDetail1DetailParam1Value);
+        result.ErrorDetails[0].DetailTemplated!.Params![ExpectedErrorDetail1DetailParam2Key].ShouldBe(ExpectedErrorDetail1DetailParam2Value);
+    }
+
+    [Fact]
+    public void WithErrorDetail_ErrorDetailInstance_AppendsItAfterExistingDetails()
+    {
+        // Arrange
+        var detail = new ErrorDetail("#/second", "Second detail");
+        var sut = Sut.Validation(ErrorUri.None(), "Test title").WithErrorDetail("#/first", "First detail");
+
+        // Act
+        var result = sut.WithErrorDetail(detail);
+
+        // Assert
+        result.ErrorDetails.Count.ShouldBe(2);
+        result.ErrorDetails[0].PropertyPointer.ShouldBe("#/first");
+        result.ErrorDetails[1].ShouldBeSameAs(detail);
+    }
+
+    [Fact]
+    public void WithErrorDetail_Always_LeavesOriginalUnchanged()
+    {
+        // Arrange
+        var sut = Sut.Validation(ErrorUri.None(), "Test title").WithErrorDetail("#/first", "First detail");
+
+        // Act
+        var result = sut.WithErrorDetail("#/second", "Second detail");
+
+        // Assert
+        result.ShouldNotBeSameAs(sut);
+        sut.ErrorDetails.Count.ShouldBe(1);
+        result.ErrorDetails.Count.ShouldBe(2);
+        result.Title.ShouldBe(sut.Title);
+        result.Category.ShouldBe(sut.Category);
+    }
+
+    [Fact]
+    public void WithErrorDetail_NullErrorDetail_ThrowsArgumentNullException()
+    {
+        // Arrange
+        var sut = Sut.Validation(ErrorUri.None(), "Test title");
+
+        // Act
+        var exception = Record.Exception(() => sut.WithErrorDetail(null!));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentNullException>();
+    }
+
+    [Fact]
+    public void WithErrorDetail_NullDetailText_ThrowsArgumentNullException()
+    {
+        // Arrange
+        var sut = Sut.Validation(ErrorUri.None(), "Test title");
+
+        // Act
+        var exception = Record.Exception(() => sut.WithErrorDetail("#/property", null!));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentNullException>();
+    }
+
+    [Fact]
+    public void ErrorDetails_CastToMutableList_CannotBeModified()
+    {
+        // Arrange
+        var sut = Sut.Validation(ErrorUri.None(), "Test title").WithErrorDetail("#/property", "Detail");
+
+        // Act
+        var exception = Record.Exception(() => ((IList<ErrorDetail>)sut.ErrorDetails).Add(new ErrorDetail(null, "x")));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<NotSupportedException>();
+        sut.ErrorDetails.Count.ShouldBe(1);
+    }
+
+    #endregion
+
+    #region ToBuilder
+
+    [Fact]
+    public void ToBuilder_BuildWithoutChanges_ReturnsEqualError()
+    {
+        // Arrange
+        var sut = Sut.Conflict(ErrorUri.Tag("tag:test.com,2024:Test"), "Test title", "Test description.",
+                ErrorUri.Locator("http://test.com/instance/1013"), "message-id", ("key", "value"))
+            .WithErrorDetail("#/property", "Detail")
+            .WithMetadata("retryAfter", 30);
+
+        // Act
+        var result = sut.ToBuilder().Build();
+
+        // Assert
+        result.ShouldBe(sut);
+        result.ShouldNotBeSameAs(sut);
+    }
+
+    [Fact]
+    public void ToBuilder_ChangedTitle_ReturnsCopyAndLeavesOriginalUnchanged()
+    {
+        // Arrange
+        var sut = Sut.Conflict(ErrorUri.None(), "Original title").WithErrorDetail("#/property", "Detail");
+
+        // Act
+        var result = sut.ToBuilder().WithTitle("Changed title").Build();
+
+        // Assert
+        result.Title.ShouldBe("Changed title");
+        result.ErrorDetails.ShouldBe(sut.ErrorDetails);
+        sut.Title.ShouldBe("Original title");
+    }
+
+    #endregion
+
+    #region ToString
+
+    [Fact]
+    public void ToString_DetailsAndMetadata_WritesTheirContent()
+    {
+        // Arrange
+        const string Expected = "Error { Category = Validation, TypeUri = https://example.org/e, Title = Bad, Detail = , "
+            + "DetailTemplated = TemplatedMessage { TemplateId = t, Params = { a = 1 } }, InstanceUri = , "
+            + "ErrorDetails = [ ErrorDetail { PropertyPointer = /x, Detail = bad x, DetailTemplated =  } ], "
+            + "Metadata = { n =  } }";
+
+        var sut = Sut.Validation(ErrorUri.Locator("https://example.org/e"), "Bad", detailTemplateId: "t",
+                detailNamedValues: ("a", 1))
+            .WithErrorDetail("/x", "bad x")
+            .WithMetadata("n", null);
+
+        // Act
+        var result = sut.ToString();
+
+        // Assert
+        result.ShouldBe(Expected);
+    }
+
+    [Fact]
+    public void ToString_NoDetailsOrMetadata_WritesEmptyCollections()
+    {
+        // Arrange
+        const string Expected = "Error { Category = NotFound, TypeUri = about:blank, Title = Missing, Detail = , "
+            + "DetailTemplated = , InstanceUri = , ErrorDetails = [], Metadata = {} }";
+
+        var sut = Sut.NotFound(ErrorUri.None(), "Missing");
+
+        // Act
+        var result = sut.ToString();
+
+        // Assert
+        result.ShouldBe(Expected);
     }
 
     #endregion
@@ -314,9 +362,9 @@ public class ErrorUnitTests
         sut.DetailTemplated.Params.ShouldNotBeNull();
         sut.DetailTemplated.Params.Count.ShouldBe(ExpectedDetailParamsCount);
         sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam1Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ToString().ShouldBe(ExpectedDetailParam1Value);
+        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ShouldBe(ExpectedDetailParam1Value);
         sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam2Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ToString().ShouldBe(ExpectedDetailParam2Value);
+        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ShouldBe(ExpectedDetailParam2Value);
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBe(ExpectedInstance);
@@ -348,7 +396,7 @@ public class ErrorUnitTests
             "Test description.",
             ErrorUri.Locator("http://test.com/instance/1013"),
             "message-id",
-            new Dictionary<string, object>
+            new Dictionary<string, object?>
             {
                 ["key1"] = "value1",
                 ["key2"] = "value2"
@@ -363,9 +411,9 @@ public class ErrorUnitTests
         sut.DetailTemplated.Params.ShouldNotBeNull();
         sut.DetailTemplated.Params.Count.ShouldBe(ExpectedDetailParamsCount);
         sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam1Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ToString().ShouldBe(ExpectedDetailParam1Value);
+        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ShouldBe(ExpectedDetailParam1Value);
         sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam2Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ToString().ShouldBe(ExpectedDetailParam2Value);
+        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ShouldBe(ExpectedDetailParam2Value);
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBe(ExpectedInstance);
@@ -438,9 +486,9 @@ public class ErrorUnitTests
         sut.DetailTemplated.Params.ShouldNotBeNull();
         sut.DetailTemplated.Params.Count.ShouldBe(ExpectedDetailParamsCount);
         sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam1Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ToString().ShouldBe(ExpectedDetailParam1Value);
+        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ShouldBe(ExpectedDetailParam1Value);
         sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam2Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ToString().ShouldBe(ExpectedDetailParam2Value);
+        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ShouldBe(ExpectedDetailParam2Value);
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBe(ExpectedInstance);
@@ -472,7 +520,7 @@ public class ErrorUnitTests
             "Test description.",
             ErrorUri.Locator("http://test.com/instance/1013"),
             "message-id",
-            new Dictionary<string, object>
+            new Dictionary<string, object?>
             {
                 ["key1"] = "value1",
                 ["key2"] = "value2"
@@ -487,9 +535,9 @@ public class ErrorUnitTests
         sut.DetailTemplated.Params.ShouldNotBeNull();
         sut.DetailTemplated.Params.Count.ShouldBe(ExpectedDetailParamsCount);
         sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam1Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ToString().ShouldBe(ExpectedDetailParam1Value);
+        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ShouldBe(ExpectedDetailParam1Value);
         sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam2Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ToString().ShouldBe(ExpectedDetailParam2Value);
+        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ShouldBe(ExpectedDetailParam2Value);
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBe(ExpectedInstance);
@@ -562,9 +610,9 @@ public class ErrorUnitTests
         sut.DetailTemplated.Params.ShouldNotBeNull();
         sut.DetailTemplated.Params.Count.ShouldBe(ExpectedDetailParamsCount);
         sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam1Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ToString().ShouldBe(ExpectedDetailParam1Value);
+        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ShouldBe(ExpectedDetailParam1Value);
         sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam2Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ToString().ShouldBe(ExpectedDetailParam2Value);
+        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ShouldBe(ExpectedDetailParam2Value);
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBe(ExpectedInstance);
@@ -596,7 +644,7 @@ public class ErrorUnitTests
             "Test description.",
             ErrorUri.Locator("http://test.com/instance/1013"),
             "message-id",
-            new Dictionary<string, object>
+            new Dictionary<string, object?>
             {
                 ["key1"] = "value1",
                 ["key2"] = "value2"
@@ -611,9 +659,9 @@ public class ErrorUnitTests
         sut.DetailTemplated.Params.ShouldNotBeNull();
         sut.DetailTemplated.Params.Count.ShouldBe(ExpectedDetailParamsCount);
         sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam1Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ToString().ShouldBe(ExpectedDetailParam1Value);
+        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ShouldBe(ExpectedDetailParam1Value);
         sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam2Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ToString().ShouldBe(ExpectedDetailParam2Value);
+        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ShouldBe(ExpectedDetailParam2Value);
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBe(ExpectedInstance);
@@ -686,9 +734,9 @@ public class ErrorUnitTests
         sut.DetailTemplated.Params.ShouldNotBeNull();
         sut.DetailTemplated.Params.Count.ShouldBe(ExpectedDetailParamsCount);
         sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam1Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ToString().ShouldBe(ExpectedDetailParam1Value);
+        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ShouldBe(ExpectedDetailParam1Value);
         sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam2Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ToString().ShouldBe(ExpectedDetailParam2Value);
+        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ShouldBe(ExpectedDetailParam2Value);
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBe(ExpectedInstance);
@@ -720,7 +768,7 @@ public class ErrorUnitTests
             "Test description.",
             ErrorUri.Locator("http://test.com/instance/1013"),
             "message-id",
-            new Dictionary<string, object>
+            new Dictionary<string, object?>
             {
                 ["key1"] = "value1",
                 ["key2"] = "value2"
@@ -735,9 +783,9 @@ public class ErrorUnitTests
         sut.DetailTemplated.Params.ShouldNotBeNull();
         sut.DetailTemplated.Params.Count.ShouldBe(ExpectedDetailParamsCount);
         sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam1Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ToString().ShouldBe(ExpectedDetailParam1Value);
+        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ShouldBe(ExpectedDetailParam1Value);
         sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam2Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ToString().ShouldBe(ExpectedDetailParam2Value);
+        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ShouldBe(ExpectedDetailParam2Value);
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBe(ExpectedInstance);
@@ -810,9 +858,9 @@ public class ErrorUnitTests
         sut.DetailTemplated.Params.ShouldNotBeNull();
         sut.DetailTemplated.Params.Count.ShouldBe(ExpectedDetailParamsCount);
         sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam1Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ToString().ShouldBe(ExpectedDetailParam1Value);
+        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ShouldBe(ExpectedDetailParam1Value);
         sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam2Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ToString().ShouldBe(ExpectedDetailParam2Value);
+        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ShouldBe(ExpectedDetailParam2Value);
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBe(ExpectedInstance);
@@ -844,7 +892,7 @@ public class ErrorUnitTests
             "Test description.",
             ErrorUri.Locator("http://test.com/instance/1013"),
             "message-id",
-            new Dictionary<string, object>
+            new Dictionary<string, object?>
             {
                 ["key1"] = "value1",
                 ["key2"] = "value2"
@@ -859,9 +907,9 @@ public class ErrorUnitTests
         sut.DetailTemplated.Params.ShouldNotBeNull();
         sut.DetailTemplated.Params.Count.ShouldBe(ExpectedDetailParamsCount);
         sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam1Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ToString().ShouldBe(ExpectedDetailParam1Value);
+        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ShouldBe(ExpectedDetailParam1Value);
         sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam2Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ToString().ShouldBe(ExpectedDetailParam2Value);
+        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ShouldBe(ExpectedDetailParam2Value);
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBe(ExpectedInstance);
@@ -934,9 +982,9 @@ public class ErrorUnitTests
         sut.DetailTemplated.Params.ShouldNotBeNull();
         sut.DetailTemplated.Params.Count.ShouldBe(ExpectedDetailParamsCount);
         sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam1Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ToString().ShouldBe(ExpectedDetailParam1Value);
+        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ShouldBe(ExpectedDetailParam1Value);
         sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam2Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ToString().ShouldBe(ExpectedDetailParam2Value);
+        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ShouldBe(ExpectedDetailParam2Value);
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBe(ExpectedInstance);
@@ -968,7 +1016,7 @@ public class ErrorUnitTests
             "Test description.",
             ErrorUri.Locator("http://test.com/instance/1013"),
             "message-id",
-            new Dictionary<string, object>
+            new Dictionary<string, object?>
             {
                 ["key1"] = "value1",
                 ["key2"] = "value2"
@@ -983,9 +1031,9 @@ public class ErrorUnitTests
         sut.DetailTemplated.Params.ShouldNotBeNull();
         sut.DetailTemplated.Params.Count.ShouldBe(ExpectedDetailParamsCount);
         sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam1Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ToString().ShouldBe(ExpectedDetailParam1Value);
+        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ShouldBe(ExpectedDetailParam1Value);
         sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam2Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ToString().ShouldBe(ExpectedDetailParam2Value);
+        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ShouldBe(ExpectedDetailParam2Value);
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBe(ExpectedInstance);
@@ -1058,9 +1106,9 @@ public class ErrorUnitTests
         sut.DetailTemplated.Params.ShouldNotBeNull();
         sut.DetailTemplated.Params.Count.ShouldBe(ExpectedDetailParamsCount);
         sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam1Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ToString().ShouldBe(ExpectedDetailParam1Value);
+        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ShouldBe(ExpectedDetailParam1Value);
         sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam2Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ToString().ShouldBe(ExpectedDetailParam2Value);
+        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ShouldBe(ExpectedDetailParam2Value);
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBe(ExpectedInstance);
@@ -1092,7 +1140,7 @@ public class ErrorUnitTests
             "Test description.",
             ErrorUri.Locator("http://test.com/instance/1013"),
             "message-id",
-            new Dictionary<string, object>
+            new Dictionary<string, object?>
             {
                 ["key1"] = "value1",
                 ["key2"] = "value2"
@@ -1107,9 +1155,9 @@ public class ErrorUnitTests
         sut.DetailTemplated.Params.ShouldNotBeNull();
         sut.DetailTemplated.Params.Count.ShouldBe(ExpectedDetailParamsCount);
         sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam1Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ToString().ShouldBe(ExpectedDetailParam1Value);
+        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ShouldBe(ExpectedDetailParam1Value);
         sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam2Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ToString().ShouldBe(ExpectedDetailParam2Value);
+        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ShouldBe(ExpectedDetailParam2Value);
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBe(ExpectedInstance);
@@ -1182,9 +1230,9 @@ public class ErrorUnitTests
         sut.DetailTemplated.Params.ShouldNotBeNull();
         sut.DetailTemplated.Params.Count.ShouldBe(ExpectedDetailParamsCount);
         sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam1Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ToString().ShouldBe(ExpectedDetailParam1Value);
+        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ShouldBe(ExpectedDetailParam1Value);
         sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam2Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ToString().ShouldBe(ExpectedDetailParam2Value);
+        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ShouldBe(ExpectedDetailParam2Value);
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBe(ExpectedInstance);
@@ -1216,7 +1264,7 @@ public class ErrorUnitTests
             "Test description.",
             ErrorUri.Locator("http://test.com/instance/1013"),
             "message-id",
-            new Dictionary<string, object>
+            new Dictionary<string, object?>
             {
                 ["key1"] = "value1",
                 ["key2"] = "value2"
@@ -1231,9 +1279,9 @@ public class ErrorUnitTests
         sut.DetailTemplated.Params.ShouldNotBeNull();
         sut.DetailTemplated.Params.Count.ShouldBe(ExpectedDetailParamsCount);
         sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam1Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ToString().ShouldBe(ExpectedDetailParam1Value);
+        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ShouldBe(ExpectedDetailParam1Value);
         sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam2Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ToString().ShouldBe(ExpectedDetailParam2Value);
+        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ShouldBe(ExpectedDetailParam2Value);
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBe(ExpectedInstance);
@@ -1306,9 +1354,9 @@ public class ErrorUnitTests
         sut.DetailTemplated.Params.ShouldNotBeNull();
         sut.DetailTemplated.Params.Count.ShouldBe(ExpectedDetailParamsCount);
         sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam1Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ToString().ShouldBe(ExpectedDetailParam1Value);
+        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ShouldBe(ExpectedDetailParam1Value);
         sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam2Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ToString().ShouldBe(ExpectedDetailParam2Value);
+        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ShouldBe(ExpectedDetailParam2Value);
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBe(ExpectedInstance);
@@ -1340,7 +1388,7 @@ public class ErrorUnitTests
             "Test description.",
             ErrorUri.Locator("http://test.com/instance/1013"),
             "message-id",
-            new Dictionary<string, object>
+            new Dictionary<string, object?>
             {
                 ["key1"] = "value1",
                 ["key2"] = "value2"
@@ -1355,9 +1403,9 @@ public class ErrorUnitTests
         sut.DetailTemplated.Params.ShouldNotBeNull();
         sut.DetailTemplated.Params.Count.ShouldBe(ExpectedDetailParamsCount);
         sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam1Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ToString().ShouldBe(ExpectedDetailParam1Value);
+        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ShouldBe(ExpectedDetailParam1Value);
         sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam2Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ToString().ShouldBe(ExpectedDetailParam2Value);
+        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ShouldBe(ExpectedDetailParam2Value);
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBe(ExpectedInstance);
@@ -1430,9 +1478,9 @@ public class ErrorUnitTests
         sut.DetailTemplated.Params.ShouldNotBeNull();
         sut.DetailTemplated.Params.Count.ShouldBe(ExpectedDetailParamsCount);
         sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam1Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ToString().ShouldBe(ExpectedDetailParam1Value);
+        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ShouldBe(ExpectedDetailParam1Value);
         sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam2Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ToString().ShouldBe(ExpectedDetailParam2Value);
+        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ShouldBe(ExpectedDetailParam2Value);
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBe(ExpectedInstance);
@@ -1464,7 +1512,7 @@ public class ErrorUnitTests
             "Test description.",
             ErrorUri.Locator("http://test.com/instance/1013"),
             "message-id",
-            new Dictionary<string, object>
+            new Dictionary<string, object?>
             {
                 ["key1"] = "value1",
                 ["key2"] = "value2"
@@ -1479,9 +1527,9 @@ public class ErrorUnitTests
         sut.DetailTemplated.Params.ShouldNotBeNull();
         sut.DetailTemplated.Params.Count.ShouldBe(ExpectedDetailParamsCount);
         sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam1Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ToString().ShouldBe(ExpectedDetailParam1Value);
+        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ShouldBe(ExpectedDetailParam1Value);
         sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam2Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ToString().ShouldBe(ExpectedDetailParam2Value);
+        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ShouldBe(ExpectedDetailParam2Value);
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBe(ExpectedInstance);
@@ -1554,9 +1602,9 @@ public class ErrorUnitTests
         sut.DetailTemplated.Params.ShouldNotBeNull();
         sut.DetailTemplated.Params.Count.ShouldBe(ExpectedDetailParamsCount);
         sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam1Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ToString().ShouldBe(ExpectedDetailParam1Value);
+        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ShouldBe(ExpectedDetailParam1Value);
         sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam2Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ToString().ShouldBe(ExpectedDetailParam2Value);
+        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ShouldBe(ExpectedDetailParam2Value);
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBe(ExpectedInstance);
@@ -1588,7 +1636,7 @@ public class ErrorUnitTests
             "Test description.",
             ErrorUri.Locator("http://test.com/instance/1013"),
             "message-id",
-            new Dictionary<string, object>
+            new Dictionary<string, object?>
             {
                 ["key1"] = "value1",
                 ["key2"] = "value2"
@@ -1603,9 +1651,9 @@ public class ErrorUnitTests
         sut.DetailTemplated.Params.ShouldNotBeNull();
         sut.DetailTemplated.Params.Count.ShouldBe(ExpectedDetailParamsCount);
         sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam1Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ToString().ShouldBe(ExpectedDetailParam1Value);
+        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ShouldBe(ExpectedDetailParam1Value);
         sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam2Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ToString().ShouldBe(ExpectedDetailParam2Value);
+        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ShouldBe(ExpectedDetailParam2Value);
         sut.ErrorDetails.ShouldNotBeNull();
         sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         sut.InstanceUri.ShouldBe(ExpectedInstance);
@@ -1647,126 +1695,6 @@ public class ErrorUnitTests
 
     #endregion
 
-    #region Deserialize
-
-    [Fact]
-    public void Deserialize_AllPropertiesAndMicrosoftSerializer_ReturnsErrorWithAllProperties()
-    {
-        // Arrange
-        const ErrorCategory ExpectedCategory = ErrorCategory.NotFound;
-        const string ExpectedDetail = "Test description.";
-        const string ExpectedDetailTemplateId = "message-id";
-        const int ExpectedDetailParamsCount = 2;
-        const string ExpectedDetailParam1Key = "key1";
-        const string ExpectedDetailParam1Value = "value1";
-        const string ExpectedDetailParam2Key = "key2";
-        const string ExpectedDetailParam2Value = "value2";
-        const int ExpectedErrorDetailsCount = 1;
-        const string ExpectedErrorDetail1PropertyPointer = "#/property1";
-        const string ExpectedErrorDetail1Detail = "Property 1 test detail";
-        const string ExpectedErrorDetail1DetailTemplateId = "message-property-id";
-        const int ExpectedErrorDetail1DetailParamsCount = 2;
-        const string ExpectedErrorDetail1DetailParam1Key = "pk1";
-        const string ExpectedErrorDetail1DetailParam1Value = "pv1";
-        const string ExpectedErrorDetail1DetailParam2Key = "pk2";
-        const string ExpectedErrorDetail1DetailParam2Value = "pv2";
-        const string ExpectedInstance = "http://test.com/instance/1013";
-        const string ExpectedTitle = "Test title";
-        const string ExpectedTypeUri = "tag:test.com,2024:Test";
-
-        const string Json = """{"Category":3,"TypeUri":"tag:test.com,2024:Test","Title":"Test title","Detail":"Test description.","DetailTemplated":{"TemplateId":"message-id","Params":{"key1":"value1","key2":"value2"}},"InstanceUri":"http://test.com/instance/1013","ErrorDetails":[{"PropertyPointer":"#/property1","Detail":"Property 1 test detail","DetailTemplated":{"TemplateId":"message-property-id","Params":{"pk1":"pv1","pk2":"pv2"}}}]}""";
-
-        // Act
-        var sut = SerializationHelper.DeserializeWithMicrosoft<Sut>(Json);
-
-        // Assert
-        sut.Category.ShouldBe(ExpectedCategory);
-        sut.Detail.ShouldBe(ExpectedDetail);
-        sut.DetailTemplated.ShouldNotBeNull();
-        sut.DetailTemplated.TemplateId.ShouldBe(ExpectedDetailTemplateId);
-        sut.DetailTemplated.Params.ShouldNotBeNull();
-        sut.DetailTemplated.Params.Count.ShouldBe(ExpectedDetailParamsCount);
-        sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam1Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ToString().ShouldBe(ExpectedDetailParam1Value);
-        sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam2Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ToString().ShouldBe(ExpectedDetailParam2Value);
-        sut.ErrorDetails.ShouldNotBeNull();
-        sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
-        sut.ErrorDetails[0].PropertyPointer.ShouldBe(ExpectedErrorDetail1PropertyPointer);
-        sut.ErrorDetails[0].Detail.ShouldBe(ExpectedErrorDetail1Detail);
-        sut.ErrorDetails[0].DetailTemplated.ShouldNotBeNull();
-        sut.ErrorDetails[0].DetailTemplated!.TemplateId.ShouldBe(ExpectedErrorDetail1DetailTemplateId);
-        sut.ErrorDetails[0].DetailTemplated!.Params.ShouldNotBeNull();
-        sut.ErrorDetails[0].DetailTemplated!.Params!.Count.ShouldBe(ExpectedErrorDetail1DetailParamsCount);
-        sut.ErrorDetails[0].DetailTemplated!.Params!.Keys.ShouldContain(ExpectedErrorDetail1DetailParam1Key);
-        sut.ErrorDetails[0].DetailTemplated!.Params![ExpectedErrorDetail1DetailParam1Key].ToString().ShouldBe(ExpectedErrorDetail1DetailParam1Value);
-        sut.ErrorDetails[0].DetailTemplated!.Params!.Keys.ShouldContain(ExpectedErrorDetail1DetailParam2Key);
-        sut.ErrorDetails[0].DetailTemplated!.Params![ExpectedErrorDetail1DetailParam2Key].ToString().ShouldBe(ExpectedErrorDetail1DetailParam2Value);
-        sut.InstanceUri.ShouldBe(ExpectedInstance);
-        sut.Title.ShouldBe(ExpectedTitle);
-        sut.TypeUri.ShouldBe(ExpectedTypeUri);
-    }
-
-    [Fact]
-    public void Deserialize_AllPropertiesAndNewtonsoftSerializer_ReturnsErrorWithAllProperties()
-    {
-        // Arrange
-        const ErrorCategory ExpectedCategory = ErrorCategory.NotFound;
-        const string ExpectedDetail = "Test description.";
-        const string ExpectedDetailTemplateId = "message-id";
-        const int ExpectedDetailParamsCount = 2;
-        const string ExpectedDetailParam1Key = "key1";
-        const string ExpectedDetailParam1Value = "value1";
-        const string ExpectedDetailParam2Key = "key2";
-        const string ExpectedDetailParam2Value = "value2";
-        const int ExpectedErrorDetailsCount = 1;
-        const string ExpectedErrorDetail1PropertyPointer = "#/property1";
-        const string ExpectedErrorDetail1Detail = "Property 1 test detail";
-        const string ExpectedErrorDetail1DetailTemplateId = "message-property-id";
-        const int ExpectedErrorDetail1DetailParamsCount = 2;
-        const string ExpectedErrorDetail1DetailParam1Key = "pk1";
-        const string ExpectedErrorDetail1DetailParam1Value = "pv1";
-        const string ExpectedErrorDetail1DetailParam2Key = "pk2";
-        const string ExpectedErrorDetail1DetailParam2Value = "pv2";
-        const string ExpectedInstance = "http://test.com/instance/1013";
-        const string ExpectedTitle = "Test title";
-        const string ExpectedTypeUri = "tag:test.com,2024:Test";
-
-        const string Json = """{"Category":3,"TypeUri":"tag:test.com,2024:Test","Title":"Test title","Detail":"Test description.","DetailTemplated":{"TemplateId":"message-id","Params":{"key1":"value1","key2":"value2"}},"InstanceUri":"http://test.com/instance/1013","ErrorDetails":[{"PropertyPointer":"#/property1","Detail":"Property 1 test detail","DetailTemplated":{"TemplateId":"message-property-id","Params":{"pk1":"pv1","pk2":"pv2"}}}]}""";
-
-        // Act
-        var sut = SerializationHelper.DeserializeWithNewtonsoft<Sut>(Json);
-
-        // Assert
-        sut.Category.ShouldBe(ExpectedCategory);
-        sut.Detail.ShouldBe(ExpectedDetail);
-        sut.DetailTemplated.ShouldNotBeNull();
-        sut.DetailTemplated.TemplateId.ShouldBe(ExpectedDetailTemplateId);
-        sut.DetailTemplated.Params.ShouldNotBeNull();
-        sut.DetailTemplated.Params.Count.ShouldBe(ExpectedDetailParamsCount);
-        sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam1Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam1Key].ToString().ShouldBe(ExpectedDetailParam1Value);
-        sut.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam2Key);
-        sut.DetailTemplated.Params[ExpectedDetailParam2Key].ToString().ShouldBe(ExpectedDetailParam2Value);
-        sut.ErrorDetails.ShouldNotBeNull();
-        sut.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
-        sut.ErrorDetails[0].PropertyPointer.ShouldBe(ExpectedErrorDetail1PropertyPointer);
-        sut.ErrorDetails[0].Detail.ShouldBe(ExpectedErrorDetail1Detail);
-        sut.ErrorDetails[0].DetailTemplated.ShouldNotBeNull();
-        sut.ErrorDetails[0].DetailTemplated!.TemplateId.ShouldBe(ExpectedErrorDetail1DetailTemplateId);
-        sut.ErrorDetails[0].DetailTemplated!.Params.ShouldNotBeNull();
-        sut.ErrorDetails[0].DetailTemplated!.Params!.Count.ShouldBe(ExpectedErrorDetail1DetailParamsCount);
-        sut.ErrorDetails[0].DetailTemplated!.Params!.Keys.ShouldContain(ExpectedErrorDetail1DetailParam1Key);
-        sut.ErrorDetails[0].DetailTemplated!.Params![ExpectedErrorDetail1DetailParam1Key].ToString().ShouldBe(ExpectedErrorDetail1DetailParam1Value);
-        sut.ErrorDetails[0].DetailTemplated!.Params!.Keys.ShouldContain(ExpectedErrorDetail1DetailParam2Key);
-        sut.ErrorDetails[0].DetailTemplated!.Params![ExpectedErrorDetail1DetailParam2Key].ToString().ShouldBe(ExpectedErrorDetail1DetailParam2Value);
-        sut.InstanceUri.ShouldBe(ExpectedInstance);
-        sut.Title.ShouldBe(ExpectedTitle);
-        sut.TypeUri.ShouldBe(ExpectedTypeUri);
-    }
-
-    #endregion
-
     #region Serialize
 
     [Fact]
@@ -1783,7 +1711,7 @@ public class ErrorUnitTests
             "messageId",
             ("key1", "value1"), ("key2", "value2"));
 
-        sut.AddDetail("#/property1", "Property 1 test detail", "message-property-id", ("pk1", "pv1"), ("pk2", "pv2"));
+        sut = sut.WithErrorDetail("#/property1", "Property 1 test detail", "message-property-id", ("pk1", "pv1"), ("pk2", "pv2"));
 
         // Act
         var result = SerializationHelper.SerializeWithMicrosoft(sut);
@@ -1806,7 +1734,7 @@ public class ErrorUnitTests
             "messageId",
             ("key1", "value1"), ("key2", "value2"));
 
-        sut.AddDetail("#/property1", "Property 1 test detail", "message-property-id", ("pk1", "pv1"), ("pk2", "pv2"));
+        sut = sut.WithErrorDetail("#/property1", "Property 1 test detail", "message-property-id", ("pk1", "pv1"), ("pk2", "pv2"));
 
         // Act
         var result = SerializationHelper.SerializeWithNewtonsoft(sut);

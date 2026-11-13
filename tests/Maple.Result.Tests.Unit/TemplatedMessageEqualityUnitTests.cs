@@ -34,12 +34,12 @@ public class TemplatedMessageEqualityUnitTests
     public void Equals_TwoMessagesWithEqualParams_AreEqual()
     {
         // Arrange
-        var first = new Sut("template.id", new Dictionary<string, object>
+        var first = new Sut("template.id", new Dictionary<string, object?>
         {
             ["userName"] = "johnny",
             ["bonusPoints"] = 100
         });
-        var second = new Sut("template.id", new Dictionary<string, object>
+        var second = new Sut("template.id", new Dictionary<string, object?>
         {
             ["userName"] = "johnny",
             ["bonusPoints"] = 100
@@ -55,12 +55,12 @@ public class TemplatedMessageEqualityUnitTests
     public void Equals_MessagesWithParamsInDifferentOrder_AreEqual()
     {
         // Arrange
-        var first = new Sut("template.id", new Dictionary<string, object>
+        var first = new Sut("template.id", new Dictionary<string, object?>
         {
             ["userName"] = "johnny",
             ["bonusPoints"] = 100
         });
-        var second = new Sut("template.id", new Dictionary<string, object>
+        var second = new Sut("template.id", new Dictionary<string, object?>
         {
             ["bonusPoints"] = 100,
             ["userName"] = "johnny"
@@ -76,8 +76,8 @@ public class TemplatedMessageEqualityUnitTests
     public void Equals_MessagesWithDifferentParamValues_AreNotEqual()
     {
         // Arrange
-        var first = new Sut("template.id", new Dictionary<string, object> { ["userName"] = "johnny" });
-        var second = new Sut("template.id", new Dictionary<string, object> { ["userName"] = "jane" });
+        var first = new Sut("template.id", new Dictionary<string, object?> { ["userName"] = "johnny" });
+        var second = new Sut("template.id", new Dictionary<string, object?> { ["userName"] = "jane" });
 
         // Act & Assert
         first.Equals(second).ShouldBeFalse();
@@ -88,8 +88,8 @@ public class TemplatedMessageEqualityUnitTests
     public void Equals_MessagesWithDifferentParamKeys_AreNotEqual()
     {
         // Arrange
-        var first = new Sut("template.id", new Dictionary<string, object> { ["userName"] = "johnny" });
-        var second = new Sut("template.id", new Dictionary<string, object> { ["userId"] = "johnny" });
+        var first = new Sut("template.id", new Dictionary<string, object?> { ["userName"] = "johnny" });
+        var second = new Sut("template.id", new Dictionary<string, object?> { ["userId"] = "johnny" });
 
         // Act & Assert
         first.Equals(second).ShouldBeFalse();
@@ -100,8 +100,8 @@ public class TemplatedMessageEqualityUnitTests
     public void Equals_MessagesWithDifferentParamCount_AreNotEqual()
     {
         // Arrange
-        var first = new Sut("template.id", new Dictionary<string, object> { ["userName"] = "johnny" });
-        var second = new Sut("template.id", new Dictionary<string, object>
+        var first = new Sut("template.id", new Dictionary<string, object?> { ["userName"] = "johnny" });
+        var second = new Sut("template.id", new Dictionary<string, object?>
         {
             ["userName"] = "johnny",
             ["bonusPoints"] = 100
@@ -129,7 +129,7 @@ public class TemplatedMessageEqualityUnitTests
     {
         // Arrange
         var withNullParams = new Sut("template.id");
-        var withEmptyParams = new Sut("template.id", new Dictionary<string, object>());
+        var withEmptyParams = new Sut("template.id", new Dictionary<string, object?>());
 
         // Act & Assert
         withNullParams.Equals(withEmptyParams).ShouldBeFalse();
@@ -144,10 +144,10 @@ public class TemplatedMessageEqualityUnitTests
     public void Params_ExposedAsReadOnly()
     {
         // Arrange
-        var sut = new Sut("template.id", new Dictionary<string, object> { ["userName"] = "johnny" });
+        var sut = new Sut("template.id", new Dictionary<string, object?> { ["userName"] = "johnny" });
 
         // Act & Assert
-        sut.Params.ShouldBeAssignableTo<IReadOnlyDictionary<string, object>>();
+        sut.Params.ShouldBeAssignableTo<IReadOnlyDictionary<string, object?>>();
     }
 
     #endregion

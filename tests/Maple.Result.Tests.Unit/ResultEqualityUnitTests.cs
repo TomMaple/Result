@@ -45,9 +45,9 @@ public class ResultEqualityUnitTests
     {
         // Arrange
         var first = Result.FromError(
-            CreateError().AddDetail("#/email", "The email is required.", "errors.email.required", ("minLength", 3)));
+            CreateError().WithErrorDetail("#/email", "The email is required.", "errors.email.required", ("minLength", 3)));
         var second = Result.FromError(
-            CreateError().AddDetail("#/email", "The email is required.", "errors.email.required", ("minLength", 3)));
+            CreateError().WithErrorDetail("#/email", "The email is required.", "errors.email.required", ("minLength", 3)));
 
         // Act & Assert
         first.Equals(second).ShouldBeTrue();
@@ -60,9 +60,9 @@ public class ResultEqualityUnitTests
     {
         // Arrange
         var first = Result.FromError(
-            CreateError().AddDetail("#/email", "The email is required.", "errors.email.required", ("minLength", 3)));
+            CreateError().WithErrorDetail("#/email", "The email is required.", "errors.email.required", ("minLength", 3)));
         var second = Result.FromError(
-            CreateError().AddDetail("#/email", "The email is required.", "errors.email.required", ("minLength", 5)));
+            CreateError().WithErrorDetail("#/email", "The email is required.", "errors.email.required", ("minLength", 5)));
 
         // Act & Assert
         first.Equals(second).ShouldBeFalse();
@@ -140,9 +140,9 @@ public class ResultEqualityUnitTests
     {
         // Arrange
         var first = Result<int>.FromError(
-            CreateError().AddDetail("#/email", "The email is required.", "errors.email.required", ("minLength", 3)));
+            CreateError().WithErrorDetail("#/email", "The email is required.", "errors.email.required", ("minLength", 3)));
         var second = Result<int>.FromError(
-            CreateError().AddDetail("#/email", "The email is required.", "errors.email.required", ("minLength", 3)));
+            CreateError().WithErrorDetail("#/email", "The email is required.", "errors.email.required", ("minLength", 3)));
 
         // Act & Assert
         first.Equals(second).ShouldBeTrue();
@@ -155,9 +155,9 @@ public class ResultEqualityUnitTests
     {
         // Arrange
         var first = Result<int>.FromError(
-            CreateError().AddDetail("#/email", "The email is required.", "errors.email.required", ("minLength", 3)));
+            CreateError().WithErrorDetail("#/email", "The email is required.", "errors.email.required", ("minLength", 3)));
         var second = Result<int>.FromError(
-            CreateError().AddDetail("#/email", "The email is required.", "errors.email.required", ("minLength", 5)));
+            CreateError().WithErrorDetail("#/email", "The email is required.", "errors.email.required", ("minLength", 5)));
 
         // Act & Assert
         first.Equals(second).ShouldBeFalse();

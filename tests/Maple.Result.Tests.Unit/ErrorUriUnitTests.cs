@@ -44,16 +44,23 @@ public class ErrorUriUnitTests
     }
 
     [Fact]
-    public void Value_ConstructedWithNull_ReturnsAboutBlank()
+    public void ToString_DefaultInstance_ReturnsAboutBlank()
     {
-        // Arrange
-        const string ExpectedValue = "about:blank";
-
         // Act
-        var result = new ErrorUri(null!);
+        var result = default(ErrorUri).ToString();
 
         // Assert
-        result.Value.ShouldBe(ExpectedValue);
+        result.ShouldBe("about:blank");
+    }
+
+    [Fact]
+    public void ToString_Locator_ReturnsUri()
+    {
+        // Act
+        var result = ErrorUri.Locator("https://example.com/errors/1").ToString();
+
+        // Assert
+        result.ShouldBe("https://example.com/errors/1");
     }
 
     [Fact]

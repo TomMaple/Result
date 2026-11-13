@@ -16,91 +16,6 @@ namespace Maple.Result.Tests.Unit;
 
 public class ResultUnitTests
 {
-    #region Result, ctor
-
-    [Fact]
-    public void Ctor_Success_ReturnsSuccessResult()
-    {
-        // Act
-        var result = new Sut();
-
-        // Assert
-        result.ShouldNotBeNull();
-        result.IsSuccess().ShouldBeTrue();
-    }
-
-    [Fact]
-    public void Ctor_Error_ReturnsErrorResult()
-    {
-        // Arrange
-        const ErrorCategory ExpectedCategory = ErrorCategory.NotFound;
-        const string ExpectedDetail = "Test description.";
-        const string ExpectedDetailTemplateId = "message-id";
-        const int ExpectedDetailParamsCount = 2;
-        const string ExpectedDetailParam1Key = "key1";
-        const string ExpectedDetailParam1Value = "value1";
-        const string ExpectedDetailParam2Key = "key2";
-        const string ExpectedDetailParam2Value = "value2";
-        const int ExpectedErrorDetailsCount = 1;
-        const string ExpectedErrorDetail1PropertyPointer = "#/property1";
-        const string ExpectedErrorDetail1Detail = "Property 1 test detail";
-        const string ExpectedErrorDetail1DetailTemplateId = "message-property-id";
-        const int ExpectedErrorDetail1DetailParamsCount = 2;
-        const string ExpectedErrorDetail1DetailParam1Key = "pk1";
-        const string ExpectedErrorDetail1DetailParam1Value = "pv1";
-        const string ExpectedErrorDetail1DetailParam2Key = "pk2";
-        const string ExpectedErrorDetail1DetailParam2Value = "pv2";
-        const string ExpectedInstance = "http://test.com/instance/1013";
-        const string ExpectedTitle = "Test title";
-        const string ExpectedTypeUri = "tag:test.com,2024:Test";
-
-        var error = Error.NotFound(
-            ErrorUri.Tag("tag:test.com,2024:Test"),
-            "Test title",
-            "Test description.",
-            ErrorUri.Locator("http://test.com/instance/1013"),
-            "message-id",
-            ("key1", "value1"), ("key2", "value2"));
-
-        error.AddDetail("#/property1", "Property 1 test detail", "message-property-id", ("pk1", "pv1"), ("pk2", "pv2"));
-
-        // Act
-        var result = new Sut(error);
-
-        // Assert
-        result.ShouldNotBeNull();
-        result.IsSuccess().ShouldBeFalse();
-        result.Error.ShouldNotBeNull();
-
-        result.Error.Category.ShouldBe(ExpectedCategory);
-        result.Error.Detail.ShouldBe(ExpectedDetail);
-        result.Error.DetailTemplated.ShouldNotBeNull();
-        result.Error.DetailTemplated.TemplateId.ShouldBe(ExpectedDetailTemplateId);
-        result.Error.DetailTemplated.Params.ShouldNotBeNull();
-        result.Error.DetailTemplated.Params.Count.ShouldBe(ExpectedDetailParamsCount);
-        result.Error.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam1Key);
-        result.Error.DetailTemplated.Params[ExpectedDetailParam1Key].ToString().ShouldBe(ExpectedDetailParam1Value);
-        result.Error.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam2Key);
-        result.Error.DetailTemplated.Params[ExpectedDetailParam2Key].ToString().ShouldBe(ExpectedDetailParam2Value);
-        result.Error.ErrorDetails.ShouldNotBeNull();
-        result.Error.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
-        result.Error.ErrorDetails[0].PropertyPointer.ShouldBe(ExpectedErrorDetail1PropertyPointer);
-        result.Error.ErrorDetails[0].Detail.ShouldBe(ExpectedErrorDetail1Detail);
-        result.Error.ErrorDetails[0].DetailTemplated.ShouldNotBeNull();
-        result.Error.ErrorDetails[0].DetailTemplated!.TemplateId.ShouldBe(ExpectedErrorDetail1DetailTemplateId);
-        result.Error.ErrorDetails[0].DetailTemplated!.Params.ShouldNotBeNull();
-        result.Error.ErrorDetails[0].DetailTemplated!.Params!.Count.ShouldBe(ExpectedErrorDetail1DetailParamsCount);
-        result.Error.ErrorDetails[0].DetailTemplated!.Params!.Keys.ShouldContain(ExpectedErrorDetail1DetailParam1Key);
-        result.Error.ErrorDetails[0].DetailTemplated!.Params![ExpectedErrorDetail1DetailParam1Key].ToString().ShouldBe(ExpectedErrorDetail1DetailParam1Value);
-        result.Error.ErrorDetails[0].DetailTemplated!.Params!.Keys.ShouldContain(ExpectedErrorDetail1DetailParam2Key);
-        result.Error.ErrorDetails[0].DetailTemplated!.Params![ExpectedErrorDetail1DetailParam2Key].ToString().ShouldBe(ExpectedErrorDetail1DetailParam2Value);
-        result.Error.InstanceUri.ShouldBe(ExpectedInstance);
-        result.Error.Title.ShouldBe(ExpectedTitle);
-        result.Error.TypeUri.ShouldBe(ExpectedTypeUri);
-    }
-
-    #endregion
-
     #region Result, implicit operator
 
     [Fact]
@@ -136,7 +51,7 @@ public class ResultUnitTests
             "message-id",
             ("key1", "value1"), ("key2", "value2"));
 
-        error.AddDetail("#/property1", "Property 1 test detail", "message-property-id", ("pk1", "pv1"), ("pk2", "pv2"));
+        error = error.WithErrorDetail("#/property1", "Property 1 test detail", "message-property-id", ("pk1", "pv1"), ("pk2", "pv2"));
 
         // Act
         Sut result = error;
@@ -153,9 +68,9 @@ public class ResultUnitTests
         result.Error.DetailTemplated.Params.ShouldNotBeNull();
         result.Error.DetailTemplated.Params.Count.ShouldBe(ExpectedDetailParamsCount);
         result.Error.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam1Key);
-        result.Error.DetailTemplated.Params[ExpectedDetailParam1Key].ToString().ShouldBe(ExpectedDetailParam1Value);
+        result.Error.DetailTemplated.Params[ExpectedDetailParam1Key].ShouldBe(ExpectedDetailParam1Value);
         result.Error.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam2Key);
-        result.Error.DetailTemplated.Params[ExpectedDetailParam2Key].ToString().ShouldBe(ExpectedDetailParam2Value);
+        result.Error.DetailTemplated.Params[ExpectedDetailParam2Key].ShouldBe(ExpectedDetailParam2Value);
         result.Error.ErrorDetails.ShouldNotBeNull();
         result.Error.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         result.Error.ErrorDetails[0].PropertyPointer.ShouldBe(ExpectedErrorDetail1PropertyPointer);
@@ -165,9 +80,9 @@ public class ResultUnitTests
         result.Error.ErrorDetails[0].DetailTemplated!.Params.ShouldNotBeNull();
         result.Error.ErrorDetails[0].DetailTemplated!.Params!.Count.ShouldBe(ExpectedErrorDetail1DetailParamsCount);
         result.Error.ErrorDetails[0].DetailTemplated!.Params!.Keys.ShouldContain(ExpectedErrorDetail1DetailParam1Key);
-        result.Error.ErrorDetails[0].DetailTemplated!.Params![ExpectedErrorDetail1DetailParam1Key].ToString().ShouldBe(ExpectedErrorDetail1DetailParam1Value);
+        result.Error.ErrorDetails[0].DetailTemplated!.Params![ExpectedErrorDetail1DetailParam1Key].ShouldBe(ExpectedErrorDetail1DetailParam1Value);
         result.Error.ErrorDetails[0].DetailTemplated!.Params!.Keys.ShouldContain(ExpectedErrorDetail1DetailParam2Key);
-        result.Error.ErrorDetails[0].DetailTemplated!.Params![ExpectedErrorDetail1DetailParam2Key].ToString().ShouldBe(ExpectedErrorDetail1DetailParam2Value);
+        result.Error.ErrorDetails[0].DetailTemplated!.Params![ExpectedErrorDetail1DetailParam2Key].ShouldBe(ExpectedErrorDetail1DetailParam2Value);
         result.Error.InstanceUri.ShouldBe(ExpectedInstance);
         result.Error.Title.ShouldBe(ExpectedTitle);
         result.Error.TypeUri.ShouldBe(ExpectedTypeUri);
@@ -263,7 +178,7 @@ public class ResultUnitTests
             "message-id",
             ("key1", "value1"), ("key2", "value2"));
 
-        error.AddDetail("#/property1", "Property 1 test detail", "message-property-id", ("pk1", "pv1"), ("pk2", "pv2"));
+        error = error.WithErrorDetail("#/property1", "Property 1 test detail", "message-property-id", ("pk1", "pv1"), ("pk2", "pv2"));
 
         // Act
         var result = Sut.FromError(error);
@@ -280,9 +195,9 @@ public class ResultUnitTests
         result.Error.DetailTemplated.Params.ShouldNotBeNull();
         result.Error.DetailTemplated.Params.Count.ShouldBe(ExpectedDetailParamsCount);
         result.Error.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam1Key);
-        result.Error.DetailTemplated.Params[ExpectedDetailParam1Key].ToString().ShouldBe(ExpectedDetailParam1Value);
+        result.Error.DetailTemplated.Params[ExpectedDetailParam1Key].ShouldBe(ExpectedDetailParam1Value);
         result.Error.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam2Key);
-        result.Error.DetailTemplated.Params[ExpectedDetailParam2Key].ToString().ShouldBe(ExpectedDetailParam2Value);
+        result.Error.DetailTemplated.Params[ExpectedDetailParam2Key].ShouldBe(ExpectedDetailParam2Value);
         result.Error.ErrorDetails.ShouldNotBeNull();
         result.Error.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         result.Error.ErrorDetails[0].PropertyPointer.ShouldBe(ExpectedErrorDetail1PropertyPointer);
@@ -292,9 +207,9 @@ public class ResultUnitTests
         result.Error.ErrorDetails[0].DetailTemplated!.Params.ShouldNotBeNull();
         result.Error.ErrorDetails[0].DetailTemplated!.Params!.Count.ShouldBe(ExpectedErrorDetail1DetailParamsCount);
         result.Error.ErrorDetails[0].DetailTemplated!.Params!.Keys.ShouldContain(ExpectedErrorDetail1DetailParam1Key);
-        result.Error.ErrorDetails[0].DetailTemplated!.Params![ExpectedErrorDetail1DetailParam1Key].ToString().ShouldBe(ExpectedErrorDetail1DetailParam1Value);
+        result.Error.ErrorDetails[0].DetailTemplated!.Params![ExpectedErrorDetail1DetailParam1Key].ShouldBe(ExpectedErrorDetail1DetailParam1Value);
         result.Error.ErrorDetails[0].DetailTemplated!.Params!.Keys.ShouldContain(ExpectedErrorDetail1DetailParam2Key);
-        result.Error.ErrorDetails[0].DetailTemplated!.Params![ExpectedErrorDetail1DetailParam2Key].ToString().ShouldBe(ExpectedErrorDetail1DetailParam2Value);
+        result.Error.ErrorDetails[0].DetailTemplated!.Params![ExpectedErrorDetail1DetailParam2Key].ShouldBe(ExpectedErrorDetail1DetailParam2Value);
         result.Error.InstanceUri.ShouldBe(ExpectedInstance);
         result.Error.Title.ShouldBe(ExpectedTitle);
         result.Error.TypeUri.ShouldBe(ExpectedTypeUri);
@@ -316,158 +231,15 @@ public class ResultUnitTests
         result.Error.ShouldBeNull();
     }
 
-    #endregion
-
-    #region Result, Deserialize
-
     [Fact]
-    public void Deserialize_SuccessAndMicrosoftSerializer_ReturnsValueWithAllProperties()
+    public void Success_CalledTwice_ReturnsSameInstance()
     {
-        // Arrange
-        const string Json = "{}";
-
         // Act
-        var sut = SerializationHelper.DeserializeWithMicrosoft<Sut>(Json);
+        var first = Sut.Success();
+        var second = Sut.Success();
 
         // Assert
-        sut.ShouldNotBeNull();
-        sut.IsSuccess().ShouldBeTrue();
-    }
-
-    [Fact]
-    public void Deserialize_SuccessAndNewtonsoftSerializer_ReturnsValueWithAllProperties()
-    {
-        // Arrange
-        const string Json = "{}";
-
-        // Act
-        var sut = SerializationHelper.DeserializeWithNewtonsoft<Sut>(Json);
-
-        // Assert
-        sut.ShouldNotBeNull();
-        sut.IsSuccess().ShouldBeTrue();
-    }
-
-    [Fact]
-    public void Deserialize_ErrorAndMicrosoftSerializer_ReturnsErrorWithAllProperties()
-    {
-        // Arrange
-        const ErrorCategory ExpectedCategory = ErrorCategory.NotFound;
-        const string ExpectedDetail = "Test description.";
-        const string ExpectedDetailTemplateId = "message-id";
-        const int ExpectedDetailParamsCount = 2;
-        const string ExpectedDetailParam1Key = "key1";
-        const string ExpectedDetailParam1Value = "value1";
-        const string ExpectedDetailParam2Key = "key2";
-        const string ExpectedDetailParam2Value = "value2";
-        const int ExpectedErrorDetailsCount = 1;
-        const string ExpectedErrorDetail1PropertyPointer = "#/property1";
-        const string ExpectedErrorDetail1Detail = "Property 1 test detail";
-        const string ExpectedErrorDetail1DetailTemplateId = "message-property-id";
-        const int ExpectedErrorDetail1DetailParamsCount = 2;
-        const string ExpectedErrorDetail1DetailParam1Key = "pk1";
-        const string ExpectedErrorDetail1DetailParam1Value = "pv1";
-        const string ExpectedErrorDetail1DetailParam2Key = "pk2";
-        const string ExpectedErrorDetail1DetailParam2Value = "pv2";
-        const string ExpectedInstance = "http://test.com/instance/1013";
-        const string ExpectedTitle = "Test title";
-        const string ExpectedTypeUri = "tag:test.com,2024:Test";
-
-        const string Json = """{"Error":{"Category":3,"TypeUri":"tag:test.com,2024:Test","Title":"Test title","Detail":"Test description.","DetailTemplated":{"TemplateId":"message-id","Params":{"key1":"value1","key2":"value2"}},"InstanceUri":"http://test.com/instance/1013","ErrorDetails":[{"PropertyPointer":"#/property1","Detail":"Property 1 test detail","DetailTemplated":{"TemplateId":"message-property-id","Params":{"pk1":"pv1","pk2":"pv2"}}}]}}""";
-
-        // Act
-        var result = SerializationHelper.DeserializeWithMicrosoft<Sut>(Json);
-
-        // Assert
-        result.ShouldNotBeNull();
-        result.IsSuccess().ShouldBeFalse();
-        result.Error.ShouldNotBeNull();
-        result.Error.Category.ShouldBe(ExpectedCategory);
-        result.Error.Detail.ShouldBe(ExpectedDetail);
-        result.Error.DetailTemplated.ShouldNotBeNull();
-        result.Error.DetailTemplated.TemplateId.ShouldBe(ExpectedDetailTemplateId);
-        result.Error.DetailTemplated.Params.ShouldNotBeNull();
-        result.Error.DetailTemplated.Params.Count.ShouldBe(ExpectedDetailParamsCount);
-        result.Error.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam1Key);
-        result.Error.DetailTemplated.Params[ExpectedDetailParam1Key].ToString().ShouldBe(ExpectedDetailParam1Value);
-        result.Error.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam2Key);
-        result.Error.DetailTemplated.Params[ExpectedDetailParam2Key].ToString().ShouldBe(ExpectedDetailParam2Value);
-        result.Error.ErrorDetails.ShouldNotBeNull();
-        result.Error.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
-        result.Error.ErrorDetails[0].PropertyPointer.ShouldBe(ExpectedErrorDetail1PropertyPointer);
-        result.Error.ErrorDetails[0].Detail.ShouldBe(ExpectedErrorDetail1Detail);
-        result.Error.ErrorDetails[0].DetailTemplated.ShouldNotBeNull();
-        result.Error.ErrorDetails[0].DetailTemplated!.TemplateId.ShouldBe(ExpectedErrorDetail1DetailTemplateId);
-        result.Error.ErrorDetails[0].DetailTemplated!.Params.ShouldNotBeNull();
-        result.Error.ErrorDetails[0].DetailTemplated!.Params!.Count.ShouldBe(ExpectedErrorDetail1DetailParamsCount);
-        result.Error.ErrorDetails[0].DetailTemplated!.Params!.Keys.ShouldContain(ExpectedErrorDetail1DetailParam1Key);
-        result.Error.ErrorDetails[0].DetailTemplated!.Params![ExpectedErrorDetail1DetailParam1Key].ToString().ShouldBe(ExpectedErrorDetail1DetailParam1Value);
-        result.Error.ErrorDetails[0].DetailTemplated!.Params!.Keys.ShouldContain(ExpectedErrorDetail1DetailParam2Key);
-        result.Error.ErrorDetails[0].DetailTemplated!.Params![ExpectedErrorDetail1DetailParam2Key].ToString().ShouldBe(ExpectedErrorDetail1DetailParam2Value);
-        result.Error.InstanceUri.ShouldBe(ExpectedInstance);
-        result.Error.Title.ShouldBe(ExpectedTitle);
-        result.Error.TypeUri.ShouldBe(ExpectedTypeUri);
-    }
-
-    [Fact]
-    public void Deserialize_ErrorAndNewtonsoftSerializer_ReturnsErrorWithAllProperties()
-    {
-        // Arrange
-        const ErrorCategory ExpectedCategory = ErrorCategory.NotFound;
-        const string ExpectedDetail = "Test description.";
-        const string ExpectedDetailTemplateId = "message-id";
-        const int ExpectedDetailParamsCount = 2;
-        const string ExpectedDetailParam1Key = "key1";
-        const string ExpectedDetailParam1Value = "value1";
-        const string ExpectedDetailParam2Key = "key2";
-        const string ExpectedDetailParam2Value = "value2";
-        const int ExpectedErrorDetailsCount = 1;
-        const string ExpectedErrorDetail1PropertyPointer = "#/property1";
-        const string ExpectedErrorDetail1Detail = "Property 1 test detail";
-        const string ExpectedErrorDetail1DetailTemplateId = "message-property-id";
-        const int ExpectedErrorDetail1DetailParamsCount = 2;
-        const string ExpectedErrorDetail1DetailParam1Key = "pk1";
-        const string ExpectedErrorDetail1DetailParam1Value = "pv1";
-        const string ExpectedErrorDetail1DetailParam2Key = "pk2";
-        const string ExpectedErrorDetail1DetailParam2Value = "pv2";
-        const string ExpectedInstance = "http://test.com/instance/1013";
-        const string ExpectedTitle = "Test title";
-        const string ExpectedTypeUri = "tag:test.com,2024:Test";
-
-        const string Json = """{"Error":{"Category":3,"TypeUri":"tag:test.com,2024:Test","Title":"Test title","Detail":"Test description.","DetailTemplated":{"TemplateId":"message-id","Params":{"key1":"value1","key2":"value2"}},"InstanceUri":"http://test.com/instance/1013","ErrorDetails":[{"PropertyPointer":"#/property1","Detail":"Property 1 test detail","DetailTemplated":{"TemplateId":"message-property-id","Params":{"pk1":"pv1","pk2":"pv2"}}}]}}""";
-
-        // Act
-        var result = SerializationHelper.DeserializeWithNewtonsoft<Sut>(Json);
-
-        // Assert
-        result.ShouldNotBeNull();
-        result.IsSuccess().ShouldBeFalse();
-        result.Error.ShouldNotBeNull();
-        result.Error.Category.ShouldBe(ExpectedCategory);
-        result.Error.Detail.ShouldBe(ExpectedDetail);
-        result.Error.DetailTemplated.ShouldNotBeNull();
-        result.Error.DetailTemplated.TemplateId.ShouldBe(ExpectedDetailTemplateId);
-        result.Error.DetailTemplated.Params.ShouldNotBeNull();
-        result.Error.DetailTemplated.Params.Count.ShouldBe(ExpectedDetailParamsCount);
-        result.Error.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam1Key);
-        result.Error.DetailTemplated.Params[ExpectedDetailParam1Key].ToString().ShouldBe(ExpectedDetailParam1Value);
-        result.Error.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam2Key);
-        result.Error.DetailTemplated.Params[ExpectedDetailParam2Key].ToString().ShouldBe(ExpectedDetailParam2Value);
-        result.Error.ErrorDetails.ShouldNotBeNull();
-        result.Error.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
-        result.Error.ErrorDetails[0].PropertyPointer.ShouldBe(ExpectedErrorDetail1PropertyPointer);
-        result.Error.ErrorDetails[0].Detail.ShouldBe(ExpectedErrorDetail1Detail);
-        result.Error.ErrorDetails[0].DetailTemplated.ShouldNotBeNull();
-        result.Error.ErrorDetails[0].DetailTemplated!.TemplateId.ShouldBe(ExpectedErrorDetail1DetailTemplateId);
-        result.Error.ErrorDetails[0].DetailTemplated!.Params.ShouldNotBeNull();
-        result.Error.ErrorDetails[0].DetailTemplated!.Params!.Count.ShouldBe(ExpectedErrorDetail1DetailParamsCount);
-        result.Error.ErrorDetails[0].DetailTemplated!.Params!.Keys.ShouldContain(ExpectedErrorDetail1DetailParam1Key);
-        result.Error.ErrorDetails[0].DetailTemplated!.Params![ExpectedErrorDetail1DetailParam1Key].ToString().ShouldBe(ExpectedErrorDetail1DetailParam1Value);
-        result.Error.ErrorDetails[0].DetailTemplated!.Params!.Keys.ShouldContain(ExpectedErrorDetail1DetailParam2Key);
-        result.Error.ErrorDetails[0].DetailTemplated!.Params![ExpectedErrorDetail1DetailParam2Key].ToString().ShouldBe(ExpectedErrorDetail1DetailParam2Value);
-        result.Error.InstanceUri.ShouldBe(ExpectedInstance);
-        result.Error.Title.ShouldBe(ExpectedTitle);
-        result.Error.TypeUri.ShouldBe(ExpectedTypeUri);
+        second.ShouldBeSameAs(first);
     }
 
     #endregion
@@ -488,9 +260,9 @@ public class ResultUnitTests
             "messageId",
             ("key1", "value1"), ("key2", "value2"));
 
-        error.AddDetail("#/property1", "Property 1 test detail", "message-property-id", ("pk1", "pv1"), ("pk2", "pv2"));
+        error = error.WithErrorDetail("#/property1", "Property 1 test detail", "message-property-id", ("pk1", "pv1"), ("pk2", "pv2"));
 
-        var sut = new Sut(error);
+        var sut = Sut.FromError(error);
 
         // Act
         var result = SerializationHelper.SerializeWithMicrosoft(sut);
@@ -513,9 +285,9 @@ public class ResultUnitTests
             "messageId",
             ("key1", "value1"), ("key2", "value2"));
 
-        error.AddDetail("#/property1", "Property 1 test detail", "message-property-id", ("pk1", "pv1"), ("pk2", "pv2"));
+        error = error.WithErrorDetail("#/property1", "Property 1 test detail", "message-property-id", ("pk1", "pv1"), ("pk2", "pv2"));
 
-        var sut = new Sut(error);
+        var sut = Sut.FromError(error);
 
         // Act
         var result = SerializationHelper.SerializeWithNewtonsoft(sut);
@@ -526,37 +298,7 @@ public class ResultUnitTests
 
     #endregion
 
-    #region Result<T>, ctor
-
-    [Fact]
-    public void IsSuccess_ParameterlessCtorAndReferenceTypeValue_ThrowsException()
-    {
-        // Arrange
-        var sut = new Result<TestClass>();
-
-        // Act
-        var exception = Record.Exception(() => sut.IsSuccess());
-
-        // Assert
-        exception.ShouldNotBeNull();
-        exception.ShouldBeOfType<InvalidOperationException>();
-        exception.Message.ShouldContain("has neither a value nor an error");
-    }
-
-    [Fact]
-    public void IsSuccess_ParameterlessCtorAndValueTypeValue_ThrowsException()
-    {
-        // Arrange
-        var sut = new Result<int>();
-
-        // Act
-        var exception = Record.Exception(() => sut.IsSuccess());
-
-        // Assert
-        exception.ShouldNotBeNull();
-        exception.ShouldBeOfType<InvalidOperationException>();
-        exception.Message.ShouldContain("has neither a value nor an error");
-    }
+    #region Result<T>, IsSuccess()
 
     [Fact]
     public void IsSuccess_ValueTypeValueEqualToDefault_ReturnsTrue()
@@ -570,187 +312,6 @@ public class ResultUnitTests
         // Assert
         result.ShouldBeTrue();
         sut.Value.ShouldBe(0);
-    }
-
-    [Fact]
-    public void IsSuccess_ParameterlessCtorWithValueAssigned_ReturnsTrue()
-    {
-        // Arrange
-        var sut = new Result<int> { Value = 0 };
-
-        // Act
-        var result = sut.IsSuccess();
-
-        // Assert
-        result.ShouldBeTrue();
-        sut.Value.ShouldBe(0);
-    }
-
-    [Fact]
-    public void IsSuccess_ParameterlessCtorWithErrorAssigned_ReturnsFalse()
-    {
-        // Arrange
-        var error = Error.NotFound(ErrorUri.Tag("tag:test.com,2024:Test"), "Test title");
-        var sut = new Result<TestClass> { Error = error };
-
-        // Act
-        var result = sut.IsSuccess();
-
-        // Assert
-        result.ShouldBeFalse();
-        sut.Error.ShouldBe(error);
-    }
-
-    [Fact]
-    public void Ctor_SuccessWithValue_ReturnsSuccessResultWithValue()
-    {
-        // Arrange
-        const string ExpectedText = "Test text";
-        const int ExpectedNumber = 43;
-
-        var value = new TestClass
-        {
-            Number = 43,
-            Text = "Test text"
-        };
-
-        // Act
-        var result = new Result<TestClass>(value);
-
-        // Assert
-        result.ShouldNotBeNull();
-        result.IsSuccess().ShouldBeTrue();
-        result.Value.ShouldNotBeNull();
-        result.Value.Text.ShouldBe(ExpectedText);
-        result.Value.Number.ShouldBe(ExpectedNumber);
-    }
-
-    [Fact]
-    public void Ctor_SuccessWithValueAndError_ThrowsException()
-    {
-        // Arrange
-        var value = new TestClass
-        {
-            Number = 43,
-            Text = "Test text"
-        };
-
-        var error = Error.NotFound(
-            ErrorUri.Tag("tag:test.com,2024:Test"),
-            "Test title",
-            "Test description.",
-            ErrorUri.Locator("http://test.com/instance/1013"),
-            "message-id",
-            ("key1", "value1"), ("key2", "value2"));
-
-        error.AddDetail("#/property1", "Property 1 test detail", "message-property-id", ("pk1", "pv1"), ("pk2", "pv2"));
-
-        // Act
-        var exception = Record.Exception(() => new Result<TestClass>(value) { Error = error });
-
-        // Assert
-        exception.ShouldNotBeNull();
-        exception.ShouldBeOfType<InvalidOperationException>();
-        exception.Message.ShouldBe("Cannot set both Value and Error of the Result!");
-    }
-
-    [Fact]
-    public void Ctor_ErrorWithoutValue_ReturnsErrorResult()
-    {
-        // Arrange
-        const ErrorCategory ExpectedCategory = ErrorCategory.NotFound;
-        const string ExpectedDetail = "Test description.";
-        const string ExpectedDetailTemplateId = "message-id";
-        const int ExpectedDetailParamsCount = 2;
-        const string ExpectedDetailParam1Key = "key1";
-        const string ExpectedDetailParam1Value = "value1";
-        const string ExpectedDetailParam2Key = "key2";
-        const string ExpectedDetailParam2Value = "value2";
-        const int ExpectedErrorDetailsCount = 1;
-        const string ExpectedErrorDetail1PropertyPointer = "#/property1";
-        const string ExpectedErrorDetail1Detail = "Property 1 test detail";
-        const string ExpectedErrorDetail1DetailTemplateId = "message-property-id";
-        const int ExpectedErrorDetail1DetailParamsCount = 2;
-        const string ExpectedErrorDetail1DetailParam1Key = "pk1";
-        const string ExpectedErrorDetail1DetailParam1Value = "pv1";
-        const string ExpectedErrorDetail1DetailParam2Key = "pk2";
-        const string ExpectedErrorDetail1DetailParam2Value = "pv2";
-        const string ExpectedInstance = "http://test.com/instance/1013";
-        const string ExpectedTitle = "Test title";
-        const string ExpectedTypeUri = "tag:test.com,2024:Test";
-
-        var error = Error.NotFound(
-            ErrorUri.Tag("tag:test.com,2024:Test"),
-            "Test title",
-            "Test description.",
-            ErrorUri.Locator("http://test.com/instance/1013"),
-            "message-id",
-            ("key1", "value1"), ("key2", "value2"));
-
-        error.AddDetail("#/property1", "Property 1 test detail", "message-property-id", ("pk1", "pv1"), ("pk2", "pv2"));
-
-        // Act
-        var result = new Result<TestClass>(error);
-
-        // Assert
-        result.ShouldNotBeNull();
-        result.IsSuccess().ShouldBeFalse();
-        result.Error.ShouldNotBeNull();
-
-        result.Error.Category.ShouldBe(ExpectedCategory);
-        result.Error.Detail.ShouldBe(ExpectedDetail);
-        result.Error.DetailTemplated.ShouldNotBeNull();
-        result.Error.DetailTemplated.TemplateId.ShouldBe(ExpectedDetailTemplateId);
-        result.Error.DetailTemplated.Params.ShouldNotBeNull();
-        result.Error.DetailTemplated.Params.Count.ShouldBe(ExpectedDetailParamsCount);
-        result.Error.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam1Key);
-        result.Error.DetailTemplated.Params[ExpectedDetailParam1Key].ToString().ShouldBe(ExpectedDetailParam1Value);
-        result.Error.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam2Key);
-        result.Error.DetailTemplated.Params[ExpectedDetailParam2Key].ToString().ShouldBe(ExpectedDetailParam2Value);
-        result.Error.ErrorDetails.ShouldNotBeNull();
-        result.Error.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
-        result.Error.ErrorDetails[0].PropertyPointer.ShouldBe(ExpectedErrorDetail1PropertyPointer);
-        result.Error.ErrorDetails[0].Detail.ShouldBe(ExpectedErrorDetail1Detail);
-        result.Error.ErrorDetails[0].DetailTemplated.ShouldNotBeNull();
-        result.Error.ErrorDetails[0].DetailTemplated!.TemplateId.ShouldBe(ExpectedErrorDetail1DetailTemplateId);
-        result.Error.ErrorDetails[0].DetailTemplated!.Params.ShouldNotBeNull();
-        result.Error.ErrorDetails[0].DetailTemplated!.Params!.Count.ShouldBe(ExpectedErrorDetail1DetailParamsCount);
-        result.Error.ErrorDetails[0].DetailTemplated!.Params!.Keys.ShouldContain(ExpectedErrorDetail1DetailParam1Key);
-        result.Error.ErrorDetails[0].DetailTemplated!.Params![ExpectedErrorDetail1DetailParam1Key].ToString().ShouldBe(ExpectedErrorDetail1DetailParam1Value);
-        result.Error.ErrorDetails[0].DetailTemplated!.Params!.Keys.ShouldContain(ExpectedErrorDetail1DetailParam2Key);
-        result.Error.ErrorDetails[0].DetailTemplated!.Params![ExpectedErrorDetail1DetailParam2Key].ToString().ShouldBe(ExpectedErrorDetail1DetailParam2Value);
-        result.Error.InstanceUri.ShouldBe(ExpectedInstance);
-        result.Error.Title.ShouldBe(ExpectedTitle);
-        result.Error.TypeUri.ShouldBe(ExpectedTypeUri);
-    }
-
-    [Fact]
-    public void Ctor_ErrorWithValue_ThrowsException()
-    {
-        // Arrange
-        var value = new TestClass
-        {
-            Number = 43,
-            Text = "Test text"
-        };
-
-        var error = Error.NotFound(
-            ErrorUri.Tag("tag:test.com,2024:Test"),
-            "Test title",
-            "Test description.",
-            ErrorUri.Locator("http://test.com/instance/1013"),
-            "message-id",
-            ("key1", "value1"), ("key2", "value2"));
-
-        error.AddDetail("#/property1", "Property 1 test detail", "message-property-id", ("pk1", "pv1"), ("pk2", "pv2"));
-
-        // Act
-        var exception = Record.Exception(() => new Result<TestClass>(error) { Value = value });
-
-        // Assert
-        exception.ShouldNotBeNull();
-        exception.ShouldBeOfType<InvalidOperationException>();
-        exception.Message.ShouldBe("Cannot set both Value and Error of the Result!");
     }
 
     #endregion
@@ -814,7 +375,7 @@ public class ResultUnitTests
             "message-id",
             ("key1", "value1"), ("key2", "value2"));
 
-        error.AddDetail("#/property1", "Property 1 test detail", "message-property-id", ("pk1", "pv1"), ("pk2", "pv2"));
+        error = error.WithErrorDetail("#/property1", "Property 1 test detail", "message-property-id", ("pk1", "pv1"), ("pk2", "pv2"));
 
         // Act
         Result<TestClass> result = error;
@@ -831,9 +392,9 @@ public class ResultUnitTests
         result.Error.DetailTemplated.Params.ShouldNotBeNull();
         result.Error.DetailTemplated.Params.Count.ShouldBe(ExpectedDetailParamsCount);
         result.Error.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam1Key);
-        result.Error.DetailTemplated.Params[ExpectedDetailParam1Key].ToString().ShouldBe(ExpectedDetailParam1Value);
+        result.Error.DetailTemplated.Params[ExpectedDetailParam1Key].ShouldBe(ExpectedDetailParam1Value);
         result.Error.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam2Key);
-        result.Error.DetailTemplated.Params[ExpectedDetailParam2Key].ToString().ShouldBe(ExpectedDetailParam2Value);
+        result.Error.DetailTemplated.Params[ExpectedDetailParam2Key].ShouldBe(ExpectedDetailParam2Value);
         result.Error.ErrorDetails.ShouldNotBeNull();
         result.Error.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         result.Error.ErrorDetails[0].PropertyPointer.ShouldBe(ExpectedErrorDetail1PropertyPointer);
@@ -843,9 +404,9 @@ public class ResultUnitTests
         result.Error.ErrorDetails[0].DetailTemplated!.Params.ShouldNotBeNull();
         result.Error.ErrorDetails[0].DetailTemplated!.Params!.Count.ShouldBe(ExpectedErrorDetail1DetailParamsCount);
         result.Error.ErrorDetails[0].DetailTemplated!.Params!.Keys.ShouldContain(ExpectedErrorDetail1DetailParam1Key);
-        result.Error.ErrorDetails[0].DetailTemplated!.Params![ExpectedErrorDetail1DetailParam1Key].ToString().ShouldBe(ExpectedErrorDetail1DetailParam1Value);
+        result.Error.ErrorDetails[0].DetailTemplated!.Params![ExpectedErrorDetail1DetailParam1Key].ShouldBe(ExpectedErrorDetail1DetailParam1Value);
         result.Error.ErrorDetails[0].DetailTemplated!.Params!.Keys.ShouldContain(ExpectedErrorDetail1DetailParam2Key);
-        result.Error.ErrorDetails[0].DetailTemplated!.Params![ExpectedErrorDetail1DetailParam2Key].ToString().ShouldBe(ExpectedErrorDetail1DetailParam2Value);
+        result.Error.ErrorDetails[0].DetailTemplated!.Params![ExpectedErrorDetail1DetailParam2Key].ShouldBe(ExpectedErrorDetail1DetailParam2Value);
         result.Error.InstanceUri.ShouldBe(ExpectedInstance);
         result.Error.Title.ShouldBe(ExpectedTitle);
         result.Error.TypeUri.ShouldBe(ExpectedTypeUri);
@@ -941,7 +502,7 @@ public class ResultUnitTests
             "message-id",
             ("key1", "value1"), ("key2", "value2"));
 
-        error.AddDetail("#/property1", "Property 1 test detail", "message-property-id", ("pk1", "pv1"), ("pk2", "pv2"));
+        error = error.WithErrorDetail("#/property1", "Property 1 test detail", "message-property-id", ("pk1", "pv1"), ("pk2", "pv2"));
 
         // Act
         var result = Result<TestClass>.FromError(error);
@@ -958,9 +519,9 @@ public class ResultUnitTests
         result.Error.DetailTemplated.Params.ShouldNotBeNull();
         result.Error.DetailTemplated.Params.Count.ShouldBe(ExpectedDetailParamsCount);
         result.Error.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam1Key);
-        result.Error.DetailTemplated.Params[ExpectedDetailParam1Key].ToString().ShouldBe(ExpectedDetailParam1Value);
+        result.Error.DetailTemplated.Params[ExpectedDetailParam1Key].ShouldBe(ExpectedDetailParam1Value);
         result.Error.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam2Key);
-        result.Error.DetailTemplated.Params[ExpectedDetailParam2Key].ToString().ShouldBe(ExpectedDetailParam2Value);
+        result.Error.DetailTemplated.Params[ExpectedDetailParam2Key].ShouldBe(ExpectedDetailParam2Value);
         result.Error.ErrorDetails.ShouldNotBeNull();
         result.Error.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
         result.Error.ErrorDetails[0].PropertyPointer.ShouldBe(ExpectedErrorDetail1PropertyPointer);
@@ -970,175 +531,9 @@ public class ResultUnitTests
         result.Error.ErrorDetails[0].DetailTemplated!.Params.ShouldNotBeNull();
         result.Error.ErrorDetails[0].DetailTemplated!.Params!.Count.ShouldBe(ExpectedErrorDetail1DetailParamsCount);
         result.Error.ErrorDetails[0].DetailTemplated!.Params!.Keys.ShouldContain(ExpectedErrorDetail1DetailParam1Key);
-        result.Error.ErrorDetails[0].DetailTemplated!.Params![ExpectedErrorDetail1DetailParam1Key].ToString().ShouldBe(ExpectedErrorDetail1DetailParam1Value);
+        result.Error.ErrorDetails[0].DetailTemplated!.Params![ExpectedErrorDetail1DetailParam1Key].ShouldBe(ExpectedErrorDetail1DetailParam1Value);
         result.Error.ErrorDetails[0].DetailTemplated!.Params!.Keys.ShouldContain(ExpectedErrorDetail1DetailParam2Key);
-        result.Error.ErrorDetails[0].DetailTemplated!.Params![ExpectedErrorDetail1DetailParam2Key].ToString().ShouldBe(ExpectedErrorDetail1DetailParam2Value);
-        result.Error.InstanceUri.ShouldBe(ExpectedInstance);
-        result.Error.Title.ShouldBe(ExpectedTitle);
-        result.Error.TypeUri.ShouldBe(ExpectedTypeUri);
-    }
-
-    #endregion
-
-    #region Result<T>, Deserialize
-
-    [Fact]
-    public void Deserialize_SuccessWithValueAndMicrosoftSerializer_ReturnsValueWithAllProperties()
-    {
-        // Arrange
-        const string ExpectedText = "Test text";
-        const int ExpectedNumber = 38;
-
-        const string Json = """{"Value":{"Text":"Test text","Number":38}}""";
-
-        // Act
-        var result = SerializationHelper.DeserializeWithMicrosoft<Result<TestClass>>(Json);
-
-        // Assert
-        result.ShouldNotBeNull();
-        result.IsSuccess().ShouldBeTrue();
-        result.Value.ShouldNotBeNull();
-        result.Value.Text.ShouldBe(ExpectedText);
-        result.Value.Number.ShouldBe(ExpectedNumber);
-    }
-
-    [Fact]
-    public void Deserialize_SuccessWithValueAndNewtonsoftSerializer_ReturnsValueWithAllProperties()
-    {
-        // Arrange
-        const string ExpectedText = "Test text";
-        const int ExpectedNumber = 38;
-
-        const string Json = """{"Value":{"Text":"Test text","Number":38}}""";
-
-        // Act
-        var result = SerializationHelper.DeserializeWithNewtonsoft<Result<TestClass>>(Json);
-
-        // Assert
-        result.ShouldNotBeNull();
-        result.IsSuccess().ShouldBeTrue();
-        result.Value.ShouldNotBeNull();
-        result.Value.Text.ShouldBe(ExpectedText);
-        result.Value.Number.ShouldBe(ExpectedNumber);
-    }
-
-    [Fact]
-    public void Deserialize_ErrorWithValueAndMicrosoftSerializer_ReturnsErrorWithAllProperties()
-    {
-        // Arrange
-        const ErrorCategory ExpectedCategory = ErrorCategory.NotFound;
-        const string ExpectedDetail = "Test description.";
-        const string ExpectedDetailTemplateId = "message-id";
-        const int ExpectedDetailParamsCount = 2;
-        const string ExpectedDetailParam1Key = "key1";
-        const string ExpectedDetailParam1Value = "value1";
-        const string ExpectedDetailParam2Key = "key2";
-        const string ExpectedDetailParam2Value = "value2";
-        const int ExpectedErrorDetailsCount = 1;
-        const string ExpectedErrorDetail1PropertyPointer = "#/property1";
-        const string ExpectedErrorDetail1Detail = "Property 1 test detail";
-        const string ExpectedErrorDetail1DetailTemplateId = "message-property-id";
-        const int ExpectedErrorDetail1DetailParamsCount = 2;
-        const string ExpectedErrorDetail1DetailParam1Key = "pk1";
-        const string ExpectedErrorDetail1DetailParam1Value = "pv1";
-        const string ExpectedErrorDetail1DetailParam2Key = "pk2";
-        const string ExpectedErrorDetail1DetailParam2Value = "pv2";
-        const string ExpectedInstance = "http://test.com/instance/1013";
-        const string ExpectedTitle = "Test title";
-        const string ExpectedTypeUri = "tag:test.com,2024:Test";
-
-        const string Json = """{"Error":{"Category":3,"TypeUri":"tag:test.com,2024:Test","Title":"Test title","Detail":"Test description.","DetailTemplated":{"TemplateId":"message-id","Params":{"key1":"value1","key2":"value2"}},"InstanceUri":"http://test.com/instance/1013","ErrorDetails":[{"PropertyPointer":"#/property1","Detail":"Property 1 test detail","DetailTemplated":{"TemplateId":"message-property-id","Params":{"pk1":"pv1","pk2":"pv2"}}}]}}""";
-
-        // Act
-        var result = SerializationHelper.DeserializeWithMicrosoft<Result<TestClass>>(Json);
-
-        // Assert
-        result.ShouldNotBeNull();
-        result.IsSuccess().ShouldBeFalse();
-        result.Error.ShouldNotBeNull();
-        result.Error.Category.ShouldBe(ExpectedCategory);
-        result.Error.Detail.ShouldBe(ExpectedDetail);
-        result.Error.DetailTemplated.ShouldNotBeNull();
-        result.Error.DetailTemplated.TemplateId.ShouldBe(ExpectedDetailTemplateId);
-        result.Error.DetailTemplated.Params.ShouldNotBeNull();
-        result.Error.DetailTemplated.Params.Count.ShouldBe(ExpectedDetailParamsCount);
-        result.Error.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam1Key);
-        result.Error.DetailTemplated.Params[ExpectedDetailParam1Key].ToString().ShouldBe(ExpectedDetailParam1Value);
-        result.Error.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam2Key);
-        result.Error.DetailTemplated.Params[ExpectedDetailParam2Key].ToString().ShouldBe(ExpectedDetailParam2Value);
-        result.Error.ErrorDetails.ShouldNotBeNull();
-        result.Error.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
-        result.Error.ErrorDetails[0].PropertyPointer.ShouldBe(ExpectedErrorDetail1PropertyPointer);
-        result.Error.ErrorDetails[0].Detail.ShouldBe(ExpectedErrorDetail1Detail);
-        result.Error.ErrorDetails[0].DetailTemplated.ShouldNotBeNull();
-        result.Error.ErrorDetails[0].DetailTemplated!.TemplateId.ShouldBe(ExpectedErrorDetail1DetailTemplateId);
-        result.Error.ErrorDetails[0].DetailTemplated!.Params.ShouldNotBeNull();
-        result.Error.ErrorDetails[0].DetailTemplated!.Params!.Count.ShouldBe(ExpectedErrorDetail1DetailParamsCount);
-        result.Error.ErrorDetails[0].DetailTemplated!.Params!.Keys.ShouldContain(ExpectedErrorDetail1DetailParam1Key);
-        result.Error.ErrorDetails[0].DetailTemplated!.Params![ExpectedErrorDetail1DetailParam1Key].ToString().ShouldBe(ExpectedErrorDetail1DetailParam1Value);
-        result.Error.ErrorDetails[0].DetailTemplated!.Params!.Keys.ShouldContain(ExpectedErrorDetail1DetailParam2Key);
-        result.Error.ErrorDetails[0].DetailTemplated!.Params![ExpectedErrorDetail1DetailParam2Key].ToString().ShouldBe(ExpectedErrorDetail1DetailParam2Value);
-        result.Error.InstanceUri.ShouldBe(ExpectedInstance);
-        result.Error.Title.ShouldBe(ExpectedTitle);
-        result.Error.TypeUri.ShouldBe(ExpectedTypeUri);
-    }
-
-    [Fact]
-    public void Deserialize_ErrorWithValueAndNewtonsoftSerializer_ReturnsErrorWithAllProperties()
-    {
-        // Arrange
-        const ErrorCategory ExpectedCategory = ErrorCategory.NotFound;
-        const string ExpectedDetail = "Test description.";
-        const string ExpectedDetailTemplateId = "message-id";
-        const int ExpectedDetailParamsCount = 2;
-        const string ExpectedDetailParam1Key = "key1";
-        const string ExpectedDetailParam1Value = "value1";
-        const string ExpectedDetailParam2Key = "key2";
-        const string ExpectedDetailParam2Value = "value2";
-        const int ExpectedErrorDetailsCount = 1;
-        const string ExpectedErrorDetail1PropertyPointer = "#/property1";
-        const string ExpectedErrorDetail1Detail = "Property 1 test detail";
-        const string ExpectedErrorDetail1DetailTemplateId = "message-property-id";
-        const int ExpectedErrorDetail1DetailParamsCount = 2;
-        const string ExpectedErrorDetail1DetailParam1Key = "pk1";
-        const string ExpectedErrorDetail1DetailParam1Value = "pv1";
-        const string ExpectedErrorDetail1DetailParam2Key = "pk2";
-        const string ExpectedErrorDetail1DetailParam2Value = "pv2";
-        const string ExpectedInstance = "http://test.com/instance/1013";
-        const string ExpectedTitle = "Test title";
-        const string ExpectedTypeUri = "tag:test.com,2024:Test";
-
-        const string Json = """{"Error":{"Category":3,"TypeUri":"tag:test.com,2024:Test","Title":"Test title","Detail":"Test description.","DetailTemplated":{"TemplateId":"message-id","Params":{"key1":"value1","key2":"value2"}},"InstanceUri":"http://test.com/instance/1013","ErrorDetails":[{"PropertyPointer":"#/property1","Detail":"Property 1 test detail","DetailTemplated":{"TemplateId":"message-property-id","Params":{"pk1":"pv1","pk2":"pv2"}}}]}}""";
-
-        // Act
-        var result = SerializationHelper.DeserializeWithNewtonsoft<Result<TestClass>>(Json);
-
-        // Assert
-        result.ShouldNotBeNull();
-        result.IsSuccess().ShouldBeFalse();
-        result.Error.ShouldNotBeNull();
-        result.Error.Category.ShouldBe(ExpectedCategory);
-        result.Error.Detail.ShouldBe(ExpectedDetail);
-        result.Error.DetailTemplated.ShouldNotBeNull();
-        result.Error.DetailTemplated.TemplateId.ShouldBe(ExpectedDetailTemplateId);
-        result.Error.DetailTemplated.Params.ShouldNotBeNull();
-        result.Error.DetailTemplated.Params.Count.ShouldBe(ExpectedDetailParamsCount);
-        result.Error.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam1Key);
-        result.Error.DetailTemplated.Params[ExpectedDetailParam1Key].ToString().ShouldBe(ExpectedDetailParam1Value);
-        result.Error.DetailTemplated.Params.Keys.ShouldContain(ExpectedDetailParam2Key);
-        result.Error.DetailTemplated.Params[ExpectedDetailParam2Key].ToString().ShouldBe(ExpectedDetailParam2Value);
-        result.Error.ErrorDetails.ShouldNotBeNull();
-        result.Error.ErrorDetails.Count.ShouldBe(ExpectedErrorDetailsCount);
-        result.Error.ErrorDetails[0].PropertyPointer.ShouldBe(ExpectedErrorDetail1PropertyPointer);
-        result.Error.ErrorDetails[0].Detail.ShouldBe(ExpectedErrorDetail1Detail);
-        result.Error.ErrorDetails[0].DetailTemplated.ShouldNotBeNull();
-        result.Error.ErrorDetails[0].DetailTemplated!.TemplateId.ShouldBe(ExpectedErrorDetail1DetailTemplateId);
-        result.Error.ErrorDetails[0].DetailTemplated!.Params.ShouldNotBeNull();
-        result.Error.ErrorDetails[0].DetailTemplated!.Params!.Count.ShouldBe(ExpectedErrorDetail1DetailParamsCount);
-        result.Error.ErrorDetails[0].DetailTemplated!.Params!.Keys.ShouldContain(ExpectedErrorDetail1DetailParam1Key);
-        result.Error.ErrorDetails[0].DetailTemplated!.Params![ExpectedErrorDetail1DetailParam1Key].ToString().ShouldBe(ExpectedErrorDetail1DetailParam1Value);
-        result.Error.ErrorDetails[0].DetailTemplated!.Params!.Keys.ShouldContain(ExpectedErrorDetail1DetailParam2Key);
-        result.Error.ErrorDetails[0].DetailTemplated!.Params![ExpectedErrorDetail1DetailParam2Key].ToString().ShouldBe(ExpectedErrorDetail1DetailParam2Value);
+        result.Error.ErrorDetails[0].DetailTemplated!.Params![ExpectedErrorDetail1DetailParam2Key].ShouldBe(ExpectedErrorDetail1DetailParam2Value);
         result.Error.InstanceUri.ShouldBe(ExpectedInstance);
         result.Error.Title.ShouldBe(ExpectedTitle);
         result.Error.TypeUri.ShouldBe(ExpectedTypeUri);
@@ -1228,7 +623,7 @@ public class ResultUnitTests
     public void Serialize_ReferenceTypeAndErrorAllPropertiesAndMicrosoftSerializer_ReturnsSerializedValueWithAllProperties()
     {
         // Arrange
-        const string ExpectedText = """{"Error":{"Category":3,"TypeUri":"tag:test.com,2024:Test","Title":"Test title","Detail":"Test description.","DetailTemplated":{"TemplateId":"messageId","Params":{"key1":"value1","key2":"value2"}},"InstanceUri":"http://test.com/instance/1013","ErrorDetails":[{"PropertyPointer":"#/property1","Detail":"Property 1 test detail","DetailTemplated":{"TemplateId":"message-property-id","Params":{"pk1":"pv1","pk2":"pv2"}}}],"Metadata":{}}}""";
+        const string ExpectedText = """{"Value":null,"Error":{"Category":3,"TypeUri":"tag:test.com,2024:Test","Title":"Test title","Detail":"Test description.","DetailTemplated":{"TemplateId":"messageId","Params":{"key1":"value1","key2":"value2"}},"InstanceUri":"http://test.com/instance/1013","ErrorDetails":[{"PropertyPointer":"#/property1","Detail":"Property 1 test detail","DetailTemplated":{"TemplateId":"message-property-id","Params":{"pk1":"pv1","pk2":"pv2"}}}],"Metadata":{}}}""";
 
         var error = Error.NotFound(
             ErrorUri.Tag("tag:test.com,2024:Test"),
@@ -1238,9 +633,9 @@ public class ResultUnitTests
             "messageId",
             ("key1", "value1"), ("key2", "value2"));
 
-        error.AddDetail("#/property1", "Property 1 test detail", "message-property-id", ("pk1", "pv1"), ("pk2", "pv2"));
+        error = error.WithErrorDetail("#/property1", "Property 1 test detail", "message-property-id", ("pk1", "pv1"), ("pk2", "pv2"));
 
-        var sut = new Result<TestClass>(error);
+        var sut = Result<TestClass>.FromError(error);
 
         // Act
         var result = SerializationHelper.SerializeWithMicrosoft(sut);
@@ -1253,7 +648,7 @@ public class ResultUnitTests
     public void Serialize_ReferenceTypeAndErrorAllPropertiesAndNewtonsoftSerializer_ReturnsSerializedValueWithAllProperties()
     {
         // Arrange
-        const string ExpectedText = """{"Error":{"Category":3,"TypeUri":"tag:test.com,2024:Test","Title":"Test title","Detail":"Test description.","DetailTemplated":{"TemplateId":"messageId","Params":{"key1":"value1","key2":"value2"}},"InstanceUri":"http://test.com/instance/1013","ErrorDetails":[{"PropertyPointer":"#/property1","Detail":"Property 1 test detail","DetailTemplated":{"TemplateId":"message-property-id","Params":{"pk1":"pv1","pk2":"pv2"}}}],"Metadata":{}}}""";
+        const string ExpectedText = """{"Value":null,"Error":{"Category":3,"TypeUri":"tag:test.com,2024:Test","Title":"Test title","Detail":"Test description.","DetailTemplated":{"TemplateId":"messageId","Params":{"key1":"value1","key2":"value2"}},"InstanceUri":"http://test.com/instance/1013","ErrorDetails":[{"PropertyPointer":"#/property1","Detail":"Property 1 test detail","DetailTemplated":{"TemplateId":"message-property-id","Params":{"pk1":"pv1","pk2":"pv2"}}}],"Metadata":{}}}""";
 
         var error = Error.NotFound(
             ErrorUri.Tag("tag:test.com,2024:Test"),
@@ -1263,9 +658,9 @@ public class ResultUnitTests
             "messageId",
             ("key1", "value1"), ("key2", "value2"));
 
-        error.AddDetail("#/property1", "Property 1 test detail", "message-property-id", ("pk1", "pv1"), ("pk2", "pv2"));
+        error = error.WithErrorDetail("#/property1", "Property 1 test detail", "message-property-id", ("pk1", "pv1"), ("pk2", "pv2"));
 
-        var sut = new Result<TestClass>(error);
+        var sut = Result<TestClass>.FromError(error);
 
         // Act
         var result = SerializationHelper.SerializeWithNewtonsoft(sut);
@@ -1278,7 +673,7 @@ public class ResultUnitTests
     public void Serialize_ValueTypeAndErrorAllPropertiesAndMicrosoftSerializer_ReturnsSerializedValueWithAllProperties()
     {
         // Arrange
-        const string ExpectedText = """{"Error":{"Category":3,"TypeUri":"tag:test.com,2024:Test","Title":"Test title","Detail":"Test description.","DetailTemplated":{"TemplateId":"messageId","Params":{"key1":"value1","key2":"value2"}},"InstanceUri":"http://test.com/instance/1013","ErrorDetails":[{"PropertyPointer":"#/property1","Detail":"Property 1 test detail","DetailTemplated":{"TemplateId":"message-property-id","Params":{"pk1":"pv1","pk2":"pv2"}}}],"Metadata":{}}}""";
+        const string ExpectedText = """{"Value":0,"Error":{"Category":3,"TypeUri":"tag:test.com,2024:Test","Title":"Test title","Detail":"Test description.","DetailTemplated":{"TemplateId":"messageId","Params":{"key1":"value1","key2":"value2"}},"InstanceUri":"http://test.com/instance/1013","ErrorDetails":[{"PropertyPointer":"#/property1","Detail":"Property 1 test detail","DetailTemplated":{"TemplateId":"message-property-id","Params":{"pk1":"pv1","pk2":"pv2"}}}],"Metadata":{}}}""";
 
         var error = Error.NotFound(
             ErrorUri.Tag("tag:test.com,2024:Test"),
@@ -1288,9 +683,9 @@ public class ResultUnitTests
             "messageId",
             ("key1", "value1"), ("key2", "value2"));
 
-        error.AddDetail("#/property1", "Property 1 test detail", "message-property-id", ("pk1", "pv1"), ("pk2", "pv2"));
+        error = error.WithErrorDetail("#/property1", "Property 1 test detail", "message-property-id", ("pk1", "pv1"), ("pk2", "pv2"));
 
-        var sut = new Result<int>(error);
+        var sut = Result<int>.FromError(error);
 
         // Act
         var result = SerializationHelper.SerializeWithMicrosoft(sut);
@@ -1303,7 +698,7 @@ public class ResultUnitTests
     public void Serialize_ValueTypeAndErrorAllPropertiesAndNewtonsoftSerializer_ReturnsSerializedValueWithAllProperties()
     {
         // Arrange
-        const string ExpectedText = """{"Error":{"Category":3,"TypeUri":"tag:test.com,2024:Test","Title":"Test title","Detail":"Test description.","DetailTemplated":{"TemplateId":"messageId","Params":{"key1":"value1","key2":"value2"}},"InstanceUri":"http://test.com/instance/1013","ErrorDetails":[{"PropertyPointer":"#/property1","Detail":"Property 1 test detail","DetailTemplated":{"TemplateId":"message-property-id","Params":{"pk1":"pv1","pk2":"pv2"}}}],"Metadata":{}}}""";
+        const string ExpectedText = """{"Value":0,"Error":{"Category":3,"TypeUri":"tag:test.com,2024:Test","Title":"Test title","Detail":"Test description.","DetailTemplated":{"TemplateId":"messageId","Params":{"key1":"value1","key2":"value2"}},"InstanceUri":"http://test.com/instance/1013","ErrorDetails":[{"PropertyPointer":"#/property1","Detail":"Property 1 test detail","DetailTemplated":{"TemplateId":"message-property-id","Params":{"pk1":"pv1","pk2":"pv2"}}}],"Metadata":{}}}""";
 
         var error = Error.NotFound(
             ErrorUri.Tag("tag:test.com,2024:Test"),
@@ -1313,9 +708,9 @@ public class ResultUnitTests
             "messageId",
             ("key1", "value1"), ("key2", "value2"));
 
-        error.AddDetail("#/property1", "Property 1 test detail", "message-property-id", ("pk1", "pv1"), ("pk2", "pv2"));
+        error = error.WithErrorDetail("#/property1", "Property 1 test detail", "message-property-id", ("pk1", "pv1"), ("pk2", "pv2"));
 
-        var sut = new Result<int>(error);
+        var sut = Result<int>.FromError(error);
 
         // Act
         var result = SerializationHelper.SerializeWithNewtonsoft(sut);
@@ -1326,302 +721,68 @@ public class ResultUnitTests
 
     #endregion
 
-    #region Result<T>, value type initialization
+    #region Result<T>, value type failure
 
     [Fact]
-    public void Ctor_ValueTypeErrorWithoutValue_ReturnsErrorResult()
+    public void FromError_ValueTypeError_ReturnsErrorResult()
     {
         // Arrange
         var error = Error.NotFound(ErrorUri.Tag("tag:test.com,2024:Test"), "Test title");
 
         // Act
-        var result = new Result<int> { Error = error };
+        var result = Result<int>.FromError(error);
 
         // Assert
         result.ShouldNotBeNull();
         result.IsSuccess().ShouldBeFalse();
         result.Error.ShouldBe(error);
+        result.Value.ShouldBe(0);
     }
 
     [Fact]
-    public void Ctor_StructValueTypeErrorWithoutValue_ReturnsErrorResult()
+    public void FromError_StructValueTypeError_ReturnsErrorResult()
     {
         // Arrange
         var error = Error.NotFound(ErrorUri.Tag("tag:test.com,2024:Test"), "Test title");
 
         // Act
-        var result = new Result<Guid> { Error = error };
+        var result = Result<Guid>.FromError(error);
 
         // Assert
         result.ShouldNotBeNull();
         result.IsSuccess().ShouldBeFalse();
         result.Error.ShouldBe(error);
-    }
-
-    [Fact]
-    public void Ctor_ValueTypeValueAndError_ThrowsException()
-    {
-        // Arrange
-        var error = Error.NotFound(ErrorUri.Tag("tag:test.com,2024:Test"), "Test title");
-
-        // Act
-        var exception = Record.Exception(() => new Result<int> { Value = 43, Error = error });
-
-        // Assert
-        exception.ShouldNotBeNull();
-        exception.ShouldBeOfType<InvalidOperationException>();
-        exception.Message.ShouldBe("Cannot set both Value and Error of the Result!");
-    }
-
-    [Fact]
-    public void Ctor_ValueTypeErrorAndValue_ThrowsException()
-    {
-        // Arrange
-        var error = Error.NotFound(ErrorUri.Tag("tag:test.com,2024:Test"), "Test title");
-
-        // Act
-        var exception = Record.Exception(() => new Result<int>(error) { Value = 43 });
-
-        // Assert
-        exception.ShouldNotBeNull();
-        exception.ShouldBeOfType<InvalidOperationException>();
-        exception.Message.ShouldBe("Cannot set both Value and Error of the Result!");
+        result.Value.ShouldBe(Guid.Empty);
     }
 
     #endregion
 
-    #region Result<T>, value type round-trip
+    #region Result<T>, value type serialization
 
     [Fact]
-    public void RoundTrip_ErrorWithValueTypeAndMicrosoftSerializer_ReturnsErrorResult()
+    public void Serialize_ErrorWithValueTypeAndMicrosoftSerializer_WritesDefaultValue()
     {
         // Arrange
-        const string ExpectedTitle = "Test title";
-        const string ExpectedTypeUri = "tag:test.com,2024:Test";
-
-        var sut = new Result<int>(Error.NotFound(ErrorUri.Tag(ExpectedTypeUri), ExpectedTitle));
-        var json = SerializationHelper.SerializeWithMicrosoft(sut);
-
-        // Act
-        var result = SerializationHelper.DeserializeWithMicrosoft<Result<int>>(json);
-
-        // Assert
-        result.ShouldNotBeNull();
-        result.IsSuccess().ShouldBeFalse();
-        result.Error.ShouldNotBeNull();
-        result.Error.Title.ShouldBe(ExpectedTitle);
-        result.Error.TypeUri.ShouldBe(ExpectedTypeUri);
-    }
-
-    [Fact]
-    public void RoundTrip_ErrorWithValueTypeAndNewtonsoftSerializer_ReturnsErrorResult()
-    {
-        // Arrange
-        const string ExpectedTitle = "Test title";
-        const string ExpectedTypeUri = "tag:test.com,2024:Test";
-
-        var sut = new Result<int>(Error.NotFound(ErrorUri.Tag(ExpectedTypeUri), ExpectedTitle));
-        var json = SerializationHelper.SerializeWithNewtonsoft(sut);
-
-        // Act
-        var result = SerializationHelper.DeserializeWithNewtonsoft<Result<int>>(json);
-
-        // Assert
-        result.ShouldNotBeNull();
-        result.IsSuccess().ShouldBeFalse();
-        result.Error.ShouldNotBeNull();
-        result.Error.Title.ShouldBe(ExpectedTitle);
-        result.Error.TypeUri.ShouldBe(ExpectedTypeUri);
-    }
-
-    [Fact]
-    public void RoundTrip_ErrorWithStructValueTypeAndMicrosoftSerializer_ReturnsErrorResult()
-    {
-        // Arrange
-        const string ExpectedTitle = "Test title";
-        const string ExpectedTypeUri = "tag:test.com,2024:Test";
-
-        var sut = new Result<Guid>(Error.NotFound(ErrorUri.Tag(ExpectedTypeUri), ExpectedTitle));
-        var json = SerializationHelper.SerializeWithMicrosoft(sut);
-
-        // Act
-        var result = SerializationHelper.DeserializeWithMicrosoft<Result<Guid>>(json);
-
-        // Assert
-        result.ShouldNotBeNull();
-        result.IsSuccess().ShouldBeFalse();
-        result.Error.ShouldNotBeNull();
-        result.Error.Title.ShouldBe(ExpectedTitle);
-    }
-
-    [Fact]
-    public void RoundTrip_ErrorWithStructValueTypeAndNewtonsoftSerializer_ReturnsErrorResult()
-    {
-        // Arrange
-        const string ExpectedTitle = "Test title";
-        const string ExpectedTypeUri = "tag:test.com,2024:Test";
-
-        var sut = new Result<Guid>(Error.NotFound(ErrorUri.Tag(ExpectedTypeUri), ExpectedTitle));
-        var json = SerializationHelper.SerializeWithNewtonsoft(sut);
-
-        // Act
-        var result = SerializationHelper.DeserializeWithNewtonsoft<Result<Guid>>(json);
-
-        // Assert
-        result.ShouldNotBeNull();
-        result.IsSuccess().ShouldBeFalse();
-        result.Error.ShouldNotBeNull();
-        result.Error.Title.ShouldBe(ExpectedTitle);
-    }
-
-    [Fact]
-    public void RoundTrip_SuccessWithDefaultValueTypeAndMicrosoftSerializer_ReturnsSuccessResult()
-    {
-        // Arrange
-        const int ExpectedValue = 0;
-
-        var sut = Result.FromValue(0);
-        var json = SerializationHelper.SerializeWithMicrosoft(sut);
-
-        // Act
-        var result = SerializationHelper.DeserializeWithMicrosoft<Result<int>>(json);
-
-        // Assert
-        result.ShouldNotBeNull();
-        result.IsSuccess().ShouldBeTrue();
-        result.Value.ShouldBe(ExpectedValue);
-    }
-
-    [Fact]
-    public void RoundTrip_SuccessWithDefaultValueTypeAndNewtonsoftSerializer_ReturnsSuccessResult()
-    {
-        // Arrange
-        const int ExpectedValue = 0;
-
-        var sut = Result.FromValue(0);
-        var json = SerializationHelper.SerializeWithNewtonsoft(sut);
-
-        // Act
-        var result = SerializationHelper.DeserializeWithNewtonsoft<Result<int>>(json);
-
-        // Assert
-        result.ShouldNotBeNull();
-        result.IsSuccess().ShouldBeTrue();
-        result.Value.ShouldBe(ExpectedValue);
-    }
-
-    [Fact]
-    public void Serialize_ErrorWithValueTypeAndMicrosoftSerializer_DoesNotWritePhantomValue()
-    {
-        // Arrange
-        var sut = new Result<int>(Error.NotFound(ErrorUri.Tag("tag:test.com,2024:Test"), "Test title"));
+        var sut = Result<int>.FromError(Error.NotFound(ErrorUri.Tag("tag:test.com,2024:Test"), "Test title"));
 
         // Act
         var result = SerializationHelper.SerializeWithMicrosoft(sut);
 
         // Assert
-        result.ShouldNotContain("\"Value\":0");
+        result.ShouldContain("\"Value\":0");
     }
 
     [Fact]
-    public void Serialize_ErrorWithValueTypeAndNewtonsoftSerializer_DoesNotWritePhantomValue()
+    public void Serialize_ErrorWithValueTypeAndNewtonsoftSerializer_WritesDefaultValue()
     {
         // Arrange
-        var sut = new Result<int>(Error.NotFound(ErrorUri.Tag("tag:test.com,2024:Test"), "Test title"));
+        var sut = Result<int>.FromError(Error.NotFound(ErrorUri.Tag("tag:test.com,2024:Test"), "Test title"));
 
         // Act
         var result = SerializationHelper.SerializeWithNewtonsoft(sut);
 
         // Assert
-        result.ShouldNotContain("\"Value\":0");
-    }
-
-    #endregion
-
-    #region Result<T>, reference type round-trip
-
-    [Fact]
-    public void RoundTrip_SuccessWithReferenceTypeAndMicrosoftSerializer_ReturnsSuccessResult()
-    {
-        // Arrange
-        const string ExpectedText = "Test text";
-        const int ExpectedNumber = 38;
-
-        var sut = new Result<TestClass>(new TestClass { Text = ExpectedText, Number = ExpectedNumber });
-        var json = SerializationHelper.SerializeWithMicrosoft(sut);
-
-        // Act
-        var result = SerializationHelper.DeserializeWithMicrosoft<Result<TestClass>>(json);
-
-        // Assert
-        result.ShouldNotBeNull();
-        result.IsSuccess().ShouldBeTrue();
-        result.Value.ShouldNotBeNull();
-        result.Value.Text.ShouldBe(ExpectedText);
-        result.Value.Number.ShouldBe(ExpectedNumber);
-    }
-
-    [Fact]
-    public void RoundTrip_SuccessWithReferenceTypeAndNewtonsoftSerializer_ReturnsSuccessResult()
-    {
-        // Arrange
-        const string ExpectedText = "Test text";
-        const int ExpectedNumber = 38;
-
-        var sut = new Result<TestClass>(new TestClass { Text = ExpectedText, Number = ExpectedNumber });
-        var json = SerializationHelper.SerializeWithNewtonsoft(sut);
-
-        // Act
-        var result = SerializationHelper.DeserializeWithNewtonsoft<Result<TestClass>>(json);
-
-        // Assert
-        result.ShouldNotBeNull();
-        result.IsSuccess().ShouldBeTrue();
-        result.Value.ShouldNotBeNull();
-        result.Value.Text.ShouldBe(ExpectedText);
-        result.Value.Number.ShouldBe(ExpectedNumber);
-    }
-
-    [Fact]
-    public void RoundTrip_ErrorWithReferenceTypeAndMicrosoftSerializer_ReturnsErrorResult()
-    {
-        // Arrange
-        const string ExpectedTitle = "Test title";
-        const string ExpectedTypeUri = "tag:test.com,2024:Test";
-
-        var sut = new Result<TestClass>(Error.NotFound(ErrorUri.Tag(ExpectedTypeUri), ExpectedTitle));
-        var json = SerializationHelper.SerializeWithMicrosoft(sut);
-
-        // Act
-        var result = SerializationHelper.DeserializeWithMicrosoft<Result<TestClass>>(json);
-
-        // Assert
-        result.ShouldNotBeNull();
-        result.IsSuccess().ShouldBeFalse();
-        result.Error.ShouldNotBeNull();
-        result.Error.Title.ShouldBe(ExpectedTitle);
-        result.Error.TypeUri.ShouldBe(ExpectedTypeUri);
-    }
-
-    [Fact]
-    public void RoundTrip_ErrorWithReferenceTypeAndNewtonsoftSerializer_ReturnsErrorResult()
-    {
-        // Arrange
-        const string ExpectedTitle = "Test title";
-        const string ExpectedTypeUri = "tag:test.com,2024:Test";
-
-        var sut = new Result<TestClass>(Error.NotFound(ErrorUri.Tag(ExpectedTypeUri), ExpectedTitle));
-        var json = SerializationHelper.SerializeWithNewtonsoft(sut);
-
-        // Act
-        var result = SerializationHelper.DeserializeWithNewtonsoft<Result<TestClass>>(json);
-
-        // Assert
-        result.ShouldNotBeNull();
-        result.IsSuccess().ShouldBeFalse();
-        result.Error.ShouldNotBeNull();
-        result.Error.Title.ShouldBe(ExpectedTitle);
-        result.Error.TypeUri.ShouldBe(ExpectedTypeUri);
+        result.ShouldContain("\"Value\":0");
     }
 
     #endregion
@@ -1675,17 +836,6 @@ public class ResultUnitTests
 
         // Act
         Result<string?> result = value;
-
-        // Assert
-        result.IsSuccess().ShouldBeTrue();
-        result.Value.ShouldBeNull();
-    }
-
-    [Fact]
-    public void Value_NullAssignedViaInitializer_ReturnsSuccessResultWithNullValue()
-    {
-        // Act
-        var result = new Result<string?> { Value = null };
 
         // Assert
         result.IsSuccess().ShouldBeTrue();
@@ -1759,96 +909,6 @@ public class ResultUnitTests
 
         // Assert
         result.ShouldBe(ExpectedText);
-    }
-
-    [Fact]
-    public void Deserialize_NullReferenceTypeValueAndMicrosoftSerializer_ReturnsSuccessResultWithNullValue()
-    {
-        // Arrange
-        const string Json = """{"Value":null,"Error":null}""";
-
-        // Act
-        var result = SerializationHelper.DeserializeWithMicrosoft<Result<string?>>(Json);
-
-        // Assert
-        result.ShouldNotBeNull();
-        result.IsSuccess().ShouldBeTrue();
-        result.Value.ShouldBeNull();
-    }
-
-    [Fact]
-    public void Deserialize_NullReferenceTypeValueAndNewtonsoftSerializer_ReturnsSuccessResultWithNullValue()
-    {
-        // Arrange
-        const string Json = """{"Value":null,"Error":null}""";
-
-        // Act
-        var result = SerializationHelper.DeserializeWithNewtonsoft<Result<string?>>(Json);
-
-        // Assert
-        result.ShouldNotBeNull();
-        result.IsSuccess().ShouldBeTrue();
-        result.Value.ShouldBeNull();
-    }
-
-    [Fact]
-    public void RoundTrip_NullReferenceTypeValueAndMicrosoftSerializer_ReturnsSuccessResultWithNullValue()
-    {
-        // Arrange
-        var sut = Result.FromValue<string?>(null);
-        var json = SerializationHelper.SerializeWithMicrosoft(sut);
-
-        // Act
-        var result = SerializationHelper.DeserializeWithMicrosoft<Result<string?>>(json);
-
-        // Assert
-        result.IsSuccess().ShouldBeTrue();
-        result.Value.ShouldBeNull();
-    }
-
-    [Fact]
-    public void RoundTrip_NullReferenceTypeValueAndNewtonsoftSerializer_ReturnsSuccessResultWithNullValue()
-    {
-        // Arrange
-        var sut = Result.FromValue<string?>(null);
-        var json = SerializationHelper.SerializeWithNewtonsoft(sut);
-
-        // Act
-        var result = SerializationHelper.DeserializeWithNewtonsoft<Result<string?>>(json);
-
-        // Assert
-        result.IsSuccess().ShouldBeTrue();
-        result.Value.ShouldBeNull();
-    }
-
-    [Fact]
-    public void RoundTrip_NullNullableValueTypeValueAndMicrosoftSerializer_ReturnsSuccessResultWithNullValue()
-    {
-        // Arrange
-        var sut = Result.FromValue<int?>(null);
-        var json = SerializationHelper.SerializeWithMicrosoft(sut);
-
-        // Act
-        var result = SerializationHelper.DeserializeWithMicrosoft<Result<int?>>(json);
-
-        // Assert
-        result.IsSuccess().ShouldBeTrue();
-        result.Value.ShouldBeNull();
-    }
-
-    [Fact]
-    public void RoundTrip_NullNullableValueTypeValueAndNewtonsoftSerializer_ReturnsSuccessResultWithNullValue()
-    {
-        // Arrange
-        var sut = Result.FromValue<int?>(null);
-        var json = SerializationHelper.SerializeWithNewtonsoft(sut);
-
-        // Act
-        var result = SerializationHelper.DeserializeWithNewtonsoft<Result<int?>>(json);
-
-        // Assert
-        result.IsSuccess().ShouldBeTrue();
-        result.Value.ShouldBeNull();
     }
 
     #endregion
