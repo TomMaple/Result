@@ -1,0 +1,88 @@
+# ErrorBuilder.WithDetailTemplated Method
+## Definition
+Namespace: [Maple.Result](../namespace.md)<br>
+Assembly: Maple.Result.dll<br>
+
+Sets the [DetailTemplated](../Error/Error_DetailTemplated.md) of the error to build.
+
+## Overloads
+| Name | Description |
+| ---- | ----------- |
+| [WithDetailTemplated(TemplatedMessage)](#withdetailtemplatedtemplatedmessage) | Sets the templated explanation of the problem occurrence. |
+| [WithDetailTemplated(String, (String, Object)[])](#withdetailtemplatedstring-string-object) | Sets the templated explanation from a template identifier and named values. |
+
+## Remarks
+A bare `null` literal is ambiguous between the two overloads (compiler error CS0121). To clear the value, write `WithDetailTemplated((TemplatedMessage?)null)`.
+
+
+## WithDetailTemplated(TemplatedMessage)
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/ErrorBuilder.cs#L270" target="_blank">ErrorBuilder.cs</a>
+
+Sets the [DetailTemplated](../Error/Error_DetailTemplated.md) of the error to build.
+
+```csharp
+public ErrorBuilder WithDetailTemplated(TemplatedMessage? detailTemplated);
+```
+
+### Parameters
+#### `detailTemplated` [TemplatedMessage](../TemplatedMessage/TemplatedMessage.md)
+The templated explanation, or `null` to clear it.
+
+### Returns
+[ErrorBuilder](ErrorBuilder.md)
+
+The current instance of the [ErrorBuilder](ErrorBuilder.md) class.
+
+### Examples
+```csharp
+var withoutTemplate = error.ToBuilder()
+    .WithDetailTemplated((TemplatedMessage?)null)
+    .Build();
+```
+
+
+## WithDetailTemplated(String, (String, Object)[])
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/ErrorBuilder.cs#L291" target="_blank">ErrorBuilder.cs</a>
+
+Sets the [DetailTemplated](../Error/Error_DetailTemplated.md) of the error to build to a new [TemplatedMessage](../TemplatedMessage/TemplatedMessage.md).
+
+```csharp
+public ErrorBuilder WithDetailTemplated(string templateId, params (string Key, object? Value)[] namedValues);
+```
+
+### Parameters
+#### `templateId` [String](https://learn.microsoft.com/dotnet/api/system.string)
+A mandatory identifier of the message template.
+
+#### `namedValues` ([String](https://learn.microsoft.com/dotnet/api/system.string), [Object](https://learn.microsoft.com/en-us/dotnet/api/system.object))[]
+An optional array of named values to be used when rendering the templated message. Values can be `null`.
+
+### Returns
+[ErrorBuilder](ErrorBuilder.md)
+
+The current instance of the [ErrorBuilder](ErrorBuilder.md) class.
+
+### Exceptions
+[ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
+
+The `templateId`, the `namedValues` array or any name is `null`.
+
+[ArgumentException](https://learn.microsoft.com/dotnet/api/system.argumentexception)
+
+The `templateId` is empty or consists only of white-space characters, or a name is repeated.
+
+In both cases the builder is unchanged.
+
+### Examples
+```csharp
+var error = ErrorBuilder.NotFound(
+                ErrorUri.Tag("tag:exampleapp.com,2026:errors:account:notfound"),
+                "Cannot update the account.")
+            .WithDetailTemplated("errors.account.notFound", ("accountId", "D12345"))
+            .Build();
+```
+
+## See Also
+* [ErrorBuilder](ErrorBuilder.md)
+* [TemplatedMessage](../TemplatedMessage/TemplatedMessage.md)
+* [DetailTemplated](../Error/Error_DetailTemplated.md)

@@ -2,12 +2,12 @@
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L187" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L130" target="_blank">Error.cs</a>
 
-Gets or sets a human-readable explanation specific to this occurrence of the problem.
+Gets a human-readable explanation specific to this occurrence of the problem.
 
 ```csharp
-public string? Detail { get; init; }
+public string? Detail { get; }
 ```
 
 ### Property Value
@@ -29,7 +29,7 @@ var error = Error.NotFound(
                 ErrorUri.Tag("tag:exampleapp.com,2026:errors:user:not-found"),
                 "The user has not been found.",
                 // the value for the Detail property
-                "The user with ID ‘12345’ was not found or has been deleted.");
+                "The user with ID ï¿½12345ï¿½ was not found or has been deleted.");
 ```
 
 ## See Also

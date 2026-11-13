@@ -26,8 +26,14 @@ var error = Error.NotFound(
 
 
 ## Remarks
-> [!CAUTION]
-> The [TemplatedMessage](TemplatedMessage.md) record is primarily used internally by the [Error](../Error/Error.md) and [ErrorDetail](../ErrorDetail/ErrorDetail.md) records for storing the data required for generating **localized** error messages. It is not typically instantiated directly in the code.
+The [TemplatedMessage](TemplatedMessage.md) record is used by the [Error](../Error/Error.md) and [ErrorDetail](../ErrorDetail/ErrorDetail.md) records to store the data required for generating **localized** error messages.
+
+The record is immutable: its properties are get-only, and `with` expressions cannot change them. The [TemplateId](TemplatedMessage_TemplateId.md) must not be `null`, empty or white-space only, and the [Params](TemplatedMessage_Params.md) are copied when the instance is created.
+
+`ToString()` writes the contents of [Params](TemplatedMessage_Params.md), e.g., `TemplatedMessage { TemplateId = message-id, Params = { min = 3 } }`.
+
+> [!NOTE]
+> An instance is usually created by the factory methods of the [Error](../Error/Error.md) record (the `detailTemplateId` and `detailNamedValues` parameters, e.g., [NotFound](../Error/Error_NotFound.md)), by [Error.WithErrorDetail](../Error/Error_WithErrorDetail.md), or by the [ErrorBuilder](../ErrorBuilder/ErrorBuilder.md) methods [WithDetailTemplated](../ErrorBuilder/ErrorBuilder_WithDetailTemplated.md) and [AddErrorDetail](../ErrorBuilder/ErrorBuilder_AddErrorDetail.md).
 
 
 ## Constructors

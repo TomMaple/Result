@@ -21,20 +21,12 @@ var error = Error.Validation(
     "Provided data is invalid.",
     "Address the validation errors and try again.",
     ErrorUri.Locator("https://api.exampleapp.com/errors/7894375839/details"));
-
-error.AddDetail("#/email", "Email is invalid", "errors-email-invalid",
-    ("required_format", "address@domain.com"), ("min_length", "9"));
 ```
 
 ```csharp
 // Use ErrorUri.None() when the problem type is not specified (it resolves to about:blank).
 var error = Error.Failure(ErrorUri.None(), "The operation could not be completed.");
 ```
-
-## Constructors
-| Name | Description |
-| ---- | ----------- |
-| [ErrorUri(String)](ErrorUri_constructors.md) | Initializes a new instance of the [ErrorUri](ErrorUri.md) record. |
 
 ## Properties
 | Name | Description |
@@ -49,8 +41,11 @@ var error = Error.Failure(ErrorUri.None(), "The operation could not be completed
 | [Locator(String)](ErrorUri_Locator.md) | Creates a new instance of the [ErrorUri](ErrorUri.md) record with a *URI Locator* value. |
 | [None()](ErrorUri_None.md) |  Creates a new instance of the [ErrorUri](ErrorUri.md) record with the `about:blank` value. |
 | [Tag(String)](ErrorUri_Tag.md) | Creates a new instance of the [ErrorUri](ErrorUri.md) record with a *URI Tag* value. |
+| [ToString()](ErrorUri_ToString.md) | Returns the *URI* [Value](ErrorUri_Value.md). |
 
 ## Remarks
+[ErrorUri](ErrorUri.md) has no public constructor: create it with [Locator(String)](ErrorUri_Locator.md), [Tag(String)](ErrorUri_Tag.md) or [None()](ErrorUri_None.md), which validate the value. An [ErrorUri](ErrorUri.md) therefore always holds a valid *URI*.
+
 > [!NOTE]
 > A default [ErrorUri](ErrorUri.md) instance is equivalent to the one returned by [None()](ErrorUri_None.md): its [Value](ErrorUri_Value.md) is `about:blank` and it compares equal to `ErrorUri.None()`.
 

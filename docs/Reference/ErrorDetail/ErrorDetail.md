@@ -12,12 +12,15 @@ public sealed record ErrorDetail
 
 Inheritance [Object](https://learn.microsoft.com/dotnet/api/system.object) → ErrorDetail
 
+## Remarks
+The record is immutable: its properties are get-only, and `with` expressions cannot change them. [Detail](ErrorDetail_Detail.md) must not be `null`.
+
 
 ## Examples
 ```csharp
-var error = Error.Validation("tag:test.com,2024:SignupErrors-InvalidData", "Provided data is invalid.");
-error.AddDetail("#/email", "Email is invalid", "errors-email-invalid",
-    ("required_format", "address@domain.com"), ("min_length", "9"));
+var error = Error.Validation(ErrorUri.Tag("tag:test.com,2024:SignupErrors-InvalidData"), "Provided data is invalid.")
+    .WithErrorDetail("#/email", "Email is invalid", "errors-email-invalid",
+        ("required_format", "address@domain.com"), ("min_length", 9));
 ```
 
 ## Constructors
@@ -28,9 +31,9 @@ error.AddDetail("#/email", "Email is invalid", "errors-email-invalid",
 ## Properties
 | Name | Description |
 | ---- | ----------- |
-| [Detail](ErrorDetail_Detail.md) | Gets or sets a human-readable explanation of the specific problem detail. |
-| [DetailTemplated](ErrorDetail_DetailTemplated.md) | Gets or sets a templated explanation of the specific problem detail. |
-| [PropertyPointer](ErrorDetail_PropertyPointer.md) | Gets or sets a JSON Pointer which identifies invalid value in the input data. |
+| [Detail](ErrorDetail_Detail.md) | Gets a human-readable explanation of the specific problem detail. |
+| [DetailTemplated](ErrorDetail_DetailTemplated.md) | Gets a templated explanation of the specific problem detail. |
+| [PropertyPointer](ErrorDetail_PropertyPointer.md) | Gets a JSON Pointer which identifies invalid value in the input data. |
 
 
 ## See Also

@@ -36,7 +36,6 @@
 
   <ItemGroup>
     <InternalsVisibleTo Include="Maple.Result.Tests.Unit" />
-    <InternalsVisibleTo Include="Maple.Result.Extensions.HttpClient" />
   </ItemGroup>
 
   <ItemGroup>

@@ -2,12 +2,12 @@
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/ErrorDetail.cs#L22" target="_blank">ErrorDetail.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/ErrorDetail.cs#L38" target="_blank">ErrorDetail.cs</a>
 
-Gets or sets a human-readable explanation of the specific problem detail.
+Gets a human-readable explanation of the specific problem detail.
 
 ```csharp
-public string Detail { get; init; }
+public string Detail { get; }
 ```
 
 ### Property Value
@@ -16,10 +16,10 @@ public string Detail { get; init; }
 A description of the specific problem detail of the [Error](../Error/Error.md).
 
 ## Remarks
-This is a mandatory property that contains a human-readable description of the specific problem detail.
+This is a mandatory property that contains a human-readable description of the specific problem detail. It is never `null`.
 
 > [!NOTE]
-> It should not be assigned directly (i.e., via the property setter) but rather through the [AddDetail](../Error/Error_AddDetail.md) methods of the [Error](../Error/Error.md) record, which builds the instance of the [ErrorDetail](ErrorDetail.md) record. For deserialization, the setter is marked as `init` to allow assignment during object initialization.
+> [ErrorDetail](ErrorDetail.md) is immutable, so this property is set by the [constructor](ErrorDetail_constructors.md). It is usually created through [Error.WithErrorDetail](../Error/Error_WithErrorDetail.md) or [ErrorBuilder.AddErrorDetail](../ErrorBuilder/ErrorBuilder_AddErrorDetail.md).
 
 ## See Also
 * [Error](../Error/Error.md)

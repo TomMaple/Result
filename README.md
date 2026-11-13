@@ -37,6 +37,7 @@ Although, there are many existing implementation of the *Result* pattern in C#, 
 * [The Result Pattern](https://github.com/TomMaple/Maple.Result#the-result-pattern)
 * [How To Use Result library](https://github.com/TomMaple/Maple.Result#how-to-use-result-library)
 * [Mapping to HTTP responses](https://github.com/TomMaple/Maple.Result#mapping-to-http-responses)
+* [Upgrading to 3.0](https://github.com/TomMaple/Maple.Result/blob/main/docs/migration-v2-to-v3.md)
 * [FAQ](https://github.com/TomMaple/Maple.Result#faq)
 * [Learn More & Documentation](https://github.com/TomMaple/Maple.Result#learn-more)
 
@@ -268,9 +269,8 @@ var error = Error.Validation(
         ErrorUri.Locator("https://exampleapp.com/errors/7894375839"),
         "errors.signup.validation"
     )
-    .AddDetail("#/email", "Email is required.", "errors.signup.validation.email.required")
-    .AddDetail("#/firstName", "At least 3 characters are required.", "errors.signup.validation.email.minLength", ("minLength", 3))
-    .AddDetail("#/mobile", "Phone number should be in format: (111) 111-1111.", "errors.signup.validation.mobile.format", ("format", "(111) 111-1111"));
+    .WithErrorDetail("#/email", "Email is required.", "errors.signup.validation.email.required")
+    .WithErrorDetail("#/firstName", "At least 3 characters are required.", "errors.signup.validation.email.minLength", ("minLength", 3));
 ```
 
 ### Error Categories
@@ -302,7 +302,7 @@ Although, mapping to HTTP responses is not part of this library and can be done 
 | `DetailTemplated` | `TemplatedMessage` | A structure to generate a localized detail message. | No | `{ "templateId": "errors.signup.email.specialcharacters", "params": { "invalidCharacter": "/" }}` |
 | `InstanceUri` | `string` | A *URI* that identifies the specific occurrence of the problem. | No | `https://api.exampleapp.com/errors/8783927589734857/details` |
 | `ErrorDetails` | `IReadOnlyList<ErrorDetail>` | The collection of additional error details. | No | `[{ "propertyPointer": "#/email", "detail": "Invalid format", "detailTemplated": { "templateId": "errors.signup.email.invalidFormat" }}]` |
-| `Metadata` | `IReadOnlyDictionary<string, object>` | Additional, machine-readable members of the problem (RFC 9457 *extension members*). | No | `{ "limit": 100, "resetAt": "2026-12-01T00:00:00Z" }` |
+| `Metadata` | `IReadOnlyDictionary<string, object?>` | Additional, machine-readable members of the problem (RFC 9457 *extension members*). | No | `{ "limit": 100, "resetAt": "2026-12-01T00:00:00Z" }` |
 
 ### Type URI
 It is a mandatory URI that identifies the type of the problem. It can be:
@@ -317,23 +317,30 @@ It is an optional URI that the specific occurrence of the problem. It can be:
 
 ### Support for multiple error details / validation errors
 ```csharp
+var builder = ErrorBuilder.Validation(
+    ErrorUri.Tag("tag:exampleapp.com,2026:errors:signup:form"),
+    "Invalid data to create a user.");
+
 if (string.IsNullOrWhiteSpace(userInput.email))
 {
-    error.AddDetail(
+    builder.AddErrorDetail(
         "#/email",
         "The email is required.",
         "errors.user.input.email.required");
 }
-
-if (userInput.email.Length < 8)
+else if (userInput.email.Length < 8)
 {
-    error.AddDetail(
+    builder.AddErrorDetail(
         "#/email",
         "The email must be at least 8 characters long.",
         "errors.user.input.email.minLength",
         ("minLength", 8));
 }
+
+var error = builder.Build();
 ```
+
+To add a single detail to an existing error, use `error.WithErrorDetail(...)`, which returns a copy.
 
 where the parameters are:
 
@@ -342,7 +349,7 @@ where the parameters are:
 | `propertyPointer` | `string` | JSON Pointer to the input data. | no | `#/firstName` |
 | `detail` | `string` | A human-readable explanation of this error detail. | yes | `Mininum 5 characters are required.` |
 | `messageId` | `string` | A message template ID. | no | `errors.signup.validation.firstName.minLength` |
-| `namedValues` | `(string, object)[]` | The collection of named values for the message template. | no | `("minLength", 5)` |
+| `namedValues` | `(string, object?)[]` | The collection of named values for the message template. | no | `("minLength", 5)` |
 
 ### Metadata
 `Metadata` holds machine-readable, response-level values—the *extension members* of [RFC 9457](https://datatracker.ietf.org/doc/html/rfc9457#section-3.2)—that a client can read instead of parsing the `Detail` text. The library does not define any well-known keys.
@@ -355,7 +362,7 @@ var error = Error.LimitExceeded(
     .WithMetadata("limit", 100)
     .WithMetadata("resetAt", "2026-12-01T00:00:00Z");
 
-// Works also after deserialization, when the value is a JsonElement, a long or a JValue.
+// Reads the value only if it is an int (no conversion).
 if (error.TryGetMetadata<int>("limit", out var limit))
 {
     // ...
@@ -363,12 +370,36 @@ if (error.TryGetMetadata<int>("limit", out var limit))
 ```
 
 * `WithMetadata()` and `WithoutMetadata()` return a **copy**; the original error is not modified.
-* Keys must not match the standard members `type`, `title`, `status`, `detail`, `instance`, `errors` and `detailTemplated` (case-insensitive); `WithMetadata()`, the `init` setter and deserialization throw an `ArgumentException` for them.
+* Keys must not match the standard members `type`, `title`, `status`, `detail`, `instance`, `errors` and `detailTemplated` (case-insensitive); `WithMetadata()` throws an `ArgumentException` for them.
 * Keys should start with a letter, use letters, digits and `_`, and be at least 3 characters long (RFC 9457 recommendation, not enforced).
-* Values must not be `null` and should be JSON primitives (strings, numbers, booleans).
-* With *System.Text.Json*, values come back as `JsonElement`; register the [ObjectAsPrimitiveConverter](https://www.nuget.org/packages/Maple.Json.ObjectAsPrimitiveConverter) to get primitive values instead.
+* Values can be `null`. `TryGetMetadata<T>()` is strict: it returns `true` only when the stored value is a `T` (a stored `int` is not read as `long`), and never for a `null` value.
 
 See more: [Metadata](https://github.com/TomMaple/Maple.Result/blob/main/docs/Reference/Error/Error_Metadata.md)
+
+### ErrorBuilder
+`Error` is immutable. Use an `ErrorBuilder` to assemble an error step by step, and `Build()` to get it:
+```csharp
+var error = ErrorBuilder.LimitExceeded(
+        ErrorUri.Tag("tag:exampleapp.com,2026:errors:reports:limit-exceeded"),
+        "Cannot generate the report.")
+    .WithDetail("The monthly limit of 100 reports has been reached.")
+    .WithMetadata("limit", 100)
+    .Build();
+```
+
+To change an existing error, use `ToBuilder()`:
+```csharp
+var publicError = error.ToBuilder()
+    .WithTitle("The report cannot be generated.")
+    .WithoutMetadata()
+    .Build();
+```
+
+* Create a builder with `new ErrorBuilder(category, typeUri, title)`, a static method per category (e.g., `ErrorBuilder.Validation(...)`), or `error.ToBuilder()`.
+* Every argument is validated when it is passed, so `Build()` never throws. `Build()` takes a snapshot; the builder stays usable.
+* The builder is not thread-safe.
+
+See more: [ErrorBuilder](https://github.com/TomMaple/Maple.Result/blob/main/docs/Reference/ErrorBuilder/ErrorBuilder.md)
 
 ### Support for localization
 The localization can be achieved by generating messages based on the template.
@@ -447,6 +478,9 @@ Check:
 * [Maple.Result.Extensions.HttpClient](https://github.com/TomMaple/Maple.Result.Extensions.HttpClient) library for mapping *HTTP Client* responses to *Result* objects.
 
 # Upgrading to 3.0
+> [!TIP]
+> See the [migration guide from 2.x to 3.0](https://github.com/TomMaple/Maple.Result/blob/main/docs/migration-v2-to-v3.md) for a checklist, before/after examples of every breaking change and a search-and-replace reference.
+
 ## New `LimitExceeded` error category
 `ErrorCategory.LimitExceeded` (numeric value `10`) and the `Error.LimitExceeded(...)` factory methods have been added. Use the category when the request is valid and permitted, but a usage limit, quota or rate has been exhausted (it corresponds to the `429` HTTP status code). `Unavailable` (`503`) is now limited to a service that is unavailable.
 
@@ -456,9 +490,35 @@ Check:
 ## New `Error.Metadata` property
 `Error` has a new `Metadata` dictionary for machine-readable values (RFC 9457 *extension members*), with the `WithMetadata()`, `WithoutMetadata()` and `TryGetMetadata<T>()` methods. See [Metadata](#metadata).
 
-* Serialized errors now always contain a `Metadata` member (`"Metadata":{}` when empty). Deserializing JSON without it (or with `"Metadata":null`) produces an empty dictionary.
-* Deserializing a `Metadata` object with a reserved key (e.g., `"status"`) or a `null` value throws (an `ArgumentException`, wrapped in a `JsonSerializationException` by *Newtonsoft.Json*).
+* Serialized errors always contain a `Metadata` member (`"Metadata":{}` when empty).
+* Metadata values can be `null`.
 * `Equals()` and `GetHashCode()` of `Error` take the metadata into account.
+
+## Immutable `Result`, `Result<T>` and `Error`, and the new `ErrorBuilder`
+> [!WARNING]
+> **Breaking changes.**
+
+* **No deserialization without converters.** `Result`, `Result<T>`, `Error` and `ErrorUri` have no public constructors or setters, so *System.Text.Json* and *Newtonsoft.Json* can no longer read them from JSON: `Result`, `Result<T>` and `Error` throw, and an `ErrorUri` is silently read as `about:blank` (see the [migration guide](https://github.com/TomMaple/Maple.Result/blob/main/docs/migration-v2-to-v3.md#no-json-deserialization-without-converters)). Writing them still works with the default settings. Reading them requires dedicated converter packages (planned).
+* **`AddDetail()` has been removed.** Use `error.WithErrorDetail(...)`, which returns a copy instead of changing the error, or an `ErrorBuilder` and its `AddErrorDetail(...)` to add several details:
+  ```csharp
+  // before
+  error.AddDetail("#/email", "The email is required.");
+  // after
+  error = error.WithErrorDetail("#/email", "The email is required.");
+  ```
+* **`with { … }` no longer changes an `Error`, `ErrorDetail` or `TemplatedMessage`.** All their properties are get-only. Use `ToBuilder()`:
+  ```csharp
+  // before
+  var copy = error with { Title = "New title" };
+  // after
+  var copy = error.ToBuilder().WithTitle("New title").Build();
+  ```
+* **Public constructors removed:** `new Result()`, `new Result<T>()`, `new Error()` and `new ErrorUri(string)`. Use `Result.Success()`, `Result.FromError()`, `Result<T>.FromValue()`, `Result<T>.FromError()` (or the implicit conversions), the `Error` factory methods or `ErrorBuilder`, and `ErrorUri.None()`, `Locator()` or `Tag()`.
+* **`TryGetMetadata<T>()` is strict.** It returns `true` only when the stored value is a `T`; there is no conversion (a stored `int` is no longer read as `long`), and a `null` value returns `false`.
+* **Nullable values.** Metadata values and the named values of templated messages (`TemplatedMessage.Params`, `detailNamedValues`, `namedValues`) are `object?`.
+* **More checks.** The title of an error must not be `null`, empty or white-space only; the category must be a defined `ErrorCategory` value; `TemplatedMessage.TemplateId` must not be blank; `ErrorDetail.Detail` must not be `null`.
+* **JSON of a failed `Result<T>`.** It now always contains `Value` with the default value of `T`, e.g., `{"Value":0,"Error":{…}}` for a `Result<int>`, or `"Value":null` for a reference type. Previously a failed result omitted `Value`.
+* `Result.Success()` returns the same, shared instance on every call.
 
 # FAQ
 ## When to use a Result and when an Exception?

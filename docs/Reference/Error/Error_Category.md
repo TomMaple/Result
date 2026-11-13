@@ -2,11 +2,11 @@
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L133" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L75" target="_blank">Error.cs</a>
 
-Gets or sets the category of the error.
+Gets the category of the error.
 ```csharp
-public ErrorCategory Category { get; init; }
+public ErrorCategory Category { get; }
 ```
 
 ### Property Value
@@ -15,7 +15,7 @@ public ErrorCategory Category { get; init; }
 The category of the error.
 
 ## Remarks
-This is a mandatory property.
+This is a mandatory property. It is always a defined [ErrorCategory](../ErrorCategory.md) value.
 
 If not specified, the category defaults to *Validation*.
 

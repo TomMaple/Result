@@ -1,8 +1,43 @@
-# Error.WithoutMetadata(String) Method
+# Error.WithoutMetadata Method
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L403" target="_blank">Error.cs</a>
+
+Returns a copy of the [Error](Error.md) without some or all of its [Metadata](Error_Metadata.md) entries.
+
+## Overloads
+| Name | Description |
+| ---- | ----------- |
+| [WithoutMetadata()](#withoutmetadata) | Returns a copy of the error without any metadata. |
+| [WithoutMetadata(String)](#withoutmetadatastring) | Returns a copy of the error without the metadata entry of the specified key. |
+
+## Remarks
+These methods **do not modify** the current instance; they return a new [Error](Error.md). To remove several entries without copying the error for each one, use an [ErrorBuilder](../ErrorBuilder/ErrorBuilder.md) (see [ErrorBuilder.WithoutMetadata](../ErrorBuilder/ErrorBuilder_WithoutMetadata.md)).
+
+
+## WithoutMetadata()
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L370" target="_blank">Error.cs</a>
+
+Returns a copy of the current error without any metadata.
+
+```csharp
+public Error WithoutMetadata();
+```
+
+### Returns
+[Error](Error.md)
+
+A new instance of the [Error](Error.md) record with an empty [Metadata](Error_Metadata.md) dictionary. The other members are unchanged.
+
+### Examples
+```csharp
+// Removes all internal values before the error is returned to the client.
+var publicError = error.WithoutMetadata();
+```
+
+
+## WithoutMetadata(String)
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L387" target="_blank">Error.cs</a>
 
 Returns a copy of the current error without the [Metadata](Error_Metadata.md) entry of the specified key.
 
@@ -28,12 +63,10 @@ The `key` is `null`.
 
 The `key` is empty or consists only of white-space characters.
 
-## Remarks
-This method **does not modify** the current instance; it returns a new [Error](Error.md) with a new, read-only [Metadata](Error_Metadata.md) dictionary (or, if the key is absent, sharing the current one). The order of the remaining entries is kept.
+### Remarks
+Keys are compared ordinally (case-sensitive). An absent key is not an error.
 
-Keys are compared ordinally (case-sensitive).
-
-## Examples
+### Examples
 ```csharp
 var error = Error.LimitExceeded(
                 ErrorUri.Tag("tag:exampleapp.com,2026:errors:reports:limit-exceeded"),

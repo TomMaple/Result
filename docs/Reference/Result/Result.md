@@ -2,7 +2,7 @@
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Result.cs#L49" target="_blank">Result.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Result.cs#L50" target="_blank">Result.cs</a>
 
 Represents the outcome of an operation that can either succeed or fail with an [Error](../Error/Error.md).
 
@@ -22,8 +22,9 @@ Implements [IResult](../IResult/IResult.md)
 
 If the operation is successful, the [IsSuccess()](Result_IsSuccess.md) method will return `true`; otherwise, it will return `false`, and the [Error](Result_Error.md) property will contain details about the failure.
 
-> [!CAUTION]
-> Use static factory methods to create instances of this record, such as [Result.Success()](Result_Success.md) and [Result.FromError(Error)](Result_FromError.md), or the [Implicit(Error to Result)](Result_implicit_Error_to_Result.md) operator rather than using the constructor directly.
+The record is immutable and has no public constructor. Create it with [Result.Success()](Result_Success.md), [Result.FromError(Error)](Result_FromError.md) or the [Implicit(Error to Result)](Result_implicit_Error_to_Result.md) operator.
+
+The default serializers can write a [Result](Result.md) as JSON; reading it back requires a dedicated converter.
 
 ## Examples
 ```csharp
@@ -46,15 +47,10 @@ public Result DeleteUser(int userId)
 }
 ```
 
-## Constructors
-| Name | Description |
-| ---- | ----------- |
-| [Result()](Result_constructors.md) | Initializes a new instance of the [Result](Result.md) record. |
-
 ## Properties
 | Name | Description |
 | ---- | ----------- |
-| [Error](Result_Error.md) | Gets or sets the error details if the result represents a failure. |
+| [Error](Result_Error.md) | Gets the error details if the result represents a failure. |
 
 ## Methods
 | Name | Description |
