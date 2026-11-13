@@ -46,19 +46,15 @@ public readonly record struct ErrorUri
     #region constructors
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="ErrorUri" /> record with the provided value.
+    ///     Initializes a new instance of the <see cref="ErrorUri" /> record with the provided value, without
+    ///     validating it.
     /// </summary>
     /// <remarks>
-    ///     <para>
-    ///         This constructor is intended only for deserialization purposes,
-    ///         and it should not be used directly in code.
-    ///     </para>
-    ///     <para>
-    ///         To create a new instance of the <see cref="ErrorUri" /> object, use one of the factory methods provided
-    ///         (<see cref="None"/>, <see cref="Locator"/> or <see cref="Tag"/>).
-    ///     </para>
+    ///     Used by the factory methods (<see cref="None"/>, <see cref="Locator"/>, <see cref="Tag"/>) after
+    ///     validation, and for values taken from an existing <see cref="Error" />, which were validated when it was
+    ///     created.
     /// </remarks>
-    public ErrorUri(string value)
+    internal ErrorUri(string value)
     {
         _value = value;
     }
@@ -101,6 +97,15 @@ public readonly record struct ErrorUri
         UriTagValidator.Validate(uriTag);
 
         return new ErrorUri(uriTag);
+    }
+
+    /// <summary>
+    ///     Returns the <i>URI</i> <see cref="Value" />.
+    /// </summary>
+    /// <returns>The <i>URI</i> value, e.g., <c>about:blank</c>.</returns>
+    public override string ToString()
+    {
+        return Value;
     }
 
     #region equality
