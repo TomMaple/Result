@@ -40,7 +40,7 @@ public sealed record TemplatedMessage(string TemplateId, IReadOnlyDictionary<str
         return other is not null
                && EqualityContract == other.EqualityContract
                && TemplateId == other.TemplateId
-               && ParamsEqual(Params, other.Params);
+               && DictionaryContent.Equal(Params, other.Params);
     }
 
     /// <summary>
@@ -56,33 +56,8 @@ public sealed record TemplatedMessage(string TemplateId, IReadOnlyDictionary<str
         hashCode.Add(TemplateId);
 
         if (Params is not null)
-        {
-            // Combine the entries in an order-independent way, since a dictionary is unordered.
-            var paramsHashCode = 0;
-            foreach (var pair in Params)
-                paramsHashCode ^= HashCode.Combine(pair.Key, pair.Value);
-
-            hashCode.Add(paramsHashCode);
-        }
+            hashCode.Add(DictionaryContent.GetHashCode(Params));
 
         return hashCode.ToHashCode();
-    }
-
-    private static bool ParamsEqual(IReadOnlyDictionary<string, object>? left,
-        IReadOnlyDictionary<string, object>? right)
-    {
-        if (ReferenceEquals(left, right))
-            return true;
-
-        if (left is null || right is null || left.Count != right.Count)
-            return false;
-
-        foreach (var pair in left)
-        {
-            if (!right.TryGetValue(pair.Key, out var value) || !object.Equals(pair.Value, value))
-                return false;
-        }
-
-        return true;
     }
 }

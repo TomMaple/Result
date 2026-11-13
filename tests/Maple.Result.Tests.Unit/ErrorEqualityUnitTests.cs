@@ -150,6 +150,73 @@ public class ErrorEqualityUnitTests
 
     #endregion
 
+    #region metadata equality
+
+    [Fact]
+    public void Equals_ErrorsWithSameMetadata_AreEqual()
+    {
+        // Arrange
+        var first = CreateError().WithMetadata("retryAfterSeconds", 30);
+        var second = CreateError().WithMetadata("retryAfterSeconds", 30);
+
+        // Act & Assert
+        first.Equals(second).ShouldBeTrue();
+        (first == second).ShouldBeTrue();
+        first.GetHashCode().ShouldBe(second.GetHashCode());
+    }
+
+    [Fact]
+    public void Equals_ErrorsWithMetadataInDifferentOrder_AreEqual()
+    {
+        // Arrange
+        var first = CreateError().WithMetadata("limit", 100).WithMetadata("remaining", 0);
+        var second = CreateError().WithMetadata("remaining", 0).WithMetadata("limit", 100);
+
+        // Act & Assert
+        first.Equals(second).ShouldBeTrue();
+        (first == second).ShouldBeTrue();
+        first.GetHashCode().ShouldBe(second.GetHashCode());
+    }
+
+    [Fact]
+    public void Equals_ErrorsWithDifferentMetadataValues_AreNotEqual()
+    {
+        // Arrange
+        var first = CreateError().WithMetadata("limit", 100);
+        var second = CreateError().WithMetadata("limit", 200);
+
+        // Act & Assert
+        first.Equals(second).ShouldBeFalse();
+        (first == second).ShouldBeFalse();
+        first.GetHashCode().ShouldNotBe(second.GetHashCode());
+    }
+
+    [Fact]
+    public void Equals_ErrorsWithDifferentMetadataKeys_AreNotEqual()
+    {
+        // Arrange
+        var first = CreateError().WithMetadata("limit", 100);
+        var second = CreateError().WithMetadata("quota", 100);
+
+        // Act & Assert
+        first.Equals(second).ShouldBeFalse();
+        (first == second).ShouldBeFalse();
+    }
+
+    [Fact]
+    public void Equals_ErrorWithAndWithoutMetadata_AreNotEqual()
+    {
+        // Arrange
+        var first = CreateError().WithMetadata("limit", 100);
+        var second = CreateError();
+
+        // Act & Assert
+        first.Equals(second).ShouldBeFalse();
+        (first == second).ShouldBeFalse();
+    }
+
+    #endregion
+
     #region with-expression aliasing
 
     [Fact]
