@@ -49,18 +49,15 @@ public interface IResult
 /// <inheritdoc cref="IResult" />
 public sealed record Result : IResult
 {
-    private static readonly Result SuccessResult = new();
+    private static readonly Result SuccessResult = new(null);
 
     #region constructors
 
-    private Result()
+    // The only constructor takes a parameter on purpose: a parameterless one (even a private one) lets
+    // Newtonsoft.Json create an instance and silently read every payload, including a failed one, as a success.
+    private Result(Error? error)
     {
-    }
-
-    private Result(Error error)
-    {
-        Error = error
-                ?? throw new ArgumentNullException(nameof(error), "Error cannot be null!");
+        Error = error;
     }
 
     #endregion
@@ -102,7 +99,7 @@ public sealed record Result : IResult
     /// <exception cref="ArgumentNullException">If the <paramref name="error" /> is <see langword="null" />.</exception>
     public static implicit operator Result(Error error)
     {
-        return new Result(error);
+        return new Result(error ?? throw new ArgumentNullException(nameof(error), "Error cannot be null!"));
     }
 
     #endregion
@@ -115,7 +112,7 @@ public sealed record Result : IResult
     /// <exception cref="ArgumentNullException">If the <paramref name="error" /> is <see langword="null" />.</exception>
     public static Result FromError(Error error)
     {
-        return new Result(error);
+        return new Result(error ?? throw new ArgumentNullException(nameof(error), "Error cannot be null!"));
     }
 
     /// <summary>

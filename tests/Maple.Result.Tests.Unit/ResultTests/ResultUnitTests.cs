@@ -913,6 +913,98 @@ public class ResultUnitTests
 
     #endregion
 
+    #region deserialization is not supported
+
+    [Fact]
+    public void Deserialize_FailedResultAndMicrosoftSerializer_ThrowsNotSupportedException()
+    {
+        // Arrange
+        var json = SerializationHelper.SerializeWithMicrosoft(
+            Sut.FromError(Error.NotFound(ErrorUri.Tag("tag:test.com,2024:Test"), "Test title")));
+
+        // Act
+        var exception = Record.Exception(() => System.Text.Json.JsonSerializer.Deserialize<Sut>(json));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<NotSupportedException>();
+    }
+
+    [Fact]
+    public void Deserialize_FailedResultAndNewtonsoftSerializer_ThrowsJsonSerializationException()
+    {
+        // Arrange
+        var json = SerializationHelper.SerializeWithNewtonsoft(
+            Sut.FromError(Error.NotFound(ErrorUri.Tag("tag:test.com,2024:Test"), "Test title")));
+
+        // Act
+        var exception = Record.Exception(() => Newtonsoft.Json.JsonConvert.DeserializeObject<Sut>(json));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<Newtonsoft.Json.JsonSerializationException>();
+    }
+
+    [Fact]
+    public void Deserialize_SuccessfulResultAndNewtonsoftSerializer_ThrowsJsonSerializationException()
+    {
+        // Arrange
+        var json = SerializationHelper.SerializeWithNewtonsoft(Sut.Success());
+
+        // Act
+        var exception = Record.Exception(() => Newtonsoft.Json.JsonConvert.DeserializeObject<Sut>(json));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<Newtonsoft.Json.JsonSerializationException>();
+    }
+
+    [Fact]
+    public void Deserialize_FailedResultOfTAndMicrosoftSerializer_ThrowsNotSupportedException()
+    {
+        // Arrange
+        var json = SerializationHelper.SerializeWithMicrosoft(
+            Result<int>.FromError(Error.NotFound(ErrorUri.Tag("tag:test.com,2024:Test"), "Test title")));
+
+        // Act
+        var exception = Record.Exception(() => System.Text.Json.JsonSerializer.Deserialize<Result<int>>(json));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<NotSupportedException>();
+    }
+
+    [Fact]
+    public void Deserialize_FailedResultOfTAndNewtonsoftSerializer_ThrowsJsonSerializationException()
+    {
+        // Arrange
+        var json = SerializationHelper.SerializeWithNewtonsoft(
+            Result<int>.FromError(Error.NotFound(ErrorUri.Tag("tag:test.com,2024:Test"), "Test title")));
+
+        // Act
+        var exception = Record.Exception(() => Newtonsoft.Json.JsonConvert.DeserializeObject<Result<int>>(json));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<Newtonsoft.Json.JsonSerializationException>();
+    }
+
+    [Fact]
+    public void Deserialize_SuccessfulResultOfTAndNewtonsoftSerializer_ThrowsJsonSerializationException()
+    {
+        // Arrange
+        var json = SerializationHelper.SerializeWithNewtonsoft(Result<int>.FromValue(1));
+
+        // Act
+        var exception = Record.Exception(() => Newtonsoft.Json.JsonConvert.DeserializeObject<Result<int>>(json));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<Newtonsoft.Json.JsonSerializationException>();
+    }
+
+    #endregion
+
     #region helper classes
 
     private class TestClass

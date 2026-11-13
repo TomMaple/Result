@@ -256,6 +256,38 @@ public class ErrorUnitTests
 
     #endregion
 
+    #region deserialization is not supported
+
+    [Fact]
+    public void Deserialize_MicrosoftSerializer_ThrowsNotSupportedException()
+    {
+        // Arrange
+        var json = SerializationHelper.SerializeWithMicrosoft(Sut.NotFound(ErrorUri.None(), "Test title"));
+
+        // Act
+        var exception = Record.Exception(() => System.Text.Json.JsonSerializer.Deserialize<Sut>(json));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<NotSupportedException>();
+    }
+
+    [Fact]
+    public void Deserialize_NewtonsoftSerializer_ThrowsJsonSerializationException()
+    {
+        // Arrange
+        var json = SerializationHelper.SerializeWithNewtonsoft(Sut.NotFound(ErrorUri.None(), "Test title"));
+
+        // Act
+        var exception = Record.Exception(() => Newtonsoft.Json.JsonConvert.DeserializeObject<Sut>(json));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<Newtonsoft.Json.JsonSerializationException>();
+    }
+
+    #endregion
+
     #region ToString
 
     [Fact]
