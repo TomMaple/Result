@@ -11,7 +11,7 @@
 using System.Collections.Generic;
 using Sut = Maple.Result.Error;
 
-namespace Maple.Result.Tests.Unit;
+namespace Maple.Result.Tests.Unit.ErrorTests;
 
 public class ErrorEqualityUnitTests
 {

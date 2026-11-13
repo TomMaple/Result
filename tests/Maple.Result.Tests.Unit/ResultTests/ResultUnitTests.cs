@@ -12,7 +12,7 @@ using Maple.Result.Tests.Unit.Helpers;
 using System;
 using Sut = Maple.Result.Result;
 
-namespace Maple.Result.Tests.Unit;
+namespace Maple.Result.Tests.Unit.ResultTests;
 
 public class ResultUnitTests
 {

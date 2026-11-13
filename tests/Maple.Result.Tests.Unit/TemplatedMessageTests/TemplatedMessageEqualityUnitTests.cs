@@ -11,7 +11,7 @@
 using System.Collections.Generic;
 using Sut = Maple.Result.TemplatedMessage;
 
-namespace Maple.Result.Tests.Unit;
+namespace Maple.Result.Tests.Unit.TemplatedMessageTests;
 
 public class TemplatedMessageEqualityUnitTests
 {
