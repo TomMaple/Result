@@ -318,4 +318,133 @@ public class ErrorUriUnitTests
     }
 
     #endregion
+
+    #region Urn
+
+    [Theory]
+    [InlineData("urn:example:errors:out-of-credit")]
+    [InlineData("URN:example:a")]                                   // the "urn" scheme is case-insensitive
+    [InlineData("urn:isbn:0451450523")]                             // RFC 8141 examples
+    [InlineData("urn:ietf:rfc:2648")]
+    [InlineData("urn:uuid:6e8bc430-9c3a-11d9-9669-0800200c9a66")]
+    [InlineData("urn:example:a123,z456")]                           // sub-delims in the NSS
+    [InlineData("urn:example:a/b/c")]                               // "/" in the NSS
+    [InlineData("urn:example:caf%C3%A9")]                           // percent-encoded UTF-8 in the NSS
+    [InlineData("urn:example:foo-bar-baz-qux?+CCResolve:cc=uk")]    // r-component
+    [InlineData("urn:example:weather?=op=map&lat=39.56")]           // q-component
+    [InlineData("urn:example:a123,z456#789")]                       // f-component
+    [InlineData("urn:ab:c")]                                        // the shortest NID (2 characters)
+    [InlineData("urn:a2345678901234567890123456789012:c")]          // the longest NID (32 characters)
+    public void Urn_ValidUrn_ReturnsErrorUriWithUrn(string urn)
+    {
+        // Act
+        var result = ErrorUri.Urn(urn);
+
+        // Assert
+        result.Value.ShouldBe(urn);
+    }
+
+    [Fact]
+    public void Urn_NullUrn_ThrowsArgumentNullException()
+    {
+        // Act
+        var exception = Record.Exception(() => ErrorUri.Urn(null!));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentNullException>();
+        ((ArgumentNullException)exception).ParamName.ShouldBe("urn");
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData("urn:")]
+    [InlineData("urn:example")]                                     // no NSS
+    [InlineData("urn:example:")]                                    // empty NSS
+    [InlineData("urn:a:b")]                                         // NID shorter than 2 characters
+    [InlineData("urn:a23456789012345678901234567890123:c")]         // NID longer than 32 characters
+    [InlineData("urn:-example:a")]                                  // NID starting with a hyphen
+    [InlineData("urn:example-:a")]                                  // NID ending with a hyphen
+    [InlineData("urn:exa_mple:a")]                                  // "_" in the NID
+    [InlineData("urn:example:a b")]                                 // a space in the NSS
+    [InlineData("urn:example:a%zz")]                                // invalid percent-encoding
+    [InlineData("urn:example:a%2")]                                 // truncated percent-encoding
+    [InlineData("urn:example:café")]                                // a literal non-ASCII character
+    [InlineData("urn:example:a\n")]                                 // a trailing newline
+    [InlineData("urn:example:a?b")]                                 // "?" not followed by "+" or "="
+    [InlineData("tag:example.com,2004:1234")]
+    [InlineData("https://example.com/errors/1")]
+    public void Urn_InvalidUrn_ThrowsUriFormatException(string value)
+    {
+        // Act
+        var exception = Record.Exception(() => ErrorUri.Urn(value));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<UriFormatException>();
+        exception.Message.ShouldBe("The URN is not valid. Check https://datatracker.ietf.org/doc/html/rfc8141#section-2 for details.");
+    }
+
+    #endregion
+
+    #region Relative
+
+    [Theory]
+    [InlineData("/account/12345/msgs/abc")]                         // RFC 9457 example
+    [InlineData("/")]
+    [InlineData("/types/123")]
+    [InlineData("/errors/out-of-credit?lang=en")]                   // a query
+    [InlineData("/errors/out-of-credit#details")]                   // a fragment
+    [InlineData("/a/b/")]                                           // a trailing "/"
+    [InlineData("/a//b")]                                           // an empty segment after the first one
+    [InlineData("/a:b/c@d")]                                        // ":" and "@" in a segment
+    [InlineData("/caf%C3%A9")]                                      // percent-encoded UTF-8
+    public void Relative_ValidRelativeReference_ReturnsErrorUriWithRelativeReference(string relativeReference)
+    {
+        // Act
+        var result = ErrorUri.Relative(relativeReference);
+
+        // Assert
+        result.Value.ShouldBe(relativeReference);
+    }
+
+    [Fact]
+    public void Relative_NullRelativeReference_ThrowsArgumentNullException()
+    {
+        // Act
+        var exception = Record.Exception(() => ErrorUri.Relative(null!));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentNullException>();
+        ((ArgumentNullException)exception).ParamName.ShouldBe("relativeReference");
+    }
+
+    [Theory]
+    [InlineData("")]                                                // an empty reference
+    [InlineData("msgs/abc")]                                        // a relative path without the full path
+    [InlineData("//example.com/a")]                                 // a network-path reference
+    [InlineData("?a=b")]                                            // a query only
+    [InlineData("#a")]                                              // a fragment only
+    [InlineData("https://example.com/a")]                           // an absolute URI
+    [InlineData("urn:example:a")]
+    [InlineData("/a b")]                                            // a space
+    [InlineData(" /a")]                                             // leading whitespace
+    [InlineData("/a\n")]                                            // a trailing newline
+    [InlineData("/a%zz")]                                           // invalid percent-encoding
+    [InlineData("/café")]                                           // a literal non-ASCII character
+    [InlineData("/a#b#c")]                                          // "#" in the fragment
+    public void Relative_InvalidRelativeReference_ThrowsUriFormatException(string value)
+    {
+        // Act
+        var exception = Record.Exception(() => ErrorUri.Relative(value));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<UriFormatException>();
+        exception.Message.ShouldBe(
+            "The relative URI reference is not valid. Check https://datatracker.ietf.org/doc/html/rfc3986#section-4.2 for details.");
+    }
+
+    #endregion
 }

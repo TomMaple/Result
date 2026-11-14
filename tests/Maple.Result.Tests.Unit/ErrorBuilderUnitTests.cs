@@ -204,6 +204,50 @@ public class ErrorBuilderUnitTests
     }
 
     [Fact]
+    public void WithInstanceUri_None_ThrowsArgumentExceptionAndKeepsPreviousValue()
+    {
+        // Arrange
+        var sut = Sut.Validation(ErrorUri.None(), "Test title")
+            .WithInstanceUri(ErrorUri.Relative("/account/12345/msgs/abc"));
+
+        // Act
+        var exception = Record.Exception(() => sut.WithInstanceUri(ErrorUri.None()));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentException>();
+        ((ArgumentException)exception).ParamName.ShouldBe("instanceUri");
+        sut.Build().InstanceUri.ShouldBe("/account/12345/msgs/abc");
+    }
+
+    [Fact]
+    public void WithInstanceUri_Default_ThrowsArgumentException()
+    {
+        // Arrange
+        var sut = Sut.Validation(ErrorUri.None(), "Test title");
+
+        // Act
+        var exception = Record.Exception(() => sut.WithInstanceUri(default(ErrorUri)));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentException>();
+        ((ArgumentException)exception).ParamName.ShouldBe("instanceUri");
+    }
+
+    [Fact]
+    public void WithInstanceUri_Urn_BuildsErrorWithUrnInstanceUri()
+    {
+        // Act
+        var result = Sut.Validation(ErrorUri.None(), "Test title")
+            .WithInstanceUri(ErrorUri.Urn("urn:uuid:6e8bc430-9c3a-11d9-9669-0800200c9a66"))
+            .Build();
+
+        // Assert
+        result.InstanceUri.ShouldBe("urn:uuid:6e8bc430-9c3a-11d9-9669-0800200c9a66");
+    }
+
+    [Fact]
     public void WithCategory_UndefinedCategory_ThrowsArgumentOutOfRangeExceptionAndKeepsPreviousValue()
     {
         // Arrange

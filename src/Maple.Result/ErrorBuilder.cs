@@ -299,8 +299,20 @@ public sealed class ErrorBuilder
     ///     A <i>URI</i> reference that identifies the specific occurrence of the problem, or <see langword="null" /> to clear it.
     /// </param>
     /// <returns>The current <see cref="ErrorBuilder" /> instance.</returns>
+    /// <remarks>
+    ///     <c>about:blank</c> (<see cref="ErrorUri.None" /> or a default <see cref="ErrorUri" />) has a meaning only as a type
+    ///     (<i>RFC 9457</i>, section 4.2.1), so it is rejected; pass <see langword="null" /> when there is no instance.
+    /// </remarks>
+    /// <exception cref="ArgumentException">If the <paramref name="instanceUri" /> is <c>about:blank</c>.</exception>
     public ErrorBuilder WithInstanceUri(ErrorUri? instanceUri)
     {
+        if (instanceUri == ErrorUri.None())
+        {
+            throw new ArgumentException(
+                "The instance URI must not be ‘about:blank’, which has a meaning only as a type; pass null when there is no instance.",
+                nameof(instanceUri));
+        }
+
         _instanceUri = instanceUri;
         return this;
     }

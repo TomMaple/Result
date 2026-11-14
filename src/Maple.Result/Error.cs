@@ -506,7 +506,8 @@ public sealed record Error
     /// </exception>
     /// <exception cref="ArgumentException">
     ///     If the <paramref name="title" /> or the <paramref name="detailTemplateId" /> is empty or whitespace-only, a parameter name is repeated,
-    ///     or <paramref name="detailNamedValues" /> are passed without a <paramref name="detailTemplateId" />.
+    ///     <paramref name="detailNamedValues" /> are passed without a <paramref name="detailTemplateId" />,
+    ///     or the <paramref name="instanceUri" /> is <c>about:blank</c>.
     /// </exception>
     private static Error Create(ErrorCategory category, ErrorUri typeUri, string title, string? detail,
         ErrorUri? instanceUri, string? detailTemplateId, ReadOnlySpan<(string Key, object? Value)> detailNamedValues)
@@ -537,7 +538,8 @@ public sealed record Error
     /// </exception>
     /// <exception cref="ArgumentException">
     ///     If the <paramref name="title" /> or the <paramref name="detailTemplateId" /> is empty or whitespace-only, a parameter name is repeated,
-    ///     or <paramref name="detailNamedValues" /> are passed without a <paramref name="detailTemplateId" />.
+    ///     <paramref name="detailNamedValues" /> are passed without a <paramref name="detailTemplateId" />,
+    ///     or the <paramref name="instanceUri" /> is <c>about:blank</c>.
     /// </exception>
     private static Error Create(ErrorCategory category, ErrorUri typeUri, string title, string? detail,
         ErrorUri? instanceUri, string? detailTemplateId, IEnumerable<KeyValuePair<string, object?>>? detailNamedValues)
@@ -750,7 +752,8 @@ public sealed record Error
     /// </summary>
     /// <remarks>
     ///     Indicates that the operation failed because it was not completed within the allotted time.<br />
-    ///     It can be mapped to the 408 HTTP status code (Request Timeout) response.
+    ///     It can be mapped to the 408 HTTP status code (Request Timeout) response when the client did not send the complete request in time,
+    ///     or to the 504 HTTP status code (Gateway Timeout) response when an upstream server or a dependency did not respond in time.
     /// </remarks>
     /// <inheritdoc cref="Create(ErrorCategory, ErrorUri, string, string?, ErrorUri?, string?, ReadOnlySpan{ValueTuple{string, object?}})" />
     public static Error Timeout(ErrorUri typeUri, string title, string? detail = null,
@@ -765,7 +768,8 @@ public sealed record Error
     /// </summary>
     /// <remarks>
     ///     Indicates that the operation failed because it was not completed within the allotted time.<br />
-    ///     It can be mapped to the 408 HTTP status code (Request Timeout) response.
+    ///     It can be mapped to the 408 HTTP status code (Request Timeout) response when the client did not send the complete request in time,
+    ///     or to the 504 HTTP status code (Gateway Timeout) response when an upstream server or a dependency did not respond in time.
     /// </remarks>
     /// <inheritdoc cref="Create(ErrorCategory, ErrorUri, string, string?, ErrorUri?, string?, IEnumerable{KeyValuePair{string, object?}}?)" />
     [OverloadResolutionPriority(1)]

@@ -33,6 +33,51 @@ public class ErrorUnitTests
     }
 
     [Fact]
+    public void Validation_UrnTypeUri_ReturnsErrorWithUrnTypeUri()
+    {
+        // Act
+        var sut = Sut.Validation(ErrorUri.Urn("urn:example:errors:out-of-credit"), "Test title");
+
+        // Assert
+        sut.TypeUri.ShouldBe("urn:example:errors:out-of-credit");
+    }
+
+    [Fact]
+    public void Validation_RelativeInstanceUri_ReturnsErrorWithRelativeInstanceUri()
+    {
+        // Act
+        var sut = Sut.Validation(ErrorUri.None(), "Test title", instanceUri: ErrorUri.Relative("/account/12345/msgs/abc"));
+
+        // Assert
+        sut.InstanceUri.ShouldBe("/account/12345/msgs/abc");
+    }
+
+    [Fact]
+    public void Validation_NoneInstanceUri_ThrowsArgumentException()
+    {
+        // Act
+        var exception = Record.Exception(() => Sut.Validation(ErrorUri.None(), "Test title", instanceUri: ErrorUri.None()));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentException>();
+        exception.Message.ShouldContain("must not be ‘about:blank’");
+        ((ArgumentException)exception).ParamName.ShouldBe("instanceUri");
+    }
+
+    [Fact]
+    public void Validation_DefaultInstanceUri_ThrowsArgumentException()
+    {
+        // Act
+        var exception = Record.Exception(() => Sut.Validation(ErrorUri.None(), "Test title", instanceUri: default(ErrorUri)));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentException>();
+        ((ArgumentException)exception).ParamName.ShouldBe("instanceUri");
+    }
+
+    [Fact]
     public void Validation_NullTitle_ThrowsArgumentNullException()
     {
         // Act
@@ -1832,30 +1877,35 @@ public class ErrorUnitTests
 
     #region ErrorCategory values
 
-    [Fact]
-    public void ErrorCategory_Unavailable_HasUnchangedNumericValue()
+    [Theory]
+    [InlineData(ErrorCategory.Validation, 0)]
+    [InlineData(ErrorCategory.Unauthenticated, 1)]
+    [InlineData(ErrorCategory.Unauthorized, 2)]
+    [InlineData(ErrorCategory.NotFound, 3)]
+    [InlineData(ErrorCategory.Timeout, 4)]
+    [InlineData(ErrorCategory.Conflict, 5)]
+    [InlineData(ErrorCategory.Failure, 6)]
+    [InlineData(ErrorCategory.LimitExceeded, 10)]
+    [InlineData(ErrorCategory.Critical, 7)]
+    [InlineData(ErrorCategory.NotImplemented, 8)]
+    [InlineData(ErrorCategory.Unavailable, 9)]
+    public void ErrorCategory_Member_HasUnchangedNumericValue(ErrorCategory category, int expectedValue)
     {
-        // Arrange
-        const int ExpectedValue = 9;
-
         // Act
-        var value = (int)ErrorCategory.Unavailable;
+        var value = (int)category;
 
         // Assert
-        value.ShouldBe(ExpectedValue);
+        value.ShouldBe(expectedValue);
     }
 
     [Fact]
-    public void ErrorCategory_LimitExceeded_IsAppendedAfterUnavailable()
+    public void ErrorCategory_Always_HasElevenMembers()
     {
-        // Arrange
-        const int ExpectedValue = 10;
-
         // Act
-        var value = (int)ErrorCategory.LimitExceeded;
+        var count = Enum.GetValues<ErrorCategory>().Length;
 
         // Assert
-        value.ShouldBe(ExpectedValue);
+        count.ShouldBe(11);
     }
 
     #endregion
