@@ -105,6 +105,18 @@ public class ErrorUriUnitTests
     [Theory]
     [InlineData("http://example.com")]
     [InlineData("https://example.com/probs/out-of-credit")]
+    [InlineData("HTTPS://example.com/a")]                           // the scheme is case-insensitive
+    [InlineData("https://example.com:8443/a/b/")]                   // a port and a trailing "/"
+    [InlineData("https://user@example.com/a")]                      // user information
+    [InlineData("https://example.com/a?b=c&d=e")]                   // a query
+    [InlineData("https://example.com/a#details")]                   // a fragment
+    [InlineData("https://example.com/a?b=/c?#d/e?")]                // "/" and "?" in the query and the fragment
+    [InlineData("https://example.com/caf%C3%A9")]                   // percent-encoded UTF-8
+    [InlineData("https://example.com/a%20b")]                       // a percent-encoded space
+    [InlineData("https://example.com/a;b=c,d+e*f!g$h'i(j)k~l")]     // sub-delims and unreserved marks
+    [InlineData("https://xn--mnchen-3ya.de/a")]                     // "münchen.de" in punycode
+    [InlineData("http://[::1]:8080/a")]                             // an IPv6 address
+    [InlineData("http://192.168.0.1/a")]                            // an IPv4 address
     public void Locator_ValidUriLocator_ReturnsErrorUriWithUriLocator(string uriValue)
     {
         // Act
@@ -146,6 +158,26 @@ public class ErrorUriUnitTests
     [InlineData("mailto:email@company.com")]
     [InlineData("tag:example.com,2004:1234")]
     [InlineData("tag:timothy@hpl.hp.com,2001:web/externalHome")]
+    // new Uri trims or escapes these, but the value is stored as passed, so they are rejected (issue #112).
+    [InlineData("  https://example.com/x \n")]                      // surrounding white space
+    [InlineData(" https://example.com/x")]                          // leading white space
+    [InlineData("https://example.com/x ")]                          // trailing white space
+    [InlineData("https://example.com/x\n")]                         // a trailing new line
+    [InlineData("https://example.com/a b")]                         // a space
+    [InlineData("https://example.com/a\tb")]                        // a tab
+    [InlineData("https://example.com/a%zz")]                        // invalid percent-encoding
+    [InlineData("https://example.com/a%2")]                         // truncated percent-encoding
+    [InlineData("https://example.com/a%")]                          // a lone "%"
+    [InlineData("https://example.com/café")]                        // a literal non-ASCII character in the path
+    [InlineData("https://münchen.de/a")]                            // a literal non-ASCII host (needs punycode instead)
+    [InlineData("https://example.com/a#b#c")]                       // a second "#"
+    [InlineData("https://example.com/a\"b")]                        // a character outside RFC 3986
+    [InlineData("https://example.com/a<b>")]
+    [InlineData("https://example.com/a{b}")]
+    [InlineData("https://example.com/a|b")]
+    [InlineData("https://example.com/a\\b")]
+    [InlineData("https://example.com/a^b")]
+    [InlineData("https://example.com/a`b")]
     public void Locator_InvalidUriLocator_ThrowsException(string value)
     {
         // Act
@@ -215,6 +247,7 @@ public class ErrorUriUnitTests
     [InlineData("tag:example.com,2004:a?q/b")]            // "?" and "/" are allowed in the specific part
     [InlineData("tag:example.com,2004:a=b&c;d")]          // sub-delims are allowed in the specific part
     [InlineData("tag:example.com,2004:~a.b_c-d")]         // unreserved marks are allowed in the specific part
+    [InlineData("tag:example.com,2004:a%2fb#c%2Fd")]      // lower- and upper-case hexadecimal digits in the specific part and the fragment
     public void Tag_ValidUriTag_ReturnsErrorUriWithUriTag(string tagValue)
     {
         // Act
@@ -280,6 +313,17 @@ public class ErrorUriUnitTests
     [InlineData("tag:example.com,2004:\U0001F600")]  // a literal emoji in the specific part
     [InlineData("tag:münchen.de,2004:x")]            // literal "ü" in the authority (needs punycode instead)
     [InlineData("tag:例.com,2004:x")]                // literal CJK ("例") in the authority
+    // White space and invalid percent-encoding (issue #112).
+    [InlineData("tag:example.com,2026:foo\n")]       // a trailing new line ("$" matched before it)
+    [InlineData("tag:example.com,2026:foo\r\n")]     // a trailing CR LF
+    [InlineData("tag:example.com,2026:foo ")]        // a trailing space
+    [InlineData(" tag:example.com,2026:foo")]        // a leading space
+    [InlineData("tag:example.com,2026:a b")]         // a space in the specific part
+    [InlineData("tag:example.com,2026:a%zz")]        // invalid percent-encoding in the specific part
+    [InlineData("tag:example.com,2026:a%2")]         // truncated percent-encoding
+    [InlineData("tag:example.com,2026:a%")]          // a lone "%"
+    [InlineData("tag:example.com,2026:a#b%zz")]      // invalid percent-encoding in the fragment
+    [InlineData("tag:example.com,2026:a#b#c")]       // a second "#"
     public void Tag_InvalidUriTag_ThrowsException(string value)
     {
         // Act

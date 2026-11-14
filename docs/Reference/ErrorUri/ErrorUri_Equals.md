@@ -2,7 +2,7 @@
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/ErrorUri.cs#L182" target="_blank">ErrorUri.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/ErrorUri.cs#L205" target="_blank">ErrorUri.cs</a>
 
 Determines whether the specified [ErrorUri](ErrorUri.md) is equal to the current [ErrorUri](ErrorUri.md), comparing the [Value](ErrorUri_Value.md) property rather than the underlying field.
 
@@ -31,11 +31,6 @@ This override is consistent with [GetHashCode()](ErrorUri_GetHashCode.md): equal
 ```csharp
 // true — a default instance reports `about:blank`, just like None().
 var areEqual = default(ErrorUri) == ErrorUri.None();
-```
-
-```csharp
-// true — a null value is treated as an unspecified type, i.e., `about:blank`.
-var areEqual = new ErrorUri(null!) == ErrorUri.None();
 ```
 
 ```csharp

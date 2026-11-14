@@ -9,11 +9,23 @@
  */
 
 using System;
+using System.Text.RegularExpressions;
 
 namespace Maple.Result.Validators;
 
-internal static class UriLocatorValidator
+internal static partial class UriLocatorValidator
 {
+    private const string Message = "The URI locator is not valid. Check https://datatracker.ietf.org/doc/html/rfc3986#section-3.1 for details.";
+
+    // new Uri trims surrounding whitespace and escapes characters such as spaces, invalid percent-encoding and non-ASCII characters,
+    // but ErrorUri stores the string as passed. So the raw string must already be a valid URI: only the RFC 3986 characters
+    // (unreserved, reserved and "%" as pct-encoded = "%" HEXDIG HEXDIG), and at most one "#", which starts the fragment.
+    [GeneratedRegex(
+        @"^(?:[A-Za-z0-9\-._~:/?\[\]@!$&'()*+,;=]|%[0-9A-Fa-f]{2})+" +
+        @"(?:#(?:[A-Za-z0-9\-._~:/?\[\]@!$&'()*+,;=]|%[0-9A-Fa-f]{2})*)?\z",
+        RegexOptions.CultureInvariant)]
+    private static partial Regex RawUriPattern();
+
     internal static void Validate(string uriLocator)
     {
         Uri uri;
@@ -24,12 +36,13 @@ internal static class UriLocatorValidator
         }
         catch (Exception ex) when (ex is not ArgumentNullException)
         {
-            throw new UriFormatException("The URI locator is not valid. Check https://datatracker.ietf.org/doc/html/rfc3986#section-3.1 for details.", ex);
+            throw new UriFormatException(Message, ex);
         }
 
         if (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps)
-        {
-            throw new UriFormatException("The URI locator is not valid. Check https://datatracker.ietf.org/doc/html/rfc3986#section-3.1 for details.");
-        }
+            throw new UriFormatException(Message);
+
+        if (!RawUriPattern().IsMatch(uriLocator))
+            throw new UriFormatException(Message);
     }
 }

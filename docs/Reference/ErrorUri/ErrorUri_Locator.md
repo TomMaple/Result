@@ -2,7 +2,7 @@
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/ErrorUri.cs#L99" target="_blank">ErrorUri.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/ErrorUri.cs#L111" target="_blank">ErrorUri.cs</a>
 
 Creates a new instance of the [ErrorUri](ErrorUri.md) record representing a *URI Locator*.
 
@@ -12,16 +12,35 @@ public static ErrorUri Locator(string uriLocator);
 
 ### Parameters
 #### `uriLocator` [String](https://learn.microsoft.com/dotnet/api/system.string)
-A mandatory value that is a *URI Locator* to be used for the new instance of [ErrorUri](ErrorUri.md).
+The absolute `http` or `https` *URI*, e.g., `https://example.com/probs/out-of-credit`; non-ASCII characters must be percent-encoded, and an internationalized domain name must use its punycode (`xn--`) form.
 
 ### Returns
 [ErrorUri](ErrorUri.md)
 
 A new instance of the [ErrorUri](ErrorUri.md) record representing a *URI Locator* initialized with the provided value.
 
+### Exceptions
+[ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
+
+The `uriLocator` is `null`.
+
+[UriFormatException](https://learn.microsoft.com/dotnet/api/system.uriformatexception)
+
+The `uriLocator` is not a valid *URI Locator*.
+
 ## Remarks
-> [!NOTE]
-> The method validates whether the provided value is a valid *URI Locator*.
+The method validates that the value is an absolute `http` or `https` *URI*. The value is stored as passed, without normalization, so it must already be a valid *URI* (*RFC 3986*):
+
+| Value | Accepted |
+| ----- | -------- |
+| `https://example.com/probs/out-of-credit`, `https://example.com:8443/a?b=c#d`, `http://[::1]/a` | yes |
+| `https://example.com/caf%C3%A9`, `https://xn--mnchen-3ya.de/a` (percent-encoded, punycode) | yes |
+| `" https://example.com/a"`, `"https://example.com/a\n"` (leading or trailing white space) | no |
+| `https://example.com/a b`, `https://example.com/a<b>` (characters that need escaping) | no |
+| `https://example.com/a%zz`, `https://example.com/a%` (invalid percent-encoding) | no |
+| `https://example.com/café`, `https://münchen.de/a` (literal non-ASCII characters) | no |
+| `https://example.com/a#b#c` (a second `#`) | no |
+| `mailto:…`, `tag:…`, `urn:…`, `/a/b` (another scheme or a relative reference) | no; use [Tag](ErrorUri_Tag.md), [Urn](ErrorUri_Urn.md) or [Relative](ErrorUri_Relative.md) |
 
 ## Examples
 ```csharp

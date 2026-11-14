@@ -179,6 +179,7 @@ These values were accepted in 2.x and now throw:
 | A `null` `TemplatedMessage.TemplateId` | `ArgumentNullException` |
 | A `null` `ErrorDetail.Detail` | `ArgumentNullException` |
 | `about:blank` as an instance *URI*, e.g., `instanceUri: ErrorUri.None()` (factory methods, `ErrorBuilder.WithInstanceUri`); pass `null` instead | `ArgumentException` |
+| An `ErrorUri.Tag` or `ErrorUri.Locator` value with white space (including a trailing new line), invalid percent-encoding (e.g., `%zz`), or, for locators, characters that need escaping (e.g., a space) or literal non-ASCII characters; 2.x accepted them and stored the value as passed | `UriFormatException` |
 
 In return, every `Error` you receive has a non-blank title, a defined category, a non-`null` type *URI* and no meaningless `about:blank` instance *URI*.
 
