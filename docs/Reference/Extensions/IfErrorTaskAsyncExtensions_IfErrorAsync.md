@@ -22,7 +22,7 @@ Runs a specific asynchronous action or function, if the instance of `TResult` re
 
 
 ## IfErrorAsync&lt;TResult&gt;(TResult, Func&lt;Error, Task&gt;, Boolean)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfErrorTaskAsyncExtensions.cs#L54" target="_blank">IfErrorTaskAsyncExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfErrorTaskAsyncExtensions.cs#L56" target="_blank">IfErrorTaskAsyncExtensions.cs</a>
 
 Executes the provided asynchronous action, only if the instance of `TResult` represents a failed operation (i.e., contains an [Error](../Error/Error.md)), as an asynchronous operation.
 
@@ -55,6 +55,9 @@ The task object representing the asynchronous operation.
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` parameter is `null` or `ifErrorAction` parameter is `null`.
 
+#### [InvalidOperationException](https://learn.microsoft.com/dotnet/api/system.invalidoperationexception)
+The `ifErrorAction` function returns a `null` task.
+
 ### Examples
 ```csharp
 var createUserResult = await _userService.CreateUserAsync(userData);
@@ -68,7 +71,7 @@ await createUserResult.IfErrorAsync(async error =>
 
 
 ## IfErrorAsync&lt;TResult&gt;(TResult, Func&lt;Error, Task&lt;TResult&gt;&gt;, Boolean)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfErrorTaskAsyncExtensions.cs#L99" target="_blank">IfErrorExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfErrorTaskAsyncExtensions.cs#L109" target="_blank">IfErrorExtensions.cs</a>
 
 Executes the provided asynchronous function, only if the instance of `TResult` represents a failed operation (i.e., contains an [Error](../Error/Error.md)), as an asynchronous operation.
 
@@ -101,6 +104,9 @@ The task object representing the asynchronous operation.
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` parameter is `null` or `ifErrorFunction` parameter is `null`.
 
+#### [InvalidOperationException](https://learn.microsoft.com/dotnet/api/system.invalidoperationexception)
+The `ifErrorFunction` function returns a `null` task or a task with a `null` result.
+
 ### Examples
 ```csharp
 var userResult = await _userService.GetUserAsync(userData);
@@ -122,7 +128,7 @@ await userResult.IfErrorAsync(async error =>
 
 
 ## IfErrorAsync&lt;TResult&gt;(Task&lt;TResult&gt;, Func&lt;Error, Task&gt;, Boolean)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfErrorTaskAsyncExtensions.cs#L153" target="_blank">IfErrorTaskAsyncExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfErrorTaskAsyncExtensions.cs#L169" target="_blank">IfErrorTaskAsyncExtensions.cs</a>
 
 Executes the provided asynchronous function, if the provided asynchronous operation returns a failed`TResult` instance (i.e., contains an [Error](../Error/Error.md)), and returns its result as an asynchronous operation.
 
@@ -159,7 +165,7 @@ The task object representing the asynchronous operation.
 The `resultTask` parameter is `null` or `ifErrorAction` parameter is `null`.
 
 #### [InvalidOperationException](https://learn.microsoft.com/dotnet/api/system.invalidoperationexception)
-The asynchronous operation represented by `resultTask` returns `null`.
+The asynchronous operation represented by `resultTask` returns `null`, or the `ifErrorAction` function returns a `null` task.
 
 ### Remarks
 The `IfErrorAsync` method executes the provided asynchronous operation represented by `resultTask` to evaluate its result. This enables chaining multiple asynchronous operations that return `Task<TResult>`.
@@ -176,7 +182,7 @@ var createUserResult = await _userService.CreateUserAsync(userData)
 
 
 ## IfErrorAsync&lt;TResult&gt;(Task&lt;TResult&gt;, Func&lt;Error, Task&lt;TResult&gt;&gt;, Boolean)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfErrorTaskAsyncExtensions.cs#L214" target="_blank">IfErrorTaskAsyncExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfErrorTaskAsyncExtensions.cs#L236" target="_blank">IfErrorTaskAsyncExtensions.cs</a>
 
 Executes the provided asynchronous function, if the provided asynchronous operation returns a failed`TResult` instance (i.e., contains an [Error](../Error/Error.md)), and returns its result as an asynchronous operation.
 
@@ -211,7 +217,7 @@ The task object representing the asynchronous operation.
 The `resultTask` parameter is `null` or `ifErrorFunction` parameter is `null`.
 
 #### [InvalidOperationException](https://learn.microsoft.com/dotnet/api/system.invalidoperationexception)
-The asynchronous operation represented by `resultTask` returns `null`.
+The asynchronous operation represented by `resultTask` returns `null`, or the `ifErrorFunction` function returns a `null` task or a task with a `null` result.
 
 ### Remarks
 The `IfErrorAsync` method executes the provided asynchronous operation represented by `resultTask` to evaluate its result. This enables chaining multiple asynchronous operations that return `Task<TResult>`.

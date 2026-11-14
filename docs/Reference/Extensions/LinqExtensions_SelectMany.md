@@ -16,7 +16,7 @@ A result selector that returns an [Error](../Error/Error.md) makes the query fai
 
 
 ## SelectMany&lt;T, TMiddle, TNext&gt;(Result&lt;T&gt;, Func&lt;T, Result&lt;TMiddle&gt;&gt;, Func&lt;T, TMiddle, TNext&gt;)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/LinqExtensions.cs#L126" target="_blank">LinqExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/LinqExtensions.cs#L131" target="_blank">LinqExtensions.cs</a>
 
 Returns a new instance of [Result&lt;TNext&gt;](../ResultT/ResultT.md) instance by applying the provided selector functions if the current [Result&lt;T&gt;](../ResultT/ResultT.md) if it is successful, or a new [Result&lt;TNext&gt;](../ResultT/ResultT.md) instance with the same error otherwise.
 
@@ -57,6 +57,9 @@ A [Result&lt;T&gt;](../ResultT/ResultT.md) instance created by applying the prov
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 If any of the `result` or `collectionSelector` or `resultSelector` parameters are `null`.
 
+#### [InvalidOperationException](https://learn.microsoft.com/dotnet/api/system.invalidoperationexception)
+The `collectionSelector` function returns `null`.
+
 ### Remarks
 This method is used to enable LINQ query syntax for [Result&lt;T&gt;](../ResultT/ResultT.md) records. It allows chaining multiple operations that return [Result&lt;T&gt;](../ResultT/ResultT.md) instances while maintaining the error state, if any of the operations fail.
 
@@ -72,7 +75,7 @@ var emailResult =
 
 
 ## SelectMany&lt;T, TMiddle&gt;(Result&lt;T&gt;, Func&lt;T, Result&lt;TMiddle&gt;&gt;, Func&lt;T, TMiddle, Error&gt;)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/LinqExtensions.cs#L177" target="_blank">LinqExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/LinqExtensions.cs#L185" target="_blank">LinqExtensions.cs</a>
 
 Applies the synchronous `collectionSelector` and the `resultSelector` to the value of a successful [Result&lt;T&gt;](../ResultT/ResultT.md) and returns a failed [Result](../Result/Result.md) with the [Error](../Error/Error.md) returned by `resultSelector`; otherwise, returns a failed [Result](../Result/Result.md) with the first [Error](../Error/Error.md).
 
@@ -106,7 +109,10 @@ A failed [Result](../Result/Result.md) with the [Error](../Error/Error.md) retur
 
 ### Exceptions
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
-The `result`, `collectionSelector` or `resultSelector` parameter is `null`, or `resultSelector` returns `null`.
+The `result`, `collectionSelector` or `resultSelector` parameter is `null`.
+
+#### [InvalidOperationException](https://learn.microsoft.com/dotnet/api/system.invalidoperationexception)
+The `collectionSelector` function returns `null`, or the `resultSelector` function returns `null`.
 
 ### Remarks
 This overload makes a query with more than one `from` clause that selects an [Error](../Error/Error.md) return a failed [Result](../Result/Result.md). Without it, such a query would bind to [SelectMany&lt;T, TMiddle, TNext&gt;(Result&lt;T&gt;, Func&lt;T, Result&lt;TMiddle&gt;&gt;, Func&lt;T, TMiddle, TNext&gt;)](#selectmanyt-tmiddle-tnextresultt-funct-resulttmiddle-funct-tmiddle-tnext) and return a **successful** `Result<Error>`.
