@@ -54,8 +54,9 @@ public static class MatchValueTaskAsyncExtensions
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="continueOnCapturedContext">
-    ///     <see langword="true" /> to attempt to marshal the continuation back to
-    ///     the original context captured; otherwise, <see langword="false" />.
+    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an
+    ///     <c>await</c>, on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any
+    ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
     ///     A <see cref="ValueTask{Result}" /> that represents the original <paramref name="result" />, enabling fluent chaining.
@@ -65,16 +66,16 @@ public static class MatchValueTaskAsyncExtensions
     ///     or <paramref name="ifErrorAction" /> parameters are <see langword="null" />.
     /// </exception>
     public static async ValueTask<Result> MatchAsync(this Result result, Func<ValueTask> ifSuccessAction,
-        Func<Error, ValueTask> ifErrorAction, bool continueOnCapturedContext = false)
+        Func<Error, ValueTask> ifErrorAction, bool? continueOnCapturedContext = null)
     {
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifSuccessAction);
         ArgumentNullException.ThrowIfNull(ifErrorAction);
 
         if (result.IsSuccess())
-            await ifSuccessAction().ConfigureAwait(continueOnCapturedContext);
+            await ifSuccessAction().ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
         else
-            await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext);
+            await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
         return result;
     }
@@ -95,8 +96,9 @@ public static class MatchValueTaskAsyncExtensions
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="continueOnCapturedContext">
-    ///     <see langword="true" /> to attempt to marshal the continuation back to
-    ///     the original context captured; otherwise, <see langword="false" />.
+    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an
+    ///     <c>await</c>, on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any
+    ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
     ///     The <see cref="ValueTask{Result}" /> that represents the <see cref="Result" />
@@ -108,16 +110,16 @@ public static class MatchValueTaskAsyncExtensions
     ///     or <paramref name="ifErrorAction" /> parameters are <see langword="null" />.
     /// </exception>
     public static async ValueTask<Result> MatchAsync(this Result result, Func<ValueTask<Result>> ifSuccessFunction,
-        Func<Error, ValueTask> ifErrorAction, bool continueOnCapturedContext = false)
+        Func<Error, ValueTask> ifErrorAction, bool? continueOnCapturedContext = null)
     {
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
         ArgumentNullException.ThrowIfNull(ifErrorAction);
 
         if (result.IsSuccess())
-            return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext);
+            return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
-        await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext);
+        await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
         return result;
     }
 
@@ -136,8 +138,9 @@ public static class MatchValueTaskAsyncExtensions
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="continueOnCapturedContext">
-    ///     <see langword="true" /> to attempt to marshal the continuation back to
-    ///     the original context captured; otherwise, <see langword="false" />.
+    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an
+    ///     <c>await</c>, on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any
+    ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
     ///     The <see cref="ValueTask{Result}" /> which represents the <see cref="Result" /> returned by
@@ -148,15 +151,15 @@ public static class MatchValueTaskAsyncExtensions
     ///     or <paramref name="ifErrorFunction" /> parameters are <see langword="null" />.
     /// </exception>
     public static async ValueTask<Result> MatchAsync(this Result result, Func<ValueTask<Result>> ifSuccessFunction,
-        Func<Error, ValueTask<Result>> ifErrorFunction, bool continueOnCapturedContext = false)
+        Func<Error, ValueTask<Result>> ifErrorFunction, bool? continueOnCapturedContext = null)
     {
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
         ArgumentNullException.ThrowIfNull(ifErrorFunction);
 
         return result.IsSuccess()
-            ? await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext)
-            : await ifErrorFunction(result.Error).ConfigureAwait(continueOnCapturedContext);
+            ? await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext)
+            : await ifErrorFunction(result.Error).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
     }
 
     /// <summary>
@@ -179,8 +182,9 @@ public static class MatchValueTaskAsyncExtensions
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="continueOnCapturedContext">
-    ///     <see langword="true" /> to attempt to marshal the continuation back to
-    ///     the original context captured; otherwise, <see langword="false" />.
+    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an
+    ///     <c>await</c>, on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any
+    ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
     ///     The <see cref="ValueTask{Result}" /> that represents the <see cref="Result{T}" /> with the value returned by
@@ -193,16 +197,16 @@ public static class MatchValueTaskAsyncExtensions
     ///     or <paramref name="ifErrorAction" /> parameters are <see langword="null" />.
     /// </exception>
     public static async ValueTask<Result<T>> MatchAsync<T>(this Result result, Func<ValueTask<T>> ifSuccessFunction,
-        Func<Error, ValueTask> ifErrorAction, bool continueOnCapturedContext = false)
+        Func<Error, ValueTask> ifErrorAction, bool? continueOnCapturedContext = null)
     {
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
         ArgumentNullException.ThrowIfNull(ifErrorAction);
 
         if (result.IsSuccess())
-            return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext);
+            return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
-        await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext);
+        await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
         return result.Error;
     }
 
@@ -225,8 +229,9 @@ public static class MatchValueTaskAsyncExtensions
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="continueOnCapturedContext">
-    ///     <see langword="true" /> to attempt to marshal the continuation back to
-    ///     the original context captured; otherwise, <see langword="false" />.
+    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an
+    ///     <c>await</c>, on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any
+    ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
     ///     The <see cref="ValueTask{T}" /> that represents the value of type<typeparamref name="T" />
@@ -237,15 +242,15 @@ public static class MatchValueTaskAsyncExtensions
     ///     or <paramref name="ifErrorFunction" /> parameters are <see langword="null" />.
     /// </exception>
     public static async ValueTask<T> MatchAsync<T>(this Result result, Func<ValueTask<T>> ifSuccessFunction,
-        Func<Error, ValueTask<T>> ifErrorFunction, bool continueOnCapturedContext = false)
+        Func<Error, ValueTask<T>> ifErrorFunction, bool? continueOnCapturedContext = null)
     {
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
         ArgumentNullException.ThrowIfNull(ifErrorFunction);
 
         return result.IsSuccess()
-            ? await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext)
-            : await ifErrorFunction(result.Error).ConfigureAwait(continueOnCapturedContext);
+            ? await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext)
+            : await ifErrorFunction(result.Error).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
     }
 
     /// <summary>
@@ -268,8 +273,9 @@ public static class MatchValueTaskAsyncExtensions
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="continueOnCapturedContext">
-    ///     <see langword="true" /> to attempt to marshal the continuation back to
-    ///     the original context captured; otherwise, <see langword="false" />.
+    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an
+    ///     <c>await</c>, on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any
+    ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
     ///     The <see cref="ValueTask{TResult}" /> that represents the <see cref="Result{T}" /> returned by
@@ -282,16 +288,16 @@ public static class MatchValueTaskAsyncExtensions
     ///     or <paramref name="ifErrorAction" /> parameters are <see langword="null" />.
     /// </exception>
     public static async ValueTask<Result<T>> MatchAsync<T>(this Result result, Func<ValueTask<Result<T>>> ifSuccessFunction,
-        Func<Error, ValueTask> ifErrorAction, bool continueOnCapturedContext = false)
+        Func<Error, ValueTask> ifErrorAction, bool? continueOnCapturedContext = null)
     {
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
         ArgumentNullException.ThrowIfNull(ifErrorAction);
 
         if (result.IsSuccess())
-            return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext);
+            return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
-        await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext);
+        await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
         return result.Error;
     }
 
@@ -314,8 +320,9 @@ public static class MatchValueTaskAsyncExtensions
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="continueOnCapturedContext">
-    ///     <see langword="true" /> to attempt to marshal the continuation back to
-    ///     the original context captured; otherwise, <see langword="false" />.
+    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an
+    ///     <c>await</c>, on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any
+    ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
     ///     The <see cref="ValueTask{TResult}" /> that represents the <see cref="Result{T}" /> produced by
@@ -326,15 +333,15 @@ public static class MatchValueTaskAsyncExtensions
     ///     or <paramref name="ifErrorFunction" /> parameters are <see langword="null" />.
     /// </exception>
     public static async ValueTask<Result<T>> MatchAsync<T>(this Result result, Func<ValueTask<Result<T>>> ifSuccessFunction,
-        Func<Error, ValueTask<Result<T>>> ifErrorFunction, bool continueOnCapturedContext = false)
+        Func<Error, ValueTask<Result<T>>> ifErrorFunction, bool? continueOnCapturedContext = null)
     {
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
         ArgumentNullException.ThrowIfNull(ifErrorFunction);
 
         return result.IsSuccess()
-            ? await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext)
-            : await ifErrorFunction(result.Error).ConfigureAwait(continueOnCapturedContext);
+            ? await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext)
+            : await ifErrorFunction(result.Error).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
     }
 
     #endregion
@@ -364,8 +371,9 @@ public static class MatchValueTaskAsyncExtensions
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="continueOnCapturedContext">
-    ///     <see langword="true" /> to attempt to marshal the continuation back to
-    ///     the original context captured; otherwise, <see langword="false" />.
+    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an
+    ///     <c>await</c>, on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any
+    ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
     ///     The <see cref="ValueTask{TResult}" /> that represents the original <paramref name="result" /> for fluent chaining.
@@ -375,16 +383,16 @@ public static class MatchValueTaskAsyncExtensions
     ///     or <paramref name="ifErrorAction" /> parameters are <see langword="null" />.
     /// </exception>
     public static async ValueTask<Result<T>> MatchAsync<T>(this Result<T> result, Func<T, ValueTask> ifSuccessAction,
-        Func<Error, ValueTask> ifErrorAction, bool continueOnCapturedContext = false)
+        Func<Error, ValueTask> ifErrorAction, bool? continueOnCapturedContext = null)
     {
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifSuccessAction);
         ArgumentNullException.ThrowIfNull(ifErrorAction);
 
         if (result.IsSuccess())
-            await ifSuccessAction(result.Value).ConfigureAwait(continueOnCapturedContext);
+            await ifSuccessAction(result.Value).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
         else
-            await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext);
+            await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
         return result;
     }
@@ -411,8 +419,9 @@ public static class MatchValueTaskAsyncExtensions
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="continueOnCapturedContext">
-    ///     <see langword="true" /> to attempt to marshal the continuation back to
-    ///     the original context captured; otherwise, <see langword="false" />.
+    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an
+    ///     <c>await</c>, on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any
+    ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
     ///     The <see cref="ValueTask{TResult}" /> that represents the <see cref="Result{TNext}" /> with the value
@@ -428,16 +437,16 @@ public static class MatchValueTaskAsyncExtensions
         this Result<T> result,
         Func<T, ValueTask<TNext>> ifSuccessFunction,
         Func<Error, ValueTask> ifErrorAction,
-        bool continueOnCapturedContext = false)
+        bool? continueOnCapturedContext = null)
     {
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
         ArgumentNullException.ThrowIfNull(ifErrorAction);
 
         if (result.IsSuccess())
-            return await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext);
+            return await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
-        await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext);
+        await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
         return result.Error;
     }
 
@@ -462,8 +471,9 @@ public static class MatchValueTaskAsyncExtensions
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="continueOnCapturedContext">
-    ///     <see langword="true" /> to attempt to marshal the continuation back to
-    ///     the original context captured; otherwise, <see langword="false" />.
+    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an
+    ///     <c>await</c>, on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any
+    ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
     ///     The <see cref="ValueTask{TNext}" /> that represents the value of the <typeparamref name="TNext" /> type
@@ -477,15 +487,15 @@ public static class MatchValueTaskAsyncExtensions
         this Result<T> result,
         Func<T, ValueTask<TNext>> ifSuccessFunction,
         Func<Error, ValueTask<TNext>> ifErrorFunction,
-        bool continueOnCapturedContext = false)
+        bool? continueOnCapturedContext = null)
     {
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
         ArgumentNullException.ThrowIfNull(ifErrorFunction);
 
         return result.IsSuccess()
-            ? await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext)
-            : await ifErrorFunction(result.Error).ConfigureAwait(continueOnCapturedContext);
+            ? await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext)
+            : await ifErrorFunction(result.Error).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
     }
 
     /// <summary>
@@ -510,8 +520,9 @@ public static class MatchValueTaskAsyncExtensions
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="continueOnCapturedContext">
-    ///     <see langword="true" /> to attempt to marshal the continuation back to
-    ///     the original context captured; otherwise, <see langword="false" />.
+    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an
+    ///     <c>await</c>, on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any
+    ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
     ///     The <see cref="ValueTask{TResult}" /> that represents the <see cref="Result{TNext}" />
@@ -527,16 +538,16 @@ public static class MatchValueTaskAsyncExtensions
         this Result<T> result,
         Func<T, ValueTask<Result<TNext>>> ifSuccessFunction,
         Func<Error, ValueTask> ifErrorAction,
-        bool continueOnCapturedContext = false)
+        bool? continueOnCapturedContext = null)
     {
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
         ArgumentNullException.ThrowIfNull(ifErrorAction);
 
         if (result.IsSuccess())
-            return await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext);
+            return await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
-        await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext);
+        await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
         return result.Error;
     }
 
@@ -561,8 +572,9 @@ public static class MatchValueTaskAsyncExtensions
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="continueOnCapturedContext">
-    ///     <see langword="true" /> to attempt to marshal the continuation back to
-    ///     the original context captured; otherwise, <see langword="false" />.
+    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an
+    ///     <c>await</c>, on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any
+    ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
     ///     The <see cref="ValueTask{TResult}" /> that represents the <see cref="Result{TNext}" /> returned by either
@@ -576,15 +588,15 @@ public static class MatchValueTaskAsyncExtensions
         this Result<T> result,
         Func<T, ValueTask<Result<TNext>>> ifSuccessFunction,
         Func<Error, ValueTask<Result<TNext>>> ifErrorFunction,
-        bool continueOnCapturedContext = false)
+        bool? continueOnCapturedContext = null)
     {
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
         ArgumentNullException.ThrowIfNull(ifErrorFunction);
 
         return result.IsSuccess()
-            ? await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext)
-            : await ifErrorFunction(result.Error).ConfigureAwait(continueOnCapturedContext);
+            ? await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext)
+            : await ifErrorFunction(result.Error).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
     }
 
     #endregion
@@ -619,8 +631,9 @@ public static class MatchValueTaskAsyncExtensions
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="continueOnCapturedContext">
-    ///     <see langword="true" /> to attempt to marshal the continuation back to
-    ///     the original context captured; otherwise, <see langword="false" />.
+    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an
+    ///     <c>await</c>, on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any
+    ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
     ///     A <see cref="ValueTask{Result}" /> that represents the original <paramref name="resultTask" />,
@@ -634,20 +647,20 @@ public static class MatchValueTaskAsyncExtensions
     ///     If the asynchronous operation represented by <paramref name="resultTask" /> returns <see langword="null" />.
     /// </exception>
     public static async ValueTask<Result> MatchAsync(this ValueTask<Result> resultTask, Func<ValueTask> ifSuccessAction,
-        Func<Error, ValueTask> ifErrorAction, bool continueOnCapturedContext = false)
+        Func<Error, ValueTask> ifErrorAction, bool? continueOnCapturedContext = null)
     {
         ArgumentNullException.ThrowIfNull(ifSuccessAction);
         ArgumentNullException.ThrowIfNull(ifErrorAction);
 
-        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
         if (result is null)
             throw new InvalidOperationException("The asynchronous operation returned null.");
 
         if (result.IsSuccess())
-            await ifSuccessAction().ConfigureAwait(continueOnCapturedContext);
+            await ifSuccessAction().ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
         else
-            await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext);
+            await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
         return result;
     }
@@ -674,8 +687,9 @@ public static class MatchValueTaskAsyncExtensions
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="continueOnCapturedContext">
-    ///     <see langword="true" /> to attempt to marshal the continuation back to the original context captured;
-    ///     otherwise, <see langword="false" />.
+    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an
+    ///     <c>await</c>, on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any
+    ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
     ///     The <see cref="ValueTask{Result}" /> that represents the <see cref="Result" />
@@ -692,20 +706,20 @@ public static class MatchValueTaskAsyncExtensions
     ///     If the asynchronous operation represented by <paramref name="resultTask" /> returns <see langword="null" />.
     /// </exception>
     public static async ValueTask<Result> MatchAsync(this ValueTask<Result> resultTask, Func<ValueTask<Result>> ifSuccessFunction,
-        Func<Error, ValueTask> ifErrorAction, bool continueOnCapturedContext = false)
+        Func<Error, ValueTask> ifErrorAction, bool? continueOnCapturedContext = null)
     {
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
         ArgumentNullException.ThrowIfNull(ifErrorAction);
 
-        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
         if (result is null)
             throw new InvalidOperationException("The asynchronous operation returned null.");
 
         if (result.IsSuccess())
-            return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext);
+            return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
-        await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext);
+        await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
         return result;
     }
 
@@ -730,8 +744,9 @@ public static class MatchValueTaskAsyncExtensions
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="continueOnCapturedContext">
-    ///     <see langword="true" /> to attempt to marshal the continuation back to
-    ///     the original context captured; otherwise, <see langword="false" />.
+    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an
+    ///     <c>await</c>, on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any
+    ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
     ///     The <see cref="ValueTask{Result}" /> which represents the <see cref="Result" /> returned by
@@ -745,19 +760,19 @@ public static class MatchValueTaskAsyncExtensions
     ///     If the asynchronous operation represented by <paramref name="resultTask" /> returns <see langword="null" />.
     /// </exception>
     public static async ValueTask<Result> MatchAsync(this ValueTask<Result> resultTask, Func<ValueTask<Result>> ifSuccessFunction,
-        Func<Error, ValueTask<Result>> ifErrorFunction, bool continueOnCapturedContext = false)
+        Func<Error, ValueTask<Result>> ifErrorFunction, bool? continueOnCapturedContext = null)
     {
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
         ArgumentNullException.ThrowIfNull(ifErrorFunction);
 
-        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
         if (result is null)
             throw new InvalidOperationException("The asynchronous operation returned null.");
 
         return result.IsSuccess()
-            ? await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext)
-            : await ifErrorFunction(result.Error).ConfigureAwait(continueOnCapturedContext);
+            ? await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext)
+            : await ifErrorFunction(result.Error).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
     }
 
     /// <summary>
@@ -783,8 +798,9 @@ public static class MatchValueTaskAsyncExtensions
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="continueOnCapturedContext">
-    ///     <see langword="true" /> to attempt to marshal the continuation back to
-    ///     the original context captured; otherwise, <see langword="false" />.
+    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an
+    ///     <c>await</c>, on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any
+    ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
     ///     The <see cref="ValueTask{Result}" /> that represents the <see cref="Result{T}" /> with the value returned by
@@ -799,20 +815,20 @@ public static class MatchValueTaskAsyncExtensions
     ///     If the asynchronous operation represented by <paramref name="resultTask" /> returns <see langword="null" />.
     /// </exception>
     public static async ValueTask<Result<T>> MatchAsync<T>(this ValueTask<Result> resultTask, Func<ValueTask<T>> ifSuccessFunction,
-        Func<Error, ValueTask> ifErrorAction, bool continueOnCapturedContext = false)
+        Func<Error, ValueTask> ifErrorAction, bool? continueOnCapturedContext = null)
     {
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
         ArgumentNullException.ThrowIfNull(ifErrorAction);
 
-        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
         if (result is null)
             throw new InvalidOperationException("The asynchronous operation returned null.");
 
         if (result.IsSuccess())
-            return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext);
+            return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
-        await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext);
+        await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
         return result.Error;
     }
 
@@ -839,8 +855,9 @@ public static class MatchValueTaskAsyncExtensions
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="continueOnCapturedContext">
-    ///     <see langword="true" /> to attempt to marshal the continuation back to
-    ///     the original context captured; otherwise, <see langword="false" />.
+    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an
+    ///     <c>await</c>, on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any
+    ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
     ///     The <see cref="ValueTask{T}" /> that represents the value of type<typeparamref name="T" />
@@ -854,19 +871,19 @@ public static class MatchValueTaskAsyncExtensions
     ///     If the asynchronous operation represented by <paramref name="resultTask" /> returns <see langword="null" />.
     /// </exception>
     public static async ValueTask<T> MatchAsync<T>(this ValueTask<Result> resultTask, Func<ValueTask<T>> ifSuccessFunction,
-        Func<Error, ValueTask<T>> ifErrorFunction, bool continueOnCapturedContext = false)
+        Func<Error, ValueTask<T>> ifErrorFunction, bool? continueOnCapturedContext = null)
     {
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
         ArgumentNullException.ThrowIfNull(ifErrorFunction);
 
-        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
         if (result is null)
             throw new InvalidOperationException("The asynchronous operation returned null.");
 
         return result.IsSuccess()
-            ? await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext)
-            : await ifErrorFunction(result.Error).ConfigureAwait(continueOnCapturedContext);
+            ? await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext)
+            : await ifErrorFunction(result.Error).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
     }
 
     /// <summary>
@@ -892,8 +909,9 @@ public static class MatchValueTaskAsyncExtensions
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="continueOnCapturedContext">
-    ///     <see langword="true" /> to attempt to marshal the continuation back to
-    ///     the original context captured; otherwise, <see langword="false" />.
+    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an
+    ///     <c>await</c>, on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any
+    ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
     ///     The <see cref="ValueTask{TResult}" /> that represents the <see cref="Result{T}" /> returned by
@@ -910,20 +928,20 @@ public static class MatchValueTaskAsyncExtensions
     /// </exception>
     public static async ValueTask<Result<T>> MatchAsync<T>(
         this ValueTask<Result> resultTask, Func<ValueTask<Result<T>>> ifSuccessFunction,
-        Func<Error, ValueTask> ifErrorAction, bool continueOnCapturedContext = false)
+        Func<Error, ValueTask> ifErrorAction, bool? continueOnCapturedContext = null)
     {
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
         ArgumentNullException.ThrowIfNull(ifErrorAction);
 
-        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
         if (result is null)
             throw new InvalidOperationException("The asynchronous operation returned null.");
 
         if (result.IsSuccess())
-            return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext);
+            return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
-        await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext);
+        await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
         return result.Error;
     }
 
@@ -949,8 +967,9 @@ public static class MatchValueTaskAsyncExtensions
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="continueOnCapturedContext">
-    ///     <see langword="true" /> to attempt to marshal the continuation back to
-    ///     the original context captured; otherwise, <see langword="false" />.
+    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an
+    ///     <c>await</c>, on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any
+    ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
     ///     The <see cref="ValueTask{TResult}" /> that represents the <see cref="Result{T}" /> produced by
@@ -965,19 +984,19 @@ public static class MatchValueTaskAsyncExtensions
     /// </exception>
     public static async ValueTask<Result<T>> MatchAsync<T>(
         this ValueTask<Result> resultTask, Func<ValueTask<Result<T>>> ifSuccessFunction,
-        Func<Error, ValueTask<Result<T>>> ifErrorFunction, bool continueOnCapturedContext = false)
+        Func<Error, ValueTask<Result<T>>> ifErrorFunction, bool? continueOnCapturedContext = null)
     {
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
         ArgumentNullException.ThrowIfNull(ifErrorFunction);
 
-        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
         if (result is null)
             throw new InvalidOperationException("The asynchronous operation returned null.");
 
         return result.IsSuccess()
-            ? await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext)
-            : await ifErrorFunction(result.Error).ConfigureAwait(continueOnCapturedContext);
+            ? await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext)
+            : await ifErrorFunction(result.Error).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
     }
 
     #endregion
@@ -1015,8 +1034,9 @@ public static class MatchValueTaskAsyncExtensions
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="continueOnCapturedContext">
-    ///     <see langword="true" /> to attempt to marshal the continuation back to
-    ///     the original context captured; otherwise, <see langword="false" />.
+    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an
+    ///     <c>await</c>, on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any
+    ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
     ///     The <see cref="ValueTask{TResult}" /> that represents the outcome of the <paramref name="resultTask" />
@@ -1030,20 +1050,20 @@ public static class MatchValueTaskAsyncExtensions
     ///     If the asynchronous operation represented by <paramref name="resultTask" /> returns <see langword="null" />.
     /// </exception>
     public static async ValueTask<Result<T>> MatchAsync<T>(this ValueTask<Result<T>> resultTask, Func<T, ValueTask> ifSuccessAction,
-        Func<Error, ValueTask> ifErrorAction, bool continueOnCapturedContext = false)
+        Func<Error, ValueTask> ifErrorAction, bool? continueOnCapturedContext = null)
     {
         ArgumentNullException.ThrowIfNull(ifSuccessAction);
         ArgumentNullException.ThrowIfNull(ifErrorAction);
 
-        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
         if (result is null)
             throw new InvalidOperationException("The asynchronous operation returned null.");
 
         if (result.IsSuccess())
-            await ifSuccessAction(result.Value).ConfigureAwait(continueOnCapturedContext);
+            await ifSuccessAction(result.Value).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
         else
-            await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext);
+            await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
         return result;
     }
@@ -1073,8 +1093,9 @@ public static class MatchValueTaskAsyncExtensions
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="continueOnCapturedContext">
-    ///     <see langword="true" /> to attempt to marshal the continuation back to
-    ///     the original context captured; otherwise, <see langword="false" />.
+    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an
+    ///     <c>await</c>, on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any
+    ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
     ///     The <see cref="ValueTask{TResult}" /> that represents the <see cref="Result{TNext}" /> with the value
@@ -1093,20 +1114,20 @@ public static class MatchValueTaskAsyncExtensions
         this ValueTask<Result<T>> resultTask,
         Func<T, ValueTask<TNext>> ifSuccessFunction,
         Func<Error, ValueTask> ifErrorAction,
-        bool continueOnCapturedContext = false)
+        bool? continueOnCapturedContext = null)
     {
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
         ArgumentNullException.ThrowIfNull(ifErrorAction);
 
-        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
         if (result is null)
             throw new InvalidOperationException("The asynchronous operation returned null.");
 
         if (result.IsSuccess())
-            return await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext);
+            return await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
-        await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext);
+        await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
         return result.Error;
     }
 
@@ -1136,8 +1157,9 @@ public static class MatchValueTaskAsyncExtensions
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="continueOnCapturedContext">
-    ///     <see langword="true" /> to attempt to marshal the continuation back to
-    ///     the original context captured; otherwise, <see langword="false" />.
+    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an
+    ///     <c>await</c>, on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any
+    ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
     ///     The <see cref="ValueTask{TNext}" /> that represents the value of the <typeparamref name="TNext" /> type
@@ -1151,19 +1173,19 @@ public static class MatchValueTaskAsyncExtensions
         this ValueTask<Result<T>> resultTask,
         Func<T, ValueTask<TNext>> ifSuccessFunction,
         Func<Error, ValueTask<TNext>> ifErrorFunction,
-        bool continueOnCapturedContext = false)
+        bool? continueOnCapturedContext = null)
     {
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
         ArgumentNullException.ThrowIfNull(ifErrorFunction);
 
-        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
         if (result is null)
             throw new InvalidOperationException("The asynchronous operation returned null.");
 
         return result.IsSuccess()
-            ? await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext)
-            : await ifErrorFunction(result.Error).ConfigureAwait(continueOnCapturedContext);
+            ? await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext)
+            : await ifErrorFunction(result.Error).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
     }
 
     /// <summary>
@@ -1191,8 +1213,9 @@ public static class MatchValueTaskAsyncExtensions
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="continueOnCapturedContext">
-    ///     <see langword="true" /> to attempt to marshal the continuation back to
-    ///     the original context captured; otherwise, <see langword="false" />.
+    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an
+    ///     <c>await</c>, on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any
+    ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
     ///     The <see cref="ValueTask{TResult}" /> that represents the <see cref="Result{TNext}" /> value
@@ -1211,20 +1234,20 @@ public static class MatchValueTaskAsyncExtensions
         this ValueTask<Result<T>> resultTask,
         Func<T, ValueTask<Result<TNext>>> ifSuccessFunction,
         Func<Error, ValueTask> ifErrorAction,
-        bool continueOnCapturedContext = false)
+        bool? continueOnCapturedContext = null)
     {
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
         ArgumentNullException.ThrowIfNull(ifErrorAction);
 
-        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
         if (result is null)
             throw new InvalidOperationException("The asynchronous operation returned null.");
 
         if (result.IsSuccess())
-            return await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext);
+            return await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
-        await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext);
+        await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
         return result.Error;
     }
 
@@ -1251,8 +1274,9 @@ public static class MatchValueTaskAsyncExtensions
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="continueOnCapturedContext">
-    ///     <see langword="true" /> to attempt to marshal the continuation back to
-    ///     the original context captured; otherwise, <see langword="false" />.
+    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an
+    ///     <c>await</c>, on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any
+    ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
     ///     The <see cref="ValueTask{TResult}" /> that represents the <see cref="Result{TNext}" /> returned by either
@@ -1269,19 +1293,19 @@ public static class MatchValueTaskAsyncExtensions
         this ValueTask<Result<T>> resultTask,
         Func<T, ValueTask<Result<TNext>>> ifSuccessFunction,
         Func<Error, ValueTask<Result<TNext>>> ifErrorFunction,
-        bool continueOnCapturedContext = false)
+        bool? continueOnCapturedContext = null)
     {
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
         ArgumentNullException.ThrowIfNull(ifErrorFunction);
 
-        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
         if (result is null)
             throw new InvalidOperationException("The asynchronous operation returned null.");
 
         return result.IsSuccess()
-            ? await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext)
-            : await ifErrorFunction(result.Error).ConfigureAwait(continueOnCapturedContext);
+            ? await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext)
+            : await ifErrorFunction(result.Error).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
     }
 
     #endregion

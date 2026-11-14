@@ -2,14 +2,14 @@
 ## Definition
 Namespace: [Maple.Result.Extensions.ValueTasks](namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/ValueTasks/ResultValueTaskAsyncExtensions.cs#L45" target="_blank">ResultValueTaskAsyncExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/ValueTasks/ResultValueTaskAsyncExtensions.cs#L52" target="_blank">ResultValueTaskAsyncExtensions.cs</a>
 
 Asynchronously converts the outcome of the asynchronous operation represented by the [Result&lt;T&gt;](../../ResultT/ResultT.md) to the non-generic [Result](../../Result/Result.md).
 
 
 ```csharp
 public static async ValueTask<Result> ToResultAsync<T>(this ValueTask<Result<T>> resultTask,
-    bool continueOnCapturedContext = false);
+    bool? continueOnCapturedContext = null);
 ```
 
 ### Type Parameters
@@ -20,10 +20,10 @@ The type of the [Result](../../ResultT/ResultT.md)&lt;T&gt; `result` value to be
 #### `resultTask` [ValueTask](https://learn.microsoft.com/dotnet/api/system.threading.tasks.valuetask-1)&lt;[Result](../../Result/Result.md)&gt;
 The value task that represents the asynchronous operation producing the [Result](../../ResultT/ResultT.md) record to be converted.
 
-#### `continueOnCapturedContext` [Boolean](https://learn.microsoft.com/dotnet/api/system.boolean)
-`true` to attempt to marshal the continuation back to the original context captured; otherwise, `false`.
+#### `continueOnCapturedContext` [Nullable](https://learn.microsoft.com/dotnet/api/system.nullable-1)&lt;[Boolean](https://learn.microsoft.com/dotnet/api/system.boolean)&gt;
+`true` to run the continuations, including the passed delegates when they run after an `await`, on the captured context (e.g., the UI thread); `false` to run them on any thread; `null` to use [ResultConfiguration.ContinueOnCapturedContext](../../ResultConfiguration/ResultConfiguration_ContinueOnCapturedContext.md) (`false` unless changed).
 
-The default value is: `false`.
+The default value is: `null`.
 
 ### Returns
 #### [ValueTask](https://learn.microsoft.com/dotnet/api/system.threading.tasks.valuetask)&lt;[Result](../../ResultT/ResultT.md)&lt;T&gt;&gt;

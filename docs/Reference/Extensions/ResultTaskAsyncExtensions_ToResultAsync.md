@@ -9,7 +9,7 @@ Asynchronously converts the outcome of the asynchronous operation represented by
 
 ```csharp
 public static async Task<Result> ToResultAsync<T>(this Task<Result<T>> resultTask,
-    bool continueOnCapturedContext = false);
+    bool? continueOnCapturedContext = null);
 ```
 
 ### Type Parameters
@@ -20,10 +20,10 @@ The type of the [Result](../ResultT/ResultT.md)&lt;T&gt; `result` value to be co
 #### `resultTask` [Task](https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1)&lt;[Result](../Result/Result.md)&gt;
 The task that represents the asynchronous operation producing the [Result](../ResultT/ResultT.md) record to be converted.
 
-#### `continueOnCapturedContext` [Boolean](https://learn.microsoft.com/dotnet/api/system.boolean)
-`true` to attempt to marshal the continuation back to the original context captured; otherwise, `false`.
+#### `continueOnCapturedContext` [Nullable](https://learn.microsoft.com/dotnet/api/system.nullable-1)&lt;[Boolean](https://learn.microsoft.com/dotnet/api/system.boolean)&gt;
+`true` to run the continuations, including the passed delegates when they run after an `await`, on the captured context (e.g., the UI thread); `false` to run them on any thread; `null` to use [ResultConfiguration.ContinueOnCapturedContext](../ResultConfiguration/ResultConfiguration_ContinueOnCapturedContext.md) (`false` unless changed).
 
-The default value is: `false`.
+The default value is: `null`.
 
 ### Returns
 #### [Task](https://learn.microsoft.com/dotnet/api/system.threading.tasks.task)&lt;[Result](../ResultT/ResultT.md)&lt;T&gt;&gt;
