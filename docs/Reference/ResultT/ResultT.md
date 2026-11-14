@@ -7,12 +7,12 @@ Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Re
 Represents the outcome of an operation that can either succeed or fail with an [Error](../Error/Error.md).
 
 ```csharp
-public sealed record Result<T> : IResult
+public sealed record Result<T> : IOperationResult
 ```
 
 Inheritance [Object](https://learn.microsoft.com/dotnet/api/system.object) → Result&lt;T&gt;
 
-Implements [IResult](../IResult/IResult.md)
+Implements [IOperationResult](../IOperationResult/IOperationResult.md)
 
 ## Remarks
 > [!NOTE]
@@ -148,5 +148,5 @@ Reading a [Result&lt;T&gt;](ResultT.md) back requires a dedicated converter, bec
 | [ToResultAsync(Task&lt;Result&lt;T&gt;&gt;)](../Extensions/ResultTaskAsyncExtensions_ToResultAsync.md) | Asynchronously converts the outcome of the asynchronous operation represented by the [Result&lt;T&gt;](../ResultT/ResultT.md) to the non-generic [Result](../Result/Result.md). |
 
 ## See Also
-* [IResult](../IResult/IResult.md)
+* [IOperationResult](../IOperationResult/IOperationResult.md)
 * [Result](../Result/Result.md)

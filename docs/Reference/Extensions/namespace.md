@@ -4,8 +4,8 @@ Provides classes with extension methods for the [Result](../Result/Result.md) an
 ## Classes
 | Name | Description |
 | ---- | ----------- |
-| [IfErrorExtensions](IfErrorExtensions.md) | Provides extension methods for the [IResult](../IResult/IResult.md) interface implementations to handle error scenarios. |
-| [IfErrorTaskAsyncExtensions](IfErrorTaskAsyncExtensions.md) | Provides asynchronous extension methods, represented by [Task](https://learn.microsoft.com/dotnet/api/system.threading.tasks.task), for the [IResult](../IResult/IResult.md) interface implementations to handle error scenarios. |
+| [IfErrorExtensions](IfErrorExtensions.md) | Provides extension methods for the [IOperationResult](../IOperationResult/IOperationResult.md) interface implementations to handle error scenarios. |
+| [IfErrorTaskAsyncExtensions](IfErrorTaskAsyncExtensions.md) | Provides asynchronous extension methods, represented by [Task](https://learn.microsoft.com/dotnet/api/system.threading.tasks.task), for the [IOperationResult](../IOperationResult/IOperationResult.md) interface implementations to handle error scenarios. |
 | [IfSuccessExtensions](IfSuccessExtensions.md) | Provides extension methods for the [Result](../Result/Result.md) and [Result&lt;T&gt;](../ResultT/ResultT.md) records to handle success scenarios. |
 | [IfSuccessTaskAsyncExtensions](IfSuccessTaskAsyncExtensions.md) | Provides asynchronous extension methods, represented by [Task](https://learn.microsoft.com/dotnet/api/system.threading.tasks.task), for the [Result](../Result/Result.md) and [Result&lt;T&gt;](../ResultT/ResultT.md) records to handle success scenarios. |
 | [LinqExtensions](LinqExtensions.md) | Provides extension methods for the [Result&lt;T&gt;](../ResultT/ResultT.md) records to allow using them with LINQ query syntax. |

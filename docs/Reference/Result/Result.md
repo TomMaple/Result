@@ -7,12 +7,12 @@ Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Re
 Represents the outcome of an operation that can either succeed or fail with an [Error](../Error/Error.md).
 
 ```csharp
-public sealed record Result : IResult
+public sealed record Result : IOperationResult
 ```
 
 Inheritance [Object](https://learn.microsoft.com/dotnet/api/system.object) → Result
 
-Implements [IResult](../IResult/IResult.md)
+Implements [IOperationResult](../IOperationResult/IOperationResult.md)
 
 ## Remarks
 > [!NOTE]
@@ -109,5 +109,5 @@ public Result DeleteUser(int userId)
 | [MatchAsync&lt;T&gt;(Task&lt;Result&gt;, Func&lt;Task&lt;Result&lt;T&gt;&gt;&gt;, Func&lt;Error, Task&lt;Result&lt;T&gt;&gt;&gt;, Boolean)](../Extensions/MatchTaskAsyncExtensions_MatchAsync.md#matchasyncttaskresult-functaskresultt-funcerror-taskresultt-boolean) | Executes one of the specified asynchronous functions as an asynchronous operation depending on whether the [Result](../Result/Result.md) represents a success or a failure. |
 
 ## See Also
-* [IResult](../IResult/IResult.md)
+* [IOperationResult](../IOperationResult/IOperationResult.md)
 * [Result&lt;T&gt;](../ResultT/ResultT.md)

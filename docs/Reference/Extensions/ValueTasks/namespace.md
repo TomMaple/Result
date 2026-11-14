@@ -16,7 +16,7 @@ If both namespaces have to be imported in one file, disambiguate the call by usi
 ## Classes
 | Name | Description |
 | ---- | ----------- |
-| [IfErrorValueTaskAsyncExtensions](IfErrorValueTaskAsyncExtensions.md) | Provides asynchronous extension methods, represented by [ValueTask](https://learn.microsoft.com/dotnet/api/system.threading.tasks.valuetask), for the [IResult](../../IResult/IResult.md) interface implementations to handle error scenarios. |
+| [IfErrorValueTaskAsyncExtensions](IfErrorValueTaskAsyncExtensions.md) | Provides asynchronous extension methods, represented by [ValueTask](https://learn.microsoft.com/dotnet/api/system.threading.tasks.valuetask), for the [IOperationResult](../../IOperationResult/IOperationResult.md) interface implementations to handle error scenarios. |
 | [IfSuccessValueTaskAsyncExtensions](IfSuccessValueTaskAsyncExtensions.md) | Provides asynchronous extension methods, represented by [ValueTask](https://learn.microsoft.com/dotnet/api/system.threading.tasks.valuetask), for the [Result](../../Result/Result.md) and [Result&lt;T&gt;](../../ResultT/ResultT.md) records to handle success scenarios. |
 | [LinqValueTaskAsyncExtensions](LinqValueTaskAsyncExtensions.md) | Provides extension methods for the ValueTask&lt;[Result&lt;T&gt;](../../ResultT/ResultT.md)&gt; to allow using them with LINQ query syntax. |
 | [MatchValueTaskAsyncExtensions](MatchValueTaskAsyncExtensions.md) | Provides asynchronous extension methods, represented by [ValueTask](https://learn.microsoft.com/dotnet/api/system.threading.tasks.valuetask), for the [Result](../../Result/Result.md) and [Result&lt;T&gt;](../../ResultT/ResultT.md) records to handle both success and error scenarios. |

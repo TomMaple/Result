@@ -17,6 +17,7 @@ Version 3.0 makes `Result`, `Result<T>` and `Error` **immutable** and **always v
   * [Nullable named values](#nullable-named-values)
   * [Other behaviour changes](#other-behaviour-changes)
   * [`continueOnCapturedContext` is `bool?`](#continueoncapturedcontext-is-bool)
+  * [`IResult` renamed to `IOperationResult`](#iresult-renamed-to-ioperationresult)
   * [Extension packages](#extension-packages)
 * [New features](#new-features)
 * [Search-and-replace reference](#search-and-replace-reference)
@@ -201,6 +202,19 @@ If your application has a synchronization context (WPF, Windows Forms, .NET MAUI
 ResultConfiguration.ContinueOnCapturedContext = true;
 ```
 
+### `IResult` renamed to `IOperationResult`
+The common interface of `Result` and `Result<T>` was renamed from `IResult` to [`IOperationResult`](Reference/IOperationResult/IOperationResult.md). Its members (`Error`, `IsSuccess()`) did not change.
+
+The old name clashed with `Microsoft.AspNetCore.Http.IResult`. ASP.NET Core web projects import `Microsoft.AspNetCore.Http` implicitly, and Minimal API endpoints commonly return `IResult`, so adding `using Maple.Result;` caused CS0104 (ambiguous reference) in endpoint signatures. If you added an alias to work around it (e.g., `using IResult = Microsoft.AspNetCore.Http.IResult;`), you can remove it.
+
+```csharp
+// 2.x
+void Log(Maple.Result.IResult result) { … }
+
+// 3.0
+void Log(IOperationResult result) { … }
+```
+
 ### Extension packages
 The current (2.x-based) version of `Maple.Result.Extensions.HttpClient` calls an internal method of `Maple.Result` 2.x that no longer exists, so using it with `Maple.Result` 3.0 fails at runtime. Upgrade all `Maple.Result.Extensions.*` packages to versions built for 3.0 together with `Maple.Result`, and do not mix 2.x and 3.0 packages.
 
@@ -225,6 +239,7 @@ The current (2.x-based) version of `Maple.Result.Extensions.HttpClient` calls an
 | `new Result<T> { Error = e }` | `Result<T>.FromError(e)` |
 | `new ErrorUri(s)` | `ErrorUri.Tag(s)` / `ErrorUri.Locator(s)` / `ErrorUri.None()` |
 | `Dictionary<string, object>` passed as named values | `Dictionary<string, object?>` |
+| `IResult` (`Maple.Result`) | `IOperationResult` |
 | `JsonSerializer.Deserialize<Result<T>>(…)` / `Deserialize<Error>(…)` | your own DTO, or the planned converter packages |
 
 ## See Also

@@ -20,7 +20,7 @@ Provides records and interfaces with the types to use as a returned value of an 
 ## Interfaces
 | Name | Description |
 | ---- | ----------- |
-| [IResult](IResult/IResult.md) | Represents the result of an operation (with or without a value) that can either be successful or failed. |
+| [IOperationResult](IOperationResult/IOperationResult.md) | Represents the result of an operation (with or without a value) that can either be successful or failed. |
 
 ## Enums
 | Name | Description |
