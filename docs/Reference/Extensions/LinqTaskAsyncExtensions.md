@@ -12,6 +12,9 @@ public static class LinqTaskAsyncExtensions
 
 Inheritance [Object](https://learn.microsoft.com/dotnet/api/system.object) → LinqTaskAsyncExtensions
 
+## Remarks
+The query syntax cannot pass a `continueOnCapturedContext` argument, so these methods use [ResultConfiguration.ContinueOnCapturedContext](../ResultConfiguration/ResultConfiguration_ContinueOnCapturedContext.md) to decide where the selectors run: on a thread-pool thread (`false`, the default) or on the captured context, e.g., the UI thread (`true`).
+
 ## Methods
 | Name | Description |
 | ---- | ----------- |

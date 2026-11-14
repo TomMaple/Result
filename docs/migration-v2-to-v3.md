@@ -16,6 +16,7 @@ Version 3.0 makes `Result`, `Result<T>` and `Error` **immutable** and **always v
   * [Stricter validation](#stricter-validation)
   * [Nullable named values](#nullable-named-values)
   * [Other behaviour changes](#other-behaviour-changes)
+  * [`continueOnCapturedContext` is `bool?`](#continueoncapturedcontext-is-bool)
   * [Extension packages](#extension-packages)
 * [New features](#new-features)
 * [Search-and-replace reference](#search-and-replace-reference)
@@ -187,6 +188,19 @@ Existing calls still compile. With nullable reference types enabled, passing a `
 * **`GetHashCode()`** of an `Error` never changes, because the error cannot change. An `Error` can be used safely as a dictionary key or in a `HashSet<T>`.
 * **`ErrorDetails`** is a read-only collection; casting it to `IList<ErrorDetail>` and modifying it throws a `NotSupportedException`.
 
+### `continueOnCapturedContext` is `bool?`
+The `continueOnCapturedContext` parameter of the asynchronous extension methods (`IfSuccessAsync`, `IfErrorAsync`, `MatchAsync`, `ToResultAsync`, for `Task` and `ValueTask`) changed from `bool continueOnCapturedContext = false` to `bool? continueOnCapturedContext = null`. `null` uses the new global setting [`ResultConfiguration.ContinueOnCapturedContext`](Reference/ResultConfiguration/ResultConfiguration_ContinueOnCapturedContext.md), which is `false` by default, so **the behaviour does not change** unless you change the setting.
+
+Calls that pass `true` or `false` still compile; recompile code that calls these methods (the signature changed, so binaries built against 2.x do not bind to 3.0).
+
+The LINQ query operators (`Select`, `SelectMany` on `Task` and `ValueTask` of a result) used a hard-coded `ConfigureAwait(false)`; they now use the global setting too.
+
+If your application has a synchronization context (WPF, Windows Forms, .NET MAUI, Blazor Server) and the delegates you pass access UI elements, set the global setting once at startup instead of passing `continueOnCapturedContext: true` everywhere:
+
+```csharp
+ResultConfiguration.ContinueOnCapturedContext = true;
+```
+
 ### Extension packages
 The current (2.x-based) version of `Maple.Result.Extensions.HttpClient` calls an internal method of `Maple.Result` 2.x that no longer exists, so using it with `Maple.Result` 3.0 fails at runtime. Upgrade all `Maple.Result.Extensions.*` packages to versions built for 3.0 together with `Maple.Result`, and do not mix 2.x and 3.0 packages.
 
@@ -195,6 +209,7 @@ The current (2.x-based) version of `Maple.Result.Extensions.HttpClient` calls an
 * **`Error.Metadata`** — machine-readable, response-level values (RFC 9457 *extension members*), with `WithMetadata()`, `WithoutMetadata()` (one key or all) and `TryGetMetadata<T>()`. `TryGetMetadata<T>()` is strict: it returns `true` only when the stored value is a `T` (a stored `int` is not read as `long`), and never for a `null` value. See [Metadata](Reference/Error/Error_Metadata.md).
 * **`Error.WithErrorDetail()`** and **`Error.ToBuilder()`** — see above.
 * **`ErrorCategory.LimitExceeded`** — see above.
+* **`ResultConfiguration.ContinueOnCapturedContext`** — a global default for the `continueOnCapturedContext` argument of the asynchronous extension methods and for the LINQ query operators; see above.
 * **Native AOT and trimming** — the core package no longer contains JSON code and produces no trimming or AOT warnings.
 
 ## Search-and-replace reference
@@ -216,3 +231,4 @@ The current (2.x-based) version of `Maple.Result.Extensions.HttpClient` calls an
 * [README: Upgrading to 3.0](../README.md#upgrading-to-30)
 * [Reference documentation](Reference/namespace.md)
 * [Issue #102: Simplify Result and Error](https://github.com/TomMaple/Maple.Result/issues/102)
+* [Issue #105: SynchronizationContext of the asynchronous extension methods](https://github.com/TomMaple/Maple.Result/issues/105)

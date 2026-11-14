@@ -21,6 +21,9 @@ namespace Maple.Result.Extensions;
 ///     with asynchronous workflows.
 ///     They help simplify error handling and reduce boilerplate code when working with
 ///     <see cref="Result{T}" />-based asynchronous workflows.
+///     The query syntax cannot pass a <c>continueOnCapturedContext</c> argument, so these methods use
+///     <see cref="ResultConfiguration.ContinueOnCapturedContext" /> to decide whether the selectors run on the captured
+///     context (e.g., the UI thread).
 /// </remarks>
 public static class LinqTaskAsyncExtensions
 {
@@ -66,7 +69,7 @@ public static class LinqTaskAsyncExtensions
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(selector);
 
-        var resultValue = await result.ConfigureAwait(false);
+        var resultValue = await result.ConfigureAwait(ResultConfiguration.ContinueOnCapturedContext);
 
         if (resultValue is null)
             throw new InvalidOperationException("The asynchronous operation represented by ‘result’ returned null.");
@@ -124,15 +127,15 @@ public static class LinqTaskAsyncExtensions
         ArgumentNullException.ThrowIfNull(collectionSelector);
         ArgumentNullException.ThrowIfNull(resultSelector);
 
-        var resultValue = await result.ConfigureAwait(false);
+        var resultValue = await result.ConfigureAwait(ResultConfiguration.ContinueOnCapturedContext);
 
         if (resultValue is null)
             throw new InvalidOperationException("The asynchronous operation represented by ‘result’ returned null.");
 
         return await resultValue.IfSuccessAsync(async Task<Result<TNext>> (x) =>
         {
-            var collectionResult = await collectionSelector(x).ConfigureAwait(false);
+            var collectionResult = await collectionSelector(x).ConfigureAwait(ResultConfiguration.ContinueOnCapturedContext);
             return collectionResult.IfSuccess(y => resultSelector(x, y));
-        }).ConfigureAwait(false);
+        }).ConfigureAwait(ResultConfiguration.ContinueOnCapturedContext);
     }
 }

@@ -49,8 +49,9 @@ public static class IfErrorValueTaskAsyncExtensions
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="continueOnCapturedContext">
-    ///     <see langword="true" /> to attempt to marshal the continuation back to
-    ///     the original context captured; otherwise, <see langword="false" />.
+    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an
+    ///     <c>await</c>, on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any
+    ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
     ///     A <see cref="ValueTask{IResult}" /> that represents the original <paramref name="result" /> instance,
@@ -63,7 +64,7 @@ public static class IfErrorValueTaskAsyncExtensions
     public static async ValueTask<TResult> IfErrorAsync<TResult>(
         [DisallowNull] this TResult result,
         Func<Error, ValueTask> ifErrorAction,
-        bool continueOnCapturedContext = false
+        bool? continueOnCapturedContext = null
     )
         where TResult : IResult
     {
@@ -71,7 +72,7 @@ public static class IfErrorValueTaskAsyncExtensions
         ArgumentNullException.ThrowIfNull(ifErrorAction);
 
         if (!result.IsSuccess())
-            await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext);
+            await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
         return result;
     }
@@ -93,8 +94,9 @@ public static class IfErrorValueTaskAsyncExtensions
     ///     The function receives the error and returns a new result. Must not be <see langword="null" />.
     /// </param>
     /// <param name="continueOnCapturedContext">
-    ///     <see langword="true" /> to attempt to marshal the continuation back to
-    ///     the original context captured; otherwise, <see langword="false" />.
+    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an
+    ///     <c>await</c>, on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any
+    ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
     ///     A <see cref="ValueTask{IResult}" /> that represents the <see cref="IResult" /> outcome of the asynchronous
@@ -110,7 +112,7 @@ public static class IfErrorValueTaskAsyncExtensions
     public static async ValueTask<TResult> IfErrorAsync<TResult>(
         [DisallowNull] this TResult result,
         Func<Error, ValueTask<TResult>> ifErrorFunction,
-        bool continueOnCapturedContext = false
+        bool? continueOnCapturedContext = null
     )
         where TResult : IResult
     {
@@ -120,7 +122,7 @@ public static class IfErrorValueTaskAsyncExtensions
         if (result.IsSuccess())
             return result;
 
-        return await ifErrorFunction(result.Error).ConfigureAwait(continueOnCapturedContext);
+        return await ifErrorFunction(result.Error).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
     }
 
     /// <summary>
@@ -148,8 +150,9 @@ public static class IfErrorValueTaskAsyncExtensions
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="continueOnCapturedContext">
-    ///     <see langword="true" /> to attempt to marshal the continuation back to
-    ///     the original context captured; otherwise, <see langword="false" />.
+    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an
+    ///     <c>await</c>, on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any
+    ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
     ///     A <see cref="ValueTask{IResult}" /> that represents the outcome of the <paramref name="resultTask" />
@@ -164,19 +167,19 @@ public static class IfErrorValueTaskAsyncExtensions
     public static async ValueTask<TResult> IfErrorAsync<TResult>(
         this ValueTask<TResult> resultTask,
         Func<Error, ValueTask> ifErrorAction,
-        bool continueOnCapturedContext = false
+        bool? continueOnCapturedContext = null
     )
         where TResult : IResult
     {
         ArgumentNullException.ThrowIfNull(ifErrorAction);
 
-        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
         if (result is null)
             throw new InvalidOperationException("The asynchronous operation returned null.");
 
         if (!result.IsSuccess())
-            await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext);
+            await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
         return result;
     }
@@ -205,8 +208,9 @@ public static class IfErrorValueTaskAsyncExtensions
     ///     The function receives the error and returns a new result. Must not be <see langword="null" />.
     /// </param>
     /// <param name="continueOnCapturedContext">
-    ///     <see langword="true" /> to attempt to marshal the continuation back to
-    ///     the original context captured; otherwise, <see langword="false" />.
+    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an
+    ///     <c>await</c>, on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any
+    ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
     ///     A <see cref="ValueTask{IResult}" /> that represents the <see cref="IResult" /> outcome of the asynchronous
@@ -223,13 +227,13 @@ public static class IfErrorValueTaskAsyncExtensions
     public static async ValueTask<TResult> IfErrorAsync<TResult>(
         this ValueTask<TResult> resultTask,
         Func<Error, ValueTask<TResult>> ifErrorFunction,
-        bool continueOnCapturedContext = false
+        bool? continueOnCapturedContext = null
     )
         where TResult : IResult
     {
         ArgumentNullException.ThrowIfNull(ifErrorFunction);
 
-        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
         if (result is null)
             throw new InvalidOperationException("The asynchronous operation returned null.");
@@ -237,6 +241,6 @@ public static class IfErrorValueTaskAsyncExtensions
         if (result.IsSuccess())
             return result;
 
-        return await ifErrorFunction(result.Error).ConfigureAwait(continueOnCapturedContext);
+        return await ifErrorFunction(result.Error).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
     }
 }

@@ -33,8 +33,9 @@ public static class ResultTaskAsyncExtensions
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="continueOnCapturedContext">
-    ///     <see langword="true" /> to attempt to marshal the continuation back to
-    ///     the original context captured; otherwise, <see langword="false" />.
+    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an
+    ///     <c>await</c>, on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any
+    ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
     ///     A task that represents the <see cref="Result" /> without a value.
@@ -48,11 +49,11 @@ public static class ResultTaskAsyncExtensions
     ///     If the asynchronous operation represented by <paramref name="resultTask" /> returns <see langword="null" />.
     /// </exception>
     public static async Task<Result> ToResultAsync<T>(this Task<Result<T>> resultTask,
-        bool continueOnCapturedContext = false)
+        bool? continueOnCapturedContext = null)
     {
         ArgumentNullException.ThrowIfNull(resultTask);
 
-        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
         if (result is null)
             throw new InvalidOperationException("The asynchronous operation returned null.");

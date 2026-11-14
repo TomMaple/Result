@@ -29,6 +29,11 @@ namespace Maple.Result.Extensions.ValueTasks;
 ///         <c>Func&lt;Task&gt;</c> as well as to a <c>Func&lt;ValueTask&gt;</c> delegate. Importing only one of these
 ///         namespaces keeps such calls unambiguous.
 ///     </para>
+///     <para>
+///         The query syntax cannot pass a <c>continueOnCapturedContext</c> argument, so these methods use
+///         <see cref="ResultConfiguration.ContinueOnCapturedContext" /> to decide whether the selectors run on the
+///         captured context (e.g., the UI thread).
+///     </para>
 /// </remarks>
 public static class LinqValueTaskAsyncExtensions
 {
@@ -73,7 +78,7 @@ public static class LinqValueTaskAsyncExtensions
     {
         ArgumentNullException.ThrowIfNull(selector);
 
-        var resultValue = await result.ConfigureAwait(false);
+        var resultValue = await result.ConfigureAwait(ResultConfiguration.ContinueOnCapturedContext);
 
         if (resultValue is null)
             throw new InvalidOperationException("The asynchronous operation represented by ‘result’ returned null.");
@@ -130,15 +135,15 @@ public static class LinqValueTaskAsyncExtensions
         ArgumentNullException.ThrowIfNull(collectionSelector);
         ArgumentNullException.ThrowIfNull(resultSelector);
 
-        var resultValue = await result.ConfigureAwait(false);
+        var resultValue = await result.ConfigureAwait(ResultConfiguration.ContinueOnCapturedContext);
 
         if (resultValue is null)
             throw new InvalidOperationException("The asynchronous operation represented by ‘result’ returned null.");
 
         return await resultValue.IfSuccessAsync(async ValueTask<Result<TNext>> (x) =>
         {
-            var collectionResult = await collectionSelector(x).ConfigureAwait(false);
+            var collectionResult = await collectionSelector(x).ConfigureAwait(ResultConfiguration.ContinueOnCapturedContext);
             return collectionResult.IfSuccess(y => resultSelector(x, y));
-        }).ConfigureAwait(false);
+        }).ConfigureAwait(ResultConfiguration.ContinueOnCapturedContext);
     }
 }

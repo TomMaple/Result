@@ -464,6 +464,16 @@ var userTokenResult =
     select token;
 ```
 
+### Asynchronous methods in UI applications
+The asynchronous extension methods that take a `Task` or `ValueTask` of a result await it with `ConfigureAwait(false)` by default, so the delegates you pass run on a thread-pool thread. That is the right choice for ASP.NET Core, console applications, Azure Functions and background services.
+
+In WPF, Windows Forms, .NET MAUI or Blazor Server, when the delegates access UI elements, either pass `continueOnCapturedContext: true`, or set the global default once at startup (it is also used by the LINQ query syntax, which cannot pass the argument):
+```csharp
+ResultConfiguration.ContinueOnCapturedContext = true;
+```
+
+See more: [ResultConfiguration.ContinueOnCapturedContext](https://github.com/TomMaple/Maple.Result/blob/main/docs/Reference/ResultConfiguration/ResultConfiguration_ContinueOnCapturedContext.md)
+
 See more: [Maple.Result.Extensions](https://github.com/TomMaple/Maple.Result/blob/main/docs/Reference/Extensions/namespace.md)
 
 # Mapping to HTTP responses
@@ -519,6 +529,7 @@ Check:
 * **More checks.** The title of an error must not be `null`, empty or white-space only; the category must be a defined `ErrorCategory` value; `TemplatedMessage.TemplateId` must not be blank; `ErrorDetail.Detail` must not be `null`.
 * **JSON of a failed `Result<T>`.** It now always contains `Value` with the default value of `T`, e.g., `{"Value":0,"Error":{…}}` for a `Result<int>`, or `"Value":null` for a reference type. Previously a failed result omitted `Value`.
 * `Result.Success()` returns the same, shared instance on every call.
+* **`continueOnCapturedContext` is `bool?`.** The parameter of the asynchronous extension methods is now `bool? continueOnCapturedContext = null`; `null` uses the new global `ResultConfiguration.ContinueOnCapturedContext` (`false` by default, so the behaviour is unchanged). Source-compatible; recompile code that calls the methods.
 
 # FAQ
 ## When to use a Result and when an Exception?

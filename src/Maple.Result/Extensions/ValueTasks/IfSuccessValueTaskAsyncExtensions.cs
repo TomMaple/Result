@@ -48,8 +48,9 @@ public static class IfSuccessValueTaskAsyncExtensions
     ///     Cannot be <see langword="null" />.
     /// </param>
     /// <param name="continueOnCapturedContext">
-    ///     <see langword="true" /> to attempt to marshal the continuation back to
-    ///     the original context captured; otherwise, <see langword="false" />.
+    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an
+    ///     <c>await</c>, on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any
+    ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
     ///     A <see cref="ValueTask{Result}" /> that represents the original <paramref name="result" />,
@@ -60,13 +61,13 @@ public static class IfSuccessValueTaskAsyncExtensions
     ///     parameters are <see langword="null" />.
     /// </exception>
     public static async ValueTask<Result> IfSuccessAsync(this Result result, Func<ValueTask> ifSuccessAction,
-        bool continueOnCapturedContext = false)
+        bool? continueOnCapturedContext = null)
     {
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifSuccessAction);
 
         if (result.IsSuccess())
-            await ifSuccessAction().ConfigureAwait(continueOnCapturedContext);
+            await ifSuccessAction().ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
         return result;
     }
@@ -87,8 +88,9 @@ public static class IfSuccessValueTaskAsyncExtensions
     ///     a <see cref="ValueTask{Result}" /> and must not be <see langword="null" />.
     /// </param>
     /// <param name="continueOnCapturedContext">
-    ///     <see langword="true" /> to attempt to marshal the continuation back to
-    ///     the original context captured; otherwise, <see langword="false" />.
+    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an
+    ///     <c>await</c>, on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any
+    ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
     ///     A <see cref="ValueTask{Result}" /> returned by <paramref name="ifSuccessFunction" />
@@ -100,13 +102,13 @@ public static class IfSuccessValueTaskAsyncExtensions
     ///     parameters are <see langword="null" />.
     /// </exception>
     public static async ValueTask<Result> IfSuccessAsync(this Result result, Func<ValueTask<Result>> ifSuccessFunction,
-        bool continueOnCapturedContext = false)
+        bool? continueOnCapturedContext = null)
     {
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
 
         if (result.IsSuccess())
-            return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext);
+            return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
         return result;
     }
@@ -128,8 +130,9 @@ public static class IfSuccessValueTaskAsyncExtensions
     ///     is used as the successful <see cref="Result{T}" />. Must not be <see langword="null" />.
     /// </param>
     /// <param name="continueOnCapturedContext">
-    ///     <see langword="true" /> to attempt to marshal the continuation back to
-    ///     the original context captured; otherwise, <see langword="false" />.
+    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an
+    ///     <c>await</c>, on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any
+    ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
     ///     A <see cref="ValueTask{TResult}" /> that represents the successful <see cref="Result{T}" />
@@ -143,13 +146,13 @@ public static class IfSuccessValueTaskAsyncExtensions
     ///     parameters are <see langword="null" />.
     /// </exception>
     public static async ValueTask<Result<T>> IfSuccessAsync<T>(this Result result, Func<ValueTask<T>> ifSuccessFunction,
-        bool continueOnCapturedContext = false)
+        bool? continueOnCapturedContext = null)
     {
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
 
         if (result.IsSuccess())
-            return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext);
+            return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
         return result.Error;
     }
@@ -172,8 +175,9 @@ public static class IfSuccessValueTaskAsyncExtensions
     ///     is used as the successful <see cref="Result{T}" />. Must not be <see langword="null" />.
     /// </param>
     /// <param name="continueOnCapturedContext">
-    ///     <see langword="true" /> to attempt to marshal the continuation back to
-    ///     the original context captured; otherwise, <see langword="false" />.
+    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an
+    ///     <c>await</c>, on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any
+    ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
     ///     A <see cref="ValueTask{TResult}" /> that represents a successful <see cref="Result{T}" />
@@ -186,13 +190,13 @@ public static class IfSuccessValueTaskAsyncExtensions
     ///     parameters are <see langword="null" />.
     /// </exception>
     public static async ValueTask<Result<T>> IfSuccessAsync<T>(this Result result,
-        Func<ValueTask<Result<T>>> ifSuccessFunction, bool continueOnCapturedContext = false)
+        Func<ValueTask<Result<T>>> ifSuccessFunction, bool? continueOnCapturedContext = null)
     {
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
 
         if (result.IsSuccess())
-            return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext);
+            return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
         return result.Error;
     }
@@ -221,8 +225,9 @@ public static class IfSuccessValueTaskAsyncExtensions
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="continueOnCapturedContext">
-    ///     <see langword="true" /> to attempt to marshal the continuation back to
-    ///     the original context captured; otherwise, <see langword="false" />.
+    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an
+    ///     <c>await</c>, on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any
+    ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
     ///     A <see cref="ValueTask{TResult}" /> that represents the original <paramref name="result" />,
@@ -233,13 +238,13 @@ public static class IfSuccessValueTaskAsyncExtensions
     ///     parameters are <see langword="null" />.
     /// </exception>
     public static async ValueTask<Result<T>> IfSuccessAsync<T>(this Result<T> result, Func<T, ValueTask> ifSuccessAction,
-        bool continueOnCapturedContext = false)
+        bool? continueOnCapturedContext = null)
     {
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifSuccessAction);
 
         if (result.IsSuccess())
-            await ifSuccessAction(result.Value).ConfigureAwait(continueOnCapturedContext);
+            await ifSuccessAction(result.Value).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
         return result;
     }
@@ -264,8 +269,9 @@ public static class IfSuccessValueTaskAsyncExtensions
     ///     a <see cref="ValueTask{Result}" /> and must not be <see langword="null" />.
     /// </param>
     /// <param name="continueOnCapturedContext">
-    ///     <see langword="true" /> to attempt to marshal the continuation back to
-    ///     the original context captured; otherwise, <see langword="false" />.
+    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an
+    ///     <c>await</c>, on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any
+    ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
     ///     A <see cref="ValueTask{Result}" /> that is returned by <paramref name="ifSuccessFunction" />
@@ -277,13 +283,13 @@ public static class IfSuccessValueTaskAsyncExtensions
     ///     parameters are <see langword="null" />.
     /// </exception>
     public static async ValueTask<Result> IfSuccessAsync<T>(this Result<T> result,
-        Func<T, ValueTask<Result>> ifSuccessFunction, bool continueOnCapturedContext = false)
+        Func<T, ValueTask<Result>> ifSuccessFunction, bool? continueOnCapturedContext = null)
     {
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
 
         if (result.IsSuccess())
-            return await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext);
+            return await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
         return result.Error;
     }
@@ -314,8 +320,9 @@ public static class IfSuccessValueTaskAsyncExtensions
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="continueOnCapturedContext">
-    ///     <see langword="true" /> to attempt to marshal the continuation back to
-    ///     the original context captured; otherwise, <see langword="false" />.
+    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an
+    ///     <c>await</c>, on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any
+    ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
     ///     A <see cref="ValueTask{TResult}" /> that represents the successful <see cref="Result{TNext}" /> containing
@@ -327,13 +334,13 @@ public static class IfSuccessValueTaskAsyncExtensions
     ///     parameters are <see langword="null" />.
     /// </exception>
     public static async ValueTask<Result<TNext>> IfSuccessAsync<T, TNext>(this Result<T> result,
-        Func<T, ValueTask<TNext>> ifSuccessFunction, bool continueOnCapturedContext = false)
+        Func<T, ValueTask<TNext>> ifSuccessFunction, bool? continueOnCapturedContext = null)
     {
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
 
         if (result.IsSuccess())
-            return await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext);
+            return await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
         return result.Error;
     }
@@ -364,8 +371,9 @@ public static class IfSuccessValueTaskAsyncExtensions
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="continueOnCapturedContext">
-    ///     <see langword="true" /> to attempt to marshal the continuation back to
-    ///     the original context captured; otherwise, <see langword="false" />.
+    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an
+    ///     <c>await</c>, on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any
+    ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
     ///     A <see cref="ValueTask{TResult}" /> that represents the successful <see cref="Result{TNext}" /> returned by
@@ -377,13 +385,13 @@ public static class IfSuccessValueTaskAsyncExtensions
     ///     parameters are <see langword="null" />.
     /// </exception>
     public static async ValueTask<Result<TNext>> IfSuccessAsync<T, TNext>(this Result<T> result,
-        Func<T, ValueTask<Result<TNext>>> ifSuccessFunction, bool continueOnCapturedContext = false)
+        Func<T, ValueTask<Result<TNext>>> ifSuccessFunction, bool? continueOnCapturedContext = null)
     {
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
 
         if (result.IsSuccess())
-            return await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext);
+            return await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
         return result.Error;
     }
@@ -413,8 +421,9 @@ public static class IfSuccessValueTaskAsyncExtensions
     ///     Cannot be <see langword="null" />.
     /// </param>
     /// <param name="continueOnCapturedContext">
-    ///     <see langword="true" /> to attempt to marshal the continuation back to
-    ///     the original context captured; otherwise, <see langword="false" />.
+    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an
+    ///     <c>await</c>, on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any
+    ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
     ///     A <see cref="ValueTask{TResult}" /> that represents the outcome of the original <paramref name="resultTask" />
@@ -427,17 +436,17 @@ public static class IfSuccessValueTaskAsyncExtensions
     ///     If the asynchronous operation represented by <paramref name="resultTask" /> returns <see langword="null" />.
     /// </exception>
     public static async ValueTask<Result> IfSuccessAsync(this ValueTask<Result> resultTask, Func<ValueTask> ifSuccessAction,
-        bool continueOnCapturedContext = false)
+        bool? continueOnCapturedContext = null)
     {
         ArgumentNullException.ThrowIfNull(ifSuccessAction);
 
-        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
         if (result is null)
             throw new InvalidOperationException("The asynchronous operation returned null.");
 
         if (result.IsSuccess())
-            await ifSuccessAction().ConfigureAwait(continueOnCapturedContext);
+            await ifSuccessAction().ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
         return result;
     }
@@ -462,8 +471,9 @@ public static class IfSuccessValueTaskAsyncExtensions
     ///     The function must return a <see cref="ValueTask{TResult}" /> and must not be <see langword="null" />.
     /// </param>
     /// <param name="continueOnCapturedContext">
-    ///     <see langword="true" /> to attempt to marshal the continuation back to
-    ///     the original context captured; otherwise, <see langword="false" />.
+    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an
+    ///     <c>await</c>, on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any
+    ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
     ///     A <see cref="ValueTask{TResult}" /> returned by <paramref name="ifSuccessFunction" />
@@ -477,17 +487,17 @@ public static class IfSuccessValueTaskAsyncExtensions
     ///     If the asynchronous operation represented by <paramref name="resultTask" /> returns <see langword="null" />.
     /// </exception>
     public static async ValueTask<Result> IfSuccessAsync(this ValueTask<Result> resultTask,
-        Func<ValueTask<Result>> ifSuccessFunction, bool continueOnCapturedContext = false)
+        Func<ValueTask<Result>> ifSuccessFunction, bool? continueOnCapturedContext = null)
     {
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
 
-        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
         if (result is null)
             throw new InvalidOperationException("The asynchronous operation returned null.");
 
         if (result.IsSuccess())
-            return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext);
+            return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
         return result;
     }
@@ -515,8 +525,9 @@ public static class IfSuccessValueTaskAsyncExtensions
     ///     The function must return a <see cref="ValueTask{TResult}" /> and must not be <see langword="null" />.
     /// </param>
     /// <param name="continueOnCapturedContext">
-    ///     <see langword="true" /> to attempt to marshal the continuation back to
-    ///     the original context captured; otherwise, <see langword="false" />.
+    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an
+    ///     <c>await</c>, on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any
+    ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
     ///     A <see cref="ValueTask{TResult}" /> that represents the successful <see cref="Result{T}" />
@@ -533,17 +544,17 @@ public static class IfSuccessValueTaskAsyncExtensions
     /// </exception>
     public static async ValueTask<Result<T>> IfSuccessAsync<T>(this ValueTask<Result> resultTask,
         Func<ValueTask<T>> ifSuccessFunction,
-        bool continueOnCapturedContext = false)
+        bool? continueOnCapturedContext = null)
     {
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
 
-        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
         if (result is null)
             throw new InvalidOperationException("The asynchronous operation returned null.");
 
         if (result.IsSuccess())
-            return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext);
+            return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
         return result.Error;
     }
@@ -571,8 +582,9 @@ public static class IfSuccessValueTaskAsyncExtensions
     ///     The function must return a <see cref="ValueTask{TResult}" /> and must not be <see langword="null" />.
     /// </param>
     /// <param name="continueOnCapturedContext">
-    ///     <see langword="true" /> to attempt to marshal the continuation back to
-    ///     the original context captured; otherwise, <see langword="false" />.
+    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an
+    ///     <c>await</c>, on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any
+    ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
     ///     A <see cref="ValueTask{TResult}" /> that represents the successful <see cref="Result{T}" />
@@ -589,17 +601,17 @@ public static class IfSuccessValueTaskAsyncExtensions
     /// </exception>
     public static async ValueTask<Result<T>> IfSuccessAsync<T>(this ValueTask<Result> resultTask,
         Func<ValueTask<Result<T>>> ifSuccessFunction,
-        bool continueOnCapturedContext = false)
+        bool? continueOnCapturedContext = null)
     {
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
 
-        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
         if (result is null)
             throw new InvalidOperationException("The asynchronous operation returned null.");
 
         if (result.IsSuccess())
-            return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext);
+            return await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
         return result.Error;
     }
@@ -635,8 +647,9 @@ public static class IfSuccessValueTaskAsyncExtensions
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="continueOnCapturedContext">
-    ///     <see langword="true" /> to attempt to marshal the continuation back to
-    ///     the original context captured; otherwise, <see langword="false" />.
+    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an
+    ///     <c>await</c>, on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any
+    ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
     ///     A <see cref="ValueTask{TResult}" /> that represents the outcome of the original <paramref name="resultTask" />
@@ -649,17 +662,17 @@ public static class IfSuccessValueTaskAsyncExtensions
     ///     If the asynchronous operation represented by <paramref name="resultTask" /> returns <see langword="null" />.
     /// </exception>
     public static async ValueTask<Result<T>> IfSuccessAsync<T>(this ValueTask<Result<T>> resultTask,
-        Func<T, ValueTask> ifSuccessAction, bool continueOnCapturedContext = false)
+        Func<T, ValueTask> ifSuccessAction, bool? continueOnCapturedContext = null)
     {
         ArgumentNullException.ThrowIfNull(ifSuccessAction);
 
-        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
         if (result is null)
             throw new InvalidOperationException("The asynchronous operation returned null.");
 
         if (result.IsSuccess())
-            await ifSuccessAction(result.Value).ConfigureAwait(continueOnCapturedContext);
+            await ifSuccessAction(result.Value).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
         return result;
     }
@@ -689,8 +702,9 @@ public static class IfSuccessValueTaskAsyncExtensions
     ///     a <see cref="ValueTask{Result}" /> and must not be <see langword="null" />.
     /// </param>
     /// <param name="continueOnCapturedContext">
-    ///     <see langword="true" /> to attempt to marshal the continuation back to
-    ///     the original context captured; otherwise, <see langword="false" />.
+    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an
+    ///     <c>await</c>, on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any
+    ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
     ///     A <see cref="ValueTask{Result}" /> that is returned by <paramref name="ifSuccessFunction" />
@@ -704,17 +718,17 @@ public static class IfSuccessValueTaskAsyncExtensions
     ///     If the asynchronous operation represented by <paramref name="resultTask" /> returns <see langword="null" />.
     /// </exception>
     public static async ValueTask<Result> IfSuccessAsync<T>(this ValueTask<Result<T>> resultTask,
-        Func<T, ValueTask<Result>> ifSuccessFunction, bool continueOnCapturedContext = false)
+        Func<T, ValueTask<Result>> ifSuccessFunction, bool? continueOnCapturedContext = null)
     {
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
 
-        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
         if (result is null)
             throw new InvalidOperationException("The asynchronous operation returned null.");
 
         if (result.IsSuccess())
-            return await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext);
+            return await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
         return result.Error;
     }
@@ -749,8 +763,9 @@ public static class IfSuccessValueTaskAsyncExtensions
     ///     a <see cref="ValueTask{Result}" /> and must not be <see langword="null" />.
     /// </param>
     /// <param name="continueOnCapturedContext">
-    ///     <see langword="true" /> to attempt to marshal the continuation back to
-    ///     the original context captured; otherwise, <see langword="false" />.
+    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an
+    ///     <c>await</c>, on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any
+    ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
     ///     A <see cref="ValueTask{TResult}" /> that represents the successful <see cref="Result{TNext}" /> containing
@@ -764,17 +779,17 @@ public static class IfSuccessValueTaskAsyncExtensions
     ///     If the asynchronous operation represented by <paramref name="resultTask" /> returns <see langword="null" />.
     /// </exception>
     public static async ValueTask<Result<TNext>> IfSuccessAsync<T, TNext>(this ValueTask<Result<T>> resultTask,
-        Func<T, ValueTask<TNext>> ifSuccessFunction, bool continueOnCapturedContext = false)
+        Func<T, ValueTask<TNext>> ifSuccessFunction, bool? continueOnCapturedContext = null)
     {
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
 
-        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
         if (result is null)
             throw new InvalidOperationException("The asynchronous operation returned null.");
 
         if (result.IsSuccess())
-            return await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext);
+            return await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
         return result.Error;
     }
@@ -810,8 +825,9 @@ public static class IfSuccessValueTaskAsyncExtensions
     ///     Must not be <see langword="null" />.
     /// </param>
     /// <param name="continueOnCapturedContext">
-    ///     <see langword="true" /> to attempt to marshal the continuation back to
-    ///     the original context captured; otherwise, <see langword="false" />.
+    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an
+    ///     <c>await</c>, on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any
+    ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
     ///     A <see cref="ValueTask{TResult}" /> that represents the successful <see cref="Result{TNext}" /> returned by
@@ -825,17 +841,17 @@ public static class IfSuccessValueTaskAsyncExtensions
     ///     If the asynchronous operation represented by <paramref name="resultTask" /> returns <see langword="null" />.
     /// </exception>
     public static async ValueTask<Result<TNext>> IfSuccessAsync<T, TNext>(this ValueTask<Result<T>> resultTask,
-        Func<T, ValueTask<Result<TNext>>> ifSuccessFunction, bool continueOnCapturedContext = false)
+        Func<T, ValueTask<Result<TNext>>> ifSuccessFunction, bool? continueOnCapturedContext = null)
     {
         ArgumentNullException.ThrowIfNull(ifSuccessFunction);
 
-        var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
         if (result is null)
             throw new InvalidOperationException("The asynchronous operation returned null.");
 
         if (result.IsSuccess())
-            return await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext);
+            return await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
         return result.Error;
     }
