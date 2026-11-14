@@ -1958,4 +1958,154 @@ public class IfSuccessValueTaskAsyncExtensionsUnitTests
     }
 
     #endregion
+
+    #region IfSuccessAsync with a function returning an Error (overload trap, issue #119)
+
+    private static readonly Error TrapError = Error.Conflict(ErrorUri.Tag("tag:test.com,2024:Trap"), "Trap title");
+
+    [Fact]
+    public async Task IfSuccessAsync_SuccessfulResultWithErrorFunction_ReturnsFailedResultWithReturnedError()
+    {
+        // Arrange
+        var sut = Result.Success();
+
+        // Act
+        Result result = await sut.IfSuccessAsync(() => ValueTask.FromResult(TrapError));
+
+        // Assert
+        result.IsSuccess().ShouldBeFalse();
+        result.Error.ShouldBeSameAs(TrapError);
+    }
+
+    [Fact]
+    public async Task IfSuccessAsync_ErrorResultWithErrorFunction_ReturnsOriginalResultAndDoesNotCallFunction()
+    {
+        // Arrange
+        var sut = Result.FromError(GetError());
+        var called = false;
+
+        // Act
+        var result = await sut.IfSuccessAsync(() =>
+        {
+            called = true;
+            return ValueTask.FromResult(TrapError);
+        });
+
+        // Assert
+        result.ShouldBeSameAs(sut);
+        called.ShouldBeFalse();
+    }
+
+    [Fact]
+    public async Task IfSuccessAsync_SuccessfulResultWithErrorFunctionReturningNull_ThrowsArgumentNullException()
+    {
+        // Arrange
+        var sut = Result.Success();
+
+        // Act
+        var exception = await Record.ExceptionAsync(async () => await sut.IfSuccessAsync(() => ValueTask.FromResult((Error)null!)));
+
+        // Assert
+        exception.ShouldBeOfType<ArgumentNullException>();
+    }
+
+    [Fact]
+    public async Task IfSuccessAsync_SuccessfulResultOfTWithErrorFunction_ReturnsFailedResultWithReturnedError()
+    {
+        // Arrange
+        var sut = Result<int>.FromValue(5);
+
+        // Act
+        Result result = await sut.IfSuccessAsync(_ => ValueTask.FromResult(TrapError));
+
+        // Assert
+        result.IsSuccess().ShouldBeFalse();
+        result.Error.ShouldBeSameAs(TrapError);
+    }
+
+    [Fact]
+    public async Task IfSuccessAsync_ErrorResultOfTWithErrorFunction_ReturnsFailedResultWithOriginalError()
+    {
+        // Arrange
+        var error = GetError();
+        var sut = Result<int>.FromError(error);
+
+        // Act
+        Result result = await sut.IfSuccessAsync(_ => ValueTask.FromResult(TrapError));
+
+        // Assert
+        result.Error.ShouldBeSameAs(error);
+    }
+
+    [Fact]
+    public async Task IfSuccessAsync_SuccessfulResultOfTWithErrorFunctionAndExplicitTypeArguments_ReturnsSuccessfulResultOfError()
+    {
+        // Arrange
+        var sut = Result<int>.FromValue(5);
+
+        // Act
+        Result<Error> result = await sut.IfSuccessAsync<int, Error>(_ => ValueTask.FromResult(TrapError));
+
+        // Assert
+        result.IsSuccess().ShouldBeTrue();
+        result.Value.ShouldBeSameAs(TrapError);
+    }
+
+    [Fact]
+    public async Task IfSuccessAsync_SuccessfulResultTaskWithErrorFunction_ReturnsFailedResultWithReturnedError()
+    {
+        // Arrange
+        var sut = ValueTask.FromResult(Result.Success());
+
+        // Act
+        Result result = await sut.IfSuccessAsync(() => ValueTask.FromResult(TrapError));
+
+        // Assert
+        result.IsSuccess().ShouldBeFalse();
+        result.Error.ShouldBeSameAs(TrapError);
+    }
+
+    [Fact]
+    public async Task IfSuccessAsync_ErrorResultTaskWithErrorFunction_ReturnsFailedResultWithOriginalError()
+    {
+        // Arrange
+        var error = GetError();
+        var sut = ValueTask.FromResult(Result.FromError(error));
+
+        // Act
+        Result result = await sut.IfSuccessAsync(() => ValueTask.FromResult(TrapError));
+
+        // Assert
+        result.Error.ShouldBeSameAs(error);
+    }
+
+    [Fact]
+    public async Task IfSuccessAsync_SuccessfulResultOfTTaskWithErrorFunction_ReturnsFailedResultWithReturnedError()
+    {
+        // Arrange
+        var sut = ValueTask.FromResult(Result<int>.FromValue(5));
+
+        // Act
+        Result result = await sut.IfSuccessAsync(_ => ValueTask.FromResult(TrapError));
+
+        // Assert
+        result.IsSuccess().ShouldBeFalse();
+        result.Error.ShouldBeSameAs(TrapError);
+    }
+
+    [Fact]
+    public async Task IfSuccessAsync_ErrorResultOfTTaskWithErrorFunction_ReturnsFailedResultWithOriginalError()
+    {
+        // Arrange
+        var error = GetError();
+        var sut = ValueTask.FromResult(Result<int>.FromError(error));
+
+        // Act
+        Result result = await sut.IfSuccessAsync(_ => ValueTask.FromResult(TrapError));
+
+        // Assert
+        result.Error.ShouldBeSameAs(error);
+    }
+
+    #endregion
 }

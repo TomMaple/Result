@@ -1052,4 +1052,137 @@ public class IfSuccessExtensionsUnitTests
     }
 
     #endregion
+
+    #region IfSuccess with a function returning an Error (overload trap, issue #119)
+
+    private static readonly Error TrapError = Error.Conflict(ErrorUri.Tag("tag:test.com,2024:Trap"), "Trap title");
+
+    [Fact]
+    public void IfSuccess_SuccessfulResultWithErrorFunction_ReturnsFailedResultWithReturnedError()
+    {
+        // Arrange
+        var sut = Result.Success();
+
+        // Act
+        Result result = sut.IfSuccess(() => TrapError);
+
+        // Assert
+        result.IsSuccess().ShouldBeFalse();
+        result.Error.ShouldBeSameAs(TrapError);
+    }
+
+    [Fact]
+    public void IfSuccess_ErrorResultWithErrorFunction_ReturnsOriginalResultAndDoesNotCallFunction()
+    {
+        // Arrange
+        var sut = Result.FromError(GetError());
+        var called = false;
+
+        // Act
+        var result = sut.IfSuccess(() =>
+        {
+            called = true;
+            return TrapError;
+        });
+
+        // Assert
+        result.ShouldBeSameAs(sut);
+        called.ShouldBeFalse();
+    }
+
+    [Fact]
+    public void IfSuccess_SuccessfulResultWithErrorFunctionReturningNull_ThrowsArgumentNullException()
+    {
+        // Arrange
+        var sut = Result.Success();
+
+        // Act
+        var exception = Record.Exception(() => sut.IfSuccess(() => (Error)null!));
+
+        // Assert
+        exception.ShouldBeOfType<ArgumentNullException>();
+    }
+
+    [Fact]
+    public void IfSuccess_SuccessfulResultWithErrorFunctionAndExplicitTypeArgument_ReturnsSuccessfulResultOfError()
+    {
+        // Arrange
+        var sut = Result.Success();
+
+        // Act
+        Result<Error> result = sut.IfSuccess<Error>(() => TrapError);
+
+        // Assert
+        result.IsSuccess().ShouldBeTrue();
+        result.Value.ShouldBeSameAs(TrapError);
+    }
+
+    [Fact]
+    public void IfSuccess_SuccessfulResultOfTWithErrorFunction_ReturnsFailedResultWithReturnedError()
+    {
+        // Arrange
+        var sut = Result<int>.FromValue(5);
+        var passedValue = 0;
+
+        // Act
+        Result result = sut.IfSuccess(x =>
+        {
+            passedValue = x;
+            return TrapError;
+        });
+
+        // Assert
+        result.IsSuccess().ShouldBeFalse();
+        result.Error.ShouldBeSameAs(TrapError);
+        passedValue.ShouldBe(5);
+    }
+
+    [Fact]
+    public void IfSuccess_ErrorResultOfTWithErrorFunction_ReturnsFailedResultWithOriginalErrorAndDoesNotCallFunction()
+    {
+        // Arrange
+        var error = GetError();
+        var sut = Result<int>.FromError(error);
+        var called = false;
+
+        // Act
+        Result result = sut.IfSuccess(_ =>
+        {
+            called = true;
+            return TrapError;
+        });
+
+        // Assert
+        result.Error.ShouldBeSameAs(error);
+        called.ShouldBeFalse();
+    }
+
+    [Fact]
+    public void IfSuccess_SuccessfulResultOfTWithErrorFunctionReturningNull_ThrowsArgumentNullException()
+    {
+        // Arrange
+        var sut = Result<int>.FromValue(5);
+
+        // Act
+        var exception = Record.Exception(() => sut.IfSuccess(_ => (Error)null!));
+
+        // Assert
+        exception.ShouldBeOfType<ArgumentNullException>();
+    }
+
+    [Fact]
+    public void IfSuccess_SuccessfulResultOfTWithErrorFunctionAndExplicitTypeArguments_ReturnsSuccessfulResultOfError()
+    {
+        // Arrange
+        var sut = Result<int>.FromValue(5);
+
+        // Act
+        Result<Error> result = sut.IfSuccess<int, Error>(_ => TrapError);
+
+        // Assert
+        result.IsSuccess().ShouldBeTrue();
+        result.Value.ShouldBeSameAs(TrapError);
+    }
+
+    #endregion
 }
