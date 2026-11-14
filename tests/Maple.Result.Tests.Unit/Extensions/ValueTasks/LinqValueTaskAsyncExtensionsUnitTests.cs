@@ -599,4 +599,148 @@ public class LinqValueTaskAsyncExtensionsUnitTests
     }
 
     #endregion
+
+    #region Mixed synchronous and asynchronous from clauses (issue #119)
+
+    private static readonly Error MixedError = Error.NotFound(ErrorUri.Tag("tag:test.com,2024:Mixed"), "Mixed title");
+
+    private static ValueTask<Result<int>> GetAsync(int value) => ValueTask.FromResult(Result<int>.FromValue(value));
+
+    private static ValueTask<Result<int>> GetErrorAsync() => ValueTask.FromResult(Result<int>.FromError(MixedError));
+
+    private static Result<int> Get(int value) => Result<int>.FromValue(value);
+
+    [Fact]
+    public async Task LinqQuerySyntax_AsyncThenSyncSuccessfulResults_ReturnsCombinedValue()
+    {
+        // Act
+        var result = await (from a in GetAsync(2)
+                            from b in Get(a + 3)
+                            select a * b);
+
+        // Assert
+        result.IsSuccess().ShouldBeTrue();
+        result.Value.ShouldBe(10);
+    }
+
+    [Fact]
+    public async Task LinqQuerySyntax_AsyncThenSyncFailedResult_ReturnsErrorOfSyncResult()
+    {
+        // Act
+        var result = await (from a in GetAsync(2)
+                            from b in Result<int>.FromError(MixedError)
+                            select a * b);
+
+        // Assert
+        result.IsSuccess().ShouldBeFalse();
+        result.Error.ShouldBeSameAs(MixedError);
+    }
+
+    [Fact]
+    public async Task LinqQuerySyntax_FailedAsyncThenSync_ReturnsErrorAndDoesNotCallSyncSelector()
+    {
+        // Arrange
+        var called = false;
+
+        // Act
+        var result = await (from a in GetErrorAsync()
+                            from b in Track(a)
+                            select a * b);
+
+        // Assert
+        result.Error.ShouldBeSameAs(MixedError);
+        called.ShouldBeFalse();
+
+        Result<int> Track(int value)
+        {
+            called = true;
+            return Get(value);
+        }
+    }
+
+    [Fact]
+    public async Task LinqQuerySyntax_SyncThenAsyncSuccessfulResults_ReturnsCombinedValue()
+    {
+        // Act
+        var result = await (from a in Get(2)
+                            from b in GetAsync(a + 3)
+                            select a * b);
+
+        // Assert
+        result.IsSuccess().ShouldBeTrue();
+        result.Value.ShouldBe(10);
+    }
+
+    [Fact]
+    public async Task LinqQuerySyntax_SyncThenAsyncFailedResult_ReturnsErrorOfAsyncResult()
+    {
+        // Act
+        var result = await (from a in Get(2)
+                            from b in GetErrorAsync()
+                            select a * b);
+
+        // Assert
+        result.IsSuccess().ShouldBeFalse();
+        result.Error.ShouldBeSameAs(MixedError);
+    }
+
+    [Fact]
+    public async Task LinqQuerySyntax_FailedSyncThenAsync_ReturnsErrorAndDoesNotCallAsyncSelector()
+    {
+        // Arrange
+        var called = false;
+
+        // Act
+        var result = await (from a in Result<int>.FromError(MixedError)
+                            from b in Track(a)
+                            select a * b);
+
+        // Assert
+        result.Error.ShouldBeSameAs(MixedError);
+        called.ShouldBeFalse();
+
+        ValueTask<Result<int>> Track(int value)
+        {
+            called = true;
+            return GetAsync(value);
+        }
+    }
+
+    [Fact]
+    public async Task LinqQuerySyntax_SyncAsyncAndSyncSuccessfulResults_ReturnsCombinedValue()
+    {
+        // Act
+        var result = await (from a in Get(1)
+                            from b in GetAsync(a + 1)
+                            from c in Get(b + 1)
+                            select a + b + c);
+
+        // Assert
+        result.IsSuccess().ShouldBeTrue();
+        result.Value.ShouldBe(6);
+    }
+
+    [Fact]
+    public async Task SelectMany_AsyncSourceWithNullSyncSelector_ThrowsArgumentNullException()
+    {
+        // Act
+        var exception = await Record.ExceptionAsync(async () =>
+            await GetAsync(1).SelectMany((Func<int, Result<int>>)null!, (a, b) => a + b));
+
+        // Assert
+        exception.ShouldBeOfType<ArgumentNullException>();
+    }
+
+    [Fact]
+    public async Task SelectMany_SyncSourceWithNullAsyncSelector_ThrowsArgumentNullException()
+    {
+        // Act
+        var exception = await Record.ExceptionAsync(async () =>
+            await Get(1).SelectMany((Func<int, ValueTask<Result<int>>>)null!, (a, b) => a + b));
+
+        // Assert
+        exception.ShouldBeOfType<ArgumentNullException>();
+    }
+
+    #endregion
 }

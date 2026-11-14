@@ -124,4 +124,97 @@ public static class LinqTaskAsyncExtensions
             return collectionResult.IfSuccess(y => resultSelector(x, y));
         }).ConfigureAwait(ResultConfiguration.ContinueOnCapturedContext);
     }
+
+    /// <summary>
+    ///     Applies the synchronous <paramref name="collectionSelector" /> and the <paramref name="resultSelector" /> to the value of a successful
+    ///     <see cref="Result{T}" /> produced by the awaited <paramref name="result" />;
+    ///     otherwise, returns a failed <see cref="Result{TNext}" /> with the original <see cref="Error" />.
+    /// </summary>
+    /// <remarks>
+    ///     This method enables LINQ query syntax that mixes an asynchronous <c>from</c> clause followed by a synchronous one,
+    ///     e.g., <c>from user in GetUserAsync(id) from address in GetAddress(user) select …</c>.
+    /// </remarks>
+    /// <typeparam name="T">
+    ///     The type of the value of the initial result. If successful, this is also the type of the parameter passed to the selectors.
+    /// </typeparam>
+    /// <typeparam name="TMiddle">The type of the value of the intermediate result returned by <paramref name="collectionSelector" />.</typeparam>
+    /// <typeparam name="TNext">The type of the value of the final result, produced by <paramref name="resultSelector" />.</typeparam>
+    /// <param name="result">The <see cref="Task{TResult}" /> that represents the initial result.</param>
+    /// <param name="collectionSelector">
+    ///     A synchronous function that takes the value of the initial result and returns a result with an intermediate value.
+    /// </param>
+    /// <param name="resultSelector">
+    ///     A function that combines the value of the initial result and the intermediate value to produce the final value.
+    /// </param>
+    /// <returns>
+    ///     A <see cref="Task{TResult}" /> that represents the result of applying the selectors if both the initial and the intermediate results are
+    ///     successful; otherwise, a failed result with the first <see cref="Error" />.
+    /// </returns>
+    /// <exception cref="ArgumentNullException">
+    ///     If any of the <paramref name="result" />,
+    ///     <paramref name="collectionSelector" /> or <paramref name="resultSelector" /> parameters are <see langword="null" />.
+    /// </exception>
+    /// <exception cref="InvalidOperationException">
+    ///     If the asynchronous operation represented by <paramref name="result" /> returns <see langword="null" />.
+    /// </exception>
+    public static async Task<Result<TNext>> SelectMany<T, TMiddle, TNext>(
+        this Task<Result<T>> result,
+        Func<T, Result<TMiddle>> collectionSelector,
+        Func<T, TMiddle, TNext> resultSelector)
+    {
+        ArgumentNullException.ThrowIfNull(result);
+        ArgumentNullException.ThrowIfNull(collectionSelector);
+        ArgumentNullException.ThrowIfNull(resultSelector);
+
+        var resultValue = await result.ConfigureAwait(ResultConfiguration.ContinueOnCapturedContext);
+
+        if (resultValue is null)
+            throw new InvalidOperationException("The asynchronous operation represented by ‘result’ returned null.");
+
+        return resultValue.SelectMany(collectionSelector, resultSelector);
+    }
+
+    /// <summary>
+    ///     Applies the asynchronous <paramref name="collectionSelector" /> and the <paramref name="resultSelector" /> to the value of a successful
+    ///     <paramref name="result" />; otherwise, returns a failed <see cref="Result{TNext}" /> with the original <see cref="Error" />.
+    /// </summary>
+    /// <remarks>
+    ///     This method enables LINQ query syntax that mixes a synchronous <c>from</c> clause followed by an asynchronous one,
+    ///     e.g., <c>from user in GetUser(id) from orders in GetOrdersAsync(user) select …</c>.
+    /// </remarks>
+    /// <typeparam name="T">
+    ///     The type of the value of the initial result. If successful, this is also the type of the parameter passed to the selectors.
+    /// </typeparam>
+    /// <typeparam name="TMiddle">The type of the value of the intermediate result returned by <paramref name="collectionSelector" />.</typeparam>
+    /// <typeparam name="TNext">The type of the value of the final result, produced by <paramref name="resultSelector" />.</typeparam>
+    /// <param name="result">The initial result.</param>
+    /// <param name="collectionSelector">
+    ///     An asynchronous function that takes the value of the initial result and returns a result with an intermediate value.
+    /// </param>
+    /// <param name="resultSelector">
+    ///     A function that combines the value of the initial result and the intermediate value to produce the final value.
+    /// </param>
+    /// <returns>
+    ///     A <see cref="Task{TResult}" /> that represents the result of applying the selectors if both the initial and the intermediate results are
+    ///     successful; otherwise, a failed result with the first <see cref="Error" />.
+    /// </returns>
+    /// <exception cref="ArgumentNullException">
+    ///     If any of the <paramref name="result" />,
+    ///     <paramref name="collectionSelector" /> or <paramref name="resultSelector" /> parameters are <see langword="null" />.
+    /// </exception>
+    public static async Task<Result<TNext>> SelectMany<T, TMiddle, TNext>(
+        this Result<T> result,
+        Func<T, Task<Result<TMiddle>>> collectionSelector,
+        Func<T, TMiddle, TNext> resultSelector)
+    {
+        ArgumentNullException.ThrowIfNull(result);
+        ArgumentNullException.ThrowIfNull(collectionSelector);
+        ArgumentNullException.ThrowIfNull(resultSelector);
+
+        if (!result.IsSuccess())
+            return result.Error;
+
+        var collectionResult = await collectionSelector(result.Value).ConfigureAwait(ResultConfiguration.ContinueOnCapturedContext);
+        return collectionResult.IfSuccess(y => resultSelector(result.Value, y));
+    }
 }
