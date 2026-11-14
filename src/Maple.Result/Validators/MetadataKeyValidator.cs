@@ -18,18 +18,17 @@ namespace Maple.Result.Validators;
 /// </summary>
 /// <remarks>
 ///     <para>
-///         Metadata entries correspond to the <i>RFC 9457</i> extension members, which share the top-level object with
-///         the standard members. A key that matches a standard member name would produce a duplicate or ambiguous member
-///         once the metadata is flattened into a problem details response, so such keys are rejected.
+///         Metadata entries correspond to the <i>RFC 9457</i> extension members, which share the top-level object with the standard members.
+///         A key that matches a standard member name would produce a duplicate or ambiguous member once the metadata is flattened into
+///         a problem details response, so such keys are rejected.
 ///     </para>
 ///     <para>
-///         The comparison ignores case: clients often deserialize JSON case-insensitively, and naming policies can
-///         change the case of a key during serialization.
+///         The comparison ignores case: clients often deserialize JSON case-insensitively,
+///         and naming policies can change the case of a key during serialization.
 ///     </para>
 ///     <para>
-///         The naming recommendations of <i>RFC 9457</i> (section 4: letters, digits and <c>_</c>, starting with a
-///         letter, at least 3 characters) are not enforced, because they are not mandatory and problem details received
-///         from other services must be accepted as they are.
+///         The naming recommendations of <i>RFC 9457</i> (section 4: letters, digits and <c>_</c>, starting with a letter, at least 3 characters)
+///         are not enforced, because they are not mandatory and problem details received from other services must be accepted as they are.
 ///     </para>
 /// </remarks>
 internal static class MetadataKeyValidator

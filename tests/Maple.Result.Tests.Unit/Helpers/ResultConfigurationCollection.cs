@@ -11,8 +11,8 @@
 namespace Maple.Result.Tests.Unit.Helpers;
 
 /// <summary>
-///     The collection of the tests that change the global <see cref="ResultConfiguration" />. They run alone, after
-///     the other tests, so a changed setting cannot affect a test that runs at the same time.
+///     The collection of the tests that change the global <see cref="ResultConfiguration" />.
+///     They run alone, after the other tests, so a changed setting cannot affect a test that runs at the same time.
 /// </summary>
 [CollectionDefinition(Name, DisableParallelization = true)]
 public sealed class ResultConfigurationCollection

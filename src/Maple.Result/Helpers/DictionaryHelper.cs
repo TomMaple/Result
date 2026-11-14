@@ -15,14 +15,13 @@ using System.Text;
 namespace Maple.Result.Helpers;
 
 /// <summary>
-///     Content-based (order-independent) equality and hashing for string-keyed dictionaries, and their text
-///     representation.
+///     Content-based (order-independent) equality and hashing for string-keyed dictionaries, and their text representation.
 /// </summary>
 internal static class DictionaryHelper
 {
     /// <summary>
-    ///     Appends the entries of the dictionary to the <paramref name="builder" /> as <c>{ key = value, … }</c>
-    ///     (<c>{}</c> when empty), in the style of the compiler-generated <c>ToString</c> of a record.
+    ///     Appends the entries of the dictionary to the <paramref name="builder" /> as <c>{ key = value, … }</c> (<c>{}</c> when empty),
+    ///     in the style of the compiler-generated <c>ToString</c> of a record.
     /// </summary>
     internal static void Append(StringBuilder builder, IReadOnlyDictionary<string, object?> dictionary)
     {
@@ -68,8 +67,7 @@ internal static class DictionaryHelper
     }
 
     /// <summary>
-    ///     Returns an order-independent hash code of the dictionary entries, consistent with
-    ///     <see cref="Equal" />.
+    ///     Returns an order-independent hash code of the dictionary entries, consistent with <see cref="Equal" />.
     /// </summary>
     internal static int GetHashCode(IReadOnlyDictionary<string, object?> dictionary)
     {

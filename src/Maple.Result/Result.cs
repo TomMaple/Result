@@ -14,18 +14,16 @@ using System.Diagnostics.CodeAnalysis;
 namespace Maple.Result;
 
 /// <summary>
-///     Defines the contract for an operation result, providing information about success or failure and any associated
-///     error details.
+///     Defines the contract for an operation result, providing information about success or failure and any associated error details.
 /// </summary>
 /// <remarks>
-///     Use the <see cref="IsSuccess" /> method to determine whether the operation completed successfully, and access
-///     the <see cref="Error" /> property for error information if the operation failed.
+///     Use the <see cref="IsSuccess" /> method to determine whether the operation completed successfully,
+///     and access the <see cref="Error" /> property for error information if the operation failed.
 /// </remarks>
 public interface IOperationResult
 {
     /// <summary>
-    ///     Returns an <see cref="Error" /> object if the operation failed;
-    ///     otherwise, returns <see langword="null" />.
+    ///     Returns an <see cref="Error" /> object if the operation failed; otherwise, returns <see langword="null" />.
     /// </summary>
     public Error? Error { get; }
 
@@ -43,8 +41,7 @@ public interface IOperationResult
 ///     Defines a result of an operation that can either be successful or contain an error.
 /// </summary>
 /// <remarks>
-///     The record is immutable. Create it with <see cref="Success" />, <see cref="FromError" /> or the implicit
-///     conversion from an <see cref="Error" />.
+///     The record is immutable. Create it with <see cref="Success" />, <see cref="FromError" /> or the implicit conversion from an <see cref="Error" />.
 /// </remarks>
 /// <inheritdoc cref="IOperationResult" />
 public sealed record Result : IOperationResult
@@ -63,8 +60,7 @@ public sealed record Result : IOperationResult
     #endregion
 
     /// <summary>
-    ///     Returns an <see cref="Error" /> object if the operation failed;
-    ///     otherwise, returns <see langword="null" />.
+    ///     Returns an <see cref="Error" /> object if the operation failed; otherwise, returns <see langword="null" />.
     /// </summary>
     public Error? Error { get; }
 
@@ -121,8 +117,8 @@ public sealed record Result : IOperationResult
     /// <typeparam name="T">The type of the <paramref name="value" />.</typeparam>
     /// <remarks>
     ///     A <see langword="null" /> <paramref name="value" /> is permitted when <typeparamref name="T" /> is nullable
-    ///     (a nullable reference type or <see cref="Nullable{T}" />); the resulting <see cref="Result{T}" /> is
-    ///     successful and its <see cref="Result{T}.Value" /> is <see langword="null" />.
+    ///     (a nullable reference type or <see cref="Nullable{T}" />);
+    ///     the resulting <see cref="Result{T}" /> is successful and its <see cref="Result{T}.Value" /> is <see langword="null" />.
     /// </remarks>
     public static Result<T> FromValue<T>(T value)
     {
@@ -133,14 +129,13 @@ public sealed record Result : IOperationResult
 }
 
 /// <summary>
-///     Defines a result of an operation that can either be successful and contain a value
-///     of type <typeparamref name="T" />, or contain an <see cref="Error" />.
+///     Defines a result of an operation that can either be successful and contain a value of type <typeparamref name="T" />,
+///     or contain an <see cref="Error" />.
 /// </summary>
 /// <typeparam name="T">The type of the successful value.</typeparam>
 /// <remarks>
-///     The record is immutable. Create it with <see cref="FromValue" />, <see cref="FromError" /> or the implicit
-///     conversions from a <typeparamref name="T" /> or an <see cref="Error" />. It is successful exactly when it has
-///     no <see cref="Error" />.
+///     The record is immutable. Create it with <see cref="FromValue" />, <see cref="FromError" /> or the implicit conversions from a <typeparamref name="T" />
+///     or an <see cref="Error" />. It is successful exactly when it has no <see cref="Error" />.
 /// </remarks>
 /// <inheritdoc cref="IOperationResult" />
 public sealed record Result<T> : IOperationResult
@@ -165,16 +160,14 @@ public sealed record Result<T> : IOperationResult
     ///     otherwise, returns the default value of <typeparamref name="T" />.
     /// </summary>
     /// <remarks>
-    ///     A successful <see cref="Result{T}" /> carries a value, which may itself be <see langword="null" /> when
-    ///     <typeparamref name="T" /> is nullable (a nullable reference type or <see cref="Nullable{T}" />). A
-    ///     <see langword="null" /> (or default) here therefore does not by itself indicate failure—use
-    ///     <see cref="IsSuccess" /> to distinguish a successful value from a failure.
+    ///     A successful <see cref="Result{T}" /> carries a value, which may itself be <see langword="null" /> when <typeparamref name="T" /> is nullable
+    ///     (a nullable reference type or <see cref="Nullable{T}" />). A <see langword="null" /> (or default) here therefore does not by itself indicate
+    ///     failure—use <see cref="IsSuccess" /> to distinguish a successful value from a failure.
     /// </remarks>
     public T? Value { get; }
 
     /// <summary>
-    ///     Returns an <see cref="Error" /> object if the operation failed;
-    ///     otherwise, returns <see langword="null" />.
+    ///     Returns an <see cref="Error" /> object if the operation failed; otherwise, returns <see langword="null" />.
     /// </summary>
     public Error? Error { get; }
 
@@ -182,11 +175,10 @@ public sealed record Result<T> : IOperationResult
     ///     Returns an indicator of whether the operation was successful.
     /// </summary>
     /// <remarks>
-    ///     The <see cref="MemberNotNullWhenAttribute" /> on <see cref="Value" /> reflects the common case where a
-    ///     successful result carries a non-null value. When <typeparamref name="T" /> is nullable (a nullable
-    ///     reference type or <see cref="Nullable{T}" />) a successful result may legitimately carry a
-    ///     <see langword="null" /> value, so the flow-analysis hint is a best effort rather than a guarantee for
-    ///     those types; access <see cref="Value" /> accordingly.
+    ///     The <see cref="MemberNotNullWhenAttribute" /> on <see cref="Value" /> reflects the common case where a successful result carries a non-null value.
+    ///     When <typeparamref name="T" /> is nullable (a nullable reference type or <see cref="Nullable{T}" />) a successful result may legitimately carry
+    ///     a <see langword="null" /> value, so the flow-analysis hint is a best effort rather than a guarantee for those types;
+    ///     access <see cref="Value" /> accordingly.
     /// </remarks>
     /// <returns>
     ///     <see langword="true" /> if the operation was successful; otherwise, <see langword="false" />.
@@ -205,8 +197,8 @@ public sealed record Result<T> : IOperationResult
     /// </summary>
     /// <remarks>
     ///     A <see langword="null" /> <paramref name="value" /> is permitted when <typeparamref name="T" /> is nullable
-    ///     (a nullable reference type or <see cref="Nullable{T}" />); the resulting <see cref="Result{T}" /> is
-    ///     successful and its <see cref="Value" /> is <see langword="null" />.
+    ///     (a nullable reference type or <see cref="Nullable{T}" />);
+    ///     the resulting <see cref="Result{T}" /> is successful and its <see cref="Value" /> is <see langword="null" />.
     /// </remarks>
     public static implicit operator Result<T>(T value)
     {
@@ -231,8 +223,8 @@ public sealed record Result<T> : IOperationResult
     /// </summary>
     /// <remarks>
     ///     A <see langword="null" /> <paramref name="value" /> is permitted when <typeparamref name="T" /> is nullable
-    ///     (a nullable reference type or <see cref="Nullable{T}" />); the resulting <see cref="Result{T}" /> is
-    ///     successful and its <see cref="Value" /> is <see langword="null" />.
+    ///     (a nullable reference type or <see cref="Nullable{T}" />);
+    ///     the resulting <see cref="Result{T}" /> is successful and its <see cref="Value" /> is <see langword="null" />.
     /// </remarks>
     public static Result<T> FromValue(T value)
     {

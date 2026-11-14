@@ -21,7 +21,7 @@ trim_trailing_whitespace = false
 indent_size = 2
 
 [*.cs]
-max_line_length = 200
+max_line_length = 160
 
 #
 # Usings: sorted alphabetically (System.* is not placed first);

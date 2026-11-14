@@ -22,9 +22,8 @@ internal static partial class UriTagValidator
     //   taggingEntity = authorityName "," date
     //   authorityName = DNSname / emailAddress
     //   date          = year ["-" month ["-" day]]
-    // The date is validated partially: the year is 1xxx or 2xxx, the month is 01-12 and the day is 01-31, each as
-    // two digits per the RFC's 2DIGIT grammar. This rejects impossible values such as month 13 or day 32 without
-    // asserting a real calendar date (for example, it still accepts 02-30).
+    // The date is validated partially: the year is 1xxx or 2xxx, the month is 01-12 and the day is 01-31, each as two digits per the RFC's 2DIGIT grammar.
+    // This rejects impossible values such as month 13 or day 32 without asserting a real calendar date (for example, it still accepts 02-30).
     [GeneratedRegex(
         "^tag:" +
         // authorityName = DNSname / emailAddress

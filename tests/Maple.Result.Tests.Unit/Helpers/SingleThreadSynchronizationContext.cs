@@ -16,8 +16,8 @@ using System.Threading.Tasks;
 namespace Maple.Result.Tests.Unit.Helpers;
 
 /// <summary>
-///     A synchronization context that runs every posted callback on the thread that called <see cref="Run" />, like the
-///     UI thread of a WPF or Windows Forms application.
+///     A synchronization context that runs every posted callback on the thread that called <see cref="Run" />,
+///     like the UI thread of a WPF or Windows Forms application.
 /// </summary>
 internal sealed class SingleThreadSynchronizationContext : SynchronizationContext
 {
@@ -34,8 +34,8 @@ internal sealed class SingleThreadSynchronizationContext : SynchronizationContex
     }
 
     /// <summary>
-    ///     Runs the asynchronous function with this context installed as the current one, processes the posted
-    ///     callbacks until the function completes, and returns its result.
+    ///     Runs the asynchronous function with this context installed as the current one,
+    ///     processes the posted callbacks until the function completes, and returns its result.
     /// </summary>
     internal static T Run<T>(Func<SingleThreadSynchronizationContext, Task<T>> function)
     {
