@@ -16,7 +16,7 @@ The details are kept in the order they were added. Unlike [Error.WithErrorDetail
 
 
 ## AddErrorDetail(ErrorDetail)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/ErrorBuilder.cs#L323" target="_blank">ErrorBuilder.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/ErrorBuilder.cs#L325" target="_blank">ErrorBuilder.cs</a>
 
 Appends the specified individual error occurrence.
 
@@ -48,7 +48,7 @@ foreach (var errorDetail in validationResult.ErrorDetails)
 
 
 ## AddErrorDetail(String, String, String, (String, Object)[])
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/ErrorBuilder.cs#L355" target="_blank">ErrorBuilder.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/ErrorBuilder.cs#L358" target="_blank">ErrorBuilder.cs</a>
 
 Appends a new individual error occurrence.
 
@@ -56,8 +56,8 @@ Appends a new individual error occurrence.
 public ErrorBuilder AddErrorDetail(
         string? propertyPointer,
         string detail,
-        string? messageId = null,
-        params (string key, object? value)[] namedValues);
+        string? detailTemplateId = null,
+        params (string Key, object? Value)[] detailNamedValues);
 ```
 
 ### Parameters
@@ -67,11 +67,11 @@ An optional [JSON Pointer](https://datatracker.ietf.org/doc/html/rfc6901) to the
 #### `detail` [String](https://learn.microsoft.com/dotnet/api/system.string)
 A mandatory human-readable message that describes the specific error occurrence.
 
-#### `messageId` [String](https://learn.microsoft.com/dotnet/api/system.string)
-An optional identifier of the message template to generate localized message. When it is `null`, no [DetailTemplated](../ErrorDetail/ErrorDetail_DetailTemplated.md) is set and the `namedValues` are ignored.
+#### `detailTemplateId` [String](https://learn.microsoft.com/dotnet/api/system.string)
+An optional identifier of the message template to generate localized message. When it is `null`, no [DetailTemplated](../ErrorDetail/ErrorDetail_DetailTemplated.md) is set.
 
-#### `namedValues` ([String](https://learn.microsoft.com/dotnet/api/system.string), [Object](https://learn.microsoft.com/en-us/dotnet/api/system.object))[]
-An optional array of named values to be used when rendering the templated message. Values can be `null`.
+#### `detailNamedValues` ([String](https://learn.microsoft.com/dotnet/api/system.string), [Object](https://learn.microsoft.com/en-us/dotnet/api/system.object))[]
+An optional array of named values to be used when rendering the templated message. Values can be `null`; names must be unique. Requires `detailTemplateId`.
 
 ### Returns
 [ErrorBuilder](ErrorBuilder.md)
@@ -81,11 +81,11 @@ The current instance of the [ErrorBuilder](ErrorBuilder.md) class.
 ### Exceptions
 [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 
-The `detail` is `null`, or the `messageId` is set and a name in `namedValues` is `null`.
+The `detail` or a name in `detailNamedValues` is `null`.
 
 [ArgumentException](https://learn.microsoft.com/dotnet/api/system.argumentexception)
 
-The `messageId` is empty or consists only of white-space characters, or a name in `namedValues` is repeated.
+The `detailTemplateId` is empty or consists only of white-space characters, a name in `detailNamedValues` is repeated, or `detailNamedValues` are passed without a `detailTemplateId`.
 
 In both cases nothing is appended.
 

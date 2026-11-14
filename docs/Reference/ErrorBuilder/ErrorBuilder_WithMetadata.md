@@ -16,7 +16,7 @@ Keys are compared ordinally (case-sensitive); a repeated key replaces the value.
 
 
 ## WithMetadata(String, Object)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/ErrorBuilder.cs#L382" target="_blank">ErrorBuilder.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/ErrorBuilder.cs#L384" target="_blank">ErrorBuilder.cs</a>
 
 Adds the specified metadata entry, or replaces its value if the key already exists.
 
@@ -57,7 +57,7 @@ var error = ErrorBuilder.LimitExceeded(
 
 
 ## WithMetadata(IEnumerable&lt;KeyValuePair&lt;String, Object&gt;&gt;)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/ErrorBuilder.cs#L407" target="_blank">ErrorBuilder.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/ErrorBuilder.cs#L409" target="_blank">ErrorBuilder.cs</a>
 
 Adds the specified metadata entries. Entries with existing keys are replaced; the other existing entries are kept.
 

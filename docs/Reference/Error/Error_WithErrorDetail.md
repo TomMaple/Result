@@ -18,7 +18,7 @@ Each call copies the error. To add several details, use [ToBuilder()](Error_ToBu
 
 
 ## WithErrorDetail(ErrorDetail)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L239" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L240" target="_blank">Error.cs</a>
 
 Returns a copy of the current error with the specified individual error occurrence appended to the [ErrorDetails](Error_ErrorDetails.md).
 
@@ -52,7 +52,7 @@ var error = Error.Validation(
 
 
 ## WithErrorDetail(String, String, String, (String, Object)[])
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L278" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L280" target="_blank">Error.cs</a>
 
 Returns a copy of the current error with a new individual error occurrence appended to the [ErrorDetails](Error_ErrorDetails.md).
 
@@ -60,8 +60,8 @@ Returns a copy of the current error with a new individual error occurrence appen
 public Error WithErrorDetail(
         string? propertyPointer,
         string detail,
-        string? messageId = null,
-        params (string key, object? value)[] namedValues);
+        string? detailTemplateId = null,
+        params (string Key, object? Value)[] detailNamedValues);
 ```
 
 ### Parameters
@@ -71,11 +71,11 @@ An optional [JSON Pointer](https://datatracker.ietf.org/doc/html/rfc6901) to the
 #### `detail` [String](https://learn.microsoft.com/dotnet/api/system.string)
 A mandatory human-readable message that describes the specific error occurrence.
 
-#### `messageId` [String](https://learn.microsoft.com/dotnet/api/system.string)
-An optional identifier of the message template to generate localized message. When it is `null`, no [DetailTemplated](../ErrorDetail/ErrorDetail_DetailTemplated.md) is set and the `namedValues` are ignored.
+#### `detailTemplateId` [String](https://learn.microsoft.com/dotnet/api/system.string)
+An optional identifier of the message template to generate localized message. When it is `null`, no [DetailTemplated](../ErrorDetail/ErrorDetail_DetailTemplated.md) is set.
 
-#### `namedValues` ([String](https://learn.microsoft.com/dotnet/api/system.string), [Object](https://learn.microsoft.com/en-us/dotnet/api/system.object))[]
-An optional array of named values to be used when rendering the templated message. Values can be `null`.
+#### `detailNamedValues` ([String](https://learn.microsoft.com/dotnet/api/system.string), [Object](https://learn.microsoft.com/en-us/dotnet/api/system.object))[]
+An optional array of named values to be used when rendering the templated message. Values can be `null`; names must be unique. Requires `detailTemplateId`.
 
 ### Returns
 [Error](Error.md)
@@ -85,11 +85,11 @@ A new instance of the [Error](Error.md) record with the error detail appended. T
 ### Exceptions
 [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 
-The `detail` is `null`, or the `messageId` is set and a name in `namedValues` is `null`.
+The `detail` or a name in `detailNamedValues` is `null`.
 
 [ArgumentException](https://learn.microsoft.com/dotnet/api/system.argumentexception)
 
-The `messageId` is empty or consists only of white-space characters, or a name in `namedValues` is repeated.
+The `detailTemplateId` is empty or consists only of white-space characters, a name in `detailNamedValues` is repeated, or `detailNamedValues` are passed without a `detailTemplateId`.
 
 ### Examples
 ```csharp

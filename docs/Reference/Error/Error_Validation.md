@@ -18,7 +18,7 @@ It relates to `400` HTTP status code (Bad Request), but can also be used in othe
 
 
 ## Validation(ErrorUri, String, String, ErrorUri, String, (String, Object)[])
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L1193" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L1319" target="_blank">Error.cs</a>
 
 Creates a new instance of the [Error](Error.md) object of the *Validation* category with specified parameters.
 
@@ -49,7 +49,7 @@ An optional *URI* reference that identifies the specific occurrence of the probl
 An optional identifier of the message template to generate custom, localized message.
 
 #### `detailNamedValues` ([String](https://learn.microsoft.com/dotnet/api/system.string), [Object](https://learn.microsoft.com/en-us/dotnet/api/system.object))[]
-An optional array of named values to be used when rendering the templated message. Values can be `null`. This parameter will be ignored if `detailTemplateId` is `null`.
+An optional array of named values to be used when rendering the templated message. Values can be `null`; names must be unique and not `null`. Requires `detailTemplateId`: passing values without it throws an [ArgumentException](https://learn.microsoft.com/dotnet/api/system.argumentexception).
 
 ### Returns
 [Error](Error.md)
@@ -59,11 +59,11 @@ A new instance of the [Error](Error.md) record of the *Validation* [ErrorCategor
 ### Exceptions
 [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 
-The `title` is `null`.
+The `title` or a name in `detailNamedValues` is `null`.
 
 [ArgumentException](https://learn.microsoft.com/dotnet/api/system.argumentexception)
 
-The `title` is empty or consists only of white-space characters, or the `detailTemplateId` is empty or consists only of white-space characters.
+The `title` or the `detailTemplateId` is empty or consists only of white-space characters, a name in `detailNamedValues` is repeated, or `detailNamedValues` are passed without a `detailTemplateId`.
 
 ### Remarks
 > [!NOTE]
@@ -94,11 +94,12 @@ error = error.WithErrorDetail(
 
 
 ## Validation(ErrorUri, String, String, ErrorUri, String, IEnumerable&lt;KeyValuePair&lt;String, Object&gt;&gt;)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L1226" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L1358" target="_blank">Error.cs</a>
 
 Creates a new instance of the [Error](Error.md) object of the *Validation* category with specified parameters.
 
 ```csharp
+[OverloadResolutionPriority(1)]
 public static Error Validation(
         ErrorUri typeUri,
         string title,
@@ -125,7 +126,7 @@ An optional *URI* reference that identifies the specific occurrence of the probl
 An optional identifier of the message template to generate custom, localized message.
 
 #### `detailNamedValues` [IEnumerable](https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1)&lt;[KeyValuePair](https://learn.microsoft.com/dotnet/api/system.collections.generic.keyvaluepair-2)&lt;[String](https://learn.microsoft.com/dotnet/api/system.string), [Object](https://learn.microsoft.com/en-us/dotnet/api/system.object)&gt;&gt;
-An optional sequence of key-value pairs to be used when rendering the templated message. Values can be `null`. This parameter will be ignored if `detailTemplateId` is `null`.
+An optional sequence of key-value pairs to be used when rendering the templated message. Values can be `null`; names must be unique and not `null`. Requires `detailTemplateId`: passing values without it throws an [ArgumentException](https://learn.microsoft.com/dotnet/api/system.argumentexception).
 
 ### Returns
 [Error](Error.md)
@@ -135,11 +136,11 @@ A new instance of the [Error](Error.md) record of the *Validation* [ErrorCategor
 ### Exceptions
 [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 
-The `title` is `null`.
+The `title` or a name in `detailNamedValues` is `null`.
 
 [ArgumentException](https://learn.microsoft.com/dotnet/api/system.argumentexception)
 
-The `title` is empty or consists only of white-space characters, or the `detailTemplateId` is empty or consists only of white-space characters.
+The `title` or the `detailTemplateId` is empty or consists only of white-space characters, a name in `detailNamedValues` is repeated, or `detailNamedValues` are passed without a `detailTemplateId`.
 
 ### Remarks
 > [!NOTE]

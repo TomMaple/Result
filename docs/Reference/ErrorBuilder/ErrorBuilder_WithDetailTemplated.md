@@ -12,15 +12,16 @@ Sets the [DetailTemplated](../Error/Error_DetailTemplated.md) of the error to bu
 | [WithDetailTemplated(String, (String, Object)[])](#withdetailtemplatedstring-string-object) | Sets the templated explanation from a template identifier and named values. |
 
 ## Remarks
-A bare `null` literal is ambiguous between the two overloads (compiler error CS0121). To clear the value, write `WithDetailTemplated((TemplatedMessage?)null)`.
+`WithDetailTemplated(null)` binds to [WithDetailTemplated(TemplatedMessage)](#withdetailtemplatedtemplatedmessage) and clears the value.
 
 
 ## WithDetailTemplated(TemplatedMessage)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/ErrorBuilder.cs#L270" target="_blank">ErrorBuilder.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/ErrorBuilder.cs#L271" target="_blank">ErrorBuilder.cs</a>
 
 Sets the [DetailTemplated](../Error/Error_DetailTemplated.md) of the error to build.
 
 ```csharp
+[OverloadResolutionPriority(1)]
 public ErrorBuilder WithDetailTemplated(TemplatedMessage? detailTemplated);
 ```
 
@@ -36,13 +37,13 @@ The current instance of the [ErrorBuilder](ErrorBuilder.md) class.
 ### Examples
 ```csharp
 var withoutTemplate = error.ToBuilder()
-    .WithDetailTemplated((TemplatedMessage?)null)
+    .WithDetailTemplated(null)
     .Build();
 ```
 
 
 ## WithDetailTemplated(String, (String, Object)[])
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/ErrorBuilder.cs#L291" target="_blank">ErrorBuilder.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/ErrorBuilder.cs#L293" target="_blank">ErrorBuilder.cs</a>
 
 Sets the [DetailTemplated](../Error/Error_DetailTemplated.md) of the error to build to a new [TemplatedMessage](../TemplatedMessage/TemplatedMessage.md).
 
@@ -65,11 +66,11 @@ The current instance of the [ErrorBuilder](ErrorBuilder.md) class.
 ### Exceptions
 [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 
-The `templateId`, the `namedValues` array or any name is `null`.
+The `templateId`, the `namedValues` array or a parameter name is `null`.
 
 [ArgumentException](https://learn.microsoft.com/dotnet/api/system.argumentexception)
 
-The `templateId` is empty or consists only of white-space characters, or a name is repeated.
+The `templateId` is empty or consists only of white-space characters, or a parameter name is repeated.
 
 In both cases the builder is unchanged.
 
