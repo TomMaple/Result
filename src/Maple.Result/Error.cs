@@ -28,7 +28,7 @@ namespace Maple.Result;
 ///         for more information, see: <seealso href="https://datatracker.ietf.org/doc/html/rfc9457" />.
 ///     </para>
 ///     <para>
-///         The record is immutable. Create it with one of the factory methods (e.g., <see cref="Validation(ErrorUri, string, string?, ErrorUri?, string?, ValueTuple{string, object?}[])" />)
+///         The record is immutable. Create it with one of the factory methods (e.g., <see cref="Validation(ErrorUri, string, string?, ErrorUri?, string?, ReadOnlySpan{ValueTuple{string, object?}})" />)
 ///         or with an <see cref="ErrorBuilder" />. Methods such as <see cref="WithErrorDetail(ErrorDetail)" /> and
 ///         <see cref="WithMetadata(string, object?)" /> return a changed copy; to change several members at once, use
 ///         <see cref="ToBuilder" /> and <see cref="ErrorBuilder.Build" />.
@@ -262,7 +262,7 @@ public sealed record Error
     /// <remarks>
     ///     <para>
     ///         To add several occurrences, use <see cref="ToBuilder" /> and
-    ///         <see cref="ErrorBuilder.AddErrorDetail(string?, string, string?, ValueTuple{string, object?}[])" />,
+    ///         <see cref="ErrorBuilder.AddErrorDetail(string?, string, string?, ReadOnlySpan{ValueTuple{string, object?}})" />,
     ///         which does not copy the error for each one.
     ///     </para>
     ///     <para>
@@ -278,7 +278,7 @@ public sealed record Error
     ///     <paramref name="detailNamedValues" /> are passed without a <paramref name="detailTemplateId" />.
     /// </exception>
     public Error WithErrorDetail(string? propertyPointer, string detail, string? detailTemplateId = null,
-        params (string Key, object? Value)[] detailNamedValues)
+        params ReadOnlySpan<(string Key, object? Value)> detailNamedValues)
     {
         return ToBuilder()
             .AddErrorDetail(propertyPointer, detail, detailTemplateId, detailNamedValues)
@@ -355,7 +355,30 @@ public sealed record Error
     /// <exception cref="ArgumentNullException">
     ///     If the <paramref name="metadata" /> or any key is <see langword="null" />.
     /// </exception>
+    [OverloadResolutionPriority(1)]
     public Error WithMetadata(IEnumerable<KeyValuePair<string, object?>> metadata)
+    {
+        return ToBuilder()
+            .WithMetadata(metadata)
+            .Build();
+    }
+
+    /// <summary>
+    ///     Returns a copy of the current error with the specified metadata entries, given as key-value tuples, added;
+    ///     entries with existing keys are replaced and the other existing entries are kept.
+    /// </summary>
+    /// <param name="metadata">
+    ///     The metadata entries to add or replace, e.g., <c>WithMetadata(("limit", 100), ("remaining", 0))</c>; values
+    ///     may be <see langword="null" />. A key repeated in the same call takes the last value.
+    /// </param>
+    /// <returns>A new instance of the <see cref="Error" /> object; the current instance is not modified.</returns>
+    /// <exception cref="ArgumentException">
+    ///     If any key is empty, whitespace-only or matches (case-insensitively) a standard problem details member:
+    ///     <c>type</c>, <c>title</c>, <c>status</c>, <c>detail</c>, <c>instance</c>, <c>errors</c> or
+    ///     <c>detailTemplated</c>.
+    /// </exception>
+    /// <exception cref="ArgumentNullException">If any key is <see langword="null" />.</exception>
+    public Error WithMetadata(params ReadOnlySpan<(string Key, object? Value)> metadata)
     {
         return ToBuilder()
             .WithMetadata(metadata)
@@ -545,7 +568,7 @@ public sealed record Error
     /// </exception>
     public static Error Conflict(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
-        params (string Key, object? Value)[] detailNamedValues)
+        params ReadOnlySpan<(string Key, object? Value)> detailNamedValues)
     {
         return Create(ErrorCategory.Conflict, typeUri, title, detail, instanceUri, detailTemplateId,
             detailNamedValues);
@@ -622,7 +645,7 @@ public sealed record Error
     /// </exception>
     public static Error Critical(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
-        params (string Key, object? Value)[] detailNamedValues)
+        params ReadOnlySpan<(string Key, object? Value)> detailNamedValues)
     {
         return Create(ErrorCategory.Critical, typeUri, title, detail, instanceUri, detailTemplateId,
             detailNamedValues);
@@ -699,7 +722,7 @@ public sealed record Error
     /// </exception>
     public static Error Failure(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
-        params (string Key, object? Value)[] detailNamedValues)
+        params ReadOnlySpan<(string Key, object? Value)> detailNamedValues)
     {
         return Create(ErrorCategory.Failure, typeUri, title, detail, instanceUri, detailTemplateId,
             detailNamedValues);
@@ -777,7 +800,7 @@ public sealed record Error
     /// </exception>
     public static Error LimitExceeded(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
-        params (string Key, object? Value)[] detailNamedValues)
+        params ReadOnlySpan<(string Key, object? Value)> detailNamedValues)
     {
         return Create(ErrorCategory.LimitExceeded, typeUri, title, detail, instanceUri, detailTemplateId,
             detailNamedValues);
@@ -855,7 +878,7 @@ public sealed record Error
     /// </exception>
     public static Error NotFound(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
-        params (string Key, object? Value)[] detailNamedValues)
+        params ReadOnlySpan<(string Key, object? Value)> detailNamedValues)
     {
         return Create(ErrorCategory.NotFound, typeUri, title, detail, instanceUri, detailTemplateId,
             detailNamedValues);
@@ -932,7 +955,7 @@ public sealed record Error
     /// </exception>
     public static Error NotImplemented(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
-        params (string Key, object? Value)[] detailNamedValues)
+        params ReadOnlySpan<(string Key, object? Value)> detailNamedValues)
     {
         return Create(ErrorCategory.NotImplemented, typeUri, title, detail, instanceUri, detailTemplateId,
             detailNamedValues);
@@ -1009,7 +1032,7 @@ public sealed record Error
     /// </exception>
     public static Error Timeout(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
-        params (string Key, object? Value)[] detailNamedValues)
+        params ReadOnlySpan<(string Key, object? Value)> detailNamedValues)
     {
         return Create(ErrorCategory.Timeout, typeUri, title, detail, instanceUri, detailTemplateId,
             detailNamedValues);
@@ -1087,7 +1110,7 @@ public sealed record Error
     /// </exception>
     public static Error Unauthenticated(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
-        params (string Key, object? Value)[] detailNamedValues)
+        params ReadOnlySpan<(string Key, object? Value)> detailNamedValues)
     {
         return Create(ErrorCategory.Unauthenticated, typeUri, title, detail, instanceUri, detailTemplateId,
             detailNamedValues);
@@ -1164,7 +1187,7 @@ public sealed record Error
     /// </exception>
     public static Error Unauthorized(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
-        params (string Key, object? Value)[] detailNamedValues)
+        params ReadOnlySpan<(string Key, object? Value)> detailNamedValues)
     {
         return Create(ErrorCategory.Unauthorized, typeUri, title, detail, instanceUri, detailTemplateId,
             detailNamedValues);
@@ -1241,7 +1264,7 @@ public sealed record Error
     /// </exception>
     public static Error Unavailable(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
-        params (string Key, object? Value)[] detailNamedValues)
+        params ReadOnlySpan<(string Key, object? Value)> detailNamedValues)
     {
         return Create(ErrorCategory.Unavailable, typeUri, title, detail, instanceUri, detailTemplateId,
             detailNamedValues);
@@ -1318,7 +1341,7 @@ public sealed record Error
     /// </exception>
     public static Error Validation(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
-        params (string Key, object? Value)[] detailNamedValues)
+        params ReadOnlySpan<(string Key, object? Value)> detailNamedValues)
     {
         return Create(ErrorCategory.Validation, typeUri, title, detail, instanceUri, detailTemplateId,
             detailNamedValues);

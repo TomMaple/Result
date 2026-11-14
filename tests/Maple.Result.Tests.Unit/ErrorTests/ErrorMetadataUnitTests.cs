@@ -181,6 +181,32 @@ public class ErrorMetadataUnitTests
     }
 
     [Fact]
+    public void WithMetadata_Tuples_ReturnsCopyWithEntriesAndLeavesOriginalUntouched()
+    {
+        // Arrange
+        var original = CreateError().WithMetadata("limit", 100);
+
+        // Act
+        var sut = original.WithMetadata(("limit", 200), ("remaining", 0));
+
+        // Assert
+        sut.Metadata.Count.ShouldBe(2);
+        sut.Metadata["limit"].ShouldBe(200);
+        sut.Metadata["remaining"].ShouldBe(0);
+        original.Metadata.Count.ShouldBe(1);
+        original.Metadata["limit"].ShouldBe(100);
+    }
+
+    [Fact]
+    public void WithMetadata_NullArgument_BindsToSequenceOverloadAndThrowsArgumentNullException()
+    {
+        // Arrange
+        var sut = CreateError();
+
+        // Act & Assert
+        Should.Throw<ArgumentNullException>(() => sut.WithMetadata(null!));
+    }
+    [Fact]
     public void WithMetadata_SequenceWithNullValue_AddsEntryWithNullValue()
     {
         // Act

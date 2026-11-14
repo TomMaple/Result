@@ -284,16 +284,13 @@ public sealed class ErrorBuilder
     /// </param>
     /// <returns>The current <see cref="ErrorBuilder" /> instance.</returns>
     /// <exception cref="ArgumentNullException">
-    ///     If the <paramref name="templateId" />, the <paramref name="namedValues" /> array or a parameter name is
-    ///     <see langword="null" />.
+    ///     If the <paramref name="templateId" /> or a parameter name is <see langword="null" />.
     /// </exception>
     /// <exception cref="ArgumentException">
     ///     If the <paramref name="templateId" /> is empty or whitespace-only, or a parameter name is repeated.
     /// </exception>
-    public ErrorBuilder WithDetailTemplated(string templateId, params (string Key, object? Value)[] namedValues)
+    public ErrorBuilder WithDetailTemplated(string templateId, params ReadOnlySpan<(string Key, object? Value)> namedValues)
     {
-        ArgumentNullException.ThrowIfNull(namedValues);
-
         _detailTemplated = TemplatedMessage.Create(templateId, namedValues, nameof(templateId), nameof(namedValues));
         return this;
     }
@@ -356,7 +353,7 @@ public sealed class ErrorBuilder
     ///     <paramref name="detailNamedValues" /> are passed without a <paramref name="detailTemplateId" />.
     /// </exception>
     public ErrorBuilder AddErrorDetail(string? propertyPointer, string detail, string? detailTemplateId = null,
-        params (string Key, object? Value)[] detailNamedValues)
+        params ReadOnlySpan<(string Key, object? Value)> detailNamedValues)
     {
         var detailTemplated = TemplatedMessage.CreateOptional(detailTemplateId, detailNamedValues,
             nameof(detailTemplateId), nameof(detailNamedValues));
@@ -406,6 +403,7 @@ public sealed class ErrorBuilder
     ///     <c>type</c>, <c>title</c>, <c>status</c>, <c>detail</c>, <c>instance</c>, <c>errors</c> or
     ///     <c>detailTemplated</c>.
     /// </exception>
+    [OverloadResolutionPriority(1)]
     public ErrorBuilder WithMetadata(IEnumerable<KeyValuePair<string, object?>> metadata)
     {
         ArgumentNullException.ThrowIfNull(metadata);
@@ -420,6 +418,40 @@ public sealed class ErrorBuilder
         var pending = GetPendingMetadata();
         foreach (var pair in entries)
             pending[pair.Key] = pair.Value;
+
+        return this;
+    }
+
+    /// <summary>
+    ///     Adds the specified entries, given as key-value tuples, to the <see cref="Error.Metadata" />; entries with
+    ///     existing keys are replaced and the other existing entries are kept.
+    /// </summary>
+    /// <param name="metadata">
+    ///     The metadata entries to add or replace, e.g., <c>WithMetadata(("limit", 100), ("remaining", 0))</c>; values
+    ///     may be <see langword="null" />.
+    /// </param>
+    /// <returns>The current <see cref="ErrorBuilder" /> instance.</returns>
+    /// <remarks>
+    ///     All keys are validated before any entry is applied, so the builder is unchanged when this method throws. A
+    ///     key repeated in the same call takes the last value.
+    /// </remarks>
+    /// <exception cref="ArgumentNullException">If any key is <see langword="null" />.</exception>
+    /// <exception cref="ArgumentException">
+    ///     If any key is empty, whitespace-only or matches (case-insensitively) a standard problem details member:
+    ///     <c>type</c>, <c>title</c>, <c>status</c>, <c>detail</c>, <c>instance</c>, <c>errors</c> or
+    ///     <c>detailTemplated</c>.
+    /// </exception>
+    public ErrorBuilder WithMetadata(params ReadOnlySpan<(string Key, object? Value)> metadata)
+    {
+        foreach (var (key, _) in metadata)
+            MetadataKeyValidator.Validate(key);
+
+        if (metadata.IsEmpty)
+            return this;
+
+        var pending = GetPendingMetadata();
+        foreach (var (key, value) in metadata)
+            pending[key] = value;
 
         return this;
     }

@@ -266,6 +266,19 @@ public class ErrorBuilderUnitTests
         result.DetailTemplated.ShouldBeNull();
     }
     [Fact]
+    public void WithDetailTemplated_TemplateIdAndNullValues_BuildsEmptyParams()
+    {
+        // Act
+        var result = Sut.Validation(ErrorUri.None(), "Test title")
+            .WithDetailTemplated("message-id", null)
+            .Build();
+
+        // Assert
+        result.DetailTemplated.ShouldNotBeNull();
+        result.DetailTemplated.Params.ShouldNotBeNull();
+        result.DetailTemplated.Params.ShouldBeEmpty();
+    }
+    [Fact]
     public void WithDetailTemplated_DuplicateName_ThrowsArgumentException()
     {
         // Arrange
@@ -526,6 +539,77 @@ public class ErrorBuilderUnitTests
         result.Metadata["limit"].ShouldBe(100);
     }
 
+    [Fact]
+    public void WithMetadata_Tuples_AddsAndReplacesEntries()
+    {
+        // Act
+        var result = Sut.LimitExceeded(ErrorUri.None(), "Test title")
+            .WithMetadata("limit", 100)
+            .WithMetadata(("limit", 200), ("remaining", 0), ("traceId", null))
+            .Build();
+
+        // Assert
+        result.Metadata.Count.ShouldBe(3);
+        result.Metadata["limit"].ShouldBe(200);
+        result.Metadata["remaining"].ShouldBe(0);
+        result.Metadata["traceId"].ShouldBeNull();
+    }
+
+    [Fact]
+    public void WithMetadata_TuplesWithRepeatedKey_TakesLastValue()
+    {
+        // Act
+        var result = Sut.LimitExceeded(ErrorUri.None(), "Test title")
+            .WithMetadata(("limit", 100), ("limit", 200))
+            .Build();
+
+        // Assert
+        result.Metadata.ShouldHaveSingleItem().Value.ShouldBe(200);
+    }
+
+    [Fact]
+    public void WithMetadata_TuplesWithInvalidKey_ThrowsAndAppliesNoEntry()
+    {
+        // Arrange
+        var sut = Sut.LimitExceeded(ErrorUri.None(), "Test title").WithMetadata("limit", 100);
+
+        // Act
+        var exception = Record.Exception(() => sut.WithMetadata(("limit", 200), ("policy", "monthly"), ("status", 429)));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentException>();
+        var result = sut.Build();
+        result.Metadata.Count.ShouldBe(1);
+        result.Metadata["limit"].ShouldBe(100);
+    }
+
+    [Fact]
+    public void WithMetadata_TuplesWithNullKey_ThrowsArgumentNullException()
+    {
+        // Arrange
+        var sut = Sut.LimitExceeded(ErrorUri.None(), "Test title");
+
+        // Act
+        var exception = Record.Exception(() => sut.WithMetadata((null!, 1)));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentNullException>();
+    }
+
+    [Fact]
+    public void WithMetadata_EmptyCollectionExpression_LeavesMetadataUnchanged()
+    {
+        // Arrange
+        var sut = Sut.LimitExceeded(ErrorUri.None(), "Test title").WithMetadata("limit", 100);
+
+        // Act
+        var result = sut.WithMetadata([]).Build();
+
+        // Assert
+        result.Metadata.ShouldHaveSingleItem().Key.ShouldBe("limit");
+    }
     [Fact]
     public void WithoutMetadata_ExistingAndAbsentKeys_RemovesOnlyExistingEntry()
     {

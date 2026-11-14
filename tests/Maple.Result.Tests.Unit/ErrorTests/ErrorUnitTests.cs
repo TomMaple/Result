@@ -86,6 +86,20 @@ public class ErrorUnitTests
     }
 
     [Fact]
+    public void Validation_TupleArray_BuildsParams()
+    {
+        // Arrange
+        (string Key, object? Value)[] namedValues = [("min", 3), ("max", 10)];
+
+        // Act
+        var sut = Sut.Validation(ErrorUri.None(), "Test title", null, null, "message-id", namedValues);
+
+        // Assert
+        sut.DetailTemplated.ShouldNotBeNull();
+        sut.DetailTemplated.Params.ShouldNotBeNull();
+        sut.DetailTemplated.Params.Count.ShouldBe(2);
+    }
+    [Fact]
     public void Validation_RepeatedNamedValue_ThrowsArgumentException()
     {
         // Act
