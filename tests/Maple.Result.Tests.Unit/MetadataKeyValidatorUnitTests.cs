@@ -8,8 +8,8 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-using System;
 using Maple.Result.Validators;
+using System;
 
 namespace Maple.Result.Tests.Unit;
 

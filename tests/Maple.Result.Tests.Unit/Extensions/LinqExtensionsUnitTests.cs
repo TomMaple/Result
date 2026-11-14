@@ -387,9 +387,9 @@ public class LinqExtensionsUnitTests
 
         // Act
         var result = from initialValue in sut
-            from function1Result in function1(initialValue)
-            from function2Result in function2(function1Result)
-            select function2Result;
+                     from function1Result in function1(initialValue)
+                     from function2Result in function2(function1Result)
+                     select function2Result;
 
         // Assert
         result.ShouldNotBeNull();
@@ -467,9 +467,9 @@ public class LinqExtensionsUnitTests
 
         // Act
         var result = from initialValue in sut
-            from function1Result in function1Mock.Object(initialValue)
-            from function2Result in function2Mock.Object(function1Result)
-            select function2Result;
+                     from function1Result in function1Mock.Object(initialValue)
+                     from function2Result in function2Mock.Object(function1Result)
+                     select function2Result;
 
         // Assert
         result.ShouldNotBeNull();
@@ -548,9 +548,9 @@ public class LinqExtensionsUnitTests
 
         // Act
         var result = from initialValue in sut
-            from function1Result in function1Mock.Object(initialValue)
-            from function2Result in function2Mock.Object(function1Result)
-            select function2Result;
+                     from function1Result in function1Mock.Object(initialValue)
+                     from function2Result in function2Mock.Object(function1Result)
+                     select function2Result;
 
         // Assert
         result.ShouldNotBeNull();

@@ -7,7 +7,7 @@ name: CI
 on:
   push:
     branches: [ "**" ]
-    paths: [ "src/**", "tests/**", ".github/workflows/**" ]
+    paths: [ "src/**", "tests/**", ".github/workflows/**", ".editorconfig" ]
   pull_request:
     branches: [ "main" ]
 
@@ -52,6 +52,9 @@ jobs:
 
     - name: Restore dependencies
       run: dotnet restore
+
+    - name: Check formatting
+      run: dotnet format --verify-no-changes --no-restore --verbosity normal
 
     - name: Build
       run: dotnet build --no-restore -p:Version=${{ steps.calculate_version.outputs.package_version }} -p:InformationalVersion=${{ steps.calculate_version.outputs.informational_version }} --configuration Release --verbosity normal

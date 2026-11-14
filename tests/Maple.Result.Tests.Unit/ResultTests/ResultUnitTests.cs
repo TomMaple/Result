@@ -42,7 +42,7 @@ public class ResultUnitTests
         const string ExpectedInstance = "http://test.com/instance/1013";
         const string ExpectedTitle = "Test title";
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
-        
+
         var error = Error.NotFound(
             ErrorUri.Tag("tag:test.com,2024:Test"),
             "Test title",
@@ -169,7 +169,7 @@ public class ResultUnitTests
         const string ExpectedInstance = "http://test.com/instance/1013";
         const string ExpectedTitle = "Test title";
         const string ExpectedTypeUri = "tag:test.com,2024:Test";
-        
+
         var error = Error.NotFound(
             ErrorUri.Tag("tag:test.com,2024:Test"),
             "Test title",

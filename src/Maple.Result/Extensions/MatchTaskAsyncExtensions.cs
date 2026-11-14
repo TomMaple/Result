@@ -249,8 +249,8 @@ public static class MatchTaskAsyncExtensions
     /// </param>
     /// <returns>
     ///     The <see cref="Task{TResult}" /> that represents the <see cref="Result{T}" /> returned by the <paramref name="ifSuccessFunction" />
-    ///     if <paramref name="result" /> is successful, or the <see cref="Result{T}" /> with the original <paramref name="result" /> after invoking
-    ///     <paramref name="ifErrorAction" />.
+    ///     if <paramref name="result" /> is successful,
+    ///     or the <see cref="Result{T}" /> with the original <paramref name="result" /> after invoking <paramref name="ifErrorAction" />.
     /// </returns>
     /// <exception cref="ArgumentNullException">
     ///     If any of the <paramref name="result" />, <paramref name="ifSuccessFunction" />,
