@@ -381,7 +381,7 @@ public class IfErrorTaskAsyncExtensionsUnitTests
 
     #endregion
 
-    #region IfErrorAsync (Result<T>, Func<Error, Task<IResult>>)
+    #region IfErrorAsync (Result<T>, Func<Error, Task<IOperationResult>>)
 
     [Fact]
     public async Task IfErrorAsync_NoGenericResultWithGenericResultFunction_ThrowsException()
@@ -890,7 +890,7 @@ public class IfErrorTaskAsyncExtensionsUnitTests
 
     #endregion
 
-    #region IfErrorAsync (Task<Result<T>>, Func<Error, Task<IResult>>)
+    #region IfErrorAsync (Task<Result<T>>, Func<Error, Task<IOperationResult>>)
 
     [Fact]
     public async Task IfErrorAsync_NoGenericResultTaskWithGenericResultFunction_ThrowsException()

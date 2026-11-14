@@ -19,16 +19,16 @@ Executes the provided action only if the instance of `TResult` represents a fail
 
 ```csharp
 public static void IfError<TResult>(this TResult result, Action<Error> errorAction)
-    where TResult : IResult;
+    where TResult : IOperationResult;
 ```
 
 ### Type Parameters
 #### `TResult`
-The type of the `result` that implements the [IResult](../IResult/IResult.md) interface—[Result](../Result/Result.md) or [Result&lt;T&gt;](../ResultT/ResultT.md) record.
+The type of the `result` that implements the [IOperationResult](../IOperationResult/IOperationResult.md) interface—[Result](../Result/Result.md) or [Result&lt;T&gt;](../ResultT/ResultT.md) record.
 
 ### Parameters
 #### `result` TResult
-The instance of `TResult` (that implements [IResult](../IResult/IResult.md) interface—[Result](../Result/Result.md) or [Result&lt;T&gt;](../ResultT/ResultT.md) record) that represents the result of the operation to be evaluated.
+The instance of `TResult` (that implements [IOperationResult](../IOperationResult/IOperationResult.md) interface—[Result](../Result/Result.md) or [Result&lt;T&gt;](../ResultT/ResultT.md) record) that represents the result of the operation to be evaluated.
 
 #### `ifErrorAction` [Action](https://learn.microsoft.com/dotnet/api/system.action-1)&lt;[Error](../Error/Error.md)&gt;
 
@@ -61,16 +61,16 @@ Executes the provided function only if the instance of `TResult` represents a fa
 
 ```csharp
 public static TResult IfError<TResult>(this TResult result, Func<Error, TResult> ifErrorFunction)
-    where TResult : IResult;
+    where TResult : IOperationResult;
 ```
 
 ### Type Parameters
 #### `TResult`
-The type of the `result` that implements the [IResult](../IResult/IResult.md) interface—[Result](../Result/Result.md) or [Result&lt;T&gt;](../ResultT/ResultT.md) record.
+The type of the `result` that implements the [IOperationResult](../IOperationResult/IOperationResult.md) interface—[Result](../Result/Result.md) or [Result&lt;T&gt;](../ResultT/ResultT.md) record.
 
 ### Parameters
 #### `result` TResult
-The instance of `TResult` (that implements [IResult](../IResult/IResult.md) interface—[Result](../Result/Result.md) or [Result&lt;T&gt;](../ResultT/ResultT.md) record) that represents the result of the operation to be evaluated.
+The instance of `TResult` (that implements [IOperationResult](../IOperationResult/IOperationResult.md) interface—[Result](../Result/Result.md) or [Result&lt;T&gt;](../ResultT/ResultT.md) record) that represents the result of the operation to be evaluated.
 
 #### `ifErrorFunction` [Func](https://learn.microsoft.com/dotnet/api/system.func-2)&lt;[Error](../Error/Error.md), TResult&gt;
 

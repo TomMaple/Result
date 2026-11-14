@@ -16,7 +16,7 @@ namespace Maple.Result.Extensions.ValueTasks;
 
 /// <summary>
 ///     The collection of extension methods for executing asynchronous actions or functions, represented by
-///     <see cref="ValueTask" />, conditionally based on the error state of a <see cref="IResult" /> instance.
+///     <see cref="ValueTask" />, conditionally based on the error state of a <see cref="IOperationResult" /> instance.
 /// </summary>
 /// <remarks>
 ///     These methods enable fluent handling of error scenarios by allowing to specify actions or functions
@@ -41,7 +41,7 @@ public static class IfErrorValueTaskAsyncExtensions
     ///     the <paramref name="result" /> or handle the <see cref="Error" /> beyond invoking the specified asynchronous
     ///     action.
     /// </remarks>
-    /// <typeparam name="TResult">The type of the result object, which must implement the <see cref="IResult" /> interface.</typeparam>
+    /// <typeparam name="TResult">The type of the result object, which must implement the <see cref="IOperationResult" /> interface.</typeparam>
     /// <param name="result">The <paramref name="result" /> to inspect for an error. Must not be <see langword="null" />.</param>
     /// <param name="ifErrorAction">
     ///     The asynchronous action to execute if the <paramref name="result" /> is an error.
@@ -54,7 +54,7 @@ public static class IfErrorValueTaskAsyncExtensions
     ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
-    ///     A <see cref="ValueTask{IResult}" /> that represents the original <paramref name="result" /> instance,
+    ///     A <see cref="ValueTask{IOperationResult}" /> that represents the original <paramref name="result" /> instance,
     ///     regardless of whether the action was invoked.
     /// </returns>
     /// <exception cref="ArgumentNullException">
@@ -66,7 +66,7 @@ public static class IfErrorValueTaskAsyncExtensions
         Func<Error, ValueTask> ifErrorAction,
         bool? continueOnCapturedContext = null
     )
-        where TResult : IResult
+        where TResult : IOperationResult
     {
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifErrorAction);
@@ -86,7 +86,7 @@ public static class IfErrorValueTaskAsyncExtensions
     ///     The <paramref name="ifErrorFunction" /> is only invoked if the <paramref name="result" /> indicates an error.
     /// </remarks>
     /// <typeparam name="TResult">
-    ///     The type of the <paramref name="result" />, which must implement the <see cref="IResult" /> interface.
+    ///     The type of the <paramref name="result" />, which must implement the <see cref="IOperationResult" /> interface.
     /// </typeparam>
     /// <param name="result">The result to evaluate for success or error. Must not be <see langword="null" />.</param>
     /// <param name="ifErrorFunction">
@@ -99,9 +99,9 @@ public static class IfErrorValueTaskAsyncExtensions
     ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
-    ///     A <see cref="ValueTask{IResult}" /> that represents the <see cref="IResult" /> outcome of the asynchronous
+    ///     A <see cref="ValueTask{IOperationResult}" /> that represents the <see cref="IOperationResult" /> outcome of the asynchronous
     ///     operation.
-    ///     The <see cref="ValueTask{IResult}" /> is either the original <paramref name="result" /> if it indicates
+    ///     The <see cref="ValueTask{IOperationResult}" /> is either the original <paramref name="result" /> if it indicates
     ///     success, or the result returned by the <paramref name="ifErrorFunction" /> if an <see cref="Error" />
     ///     is present.
     /// </returns>
@@ -114,7 +114,7 @@ public static class IfErrorValueTaskAsyncExtensions
         Func<Error, ValueTask<TResult>> ifErrorFunction,
         bool? continueOnCapturedContext = null
     )
-        where TResult : IResult
+        where TResult : IOperationResult
     {
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifErrorFunction);
@@ -140,7 +140,7 @@ public static class IfErrorValueTaskAsyncExtensions
     ///     </para>
     /// </remarks>
     /// <typeparam name="TResult">
-    ///     The type of the operation result object, which must implement the <see cref="IResult" /> interface.
+    ///     The type of the operation result object, which must implement the <see cref="IOperationResult" /> interface.
     /// </typeparam>
     /// <param name="resultTask">The asynchronous operation to be executed and which result is to be inspected.</param>
     /// <param name="ifErrorAction">
@@ -155,7 +155,7 @@ public static class IfErrorValueTaskAsyncExtensions
     ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
-    ///     A <see cref="ValueTask{IResult}" /> that represents the outcome of the <paramref name="resultTask" />
+    ///     A <see cref="ValueTask{IOperationResult}" /> that represents the outcome of the <paramref name="resultTask" />
     ///     asynchronous operation, regardless of whether the action was invoked.
     /// </returns>
     /// <exception cref="ArgumentNullException">
@@ -169,7 +169,7 @@ public static class IfErrorValueTaskAsyncExtensions
         Func<Error, ValueTask> ifErrorAction,
         bool? continueOnCapturedContext = null
     )
-        where TResult : IResult
+        where TResult : IOperationResult
     {
         ArgumentNullException.ThrowIfNull(ifErrorAction);
 
@@ -200,7 +200,7 @@ public static class IfErrorValueTaskAsyncExtensions
     ///     </para>
     /// </remarks>
     /// <typeparam name="TResult">
-    ///     The type of the operation result object, which must implement the <see cref="IResult" /> interface.
+    ///     The type of the operation result object, which must implement the <see cref="IOperationResult" /> interface.
     /// </typeparam>
     /// <param name="resultTask">The asynchronous operation to be executed and which result is to be inspected.</param>
     /// <param name="ifErrorFunction">
@@ -213,8 +213,8 @@ public static class IfErrorValueTaskAsyncExtensions
     ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
-    ///     A <see cref="ValueTask{IResult}" /> that represents the <see cref="IResult" /> outcome of the asynchronous
-    ///     operation. The <see cref="ValueTask{IResult}" /> is either the outcome of the original
+    ///     A <see cref="ValueTask{IOperationResult}" /> that represents the <see cref="IOperationResult" /> outcome of the asynchronous
+    ///     operation. The <see cref="ValueTask{IOperationResult}" /> is either the outcome of the original
     ///     <paramref name="resultTask" /> if it indicates success, or
     ///     the result returned by the <paramref name="ifErrorFunction" /> if an <see cref="Error" /> is present.
     /// </returns>
@@ -229,7 +229,7 @@ public static class IfErrorValueTaskAsyncExtensions
         Func<Error, ValueTask<TResult>> ifErrorFunction,
         bool? continueOnCapturedContext = null
     )
-        where TResult : IResult
+        where TResult : IOperationResult
     {
         ArgumentNullException.ThrowIfNull(ifErrorFunction);
 

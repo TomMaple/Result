@@ -21,7 +21,7 @@ namespace Maple.Result;
 ///     Use the <see cref="IsSuccess" /> method to determine whether the operation completed successfully, and access
 ///     the <see cref="Error" /> property for error information if the operation failed.
 /// </remarks>
-public interface IResult
+public interface IOperationResult
 {
     /// <summary>
     ///     Returns an <see cref="Error" /> object if the operation failed;
@@ -46,8 +46,8 @@ public interface IResult
 ///     The record is immutable. Create it with <see cref="Success" />, <see cref="FromError" /> or the implicit
 ///     conversion from an <see cref="Error" />.
 /// </remarks>
-/// <inheritdoc cref="IResult" />
-public sealed record Result : IResult
+/// <inheritdoc cref="IOperationResult" />
+public sealed record Result : IOperationResult
 {
     private static readonly Result SuccessResult = new(null);
 
@@ -142,8 +142,8 @@ public sealed record Result : IResult
 ///     conversions from a <typeparamref name="T" /> or an <see cref="Error" />. It is successful exactly when it has
 ///     no <see cref="Error" />.
 /// </remarks>
-/// <inheritdoc cref="IResult" />
-public sealed record Result<T> : IResult
+/// <inheritdoc cref="IOperationResult" />
+public sealed record Result<T> : IOperationResult
 {
     #region constructors
 

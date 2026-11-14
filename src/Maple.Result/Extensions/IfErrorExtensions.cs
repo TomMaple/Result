@@ -15,7 +15,7 @@ namespace Maple.Result.Extensions;
 
 /// <summary>
 ///     The collection of extension methods for executing actions or functions conditionally based on the error state of a
-///     <see cref="IResult" /> instance.
+///     <see cref="IOperationResult" /> instance.
 /// </summary>
 /// <remarks>
 ///     These methods enable fluent handling of error scenarios by allowing to specify actions or functions
@@ -32,7 +32,7 @@ public static class IfErrorExtensions
     ///     indicates an error, without altering the <paramref name="result" /> itself. The method does not modify
     ///     the <paramref name="result" /> or handle the <see cref="Error" /> beyond invoking the specified action.
     /// </remarks>
-    /// <typeparam name="TResult">The type of the result object, which must implement the <see cref="IResult" /> interface.</typeparam>
+    /// <typeparam name="TResult">The type of the result object, which must implement the <see cref="IOperationResult" /> interface.</typeparam>
     /// <param name="result">The <paramref name="result" /> to inspect for an error. Must not be <see langword="null" />.</param>
     /// <param name="ifErrorAction">
     ///     The action to execute if the <paramref name="result" /> is an error. The <see cref="Error" /> associated with
@@ -44,7 +44,7 @@ public static class IfErrorExtensions
     ///     parameters are <see langword="null" />.
     /// </exception>
     public static TResult IfError<TResult>([DisallowNull] this TResult result, Action<Error> ifErrorAction)
-        where TResult : IResult
+        where TResult : IOperationResult
     {
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifErrorAction);
@@ -59,7 +59,7 @@ public static class IfErrorExtensions
     ///     Invokes the specified function if the <paramref name="result" /> represents an error and returns its outcome;
     ///     otherwise, returns the original <paramref name="result" />.
     /// </summary>
-    /// <typeparam name="TResult">The type of the result object, which must implement the <see cref="IResult" /> interface.</typeparam>
+    /// <typeparam name="TResult">The type of the result object, which must implement the <see cref="IOperationResult" /> interface.</typeparam>
     /// <param name="result">The <paramref name="result" /> to inspect for an error. Must not be <see langword="null" />.</param>
     /// <param name="ifErrorFunction">
     ///     The function to execute if the <paramref name="result" /> is an error. The <see cref="Error" /> associated with
@@ -75,7 +75,7 @@ public static class IfErrorExtensions
     ///     parameters are <see langword="null" />.
     /// </exception>
     public static TResult IfError<TResult>([DisallowNull] this TResult result, Func<Error, TResult> ifErrorFunction)
-        where TResult : IResult
+        where TResult : IOperationResult
     {
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifErrorFunction);

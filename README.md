@@ -530,6 +530,7 @@ Check:
 * **JSON of a failed `Result<T>`.** It now always contains `Value` with the default value of `T`, e.g., `{"Value":0,"Error":{…}}` for a `Result<int>`, or `"Value":null` for a reference type. Previously a failed result omitted `Value`.
 * `Result.Success()` returns the same, shared instance on every call.
 * **`continueOnCapturedContext` is `bool?`.** The parameter of the asynchronous extension methods is now `bool? continueOnCapturedContext = null`; `null` uses the new global `ResultConfiguration.ContinueOnCapturedContext` (`false` by default, so the behaviour is unchanged). Source-compatible; recompile code that calls the methods.
+* **`IResult` renamed to `IOperationResult`.** The common interface of `Result` and `Result<T>` no longer clashes with `Microsoft.AspNetCore.Http.IResult` (CS0104 in ASP.NET Core projects); its members did not change.
 
 # FAQ
 ## When to use a Result and when an Exception?
