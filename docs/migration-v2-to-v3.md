@@ -30,7 +30,7 @@ Version 3.0 makes `Result`, `Result<T>` and `Error` **immutable** and **always v
 4. Replace `new Result()`, `new Result<T>()`, `new Error()` and `new ErrorUri(...)` with the factory methods.
 5. If you **read** `Result`, `Result<T>` or `Error` from JSON (e.g., Azure Durable Functions, message queues, caches, HTTP clients), see [No JSON deserialization without converters](#no-json-deserialization-without-converters).
 6. If you compare or snapshot the **written** JSON, see [Changed JSON output](#changed-json-output).
-7. Make sure error titles are never `null` or blank.
+7. Make sure error titles are never `null` or blank, and pass `null` instead of `ErrorUri.None()` as an instance *URI*.
 8. Upgrade the `Maple.Result.Extensions.*` packages together with `Maple.Result` (see [Extension packages](#extension-packages)).
 
 ## Breaking changes
@@ -62,9 +62,11 @@ The types can only be created through their factory methods, which always produc
 | `new Result<T> { Value = value }` | `Result<T>.FromValue(value)`, `Result.FromValue(value)` or the implicit conversion from `T` |
 | `new Result<T> { Error = error }` | `Result<T>.FromError(error)` or the implicit conversion from `Error` |
 | `new Error()` / `new Error { … }` | `Error.Validation(...)`, `Error.NotFound(...)`, … or `ErrorBuilder` |
-| `new ErrorUri("…")` | `ErrorUri.Tag("…")`, `ErrorUri.Locator("…")` or `ErrorUri.None()` |
+| `new ErrorUri("…")` | `ErrorUri.Tag("…")`, `ErrorUri.Locator("…")`, `ErrorUri.Urn("…")`, `ErrorUri.Relative("/…")` or `ErrorUri.None()` |
 
 `ErrorDetail` and `TemplatedMessage` keep their public constructors.
+
+`ErrorUri.Urn` (*RFC 8141*) and `ErrorUri.Relative` (a relative reference with the full path, e.g., `/account/12345/msgs/abc`) are new in 3.0, for values that 2.x could create only with the constructor, such as `urn:` types and relative instances. Other values, e.g., a relative path without a leading `/`, cannot be created.
 
 > [!NOTE]
 > In 2.x, `new Result<T>()` created a result with neither a value nor an error, and `IsSuccess()` then threw an `InvalidOperationException`. That state no longer exists: a `Result<T>` is successful exactly when its `Error` is `null`.
@@ -143,6 +145,8 @@ public static Error FromDto(ErrorDto dto) =>
 private static ErrorUri ToErrorUri(string value) =>
     value == "about:blank" ? ErrorUri.None()
     : value.StartsWith("tag:", StringComparison.Ordinal) ? ErrorUri.Tag(value)
+    : value.StartsWith("urn:", StringComparison.OrdinalIgnoreCase) ? ErrorUri.Urn(value)
+    : value.StartsWith('/') ? ErrorUri.Relative(value)
     : ErrorUri.Locator(value);
 ```
 
@@ -174,8 +178,11 @@ These values were accepted in 2.x and now throw:
 | Named values without a template id, e.g., `WithErrorDetail("#/name", "Too short.", null, ("min", 3))` (2.x **silently dropped** them) | `ArgumentException` |
 | A `null` `TemplatedMessage.TemplateId` | `ArgumentNullException` |
 | A `null` `ErrorDetail.Detail` | `ArgumentNullException` |
+| `about:blank` as an instance *URI*, e.g., `instanceUri: ErrorUri.None()` (factory methods, `ErrorBuilder.WithInstanceUri`); pass `null` instead | `ArgumentException` |
 
-In return, every `Error` you receive has a non-blank title, a defined category and a non-`null` type *URI*.
+In return, every `Error` you receive has a non-blank title, a defined category, a non-`null` type *URI* and no meaningless `about:blank` instance *URI*.
+
+`about:blank` has a meaning only as a type (*RFC 9457*, section 4.2.1). A default `ErrorUri` is `about:blank` too, so `instanceUri: default` throws as well.
 
 ### Nullable named values
 The named values of templated messages are now `object?` instead of `object`:
@@ -216,6 +223,7 @@ The named values of the factory methods (`detailNamedValues`), `WithErrorDetail`
 * **`ToString()`** of `Error` and `TemplatedMessage` now prints the contents of `ErrorDetails`, `Metadata` and `Params` (instead of their type names), and `ErrorUri.ToString()` returns just the *URI* (instead of `ErrorUri { Value = … }`). Update tests or log parsers that depend on the old text.
 * **`GetHashCode()`** of an `Error` never changes, because the error cannot change. An `Error` can be used safely as a dictionary key or in a `HashSet<T>`.
 * **`ErrorDetails`** is a read-only collection; casting it to `IList<ErrorDetail>` and modifying it throws a `NotSupportedException`.
+* **`ErrorCategory.Timeout`** is now documented as `408` (Request Timeout) when the client did not send the complete request in time, or `504` (Gateway Timeout) when an upstream server or a dependency did not respond in time; 2.x documented only `408`. The `ErrorCategory` members now have explicit values, equal to the 2.x ones, so stored and serialized values do not change.
 
 ### `continueOnCapturedContext` is `bool?`
 The `continueOnCapturedContext` parameter of the asynchronous extension methods (`IfSuccessAsync`, `IfErrorAsync`, `MatchAsync`, `ToResultAsync`, for `Task` and `ValueTask`) changed from `bool continueOnCapturedContext = false` to `bool? continueOnCapturedContext = null`. `null` uses the new global setting [`ResultConfiguration.ContinueOnCapturedContext`](Reference/ResultConfiguration/ResultConfiguration_ContinueOnCapturedContext.md), which is `false` by default, so **the behaviour does not change** unless you change the setting.
@@ -252,6 +260,7 @@ The current (2.x-based) version of `Maple.Result.Extensions.HttpClient` calls an
 * **`WithMetadata` with tuples** — `error.WithMetadata(("limit", 100), ("remaining", 0))` on `Error` and `ErrorBuilder` adds several entries in one call.
 * **`Error.WithErrorDetail()`** and **`Error.ToBuilder()`** — see above.
 * **`ErrorCategory.LimitExceeded`** — see above.
+* **`ErrorUri.Urn()`** and **`ErrorUri.Relative()`** — `urn:` types and instances (*RFC 8141*), and relative references with the full path (e.g., the *RFC 9457* example `/account/12345/msgs/abc`). See [ErrorUri](Reference/ErrorUri/ErrorUri.md).
 * **`ResultConfiguration.ContinueOnCapturedContext`** — a global default for the `continueOnCapturedContext` argument of the asynchronous extension methods and for the LINQ query operators; see above.
 * **Native AOT and trimming** — the core package no longer contains JSON code and produces no trimming or AOT warnings.
 
@@ -266,7 +275,8 @@ The current (2.x-based) version of `Maple.Result.Extensions.HttpClient` calls an
 | `new Result()` | `Result.Success()` |
 | `new Result<T> { Value = v }` | `Result<T>.FromValue(v)` |
 | `new Result<T> { Error = e }` | `Result<T>.FromError(e)` |
-| `new ErrorUri(s)` | `ErrorUri.Tag(s)` / `ErrorUri.Locator(s)` / `ErrorUri.None()` |
+| `new ErrorUri(s)` | `ErrorUri.Tag(s)` / `ErrorUri.Locator(s)` / `ErrorUri.Urn(s)` / `ErrorUri.Relative(s)` / `ErrorUri.None()` |
+| `instanceUri: ErrorUri.None()` / `WithInstanceUri(ErrorUri.None())` | `instanceUri: null` / `WithInstanceUri(null)` |
 | `Dictionary<string, object>` passed as named values | `Dictionary<string, object?>` |
 | `IResult` (`Maple.Result`) | `IOperationResult` |
 | `WithErrorDetail(…, messageId: …, namedValues: …)` (named arguments) | `WithErrorDetail(…, detailTemplateId: …, detailNamedValues: …)` |

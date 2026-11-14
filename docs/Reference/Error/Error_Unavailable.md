@@ -20,7 +20,7 @@ Do not use it when a usage limit, quota or rate has been exhausted; use [LimitEx
 
 
 ## Unavailable(ErrorUri, String, String, ErrorUri, String, (String, Object)[])
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L849" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L853" target="_blank">Error.cs</a>
 
 Creates a new instance of the [Error](Error.md) object of the *Unavailable* category with specified parameters.
 
@@ -45,7 +45,7 @@ A mandatory short, human-readable summary of the problem.
 An optional, human-readable explanation specific to this occurrence of the problem.
 
 #### `instanceUri` [ErrorUri](../ErrorUri/ErrorUri.md)
-An optional *URI* reference that identifies the specific occurrence of the problem.
+An optional *URI* reference that identifies the specific occurrence of the problem. It must not be `about:blank` ([ErrorUri.None()](../ErrorUri/ErrorUri_None.md) or a default [ErrorUri](../ErrorUri/ErrorUri.md)); pass `null` when there is no instance.
 
 #### `detailTemplateId` [String](https://learn.microsoft.com/dotnet/api/system.string)
 An optional identifier of the message template to generate custom, localized message.
@@ -65,7 +65,7 @@ The `title` or a name in `detailNamedValues` is `null`.
 
 [ArgumentException](https://learn.microsoft.com/dotnet/api/system.argumentexception)
 
-The `title` or the `detailTemplateId` is empty or consists only of white-space characters, a name in `detailNamedValues` is repeated, or `detailNamedValues` are passed without a `detailTemplateId`.
+The `title` or the `detailTemplateId` is empty or consists only of white-space characters, a name in `detailNamedValues` is repeated, `detailNamedValues` are passed without a `detailTemplateId`, or the `instanceUri` is `about:blank`.
 
 ### Remarks
 > [!NOTE]
@@ -84,7 +84,7 @@ var error = Error.Unavailable(
 
 
 ## Unavailable(ErrorUri, String, String, ErrorUri, String, IEnumerable&lt;KeyValuePair&lt;String, Object&gt;&gt;)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L865" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L869" target="_blank">Error.cs</a>
 
 Creates a new instance of the [Error](Error.md) object of the *Unavailable* category with specified parameters.
 
@@ -110,7 +110,7 @@ A mandatory short, human-readable summary of the problem.
 An optional, human-readable explanation specific to this occurrence of the problem.
 
 #### `instanceUri` [ErrorUri](../ErrorUri/ErrorUri.md)
-An optional *URI* reference that identifies the specific occurrence of the problem.
+An optional *URI* reference that identifies the specific occurrence of the problem. It must not be `about:blank` ([ErrorUri.None()](../ErrorUri/ErrorUri_None.md) or a default [ErrorUri](../ErrorUri/ErrorUri.md)); pass `null` when there is no instance.
 
 #### `detailTemplateId` [String](https://learn.microsoft.com/dotnet/api/system.string)
 An optional identifier of the message template to generate custom, localized message.
@@ -130,7 +130,7 @@ The `title` or a name in `detailNamedValues` is `null`.
 
 [ArgumentException](https://learn.microsoft.com/dotnet/api/system.argumentexception)
 
-The `title` or the `detailTemplateId` is empty or consists only of white-space characters, a name in `detailNamedValues` is repeated, or `detailNamedValues` are passed without a `detailTemplateId`.
+The `title` or the `detailTemplateId` is empty or consists only of white-space characters, a name in `detailNamedValues` is repeated, `detailNamedValues` are passed without a `detailTemplateId`, or the `instanceUri` is `about:blank`.
 
 ### Remarks
 > [!NOTE]
