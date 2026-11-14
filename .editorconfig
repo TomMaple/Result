@@ -45,6 +45,30 @@ csharp_style_prefer_primary_constructors = false
 csharp_style_var_when_type_is_apparent = true
 
 #
+# Expression bodies (=>): allowed, not enforced, for a method, operator or local function whose body fits on one line;
+# a multi-line body is a block body ({ }). Neither style is suggested.
+#
+csharp_style_expression_bodied_local_functions = when_on_single_line:silent
+csharp_style_expression_bodied_methods = when_on_single_line:silent
+csharp_style_expression_bodied_operators = when_on_single_line:silent
+resharper_arrange_local_function_body_highlighting = none
+resharper_arrange_method_or_operator_body_highlighting = none
+resharper_use_heuristics_for_body_style = true
+
+#
+# Wrapping: chained calls are wrapped one per line, before the ".", and binary expressions one operand per line,
+# before the operator (&&, ||, ??, +, …, the pattern operators and ?/:), unless the whole statement fits on one line.
+# Stated explicitly, although some match the defaults, because Visual Studio and Rider use different settings.
+#
+dotnet_style_operator_placement_when_wrapping = beginning_of_line
+resharper_wrap_after_dot_in_method_calls = false
+resharper_wrap_before_binary_opsign = true
+resharper_wrap_before_binary_pattern_op = true
+resharper_wrap_before_ternary_opsigns = true
+resharper_wrap_chained_binary_expressions = chop_if_long
+resharper_wrap_chained_method_calls = chop_if_long
+
+#
 # Naming: symbols
 #
 dotnet_naming_symbols.constants.applicable_kinds = field, local
