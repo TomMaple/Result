@@ -13,12 +13,12 @@ Runs a specific action or function if the instance of `TResult` represents a fai
 
 
 ## IfError&lt;TResult&gt;(TResult, Action&lt;Error&gt;)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfErrorExtensions.cs#L46" target="_blank">IfErrorExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfErrorExtensions.cs#L44" target="_blank">IfErrorExtensions.cs</a>
 
 Executes the provided action only if the instance of `TResult` represents a failed operation (i.e., contains an [Error](../Error/Error.md)).
 
 ```csharp
-public static void IfError<TResult>(this TResult result, Action<Error> errorAction)
+public static TResult IfError<TResult>(this TResult result, Action<Error> ifErrorAction)
     where TResult : IOperationResult;
 ```
 
@@ -55,7 +55,7 @@ createUserResult.IfError(error =>
 
 
 ## IfError&lt;TResult&gt;(TResult, Func&lt;Error, TResult&gt;)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfErrorExtensions.cs#L77" target="_blank">IfErrorExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfErrorExtensions.cs#L73" target="_blank">IfErrorExtensions.cs</a>
 
 Executes the provided function only if the instance of `TResult` represents a failed operation (i.e., contains an [Error](../Error/Error.md)).
 

@@ -18,7 +18,7 @@ It relates to `404` HTTP status code (Not Found), but can also be used in other 
 
 
 ## NotFound(ErrorUri, String, String, ErrorUri, String, (String, Object)[])
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L879" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L694" target="_blank">Error.cs</a>
 
 Creates a new instance of the [Error](Error.md) object of the *NotFound* category with specified parameters.
 
@@ -88,7 +88,7 @@ error = error.WithErrorDetail(
 
 
 ## NotFound(ErrorUri, String, String, ErrorUri, String, IEnumerable&lt;KeyValuePair&lt;String, Object&gt;&gt;)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L918" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L710" target="_blank">Error.cs</a>
 
 Creates a new instance of the [Error](Error.md) object of the *NotFound* category with specified parameters.
 

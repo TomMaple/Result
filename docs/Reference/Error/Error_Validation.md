@@ -18,7 +18,7 @@ It relates to `400` HTTP status code (Bad Request), but can also be used in othe
 
 
 ## Validation(ErrorUri, String, String, ErrorUri, String, (String, Object)[])
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L1342" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L880" target="_blank">Error.cs</a>
 
 Creates a new instance of the [Error](Error.md) object of the *Validation* category with specified parameters.
 
@@ -94,7 +94,7 @@ error = error.WithErrorDetail(
 
 
 ## Validation(ErrorUri, String, String, ErrorUri, String, IEnumerable&lt;KeyValuePair&lt;String, Object&gt;&gt;)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L1381" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L896" target="_blank">Error.cs</a>
 
 Creates a new instance of the [Error](Error.md) object of the *Validation* category with specified parameters.
 

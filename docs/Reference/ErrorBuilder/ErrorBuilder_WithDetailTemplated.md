@@ -16,7 +16,7 @@ Sets the [DetailTemplated](../Error/Error_DetailTemplated.md) of the error to bu
 
 
 ## WithDetailTemplated(TemplatedMessage)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/ErrorBuilder.cs#L271" target="_blank">ErrorBuilder.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/ErrorBuilder.cs#L269" target="_blank">ErrorBuilder.cs</a>
 
 Sets the [DetailTemplated](../Error/Error_DetailTemplated.md) of the error to build.
 
@@ -43,7 +43,7 @@ var withoutTemplate = error.ToBuilder()
 
 
 ## WithDetailTemplated(String, (String, Object)[])
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/ErrorBuilder.cs#L292" target="_blank">ErrorBuilder.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/ErrorBuilder.cs#L289" target="_blank">ErrorBuilder.cs</a>
 
 Sets the [DetailTemplated](../Error/Error_DetailTemplated.md) of the error to build to a new [TemplatedMessage](../TemplatedMessage/TemplatedMessage.md).
 

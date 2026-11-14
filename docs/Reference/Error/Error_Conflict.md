@@ -18,7 +18,7 @@ It relates to `409` HTTP status code (Conflict), but can also be used in other c
 
 
 ## Conflict(ErrorUri, String, String, ErrorUri, String, (String, Object)[])
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L569" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L568" target="_blank">Error.cs</a>
 
 Creates a new instance of the [Error](Error.md) object of the *Conflict* category with specified parameters.
 
@@ -82,7 +82,7 @@ var error = Error.Conflict(
 
 
 ## Conflict(ErrorUri, String, String, ErrorUri, String, IEnumerable&lt;KeyValuePair&lt;String, Object&gt;&gt;)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L608" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L584" target="_blank">Error.cs</a>
 
 Creates a new instance of the [Error](Error.md) object of the *Conflict* category with specified parameters.
 

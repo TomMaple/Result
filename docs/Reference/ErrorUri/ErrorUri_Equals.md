@@ -2,7 +2,7 @@
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/ErrorUri.cs#L123" target="_blank">ErrorUri.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/ErrorUri.cs#L119" target="_blank">ErrorUri.cs</a>
 
 Determines whether the specified [ErrorUri](ErrorUri.md) is equal to the current [ErrorUri](ErrorUri.md), comparing the [Value](ErrorUri_Value.md) property rather than the underlying field.
 

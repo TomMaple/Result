@@ -20,7 +20,7 @@ It relates to `429` HTTP status code (Too Many Requests), but can also be used i
 
 
 ## LimitExceeded(ErrorUri, String, String, ErrorUri, String, (String, Object)[])
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L801" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L662" target="_blank">Error.cs</a>
 
 Creates a new instance of the [Error](Error.md) object of the *LimitExceeded* category with specified parameters.
 
@@ -84,7 +84,7 @@ var error = Error.LimitExceeded(
 
 
 ## LimitExceeded(ErrorUri, String, String, ErrorUri, String, IEnumerable&lt;KeyValuePair&lt;String, Object&gt;&gt;)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L841" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L679" target="_blank">Error.cs</a>
 
 Creates a new instance of the [Error](Error.md) object of the *LimitExceeded* category with specified parameters.
 

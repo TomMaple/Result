@@ -2,7 +2,7 @@
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Result.cs#L50" target="_blank">Result.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Result.cs#L47" target="_blank">Result.cs</a>
 
 Represents the outcome of an operation that can either succeed or fail with an [Error](../Error/Error.md).
 
@@ -87,7 +87,7 @@ public Result DeleteUser(int userId)
 | [IfSuccessAsync&lt;T&gt;(Task&lt;Result&gt;, Func&lt;Task&lt;T&gt;&gt;, Boolean)](../Extensions/IfSuccessTaskAsyncExtensions_IfSuccessAsync.md#ifsuccessasyncttaskresult-functaskt-boolean) | Executes the specified asynchronous function, if the provided asynchronous operation returns a successful [Result](../Result/Result.md), as an asynchronous operation. |
 | [IfSuccessAsync&lt;T&gt;(Task&lt;Result&gt;, Func&lt;Task&lt;Result&lt;T&gt;&gt;&gt;, Boolean)](../Extensions/IfSuccessTaskAsyncExtensions_IfSuccessAsync.md#ifsuccessasyncttaskresult-functaskresultt-boolean) | Executes the specified asynchronous function, if the provided asynchronous operation returns a successful [Result](../Result/Result.md), as an asynchronous operation. |
 | [Match(Result, Action, Action&lt;Error&gt;)](../Extensions/MatchExtensions_Match.md#matchresult-action-actionerror) | Executes one of the specified actions depending on whether the [Result](../Result/Result.md) represents a success or a failure. |
-| [Match(Result, Func&lt;Result&gt;, Action&lt;Error&gt;)](../Extensions/MatchExtensions_Match.md#matchresult-actionresult-actionerror) | Executes the specified function or action depending on whether the [Result](../Result/Result.md) represents a success or a failure. |
+| [Match(Result, Func&lt;Result&gt;, Action&lt;Error&gt;)](../Extensions/MatchExtensions_Match.md#matchresult-funcresult-actionerror) | Executes the specified function or action depending on whether the [Result](../Result/Result.md) represents a success or a failure. |
 | [Match(Result, Func&lt;Result&gt;, Func&lt;Error, Result&gt;)](../Extensions/MatchExtensions_Match.md#matchresult-funcresult-funcerror-result) | Executes one of the specified functions depending on whether the [Result](../Result/Result.md) represents a success or a failure. |
 | [Match&lt;T&gt;(Result, Func&lt;T&gt;, Action&lt;Error&gt;)](../Extensions/MatchExtensions_Match.md#matchtresult-funct-actionerror) | Executes the specified function or action depending on whether the [Result](../Result/Result.md) represents a success or a failure. |
 | [Match&lt;T&gt;(Result, Func&lt;T&gt;, Func&lt;Error, T&gt;)](../Extensions/MatchExtensions_Match.md#matchtresult-funct-funcerror-t) | Executes one of the specified functions depending on whether the [Result](../Result/Result.md) represents a success or a failure. |
