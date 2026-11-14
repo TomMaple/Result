@@ -46,13 +46,11 @@ public readonly record struct ErrorUri
     #region constructors
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="ErrorUri" /> record with the provided value, without
-    ///     validating it.
+    ///     Initializes a new instance of the <see cref="ErrorUri" /> record with the provided value, without validating it.
     /// </summary>
     /// <remarks>
-    ///     Used by the factory methods (<see cref="None"/>, <see cref="Locator"/>, <see cref="Tag"/>) after
-    ///     validation, and for values taken from an existing <see cref="Error" />, which were validated when it was
-    ///     created.
+    ///     Used by the factory methods (<see cref="None"/>, <see cref="Locator"/>, <see cref="Tag"/>) after validation,
+    ///     and for values taken from an existing <see cref="Error" />, which were validated when it was created.
     /// </remarks>
     internal ErrorUri(string value)
     {
@@ -65,8 +63,8 @@ public readonly record struct ErrorUri
     ///     The <i>URI</i> value representing the error type or category.
     /// </summary>
     /// <remarks>
-    ///     A default <see cref="ErrorUri" /> instance—which bypasses the constructor and therefore has no underlying
-    ///     value—reports <c>about:blank</c>, the value that <i>RFC 9457</i> defines for an unspecified type.
+    ///     A default <see cref="ErrorUri" /> instance—which bypasses the constructor and therefore has no underlying value—reports <c>about:blank</c>,
+    ///     the value that <i>RFC 9457</i> defines for an unspecified type.
     ///     This keeps the mandatory <see cref="Error.TypeUri" /> from ever being <see langword="null" />.
     /// </remarks>
     public string Value => _value ?? NoneValue;
@@ -112,13 +110,11 @@ public readonly record struct ErrorUri
 
     /// <summary>
     ///     Determines whether the specified <see cref="ErrorUri" /> is equal to the current one,
-    ///     comparing the <see cref="Value" /> rather than the underlying field, so that a default instance
-    ///     is equal to the one returned by <see cref="None" />.
+    ///     comparing the <see cref="Value" /> rather than the underlying field, so that a default instance is equal to the one returned by <see cref="None" />.
     /// </summary>
     /// <param name="other">The <see cref="ErrorUri" /> to compare with the current instance.</param>
     /// <returns>
-    ///     <see langword="true" /> if the specified <see cref="ErrorUri" /> is equal to the current one;
-    ///     otherwise, <see langword="false" />.
+    ///     <see langword="true" /> if the specified <see cref="ErrorUri" /> is equal to the current one; otherwise, <see langword="false" />.
     /// </returns>
     public bool Equals(ErrorUri other)
     {

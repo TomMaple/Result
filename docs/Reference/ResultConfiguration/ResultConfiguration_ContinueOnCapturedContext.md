@@ -2,7 +2,7 @@
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/ResultConfiguration.cs#L50" target="_blank">ResultConfiguration.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/ResultConfiguration.cs#L46" target="_blank">ResultConfiguration.cs</a>
 
 Gets or sets the default value used by the asynchronous extension methods (e.g., `IfSuccessAsync`, `MatchAsync` and the LINQ query operators) when their `continueOnCapturedContext` argument is not passed.
 

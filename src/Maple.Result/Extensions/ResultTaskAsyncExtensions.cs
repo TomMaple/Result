@@ -19,28 +19,24 @@ namespace Maple.Result.Extensions;
 public static class ResultTaskAsyncExtensions
 {
     /// <summary>
-    ///     Asynchronously converts a task that produces a generic result into a non-generic result, preserving success or
-    ///     <see cref="Error" />.
+    ///     Asynchronously converts a task that produces a generic result into a non-generic result, preserving success or <see cref="Error" />.
     /// </summary>
     /// <remarks>
-    ///     Use this method to convert a <see cref="Task{TResult}" /> that represents <see cref="Result{T}" /> to
-    ///     a <see cref="Result{Task}" /> when the value is not needed
-    ///     but the success or error state with the original <see cref="Error" /> must be preserved.
+    ///     Use this method to convert a <see cref="Task{TResult}" /> that represents <see cref="Result{T}" /> to a <see cref="Result{Task}" /> when
+    ///     the value is not needed but the success or error state with the original <see cref="Error" /> must be preserved.
     /// </remarks>
     /// <typeparam name="T">The type of the value contained in the original result.</typeparam>
     /// <param name="resultTask">
-    ///     The asynchronous operation to be executed and which result is to be inspected.
-    ///     Must not be <see langword="null" />.
+    ///     The asynchronous operation to be executed and which result is to be inspected. Must not be <see langword="null" />.
     /// </param>
     /// <param name="continueOnCapturedContext">
-    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an
-    ///     <c>await</c>, on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any
-    ///     thread; <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
+    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an <c>await</c>,
+    ///     on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any thread;
+    ///     <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
     /// </param>
     /// <returns>
     ///     A task that represents the <see cref="Result" /> without a value.
-    ///     The result indicates success if the original result was successful;
-    ///     otherwise, it contains the <see cref="Error" /> from the original result.
+    ///     The result indicates success if the original result was successful; otherwise, it contains the <see cref="Error" /> from the original result.
     /// </returns>
     /// <exception cref="ArgumentNullException">
     ///     If the <paramref name="resultTask" /> is <see langword="null" />.
@@ -48,8 +44,7 @@ public static class ResultTaskAsyncExtensions
     /// <exception cref="InvalidOperationException">
     ///     If the asynchronous operation represented by <paramref name="resultTask" /> returns <see langword="null" />.
     /// </exception>
-    public static async Task<Result> ToResultAsync<T>(this Task<Result<T>> resultTask,
-        bool? continueOnCapturedContext = null)
+    public static async Task<Result> ToResultAsync<T>(this Task<Result<T>> resultTask, bool? continueOnCapturedContext = null)
     {
         ArgumentNullException.ThrowIfNull(resultTask);
 

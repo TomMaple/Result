@@ -10,6 +10,7 @@ Returns a copy of the [Error](Error.md) with the specified [Metadata](Error_Meta
 | ---- | ----------- |
 | [WithMetadata(String, Object)](#withmetadatastring-object) | Returns a copy of the error with the specified metadata entry added or replaced. |
 | [WithMetadata(IEnumerable<KeyValuePair<String, Object>>)](#withmetadataienumerablekeyvaluepairstring-object) | Returns a copy of the error with the specified metadata entries added or replaced. |
+| [WithMetadata(ReadOnlySpan<(String, Object)>)](#withmetadatareadonlyspanstring-object) | Returns a copy of the error with the specified metadata entries, given as key-value tuples, added or replaced. |
 
 ## Remarks
 These methods **do not modify** the current instance; they return a new [Error](Error.md) with a new, read-only [Metadata](Error_Metadata.md) dictionary. To change several entries without copying the error for each one, use an [ErrorBuilder](../ErrorBuilder/ErrorBuilder.md) (see [ErrorBuilder.WithMetadata](../ErrorBuilder/ErrorBuilder_WithMetadata.md)).
@@ -18,7 +19,7 @@ Keys are compared ordinally (case-sensitive); values can be `null`. See [Metadat
 
 
 ## WithMetadata(String, Object)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L335" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L317" target="_blank">Error.cs</a>
 
 Returns a copy of the current error with the specified metadata entry added, or replaced if the key already exists.
 
@@ -58,11 +59,12 @@ var error = Error.LimitExceeded(
 
 
 ## WithMetadata(IEnumerable&lt;KeyValuePair&lt;String, Object&gt;&gt;)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L356" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L338" target="_blank">Error.cs</a>
 
 Returns a copy of the current error with the specified metadata entries added. Entries with existing keys are replaced; the other existing entries are kept.
 
 ```csharp
+[OverloadResolutionPriority(1)]
 public Error WithMetadata(IEnumerable<KeyValuePair<string, object?>> metadata);
 ```
 
@@ -90,6 +92,45 @@ var error = Error.LimitExceeded(
                 ErrorUri.Tag("tag:exampleapp.com,2026:errors:reports:limit-exceeded"),
                 "Cannot generate the report.")
             .WithMetadata(new Dictionary<string, object?> { ["limit"] = 100, ["remaining"] = 0 });
+```
+
+### Remarks
+`null` and an empty collection expression (`[]`) bind to this overload.
+
+
+## WithMetadata(ReadOnlySpan&lt;(String, Object)&gt;)
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L359" target="_blank">Error.cs</a>
+
+Returns a copy of the current error with the specified metadata entries, given as key-value tuples, added. Entries with existing keys are replaced; the other existing entries are kept.
+
+```csharp
+public Error WithMetadata(params ReadOnlySpan<(string Key, object? Value)> metadata);
+```
+
+### Parameters
+#### `metadata` [ReadOnlySpan](https://learn.microsoft.com/dotnet/api/system.readonlyspan-1)&lt;([String](https://learn.microsoft.com/dotnet/api/system.string), [Object](https://learn.microsoft.com/dotnet/api/system.object))&gt;
+The metadata entries to add or replace, given inline, as an array or as a collection expression; values can be `null`. A key repeated in the same call takes the last value.
+
+### Returns
+[Error](Error.md)
+
+A new instance of the [Error](Error.md) record with the entries added or replaced. The current instance is not modified.
+
+### Exceptions
+[ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
+
+Any key is `null`.
+
+[ArgumentException](https://learn.microsoft.com/dotnet/api/system.argumentexception)
+
+Any key is empty, consists only of white-space characters, or is [reserved](Error_Metadata.md#keys).
+
+### Examples
+```csharp
+var error = Error.LimitExceeded(
+                ErrorUri.Tag("tag:exampleapp.com,2026:errors:reports:limit-exceeded"),
+                "Cannot generate the report.")
+            .WithMetadata(("limit", 100), ("remaining", 0));
 ```
 
 ## See Also

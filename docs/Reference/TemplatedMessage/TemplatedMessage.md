@@ -28,7 +28,9 @@ var error = Error.NotFound(
 ## Remarks
 The [TemplatedMessage](TemplatedMessage.md) record is used by the [Error](../Error/Error.md) and [ErrorDetail](../ErrorDetail/ErrorDetail.md) records to store the data required for generating **localized** error messages.
 
-The record is immutable: its properties are get-only, and `with` expressions cannot change them. The [TemplateId](TemplatedMessage_TemplateId.md) must not be `null`, empty or white-space only, and the [Params](TemplatedMessage_Params.md) are copied when the instance is created.
+The record is immutable: its properties are get-only, and `with` expressions cannot change them. The [TemplateId](TemplatedMessage_TemplateId.md) must not be `null`, empty or white-space only. The parameters are copied into one read-only dictionary ([Params](TemplatedMessage_Params.md)) when the instance is created; their names must be unique and not `null`.
+
+It is not a positional record and has no `Deconstruct` method; use a property pattern instead, e.g., `message is { TemplateId: "errors.email.required", Params: var parameters }`.
 
 `ToString()` writes the contents of [Params](TemplatedMessage_Params.md), e.g., `TemplatedMessage { TemplateId = message-id, Params = { min = 3 } }`.
 
@@ -39,7 +41,8 @@ The record is immutable: its properties are get-only, and `with` expressions can
 ## Constructors
 | Name | Description |
 | ---- | ----------- |
-| [TemplatedMessage(String, IReadOnlyDictionary&lt;String, Object&gt;)](TemplatedMessage_constructors.md) | Initializes a new instance of the [TemplatedMessage](TemplatedMessage.md) record. |
+| [TemplatedMessage(String, IEnumerable&lt;KeyValuePair&lt;String, Object&gt;&gt;)](TemplatedMessage_constructors.md#templatedmessagestring-ienumerablekeyvaluepairstring-object) | Initializes a new instance with the parameters given as key-value pairs (e.g., a dictionary). |
+| [TemplatedMessage(String, ReadOnlySpan&lt;(String, Object)&gt;)](TemplatedMessage_constructors.md#templatedmessagestring-readonlyspanstring-object) | Initializes a new instance with the parameters given as name-value tuples. |
 
 
 ## Properties

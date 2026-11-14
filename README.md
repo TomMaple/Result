@@ -348,8 +348,8 @@ where the parameters are:
 | --------- | ---- | ----------- | -------- | ------- |
 | `propertyPointer` | `string` | JSON Pointer to the input data. | no | `#/firstName` |
 | `detail` | `string` | A human-readable explanation of this error detail. | yes | `Mininum 5 characters are required.` |
-| `messageId` | `string` | A message template ID. | no | `errors.signup.validation.firstName.minLength` |
-| `namedValues` | `(string, object?)[]` | The collection of named values for the message template. | no | `("minLength", 5)` |
+| `detailTemplateId` | `string` | A message template ID. | no | `errors.signup.validation.firstName.minLength` |
+| `detailNamedValues` | `(string, object?)[]` | The named values for the message template; names must be unique, and values require `detailTemplateId`. | no | `("minLength", 5)` |
 
 ### Metadata
 `Metadata` holds machine-readable, response-level values—the *extension members* of [RFC 9457](https://datatracker.ietf.org/doc/html/rfc9457#section-3.2)—that a client can read instead of parsing the `Detail` text. The library does not define any well-known keys.
@@ -369,7 +369,7 @@ if (error.TryGetMetadata<int>("limit", out var limit))
 }
 ```
 
-* `WithMetadata()` and `WithoutMetadata()` return a **copy**; the original error is not modified.
+* `WithMetadata()` and `WithoutMetadata()` return a **copy**; the original error is not modified. Several entries can be added in one call: `WithMetadata(("limit", 100), ("remaining", 0))`.
 * Keys must not match the standard members `type`, `title`, `status`, `detail`, `instance`, `errors` and `detailTemplated` (case-insensitive); `WithMetadata()` throws an `ArgumentException` for them.
 * Keys should start with a letter, use letters, digits and `_`, and be at least 3 characters long (RFC 9457 recommendation, not enforced).
 * Values can be `null`. `TryGetMetadata<T>()` is strict: it returns `true` only when the stored value is a `T` (a stored `int` is not read as `long`), and never for a `null` value.
@@ -531,6 +531,7 @@ Check:
 * `Result.Success()` returns the same, shared instance on every call.
 * **`continueOnCapturedContext` is `bool?`.** The parameter of the asynchronous extension methods is now `bool? continueOnCapturedContext = null`; `null` uses the new global `ResultConfiguration.ContinueOnCapturedContext` (`false` by default, so the behaviour is unchanged). Source-compatible; recompile code that calls the methods.
 * **`IResult` renamed to `IOperationResult`.** The common interface of `Result` and `Result<T>` no longer clashes with `Microsoft.AspNetCore.Http.IResult` (CS0104 in ASP.NET Core projects); its members did not change.
+* **`TemplatedMessage` constructors and named values.** `TemplatedMessage` is no longer a positional record: it takes the parameters as key-value pairs (e.g., a dictionary) or as tuples, and has no `Deconstruct`. Repeated or `null` parameter names throw a clear exception, and named values passed without a template id throw instead of being silently dropped. `WithErrorDetail` takes `detailTemplateId` / `detailNamedValues`, like the factory methods.
 
 # FAQ
 ## When to use a Result and when an Exception?

@@ -2,7 +2,7 @@
 ## Definition
 Namespace: [Maple.Result](../namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L408" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L407" target="_blank">Error.cs</a>
 
 Determines whether the specified [Error](Error.md) is equal to the current [Error](Error.md), comparing the [ErrorDetails](Error_ErrorDetails.md) collection and the [Metadata](Error_Metadata.md) dictionary by their content rather than by reference.
 
@@ -30,7 +30,7 @@ Two [Error](Error.md) instances are equal when all of their properties are equal
 This override is consistent with [GetHashCode()](Error_GetHashCode.md): equal [Error](Error.md) instances always produce the same hash code.
 
 > [!NOTE]
-> Details that carry a [TemplatedMessage](../TemplatedMessage/TemplatedMessage.md) with parameters (i.e., added via [WithErrorDetail](Error_WithErrorDetail.md) with a `messageId` and `namedValues`) are also compared by value: [TemplatedMessage](../TemplatedMessage/TemplatedMessage.md) compares its `Params` collection by content, so two identically-built templated details are equal.
+> Details that carry a [TemplatedMessage](../TemplatedMessage/TemplatedMessage.md) with parameters (i.e., added via [WithErrorDetail](Error_WithErrorDetail.md) with a `detailTemplateId` and `detailNamedValues`) are also compared by value: [TemplatedMessage](../TemplatedMessage/TemplatedMessage.md) compares its `Params` collection by content, so two identically-built templated details are equal.
 
 > [!NOTE]
 > [Metadata](Error_Metadata.md) values and [TemplatedMessage](../TemplatedMessage/TemplatedMessage.md) parameters are compared with `object.Equals`. Values without value equality (e.g., arrays or most classes) are compared by reference.

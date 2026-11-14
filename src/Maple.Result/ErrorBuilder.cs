@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Maple.Result.Validators;
 
 namespace Maple.Result;
@@ -21,18 +22,17 @@ namespace Maple.Result;
 /// </summary>
 /// <remarks>
 ///     <para>
-///         Use it to assemble an error step by step (e.g., adding one <see cref="ErrorDetail" /> per invalid field in a
-///         loop) and call <see cref="Build" /> to obtain the <see cref="Error" />. Create it with the constructor, with
-///         one of the static methods named after the categories (e.g., <see cref="Validation" />), or from an existing
-///         error with <see cref="Error.ToBuilder" />.
+///         Use it to assemble an error step by step (e.g., adding one <see cref="ErrorDetail" /> per invalid field in a loop) and call <see cref="Build" /> to
+///         obtain the <see cref="Error" />. Create it with the constructor, with one of the static methods named after the categories
+///         (e.g., <see cref="Validation" />), or from an existing error with <see cref="Error.ToBuilder" />.
 ///     </para>
 ///     <para>
-///         Every argument is validated when it is passed, so <see cref="Build" /> never throws. Every method returns
-///         the same builder instance to allow chaining.
+///         Every argument is validated when it is passed, so <see cref="Build" /> never throws.
+///         Every method returns the same builder instance to allow chaining.
 ///     </para>
 ///     <para>
-///         <see cref="Build" /> takes a snapshot: later changes to the builder do not affect an <see cref="Error" />
-///         already built, and the builder stays usable after <see cref="Build" />.
+///         <see cref="Build" /> takes a snapshot: later changes to the builder do not affect an <see cref="Error" /> already built,
+///         and the builder stays usable after <see cref="Build" />.
 ///     </para>
 ///     <para>The builder is not thread-safe.</para>
 /// </remarks>
@@ -55,8 +55,7 @@ public sealed class ErrorBuilder
     #region constructors
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="ErrorBuilder" /> class with the mandatory members of an
-    ///     <see cref="Error" />.
+    ///     Initializes a new instance of the <see cref="ErrorBuilder" /> class with the mandatory members of an <see cref="Error" />.
     /// </summary>
     /// <param name="category">The category of the error.</param>
     /// <param name="typeUri">A record containing a <i>URI</i> reference that identifies the problem type.</param>
@@ -79,8 +78,8 @@ public sealed class ErrorBuilder
     }
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="ErrorBuilder" /> class with the members of an existing
-    ///     <see cref="Error" />, which were validated when it was created.
+    ///     Initializes a new instance of the <see cref="ErrorBuilder" /> class with the members of an existing <see cref="Error" />,
+    ///     which were validated when it was created.
     /// </summary>
     internal ErrorBuilder(Error error)
     {
@@ -244,8 +243,8 @@ public sealed class ErrorBuilder
     }
 
     /// <summary>
-    ///     Sets the <see cref="Error.Detail" />: the human-readable explanation specific to this occurrence of the
-    ///     problem (the <i>RFC 9457</i> “detail” member).
+    ///     Sets the <see cref="Error.Detail" />: the human-readable explanation specific to this occurrence of the problem
+    ///     (the <i>RFC 9457</i> “detail” member).
     /// </summary>
     /// <param name="detail">The explanation, or <see langword="null" /> to clear it.</param>
     /// <returns>The current <see cref="ErrorBuilder" /> instance.</returns>
@@ -264,9 +263,9 @@ public sealed class ErrorBuilder
     /// <param name="detailTemplated">The templated explanation, or <see langword="null" /> to clear it.</param>
     /// <returns>The current <see cref="ErrorBuilder" /> instance.</returns>
     /// <remarks>
-    ///     A bare <see langword="null" /> literal is ambiguous between the overloads of this method; to clear the
-    ///     value, write <c>WithDetailTemplated((TemplatedMessage?)null)</c>.
+    ///     <c>WithDetailTemplated(null)</c> binds to this overload and clears the value.
     /// </remarks>
+    [OverloadResolutionPriority(1)]
     public ErrorBuilder WithDetailTemplated(TemplatedMessage? detailTemplated)
     {
         _detailTemplated = detailTemplated;
@@ -278,21 +277,18 @@ public sealed class ErrorBuilder
     /// </summary>
     /// <param name="templateId">The identifier of the message template.</param>
     /// <param name="namedValues">
-    ///     The parameters (names and values) that might be required to generate a localized message.
+    ///     The parameters (names and values) that might be required to generate a localized message; values can be <see langword="null" />.
     /// </param>
     /// <returns>The current <see cref="ErrorBuilder" /> instance.</returns>
     /// <exception cref="ArgumentNullException">
-    ///     If the <paramref name="templateId" />, the <paramref name="namedValues" /> or any name is
-    ///     <see langword="null" />.
+    ///     If the <paramref name="templateId" /> or a parameter name is <see langword="null" />.
     /// </exception>
     /// <exception cref="ArgumentException">
-    ///     If the <paramref name="templateId" /> is empty or whitespace-only, or a name is repeated.
+    ///     If the <paramref name="templateId" /> is empty or whitespace-only, or a parameter name is repeated.
     /// </exception>
-    public ErrorBuilder WithDetailTemplated(string templateId, params (string Key, object? Value)[] namedValues)
+    public ErrorBuilder WithDetailTemplated(string templateId, params ReadOnlySpan<(string Key, object? Value)> namedValues)
     {
-        ArgumentNullException.ThrowIfNull(namedValues);
-
-        _detailTemplated = new TemplatedMessage(templateId, namedValues.ToDictionary(x => x.Key, x => x.Value));
+        _detailTemplated = TemplatedMessage.Create(templateId, namedValues, nameof(templateId), nameof(namedValues));
         return this;
     }
 
@@ -300,8 +296,7 @@ public sealed class ErrorBuilder
     ///     Sets the <see cref="Error.InstanceUri" />.
     /// </summary>
     /// <param name="instanceUri">
-    ///     A <i>URI</i> reference that identifies the specific occurrence of the problem, or <see langword="null" />
-    ///     to clear it.
+    ///     A <i>URI</i> reference that identifies the specific occurrence of the problem, or <see langword="null" /> to clear it.
     /// </param>
     /// <returns>The current <see cref="ErrorBuilder" /> instance.</returns>
     public ErrorBuilder WithInstanceUri(ErrorUri? instanceUri)
@@ -333,33 +328,30 @@ public sealed class ErrorBuilder
     /// </summary>
     /// <param name="propertyPointer">The JSON Pointer which identifies the invalid value in the input data.</param>
     /// <param name="detail">The human-readable explanation specific to this individual error occurrence.</param>
-    /// <param name="messageId">
-    ///     The identifier of the message template; when <see langword="null" />, no
-    ///     <see cref="ErrorDetail.DetailTemplated" /> is set and the <paramref name="namedValues" /> are ignored.
+    /// <param name="detailTemplateId">
+    ///     The identifier of the message template; when <see langword="null" />, no <see cref="ErrorDetail.DetailTemplated" /> is set.
     /// </param>
-    /// <param name="namedValues">
-    ///     The optional collection of parameters (names and values) that might be required to generate
-    ///     a localized message.
+    /// <param name="detailNamedValues">
+    ///     The optional parameters (names and values) that might be required to generate a localized message;
+    ///     they require <paramref name="detailTemplateId" />.
     /// </param>
     /// <returns>The current <see cref="ErrorBuilder" /> instance.</returns>
     /// <remarks>
     ///     For more details about JSON Pointers, see: <seealso href="https://datatracker.ietf.org/doc/html/rfc6901" />.
     /// </remarks>
     /// <exception cref="ArgumentNullException">
-    ///     If the <paramref name="detail" /> is <see langword="null" />, or the <paramref name="messageId" /> is set
-    ///     and a name is <see langword="null" />.
+    ///     If the <paramref name="detail" /> or a parameter name in <paramref name="detailNamedValues" /> is <see langword="null" />.
     /// </exception>
     /// <exception cref="ArgumentException">
-    ///     If the <paramref name="messageId" /> is empty or whitespace-only, or a name is repeated.
+    ///     If the <paramref name="detailTemplateId" /> is empty or whitespace-only, a parameter name is repeated,
+    ///     or <paramref name="detailNamedValues" /> are passed without a <paramref name="detailTemplateId" />.
     /// </exception>
-    public ErrorBuilder AddErrorDetail(string? propertyPointer, string detail, string? messageId = null,
-        params (string key, object? value)[] namedValues)
+    public ErrorBuilder AddErrorDetail(string? propertyPointer, string detail, string? detailTemplateId = null,
+        params ReadOnlySpan<(string Key, object? Value)> detailNamedValues)
     {
-        var templatedMessage = messageId is null
-            ? null
-            : new TemplatedMessage(messageId, namedValues.ToDictionary(x => x.key, x => x.value));
+        var detailTemplated = TemplatedMessage.CreateOptional(detailTemplateId, detailNamedValues, nameof(detailTemplateId), nameof(detailNamedValues));
 
-        return AddErrorDetail(new ErrorDetail(propertyPointer, detail, templatedMessage));
+        return AddErrorDetail(new ErrorDetail(propertyPointer, detail, detailTemplated));
     }
 
     #endregion
@@ -367,17 +359,15 @@ public sealed class ErrorBuilder
     #region metadata
 
     /// <summary>
-    ///     Adds the specified entry to the <see cref="Error.Metadata" />, or replaces its value if the key already
-    ///     exists.
+    ///     Adds the specified entry to the <see cref="Error.Metadata" />, or replaces its value if the key already exists.
     /// </summary>
     /// <param name="key">The key of the metadata entry.</param>
     /// <param name="value">The value of the metadata entry; it may be <see langword="null" />.</param>
     /// <returns>The current <see cref="ErrorBuilder" /> instance.</returns>
     /// <exception cref="ArgumentNullException">If the <paramref name="key" /> is <see langword="null" />.</exception>
     /// <exception cref="ArgumentException">
-    ///     If the <paramref name="key" /> is empty, whitespace-only or matches (case-insensitively) a standard problem
-    ///     details member: <c>type</c>, <c>title</c>, <c>status</c>, <c>detail</c>, <c>instance</c>, <c>errors</c> or
-    ///     <c>detailTemplated</c>.
+    ///     If the <paramref name="key" /> is empty, whitespace-only or matches (case-insensitively) a standard problem details member: <c>type</c>,
+    ///     <c>title</c>, <c>status</c>, <c>detail</c>, <c>instance</c>, <c>errors</c> or <c>detailTemplated</c>.
     /// </exception>
     public ErrorBuilder WithMetadata(string key, object? value)
     {
@@ -388,8 +378,7 @@ public sealed class ErrorBuilder
     }
 
     /// <summary>
-    ///     Adds the specified entries to the <see cref="Error.Metadata" />; entries with existing keys are replaced
-    ///     and the other existing entries are kept.
+    ///     Adds the specified entries to the <see cref="Error.Metadata" />; entries with existing keys are replaced and the other existing entries are kept.
     /// </summary>
     /// <param name="metadata">The metadata entries to add or replace; values may be <see langword="null" />.</param>
     /// <returns>The current <see cref="ErrorBuilder" /> instance.</returns>
@@ -400,10 +389,10 @@ public sealed class ErrorBuilder
     ///     If the <paramref name="metadata" /> or any key is <see langword="null" />.
     /// </exception>
     /// <exception cref="ArgumentException">
-    ///     If any key is empty, whitespace-only or matches (case-insensitively) a standard problem details member:
-    ///     <c>type</c>, <c>title</c>, <c>status</c>, <c>detail</c>, <c>instance</c>, <c>errors</c> or
-    ///     <c>detailTemplated</c>.
+    ///     If any key is empty, whitespace-only or matches (case-insensitively) a standard problem details member: <c>type</c>, <c>title</c>, <c>status</c>,
+    ///     <c>detail</c>, <c>instance</c>, <c>errors</c> or <c>detailTemplated</c>.
     /// </exception>
+    [OverloadResolutionPriority(1)]
     public ErrorBuilder WithMetadata(IEnumerable<KeyValuePair<string, object?>> metadata)
     {
         ArgumentNullException.ThrowIfNull(metadata);
@@ -418,6 +407,38 @@ public sealed class ErrorBuilder
         var pending = GetPendingMetadata();
         foreach (var pair in entries)
             pending[pair.Key] = pair.Value;
+
+        return this;
+    }
+
+    /// <summary>
+    ///     Adds the specified entries, given as key-value tuples, to the <see cref="Error.Metadata" />;
+    ///     entries with existing keys are replaced and the other existing entries are kept.
+    /// </summary>
+    /// <param name="metadata">
+    ///     The metadata entries to add or replace, e.g., <c>WithMetadata(("limit", 100), ("remaining", 0))</c>; values may be <see langword="null" />.
+    /// </param>
+    /// <returns>The current <see cref="ErrorBuilder" /> instance.</returns>
+    /// <remarks>
+    ///     All keys are validated before any entry is applied, so the builder is unchanged when this method throws.
+    ///     A key repeated in the same call takes the last value.
+    /// </remarks>
+    /// <exception cref="ArgumentNullException">If any key is <see langword="null" />.</exception>
+    /// <exception cref="ArgumentException">
+    ///     If any key is empty, whitespace-only or matches (case-insensitively) a standard problem details member: <c>type</c>, <c>title</c>, <c>status</c>,
+    ///     <c>detail</c>, <c>instance</c>, <c>errors</c> or <c>detailTemplated</c>.
+    /// </exception>
+    public ErrorBuilder WithMetadata(params ReadOnlySpan<(string Key, object? Value)> metadata)
+    {
+        foreach (var (key, _) in metadata)
+            MetadataKeyValidator.Validate(key);
+
+        if (metadata.IsEmpty)
+            return this;
+
+        var pending = GetPendingMetadata();
+        foreach (var (key, value) in metadata)
+            pending[key] = value;
 
         return this;
     }
@@ -459,8 +480,7 @@ public sealed class ErrorBuilder
     /// </summary>
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
     /// <remarks>
-    ///     This method never throws. The returned error is a snapshot: later changes to the builder do not affect it,
-    ///     and the builder can still be used.
+    ///     This method never throws. The returned error is a snapshot: later changes to the builder do not affect it, and the builder can still be used.
     /// </remarks>
     public Error Build()
     {
@@ -476,14 +496,14 @@ public sealed class ErrorBuilder
         {
             _builtMetadata = _pendingMetadata.Count == 0
                 ? Error.EmptyMetadata
-                : new ReadOnlyDictionary<string, object?>(
-                    new Dictionary<string, object?>(_pendingMetadata, StringComparer.Ordinal));
+                : new ReadOnlyDictionary<string, object?>(new Dictionary<string, object?>(_pendingMetadata, StringComparer.Ordinal));
             _pendingMetadata = null;
         }
 
-        return new Error(_category, _typeUri.Value, _title, _detail, _detailTemplated, _instanceUri?.Value,
-            _builtErrorDetails, _builtMetadata);
+        return new Error(_category, _typeUri.Value, _title, _detail, _detailTemplated, _instanceUri?.Value, _builtErrorDetails, _builtMetadata);
     }
+
+    #region helper methods
 
     private List<ErrorDetail> GetPendingErrorDetails()
     {
@@ -499,8 +519,9 @@ public sealed class ErrorBuilder
     {
         if (!Enum.IsDefined(category))
         {
-            throw new ArgumentOutOfRangeException(nameof(category), category,
-                $"The error category ‘{category}’ is not defined.");
+            throw new ArgumentOutOfRangeException(nameof(category), category, $"The error category ‘{category}’ is not defined.");
         }
     }
+
+    #endregion
 }

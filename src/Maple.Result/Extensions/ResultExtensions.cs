@@ -23,8 +23,7 @@ public static class ResultExtensions
     /// <typeparam name="T">The type of the value contained in the <see cref="Result{T}" />.</typeparam>
     /// <param name="result">The <see cref="Result{T}" /> instance to convert.</param>
     /// <returns>
-    ///     A non-generic <see cref="Result" /> representing a success state or
-    ///     a failure state (with the original <see cref="Error" />).
+    ///     A non-generic <see cref="Result" /> representing a success state or a failure state (with the original <see cref="Error" />).
     /// </returns>
     /// <exception cref="ArgumentNullException">
     ///     If the <paramref name="result" /> is <see langword="null" />.

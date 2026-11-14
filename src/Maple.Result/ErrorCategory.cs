@@ -98,8 +98,7 @@ public enum ErrorCategory
     ///     The service is not available.
     /// </summary>
     /// <remarks>
-    ///     The service (or a resource it depends on) is temporarily unavailable, e.g. it is down or overloaded.
-    ///     Try again later.<br />
+    ///     The service (or a resource it depends on) is temporarily unavailable, e.g. it is down or overloaded. Try again later.<br />
     ///     Do not use when a usage limit, quota or rate has been exhausted (use <see cref="LimitExceeded" />).<br />
     ///     Can be mapped to the 503 HTTP status code (Service Unavailable).
     /// </remarks>
@@ -109,8 +108,7 @@ public enum ErrorCategory
     ///     A usage limit has been exceeded.
     /// </summary>
     /// <remarks>
-    ///     The request is valid and permitted, but a usage limit, quota or rate has been exhausted.
-    ///     It may succeed later or once the limit is raised.<br />
+    ///     The request is valid and permitted, but a usage limit, quota or rate has been exhausted. It may succeed later or once the limit is raised.<br />
     ///     Applies to business limits as well as throttling.<br />
     ///     Do not use for input-size checks (use <see cref="Validation" />).<br />
     ///     Can be mapped to the 429 HTTP status code (Too Many Requests).
