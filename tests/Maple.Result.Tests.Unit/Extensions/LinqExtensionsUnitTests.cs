@@ -569,4 +569,109 @@ public class LinqExtensionsUnitTests
     }
 
     #endregion
+
+    #region LINQ query selecting an Error (overload trap, issue #119)
+
+    private static readonly Error TrapError = Error.Conflict(ErrorUri.Tag("tag:test.com,2024:Trap"), "Trap title");
+
+    private static Result<int> Get(int value) => Result<int>.FromValue(value);
+
+    [Fact]
+    public void LinqQuerySyntax_SuccessfulResultSelectingError_ReturnsFailedResultWithSelectedError()
+    {
+        // Arrange
+        var passedValue = 0;
+
+        // Act
+        Result result = from a in Get(5)
+                        select Track(a);
+
+        // Assert
+        result.IsSuccess().ShouldBeFalse();
+        result.Error.ShouldBeSameAs(TrapError);
+        passedValue.ShouldBe(5);
+
+        Error Track(int value)
+        {
+            passedValue = value;
+            return TrapError;
+        }
+    }
+
+    [Fact]
+    public void LinqQuerySyntax_FailedResultSelectingError_ReturnsOriginalError()
+    {
+        // Arrange
+        var sut = GetErrorResult<int>();
+
+        // Act
+        Result result = from a in sut
+                        select TrapError;
+
+        // Assert
+        result.IsSuccess().ShouldBeFalse();
+        result.Error.ShouldBeSameAs(sut.Error);
+    }
+
+    [Fact]
+    public void LinqQuerySyntax_SuccessfulResultsWithTwoFromClausesSelectingError_ReturnsFailedResultWithSelectedError()
+    {
+        // Arrange
+        var passedValue = 0;
+
+        // Act
+        Result result = from a in Get(2)
+                        from b in Get(a + 3)
+                        select Track(a * b);
+
+        // Assert
+        result.IsSuccess().ShouldBeFalse();
+        result.Error.ShouldBeSameAs(TrapError);
+        passedValue.ShouldBe(10);
+
+        Error Track(int value)
+        {
+            passedValue = value;
+            return TrapError;
+        }
+    }
+
+    [Fact]
+    public void LinqQuerySyntax_FailedIntermediateResultSelectingError_ReturnsErrorOfIntermediateResult()
+    {
+        // Arrange
+        var intermediate = GetErrorResult<int>();
+
+        // Act
+        Result result = from a in Get(2)
+                        from b in intermediate
+                        select TrapError;
+
+        // Assert
+        result.IsSuccess().ShouldBeFalse();
+        result.Error.ShouldBeSameAs(intermediate.Error);
+    }
+
+    [Fact]
+    public void Select_SuccessfulResultWithErrorSelectorReturningNull_ThrowsArgumentNullException()
+    {
+        // Act
+        var exception = Record.Exception(() => Get(5).Select(_ => (Error)null!));
+
+        // Assert
+        exception.ShouldBeOfType<ArgumentNullException>();
+    }
+
+    [Fact]
+    public void Select_SuccessfulResultWithErrorSelectorAndExplicitTypeArguments_ReturnsSuccessfulResultOfError()
+    {
+        // Act
+        Result<Error> result = Get(5).Select<int, Error>(_ => TrapError);
+
+        // Assert
+        result.IsSuccess().ShouldBeTrue();
+        result.Value.ShouldBeSameAs(TrapError);
+    }
+
+    #endregion
 }

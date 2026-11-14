@@ -743,4 +743,141 @@ public class LinqValueTaskAsyncExtensionsUnitTests
     }
 
     #endregion
+
+    #region LINQ query selecting an Error (overload trap, issue #119)
+
+    private static readonly Error TrapError = Error.Conflict(ErrorUri.Tag("tag:test.com,2024:Trap"), "Trap title");
+
+    [Fact]
+    public async Task LinqQuerySyntax_AsyncSuccessfulResultSelectingError_ReturnsFailedResultWithSelectedError()
+    {
+        // Arrange
+        var passedValue = 0;
+
+        // Act
+        Result result = await (from a in GetAsync(5)
+                               select Track(a));
+
+        // Assert
+        result.IsSuccess().ShouldBeFalse();
+        result.Error.ShouldBeSameAs(TrapError);
+        passedValue.ShouldBe(5);
+
+        Error Track(int value)
+        {
+            passedValue = value;
+            return TrapError;
+        }
+    }
+
+    [Fact]
+    public async Task LinqQuerySyntax_AsyncFailedResultSelectingError_ReturnsOriginalError()
+    {
+        // Act
+        Result result = await (from a in GetErrorAsync()
+                               select TrapError);
+
+        // Assert
+        result.IsSuccess().ShouldBeFalse();
+        result.Error.ShouldBeSameAs(MixedError);
+    }
+
+    [Fact]
+    public async Task LinqQuerySyntax_AsyncThenAsyncSuccessfulResultsSelectingError_ReturnsFailedResultWithSelectedError()
+    {
+        // Arrange
+        var passedValue = 0;
+
+        // Act
+        Result result = await (from a in GetAsync(2)
+                               from b in GetAsync(a + 3)
+                               select Track(a * b));
+
+        // Assert
+        result.IsSuccess().ShouldBeFalse();
+        result.Error.ShouldBeSameAs(TrapError);
+        passedValue.ShouldBe(10);
+
+        Error Track(int value)
+        {
+            passedValue = value;
+            return TrapError;
+        }
+    }
+
+    [Fact]
+    public async Task LinqQuerySyntax_AsyncThenFailedAsyncResultSelectingError_ReturnsErrorOfIntermediateResult()
+    {
+        // Act
+        Result result = await (from a in GetAsync(2)
+                               from b in GetErrorAsync()
+                               select TrapError);
+
+        // Assert
+        result.IsSuccess().ShouldBeFalse();
+        result.Error.ShouldBeSameAs(MixedError);
+    }
+
+    [Fact]
+    public async Task LinqQuerySyntax_AsyncThenSyncSuccessfulResultsSelectingError_ReturnsFailedResultWithSelectedError()
+    {
+        // Act
+        Result result = await (from a in GetAsync(2)
+                               from b in Get(a + 3)
+                               select TrapError);
+
+        // Assert
+        result.IsSuccess().ShouldBeFalse();
+        result.Error.ShouldBeSameAs(TrapError);
+    }
+
+    [Fact]
+    public async Task LinqQuerySyntax_FailedAsyncThenSyncSelectingError_ReturnsOriginalError()
+    {
+        // Act
+        Result result = await (from a in GetErrorAsync()
+                               from b in Get(a + 3)
+                               select TrapError);
+
+        // Assert
+        result.IsSuccess().ShouldBeFalse();
+        result.Error.ShouldBeSameAs(MixedError);
+    }
+
+    [Fact]
+    public async Task LinqQuerySyntax_SyncThenAsyncSuccessfulResultsSelectingError_ReturnsFailedResultWithSelectedError()
+    {
+        // Act
+        Result result = await (from a in Get(2)
+                               from b in GetAsync(a + 3)
+                               select TrapError);
+
+        // Assert
+        result.IsSuccess().ShouldBeFalse();
+        result.Error.ShouldBeSameAs(TrapError);
+    }
+
+    [Fact]
+    public async Task LinqQuerySyntax_FailedSyncThenAsyncSelectingError_ReturnsOriginalErrorAndDoesNotCallAsyncSelector()
+    {
+        // Arrange
+        var called = false;
+
+        // Act
+        Result result = await (from a in Result<int>.FromError(MixedError)
+                               from b in Track(a)
+                               select TrapError);
+
+        // Assert
+        result.Error.ShouldBeSameAs(MixedError);
+        called.ShouldBeFalse();
+
+        ValueTask<Result<int>> Track(int value)
+        {
+            called = true;
+            return GetAsync(value);
+        }
+    }
+
+    #endregion
 }

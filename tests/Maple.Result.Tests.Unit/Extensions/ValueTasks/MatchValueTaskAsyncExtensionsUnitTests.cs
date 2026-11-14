@@ -3480,4 +3480,199 @@ public class MatchValueTaskAsyncExtensionsUnitTests
     }
 
     #endregion
+
+    #region MatchAsync with a function returning an Error (overload trap, issue #119)
+
+    private static readonly Error TrapError = Error.Conflict(ErrorUri.Tag("tag:test.com,2024:Trap"), "Trap title");
+
+    [Fact]
+    public async Task MatchAsync_SuccessfulResultWithErrorFunction_ReturnsFailedResultWithReturnedError()
+    {
+        // Arrange
+        var sut = Result.Success();
+        var actionCalled = false;
+
+        // Act
+        Result result = await sut.MatchAsync(() => ValueTask.FromResult(TrapError), _ =>
+        {
+            actionCalled = true;
+            return ValueTask.CompletedTask;
+        });
+
+        // Assert
+        result.IsSuccess().ShouldBeFalse();
+        result.Error.ShouldBeSameAs(TrapError);
+        actionCalled.ShouldBeFalse();
+    }
+
+    [Fact]
+    public async Task MatchAsync_ErrorResultWithErrorFunction_ReturnsOriginalResultAndCallsAction()
+    {
+        // Arrange
+        var sut = GetErrorResult();
+        var functionCalled = false;
+        Error? passedError = null;
+
+        // Act
+        Result result = await sut.MatchAsync(() =>
+        {
+            functionCalled = true;
+            return ValueTask.FromResult(TrapError);
+        }, e =>
+        {
+            passedError = e;
+            return ValueTask.CompletedTask;
+        });
+
+        // Assert
+        result.ShouldBeSameAs(sut);
+        passedError.ShouldBeSameAs(sut.Error);
+        functionCalled.ShouldBeFalse();
+    }
+
+    [Fact]
+    public async Task MatchAsync_SuccessfulResultWithErrorFunctionReturningNull_ThrowsArgumentNullException()
+    {
+        // Arrange
+        var sut = Result.Success();
+
+        // Act
+        var exception = await Record.ExceptionAsync(async () =>
+            await sut.MatchAsync(() => ValueTask.FromResult<Error>(null!), _ => ValueTask.CompletedTask));
+
+        // Assert
+        exception.ShouldBeOfType<ArgumentNullException>();
+    }
+
+    [Fact]
+    public async Task MatchAsync_SuccessfulResultWithErrorFunctionAndExplicitTypeArgument_ReturnsSuccessfulResultOfError()
+    {
+        // Arrange
+        var sut = Result.Success();
+
+        // Act
+        Result<Error> result = await sut.MatchAsync<Error>(() => ValueTask.FromResult(TrapError), _ => ValueTask.CompletedTask);
+
+        // Assert
+        result.IsSuccess().ShouldBeTrue();
+        result.Value.ShouldBeSameAs(TrapError);
+    }
+
+    [Fact]
+    public async Task MatchAsync_SuccessfulResultOfTWithErrorFunction_ReturnsFailedResultWithReturnedError()
+    {
+        // Arrange
+        var sut = Result<int>.FromValue(5);
+        var passedValue = 0;
+
+        // Act
+        Result result = await sut.MatchAsync(x =>
+        {
+            passedValue = x;
+            return ValueTask.FromResult(TrapError);
+        }, _ => ValueTask.CompletedTask);
+
+        // Assert
+        result.IsSuccess().ShouldBeFalse();
+        result.Error.ShouldBeSameAs(TrapError);
+        passedValue.ShouldBe(5);
+    }
+
+    [Fact]
+    public async Task MatchAsync_ErrorResultOfTWithErrorFunction_ReturnsFailedResultWithOriginalErrorAndCallsAction()
+    {
+        // Arrange
+        var sut = GetErrorResult<int>();
+        Error? passedError = null;
+
+        // Act
+        Result result = await sut.MatchAsync(_ => ValueTask.FromResult(TrapError), e =>
+        {
+            passedError = e;
+            return ValueTask.CompletedTask;
+        });
+
+        // Assert
+        result.IsSuccess().ShouldBeFalse();
+        result.Error.ShouldBeSameAs(sut.Error);
+        passedError.ShouldBeSameAs(sut.Error);
+    }
+
+    [Fact]
+    public async Task MatchAsync_SuccessfulResultTaskWithErrorFunction_ReturnsFailedResultWithReturnedError()
+    {
+        // Arrange
+        var sut = ValueTask.FromResult(Result.Success());
+
+        // Act
+        Result result = await sut.MatchAsync(() => ValueTask.FromResult(TrapError), _ => ValueTask.CompletedTask);
+
+        // Assert
+        result.IsSuccess().ShouldBeFalse();
+        result.Error.ShouldBeSameAs(TrapError);
+    }
+
+    [Fact]
+    public async Task MatchAsync_ErrorResultTaskWithErrorFunction_ReturnsOriginalErrorAndCallsAction()
+    {
+        // Arrange
+        var errorResult = GetErrorResult();
+        var error = errorResult.Error;
+        var sut = ValueTask.FromResult(errorResult);
+        Error? passedError = null;
+
+        // Act
+        Result result = await sut.MatchAsync(() => ValueTask.FromResult(TrapError), e =>
+        {
+            passedError = e;
+            return ValueTask.CompletedTask;
+        });
+
+        // Assert
+        result.Error.ShouldBeSameAs(error);
+        passedError.ShouldBeSameAs(error);
+    }
+
+    [Fact]
+    public async Task MatchAsync_SuccessfulResultOfTTaskWithErrorFunction_ReturnsFailedResultWithReturnedError()
+    {
+        // Arrange
+        var sut = ValueTask.FromResult(Result<int>.FromValue(5));
+        var passedValue = 0;
+
+        // Act
+        Result result = await sut.MatchAsync(x =>
+        {
+            passedValue = x;
+            return ValueTask.FromResult(TrapError);
+        }, _ => ValueTask.CompletedTask);
+
+        // Assert
+        result.IsSuccess().ShouldBeFalse();
+        result.Error.ShouldBeSameAs(TrapError);
+        passedValue.ShouldBe(5);
+    }
+
+    [Fact]
+    public async Task MatchAsync_ErrorResultOfTTaskWithErrorFunction_ReturnsFailedResultWithOriginalErrorAndCallsAction()
+    {
+        // Arrange
+        var errorResult = GetErrorResult<int>();
+        var error = errorResult.Error;
+        var sut = ValueTask.FromResult(errorResult);
+        Error? passedError = null;
+
+        // Act
+        Result result = await sut.MatchAsync(_ => ValueTask.FromResult(TrapError), e =>
+        {
+            passedError = e;
+            return ValueTask.CompletedTask;
+        });
+
+        // Assert
+        result.Error.ShouldBeSameAs(error);
+        passedError.ShouldBeSameAs(error);
+    }
+
+    #endregion
 }

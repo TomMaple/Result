@@ -69,6 +69,51 @@ public static class LinqTaskAsyncExtensions
     }
 
     /// <summary>
+    ///     Applies the provided <paramref name="selector" /> to the value of a successful <see cref="Result{T}" /> produced by the awaited
+    ///     <paramref name="result" /> and returns a failed <see cref="Result" /> with the <see cref="Error" /> it returns;
+    ///     otherwise, returns a failed <see cref="Result" /> with the original <see cref="Error" />.
+    /// </summary>
+    /// <typeparam name="T">
+    ///     The type of the <see cref="Result{T}" /> value used to determine whether to execute the passed <paramref name="selector" /> function.
+    ///     If successful, this is also the type of the parameter passed to that function.
+    /// </typeparam>
+    /// <param name="result">The <see cref="Task{TResult}" /> that represents the initial result.</param>
+    /// <param name="selector">A function that takes the value of the initial result and returns the <see cref="Error" /> of the failed result.</param>
+    /// <returns>
+    ///     A <see cref="Task{TResult}" /> that represents a failed <see cref="Result" /> with the <see cref="Error" /> returned by
+    ///     <paramref name="selector" /> if the <paramref name="result" /> is successful;
+    ///     otherwise, a failed <see cref="Result" /> with the original <see cref="Error" />.
+    /// </returns>
+    /// <exception cref="ArgumentNullException">
+    ///     If any of the <paramref name="result" /> or <paramref name="selector" /> parameters are <see langword="null" />,
+    ///     or if <paramref name="selector" /> returns <see langword="null" />.
+    /// </exception>
+    /// <exception cref="InvalidOperationException">
+    ///     If the asynchronous operation represented by <paramref name="result" /> returns <see langword="null" />.
+    /// </exception>
+    /// <remarks>
+    ///     <para>
+    ///         This method makes a query that selects an <see cref="Error" />, e.g., <c>from user in GetUserAsync(id) select Error.Conflict(…)</c>,
+    ///         return a failed <see cref="Result" />.
+    ///     </para>
+    ///     <para>
+    ///         Without this overload, such a query would return a <b>successful</b> <c>Result&lt;Error&gt;</c>.
+    ///     </para>
+    /// </remarks>
+    public static async Task<Result> Select<T>(this Task<Result<T>> result, Func<T, Error> selector)
+    {
+        ArgumentNullException.ThrowIfNull(result);
+        ArgumentNullException.ThrowIfNull(selector);
+
+        var resultValue = await result.ConfigureAwait(ResultConfiguration.ContinueOnCapturedContext);
+
+        if (resultValue is null)
+            throw new InvalidOperationException("The asynchronous operation represented by ‘result’ returned null.");
+
+        return resultValue.IfSuccess(selector);
+    }
+
+    /// <summary>
     ///     Returns a new instance of the <see cref="Task{TResult}" /> that represents the result of applying the provided collection selector and
     ///     a result selector functions if the current <see cref="Result{T}" /> is successful,
     ///     or the new <see cref="Task{TResult}" /> that represents a new <see cref="Result{TNext}" /> instance with the same error otherwise.
@@ -206,6 +251,170 @@ public static class LinqTaskAsyncExtensions
         this Result<T> result,
         Func<T, Task<Result<TMiddle>>> collectionSelector,
         Func<T, TMiddle, TNext> resultSelector)
+    {
+        ArgumentNullException.ThrowIfNull(result);
+        ArgumentNullException.ThrowIfNull(collectionSelector);
+        ArgumentNullException.ThrowIfNull(resultSelector);
+
+        if (!result.IsSuccess())
+            return result.Error;
+
+        var collectionResult = await collectionSelector(result.Value).ConfigureAwait(ResultConfiguration.ContinueOnCapturedContext);
+        return collectionResult.IfSuccess(y => resultSelector(result.Value, y));
+    }
+
+    /// <summary>
+    ///     Applies the asynchronous <paramref name="collectionSelector" /> and the <paramref name="resultSelector" /> to the value of a successful
+    ///     <see cref="Result{T}" /> produced by the awaited <paramref name="result" /> and returns a failed <see cref="Result" /> with
+    ///     the <see cref="Error" /> returned by <paramref name="resultSelector" />; otherwise, returns a failed <see cref="Result" /> with
+    ///     the first <see cref="Error" />.
+    /// </summary>
+    /// <typeparam name="T">
+    ///     The type of the value of the initial result. If successful, this is also the type of the parameter passed to the selectors.
+    /// </typeparam>
+    /// <typeparam name="TMiddle">The type of the value of the intermediate result returned by <paramref name="collectionSelector" />.</typeparam>
+    /// <param name="result">The <see cref="Task{TResult}" /> that represents the initial result.</param>
+    /// <param name="collectionSelector">
+    ///     An asynchronous function that takes the value of the initial result and returns a result with an intermediate value.
+    /// </param>
+    /// <param name="resultSelector">
+    ///     A function that takes the value of the initial result and the intermediate value, and returns the <see cref="Error" /> of the failed result.
+    /// </param>
+    /// <returns>
+    ///     A <see cref="Task{TResult}" /> that represents a failed <see cref="Result" /> with the <see cref="Error" /> returned by
+    ///     <paramref name="resultSelector" /> if both the initial and the intermediate results are successful;
+    ///     otherwise, a failed <see cref="Result" /> with the first <see cref="Error" />.
+    /// </returns>
+    /// <exception cref="ArgumentNullException">
+    ///     If any of the <paramref name="result" />, <paramref name="collectionSelector" /> or <paramref name="resultSelector" /> parameters are
+    ///     <see langword="null" />, or if <paramref name="resultSelector" /> returns <see langword="null" />.
+    /// </exception>
+    /// <exception cref="InvalidOperationException">
+    ///     If the asynchronous operation represented by <paramref name="result" /> returns <see langword="null" />.
+    /// </exception>
+    /// <remarks>
+    ///     <para>
+    ///         This method makes a query with more than one <c>from</c> clause that selects an <see cref="Error" />,
+    ///         e.g., <c>from user in GetUserAsync(id) from order in GetOrderAsync(user) select Error.Conflict(…)</c>, return a failed <see cref="Result" />.
+    ///     </para>
+    ///     <para>
+    ///         Without this overload, such a query would return a <b>successful</b> <c>Result&lt;Error&gt;</c>.
+    ///     </para>
+    /// </remarks>
+    public static async Task<Result> SelectMany<T, TMiddle>(
+        this Task<Result<T>> result,
+        Func<T, Task<Result<TMiddle>>> collectionSelector,
+        Func<T, TMiddle, Error> resultSelector)
+    {
+        ArgumentNullException.ThrowIfNull(result);
+        ArgumentNullException.ThrowIfNull(collectionSelector);
+        ArgumentNullException.ThrowIfNull(resultSelector);
+
+        var resultValue = await result.ConfigureAwait(ResultConfiguration.ContinueOnCapturedContext);
+
+        if (resultValue is null)
+            throw new InvalidOperationException("The asynchronous operation represented by ‘result’ returned null.");
+
+        if (!resultValue.IsSuccess())
+            return resultValue.Error;
+
+        var collectionResult = await collectionSelector(resultValue.Value).ConfigureAwait(ResultConfiguration.ContinueOnCapturedContext);
+        return collectionResult.IfSuccess(y => resultSelector(resultValue.Value, y));
+    }
+
+    /// <summary>
+    ///     Applies the synchronous <paramref name="collectionSelector" /> and the <paramref name="resultSelector" /> to the value of a successful
+    ///     <see cref="Result{T}" /> produced by the awaited <paramref name="result" /> and returns a failed <see cref="Result" /> with
+    ///     the <see cref="Error" /> returned by <paramref name="resultSelector" />; otherwise, returns a failed <see cref="Result" /> with
+    ///     the first <see cref="Error" />.
+    /// </summary>
+    /// <typeparam name="T">
+    ///     The type of the value of the initial result. If successful, this is also the type of the parameter passed to the selectors.
+    /// </typeparam>
+    /// <typeparam name="TMiddle">The type of the value of the intermediate result returned by <paramref name="collectionSelector" />.</typeparam>
+    /// <param name="result">The <see cref="Task{TResult}" /> that represents the initial result.</param>
+    /// <param name="collectionSelector">
+    ///     A synchronous function that takes the value of the initial result and returns a result with an intermediate value.
+    /// </param>
+    /// <param name="resultSelector">
+    ///     A function that takes the value of the initial result and the intermediate value, and returns the <see cref="Error" /> of the failed result.
+    /// </param>
+    /// <returns>
+    ///     A <see cref="Task{TResult}" /> that represents a failed <see cref="Result" /> with the <see cref="Error" /> returned by
+    ///     <paramref name="resultSelector" /> if both the initial and the intermediate results are successful;
+    ///     otherwise, a failed <see cref="Result" /> with the first <see cref="Error" />.
+    /// </returns>
+    /// <exception cref="ArgumentNullException">
+    ///     If any of the <paramref name="result" />, <paramref name="collectionSelector" /> or <paramref name="resultSelector" /> parameters are
+    ///     <see langword="null" />, or if <paramref name="resultSelector" /> returns <see langword="null" />.
+    /// </exception>
+    /// <exception cref="InvalidOperationException">
+    ///     If the asynchronous operation represented by <paramref name="result" /> returns <see langword="null" />.
+    /// </exception>
+    /// <remarks>
+    ///     <para>
+    ///         This method makes a query with more than one <c>from</c> clause that selects an <see cref="Error" />,
+    ///         e.g., <c>from user in GetUserAsync(id) from order in GetOrder(user) select Error.Conflict(…)</c>, return a failed <see cref="Result" />.
+    ///     </para>
+    ///     <para>
+    ///         Without this overload, such a query would return a <b>successful</b> <c>Result&lt;Error&gt;</c>.
+    ///     </para>
+    /// </remarks>
+    public static async Task<Result> SelectMany<T, TMiddle>(
+        this Task<Result<T>> result,
+        Func<T, Result<TMiddle>> collectionSelector,
+        Func<T, TMiddle, Error> resultSelector)
+    {
+        ArgumentNullException.ThrowIfNull(result);
+        ArgumentNullException.ThrowIfNull(collectionSelector);
+        ArgumentNullException.ThrowIfNull(resultSelector);
+
+        var resultValue = await result.ConfigureAwait(ResultConfiguration.ContinueOnCapturedContext);
+
+        if (resultValue is null)
+            throw new InvalidOperationException("The asynchronous operation represented by ‘result’ returned null.");
+
+        return resultValue.SelectMany(collectionSelector, resultSelector);
+    }
+
+    /// <summary>
+    ///     Applies the asynchronous <paramref name="collectionSelector" /> and the <paramref name="resultSelector" /> to the value of a successful
+    ///     <paramref name="result" /> and returns a failed <see cref="Result" /> with the <see cref="Error" /> returned by <paramref name="resultSelector" />;
+    ///     otherwise, returns a failed <see cref="Result" /> with the first <see cref="Error" />.
+    /// </summary>
+    /// <typeparam name="T">
+    ///     The type of the value of the initial result. If successful, this is also the type of the parameter passed to the selectors.
+    /// </typeparam>
+    /// <typeparam name="TMiddle">The type of the value of the intermediate result returned by <paramref name="collectionSelector" />.</typeparam>
+    /// <param name="result">The initial result.</param>
+    /// <param name="collectionSelector">
+    ///     An asynchronous function that takes the value of the initial result and returns a result with an intermediate value.
+    /// </param>
+    /// <param name="resultSelector">
+    ///     A function that takes the value of the initial result and the intermediate value, and returns the <see cref="Error" /> of the failed result.
+    /// </param>
+    /// <returns>
+    ///     A <see cref="Task{TResult}" /> that represents a failed <see cref="Result" /> with the <see cref="Error" /> returned by
+    ///     <paramref name="resultSelector" /> if both the initial and the intermediate results are successful;
+    ///     otherwise, a failed <see cref="Result" /> with the first <see cref="Error" />.
+    /// </returns>
+    /// <exception cref="ArgumentNullException">
+    ///     If any of the <paramref name="result" />, <paramref name="collectionSelector" /> or <paramref name="resultSelector" /> parameters are
+    ///     <see langword="null" />, or if <paramref name="resultSelector" /> returns <see langword="null" />.
+    /// </exception>
+    /// <remarks>
+    ///     <para>
+    ///         This method makes a query with more than one <c>from</c> clause that selects an <see cref="Error" />,
+    ///         e.g., <c>from user in GetUser(id) from order in GetOrderAsync(user) select Error.Conflict(…)</c>, return a failed <see cref="Result" />.
+    ///     </para>
+    ///     <para>
+    ///         Without this overload, such a query would return a <b>successful</b> <c>Result&lt;Error&gt;</c>.
+    ///     </para>
+    /// </remarks>
+    public static async Task<Result> SelectMany<T, TMiddle>(
+        this Result<T> result,
+        Func<T, Task<Result<TMiddle>>> collectionSelector,
+        Func<T, TMiddle, Error> resultSelector)
     {
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(collectionSelector);
