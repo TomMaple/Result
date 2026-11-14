@@ -5,9 +5,23 @@
 	* `main`,
 	* `feature/{issue_id}-{kebab-case-name}`
 	* `bugfix/{issue_id}-{kebab-case-name}`
+1. Branches:
+	* Create a branch from an up-to-date `main`, after the previous pull request is merged.
+	* Delete a branch once its pull request is merged.
 1. Commit messages:
 	* [Conventional commits](https://www.conventionalcommits.org/)
 	* Past tense
+	* The issue number at the end of the subject, e.g., `feat: Rejected invalid ErrorUri tags (#112)`.
+	* A breaking change is marked with `!` (e.g., `feat!:`) or a `BREAKING CHANGE:` footer; it drives the version bump
+	  (see [Releasing](#releasing)).
+1. Commits:
+	* Changes in the `docs` folder go in a separate `docs:` commit, made after all the other changes (code and tests) are
+	  committed.
+1. Before opening a pull request, all of these pass:
+	* `dotnet build -c Release`: no warnings,
+	* `dotnet test`,
+	* `dotnet build src/Maple.Result -c Release -p:IsAotCompatible=true`: no warnings,
+	* `dotnet format --verify-no-changes`.
 
 ## Releasing
 Pushes to `main` never publish. The CI workflow only builds, tests and uploads a `X.Y.Z-ci.N` package as a workflow artifact.
@@ -35,6 +49,34 @@ are marked breaking. Preview the notes locally with `git cliff --unreleased --st
 	* [Guidelines](https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/)
 	* Indent character: *space*.
 	* Constant naming style: *PascalCase*.
-2. Tests
+	* Formatting: `.editorconfig`; lines up to 160 characters.
+	* Every source file starts with the SPDX license identifier and the copyright header.
+	* Members are ordered alphabetically within each `#region`.
+	* Chained calls go one per line, unless the whole statement fits on one line.
+	* Exceptions name the caller’s parameter (e.g., `detailNamedValues` rather than the parameter of an internal helper).
+	* Invalid input is rejected with an exception; it is never silently normalized (e.g., trimmed or escaped) or dropped.
+1. XML documentation
+	* Every public member is documented (`GenerateDocumentationFile` is on).
+	* Documentation shared by several members is written once and inherited with `<inheritdoc cref="…" />`; the local
+	  tags (e.g., `<summary>`, `<returns>`) go before it.
+1. Tests
 	* [Naming convention](https://learn.microsoft.com/en-us/dotnet/core/testing/unit-testing-best-practices#naming-your-tests)
 	* Types: unit, integration, functional, guard (convention).
+	* Each test is split into `// Arrange`, `// Act` and `// Assert` sections (`// Act & Assert` when they cannot be
+	  separated).
+	* Assertions use [Shouldly](https://docs.shouldly.org/); exceptions are captured with `Record.Exception(…)` and
+	  then asserted.
+	* No loops in assertions: one case per test, or per `[InlineData]` / `[MemberData]` row of a `[Theory]`.
+	* Every bug fix comes with a test that fails without the fix.
+
+## Documentation
+1. Typography: all texts (XML documentation, exception messages, Markdown documentation) use typographic characters:
+   quotes (‘…’, “…”), apostrophes (’), em dashes (—), en dashes for ranges (e.g., 2–32) and the ellipsis (…).
+   Code, identifiers, code spans and string values that are part of an API or a format (e.g., JSON) keep the ASCII
+   characters.
+1. The reference pages in `docs/Reference` are written by hand, one page per member.
+1. After a code change, update the pages of the changed members:
+	* the source line links (`…/blob/main/src/….cs#L<line>`) point at the declaration of the member,
+	* the signature in the `csharp` code block matches the code.
+1. Every breaking change is documented in the migration guide of the major version it is released in, with what
+   changed, why, and how to update the calling code.
