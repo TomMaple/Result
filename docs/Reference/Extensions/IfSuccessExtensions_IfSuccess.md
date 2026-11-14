@@ -10,18 +10,22 @@ Runs a specific action or function, if the instance of [Result](../Result/Result
 | ---- | ----------- |
 | [IfSuccess(Result, Action)](#ifsuccessresult-action) | Executes the specified action, if the [Result](../Result/Result.md) represents a successful operation. |
 | [IfSuccess(Result, Func&lt;Result&gt;)](#ifsuccessresult-funcresult) | Executes the specified function, if the [Result](../Result/Result.md) represents a successful operation. |
+| [IfSuccess(Result, Func&lt;Error&gt;)](#ifsuccessresult-funcerror) | Executes the specified function, if the [Result](../Result/Result.md) represents a successful operation, and returns a failed [Result](../Result/Result.md) with the [Error](../Error/Error.md) it returns. |
 | [IfSuccess&lt;T&gt;(Result, Func&lt;T&gt;)](#ifsuccesstresult-funct) | Executes the specified function, if the [Result](../Result/Result.md) represents a successful operation. |
 | [IfSuccess&lt;T&gt;(Result, Func&lt;Result&lt;T&gt;&gt;)](#ifsuccesstresult-funcresultt) | Executes the specified function, if the [Result](../Result/Result.md) represents a successful operation. |
 | [IfSuccess&lt;T&gt;(Result&lt;T&gt;, Action&lt;T&gt;)](#ifsuccesstresultt-actiont) | Executes the specified action, if the [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation. |
 | [IfSuccess&lt;T&gt;(Result&lt;T&gt;, Func&lt;T, Result&gt;)](#ifsuccesstresultt-funct-result) | Executes the specified function, if the [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation. |
+| [IfSuccess&lt;T&gt;(Result&lt;T&gt;, Func&lt;T, Error&gt;)](#ifsuccesstresultt-funct-error) | Executes the specified function, if the [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation, and returns a failed [Result](../Result/Result.md) with the [Error](../Error/Error.md) it returns. |
 | [IfSuccess&lt;T, TNext&gt;(Result&lt;T&gt;, Func&lt;T, TNext&gt;)](#ifsuccesst-tnextresultt-funct-tnext) | Executes the specified function, if the [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation. |
 | [IfSuccess&lt;T, TNext&gt;(Result&lt;T&gt;, Func&lt;T, Result&lt;TNext&gt;&gt;)](#ifsuccesst-tnextresultt-funct-resulttnext) | Executes the specified function, if the [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation. |
 
 ## Remarks
+A function that returns an [Error](../Error/Error.md) makes the result fail: see [IfSuccess(Result, Func&lt;Error&gt;)](#ifsuccessresult-funcerror) and [IfSuccess&lt;T&gt;(Result&lt;T&gt;, Func&lt;T, Error&gt;)](#ifsuccesstresultt-funct-error).
 
+A function that returns a `Task`, `Task<T>`, `ValueTask` or `ValueTask<T>` is not supported: `IfSuccess` does not await it, so such a call is a compile error (CS0619). Use [IfSuccessAsync](IfSuccessTaskAsyncExtensions_IfSuccessAsync.md) instead, or specify the type arguments (e.g., `IfSuccess<Task>(…)` or `IfSuccess<T, Task>(…)`) to keep the task in the result on purpose.
 
 ## IfSuccess(Result, Action)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L43" target="_blank">IfSuccessExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L46" target="_blank">IfSuccessExtensions.cs</a>
 
 Executes the provided action, only if the instance of [Result](../Result/Result.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)).
 
@@ -56,7 +60,7 @@ createUserResult.IfSuccess(() =>
 
 
 ## IfSuccess(Result, Func&lt;Result&gt;)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L74" target="_blank">IfSuccessExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L77" target="_blank">IfSuccessExtensions.cs</a>
 
 Executes the provided function only if the instance of [Result](../Result/Result.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)).
 
@@ -90,8 +94,42 @@ var userAddedResult = createUserResult.IfSuccess(() =>
 ```
 
 
+## IfSuccess(Result, Func&lt;Error&gt;)
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L115" target="_blank">IfSuccessExtensions.cs</a>
+
+Executes the provided function only if the instance of [Result](../Result/Result.md) represents a successful operation, and returns a failed [Result](../Result/Result.md) with the [Error](../Error/Error.md) returned by the function.
+
+```csharp
+public static Result IfSuccess(this Result result, Func<Error> ifSuccessFunction);
+```
+
+### Parameters
+#### `result` [Result](../Result/Result.md)
+The instance of [Result](../Result/Result.md) record that represents the result of the operation to be evaluated.
+
+#### `ifSuccessFunction` [Func](https://learn.microsoft.com/dotnet/api/system.func-1)&lt;[Error](../Error/Error.md)&gt;
+The function to be executed only if the `result` represents a successful operation. It returns the [Error](../Error/Error.md) of the failed result.
+
+### Returns
+#### [Result](../Result/Result.md)
+A failed [Result](../Result/Result.md) with the [Error](../Error/Error.md) returned by `ifSuccessFunction` if the `result` is successful; otherwise, the original `result`. The returned result is always failed.
+
+### Exceptions
+#### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
+The `result` or `ifSuccessFunction` parameter is `null`, or `ifSuccessFunction` returns `null`.
+
+### Remarks
+Without this overload, a function returning an [Error](../Error/Error.md) would bind to [IfSuccess&lt;T&gt;(Result, Func&lt;T&gt;)](#ifsuccesstresult-funct) and return a **successful** `Result<Error>`. To get that on purpose, specify the type argument: `IfSuccess<Error>(…)`.
+
+### Examples
+```csharp
+var result = _userService.DeleteUser(userId)
+    .IfSuccess(() => Error.Conflict(typeUri, "The user cannot be deleted."));
+```
+
+
 ## IfSuccess&lt;T&gt;(Result, Func&lt;T&gt;)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L106" target="_blank">IfSuccessExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L147" target="_blank">IfSuccessExtensions.cs</a>
 
 Executes the provided function only if the instance of [Result](../Result/Result.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)).
 
@@ -130,7 +168,7 @@ var companyResult = createUserResult.IfSuccess(() =>
 
 
 ## IfSuccess&lt;T&gt;(Result, Func&lt;Result&lt;T&gt;&gt;)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L138" target="_blank">IfSuccessExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L179" target="_blank">IfSuccessExtensions.cs</a>
 
 Executes the provided function only if the instance of [Result](../Result/Result.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)).
 
@@ -169,7 +207,7 @@ var companyResult = createUserResult.IfSuccess(() =>
 
 
 ## IfSuccess&lt;T&gt;(Result&lt;T&gt;, Action&lt;T&gt;)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L171" target="_blank">IfSuccessExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L212" target="_blank">IfSuccessExtensions.cs</a>
 
 Executes the provided action, only if the instance of [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)).
 
@@ -208,7 +246,7 @@ userResult.IfSuccess(user =>
 
 
 ## IfSuccess&lt;T&gt;(Result&lt;T&gt;, Func&lt;T, Result&gt;)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L202" target="_blank">IfSuccessExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L243" target="_blank">IfSuccessExtensions.cs</a>
 
 Executes the provided function only if the instance of [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)).
 
@@ -246,8 +284,46 @@ var userAddedResult = createUserResult.IfSuccess(user =>
 ```
 
 
+## IfSuccess&lt;T&gt;(Result&lt;T&gt;, Func&lt;T, Error&gt;)
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L282" target="_blank">IfSuccessExtensions.cs</a>
+
+Executes the provided function only if the instance of [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation, and returns a failed [Result](../Result/Result.md) with the [Error](../Error/Error.md) returned by the function.
+
+```csharp
+public static Result IfSuccess<T>(this Result<T> result, Func<T, Error> ifSuccessFunction);
+```
+
+### Type Parameters
+#### `T`
+The type of the value of the `result`, passed to the `ifSuccessFunction`.
+
+### Parameters
+#### `result` [Result&lt;T&gt;](../ResultT/ResultT.md)
+The instance of [Result&lt;T&gt;](../ResultT/ResultT.md) record that represents the result of the operation to be evaluated.
+
+#### `ifSuccessFunction` [Func](https://learn.microsoft.com/dotnet/api/system.func-2)&lt;T, [Error](../Error/Error.md)&gt;
+The function to be executed only if the `result` represents a successful operation. The value of the `result` is passed as a parameter. It returns the [Error](../Error/Error.md) of the failed result.
+
+### Returns
+#### [Result](../Result/Result.md)
+A failed [Result](../Result/Result.md) with the [Error](../Error/Error.md) returned by `ifSuccessFunction` if the `result` is successful; otherwise, a failed [Result](../Result/Result.md) with the original [Error](../Error/Error.md). The returned result is always failed.
+
+### Exceptions
+#### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
+The `result` or `ifSuccessFunction` parameter is `null`, or `ifSuccessFunction` returns `null`.
+
+### Remarks
+Without this overload, a function returning an [Error](../Error/Error.md) would bind to [IfSuccess&lt;T, TNext&gt;(Result&lt;T&gt;, Func&lt;T, TNext&gt;)](#ifsuccesst-tnextresultt-funct-tnext) and return a **successful** `Result<Error>`. To get that on purpose, specify the type arguments: `IfSuccess<T, Error>(…)`.
+
+### Examples
+```csharp
+var result = _userService.GetUser(userId)
+    .IfSuccess(user => Error.Conflict(typeUri, $"The user ‘{user.Name}’ already exists."));
+```
+
+
 ## IfSuccess&lt;T, TNext&gt;(Result&lt;T&gt;, Func&lt;T, TNext&gt;)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L240" target="_blank">IfSuccessExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L320" target="_blank">IfSuccessExtensions.cs</a>
 
 Executes the provided function only if the instance of [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)).
 
@@ -289,7 +365,7 @@ var companyResult = createUserResult.IfSuccess(user =>
 
 
 ## IfSuccess&lt;T, TNext&gt;(Result&lt;T&gt;, Func&lt;T, Result&lt;TNext&gt;&gt;)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L278" target="_blank">IfSuccessExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L358" target="_blank">IfSuccessExtensions.cs</a>
 
 Executes the provided function only if the instance of [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)).
 

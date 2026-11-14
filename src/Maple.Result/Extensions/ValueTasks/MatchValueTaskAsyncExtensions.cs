@@ -107,6 +107,26 @@ public static class MatchValueTaskAsyncExtensions
     }
 
     /// <returns>
+    ///     A <see cref="ValueTask{Result}" /> that represents a failed <see cref="Result" /> with the <see cref="Error" /> returned by
+    ///     <paramref name="ifSuccessFunction" /> if <paramref name="result" /> is successful;
+    ///     otherwise, the original <paramref name="result" /> after invoking <paramref name="ifErrorAction" />.
+    /// </returns>
+    /// <inheritdoc cref="MatchTaskAsyncExtensions.MatchAsync(Result, Func{Task{Error}}, Func{Error, Task}, bool?)" />
+    public static async ValueTask<Result> MatchAsync(this Result result, Func<ValueTask<Error>> ifSuccessFunction,
+        Func<Error, ValueTask> ifErrorAction, bool? continueOnCapturedContext = null)
+    {
+        ArgumentNullException.ThrowIfNull(result);
+        ArgumentNullException.ThrowIfNull(ifSuccessFunction);
+        ArgumentNullException.ThrowIfNull(ifErrorAction);
+
+        if (result.IsSuccess())
+            return Result.FromError(await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext));
+
+        await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
+        return result;
+    }
+
+    /// <returns>
     ///     The <see cref="ValueTask{T}" /> that represents the value of type<typeparamref name="T" /> produced by either <paramref name="ifSuccessFunction" />
     ///     or <paramref name="ifErrorFunction" />.
     /// </returns>
@@ -201,6 +221,32 @@ public static class MatchValueTaskAsyncExtensions
 
         if (result.IsSuccess())
             return await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
+
+        await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
+        return result.Error;
+    }
+
+    /// <returns>
+    ///     A <see cref="ValueTask{Result}" /> that represents a failed <see cref="Result" /> with the <see cref="Error" /> returned by
+    ///     <paramref name="ifSuccessFunction" /> if <paramref name="result" /> is successful;
+    ///     otherwise, a failed <see cref="Result" /> with the original <see cref="Error" /> after invoking <paramref name="ifErrorAction" />.
+    /// </returns>
+    /// <inheritdoc cref="MatchTaskAsyncExtensions.MatchAsync{T}(Result{T}, Func{T, Task{Error}}, Func{Error, Task}, bool?)" />
+    public static async ValueTask<Result> MatchAsync<T>(
+        this Result<T> result,
+        Func<T, ValueTask<Error>> ifSuccessFunction,
+        Func<Error, ValueTask> ifErrorAction,
+        bool? continueOnCapturedContext = null)
+    {
+        ArgumentNullException.ThrowIfNull(result);
+        ArgumentNullException.ThrowIfNull(ifSuccessFunction);
+        ArgumentNullException.ThrowIfNull(ifErrorAction);
+
+        if (result.IsSuccess())
+        {
+            return Result.FromError(await ifSuccessFunction(result.Value)
+                .ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext));
+        }
 
         await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
         return result.Error;
@@ -482,6 +528,70 @@ public static class MatchValueTaskAsyncExtensions
     }
 
     /// <summary>
+    ///     Invokes the provided asynchronous function if the <paramref name="resultTask" /> is a successful operation and returns a failed
+    ///     <see cref="Result" /> with the <see cref="Error" /> it returns; otherwise, invokes the provided asynchronous action and returns
+    ///     the original result.
+    /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///         Use it to turn a successful result into a failure, e.g.,
+    ///         <c>resultTask.MatchAsync(async () => Error.Conflict(…), e => LogAsync(e))</c>. The returned <see cref="Result" /> is always failed.
+    ///     </para>
+    ///     <para>
+    ///         Without this overload, such a call would return a <b>successful</b> <c>Result&lt;Error&gt;</c>.
+    ///         To get that on purpose, specify the type argument: <c>MatchAsync&lt;Error&gt;(…)</c>.
+    ///     </para>
+    ///     <para>
+    ///         The method executes passed <paramref name="resultTask" /> asynchronous operation.
+    ///     </para>
+    /// </remarks>
+    /// <param name="resultTask">
+    ///     The asynchronous operation to be executed and which result is to be inspected.
+    /// </param>
+    /// <param name="ifSuccessFunction">
+    ///     The asynchronous function invoked when the <paramref name="resultTask" /> represents a successful operation.
+    ///     It returns the <see cref="Error" /> of the failed <see cref="Result" />. Must not be <see langword="null" />.
+    /// </param>
+    /// <param name="ifErrorAction">
+    ///     The asynchronous action invoked when the <paramref name="resultTask" /> represents a failed operation.
+    ///     The <see cref="Error" /> associated with the <paramref name="resultTask" /> outcome is passed to this action. Must not be <see langword="null" />.
+    /// </param>
+    /// <param name="continueOnCapturedContext">
+    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an <c>await</c>,
+    ///     on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any thread;
+    ///     <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
+    /// </param>
+    /// <returns>
+    ///     A <see cref="ValueTask{Result}" /> that represents a failed <see cref="Result" /> with the <see cref="Error" /> returned by
+    ///     <paramref name="ifSuccessFunction" /> if the <paramref name="resultTask" /> operation is successful;
+    ///     otherwise, the original result after invoking <paramref name="ifErrorAction" />.
+    /// </returns>
+    /// <exception cref="ArgumentNullException">
+    ///     If any of the <paramref name="ifSuccessFunction" /> or <paramref name="ifErrorAction" /> parameters are
+    ///     <see langword="null" />, or if <paramref name="ifSuccessFunction" /> returns <see langword="null" />.
+    /// </exception>
+    /// <exception cref="InvalidOperationException">
+    ///     If the asynchronous operation represented by <paramref name="resultTask" /> returns <see langword="null" />.
+    /// </exception>
+    public static async ValueTask<Result> MatchAsync(this ValueTask<Result> resultTask, Func<ValueTask<Error>> ifSuccessFunction,
+        Func<Error, ValueTask> ifErrorAction, bool? continueOnCapturedContext = null)
+    {
+        ArgumentNullException.ThrowIfNull(ifSuccessFunction);
+        ArgumentNullException.ThrowIfNull(ifErrorAction);
+
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
+
+        if (result is null)
+            throw new InvalidOperationException("The asynchronous operation returned null.");
+
+        if (result.IsSuccess())
+            return Result.FromError(await ifSuccessFunction().ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext));
+
+        await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
+        return result;
+    }
+
+    /// <summary>
     ///     Invokes one of the provided asynchronous functions depending on whether the <paramref name="resultTask" /> is a successful operation and returns
     ///     their value as an asynchronous operation that returns a <see cref="Result{T}" /> instance.
     /// </summary>
@@ -749,6 +859,78 @@ public static class MatchValueTaskAsyncExtensions
 
         if (result.IsSuccess())
             return await ifSuccessFunction(result.Value).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
+
+        await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
+        return result.Error;
+    }
+
+    /// <summary>
+    ///     Invokes the provided asynchronous function if the <paramref name="resultTask" /> is a successful operation and returns a failed
+    ///     <see cref="Result" /> with the <see cref="Error" /> it returns; otherwise, invokes the provided asynchronous action and returns
+    ///     a failed <see cref="Result" /> with the original <see cref="Error" />.
+    /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///         Use it to turn a successful result into a failure, e.g.,
+    ///         <c>resultTask.MatchAsync(async user => Error.Conflict(…), e => LogAsync(e))</c>. The returned <see cref="Result" /> is always failed.
+    ///     </para>
+    ///     <para>
+    ///         Without this overload, such a call would return a <b>successful</b> <c>Result&lt;Error&gt;</c>.
+    ///         To get that on purpose, specify the type arguments: <c>MatchAsync&lt;T, Error&gt;(…)</c>.
+    ///     </para>
+    ///     <para>
+    ///         The method executes passed <paramref name="resultTask" /> asynchronous operation.
+    ///     </para>
+    /// </remarks>
+    /// <typeparam name="T">The type wrapped by the source <see cref="Result{T}" />.</typeparam>
+    /// <param name="resultTask">
+    ///     The asynchronous operation to be executed and which result is to be inspected.
+    /// </param>
+    /// <param name="ifSuccessFunction">
+    ///     The asynchronous function invoked when the <paramref name="resultTask" /> represents a successful operation. The value of
+    ///     the successful <see cref="Result{T}" /> is passed as a parameter. It returns the <see cref="Error" /> of the failed <see cref="Result" />.
+    ///     Must not be <see langword="null" />.
+    /// </param>
+    /// <param name="ifErrorAction">
+    ///     The asynchronous action invoked when the <paramref name="resultTask" /> represents a failed operation.
+    ///     The <see cref="Error" /> associated with the <paramref name="resultTask" /> outcome is passed to this action. Must not be <see langword="null" />.
+    /// </param>
+    /// <param name="continueOnCapturedContext">
+    ///     <see langword="true" /> to run the continuations, including the passed delegates when they run after an <c>await</c>,
+    ///     on the captured context (e.g., the UI thread); <see langword="false" /> to run them on any thread;
+    ///     <see langword="null" /> (the default) to use <see cref="ResultConfiguration.ContinueOnCapturedContext" />.
+    /// </param>
+    /// <returns>
+    ///     A <see cref="ValueTask{Result}" /> that represents a failed <see cref="Result" /> with the <see cref="Error" /> returned by
+    ///     <paramref name="ifSuccessFunction" /> if the <paramref name="resultTask" /> operation is successful;
+    ///     otherwise, a failed <see cref="Result" /> with the original <see cref="Error" /> after invoking <paramref name="ifErrorAction" />.
+    /// </returns>
+    /// <exception cref="ArgumentNullException">
+    ///     If any of the <paramref name="ifSuccessFunction" /> or <paramref name="ifErrorAction" /> parameters are
+    ///     <see langword="null" />, or if <paramref name="ifSuccessFunction" /> returns <see langword="null" />.
+    /// </exception>
+    /// <exception cref="InvalidOperationException">
+    ///     If the asynchronous operation represented by <paramref name="resultTask" /> returns <see langword="null" />.
+    /// </exception>
+    public static async ValueTask<Result> MatchAsync<T>(
+        this ValueTask<Result<T>> resultTask,
+        Func<T, ValueTask<Error>> ifSuccessFunction,
+        Func<Error, ValueTask> ifErrorAction,
+        bool? continueOnCapturedContext = null)
+    {
+        ArgumentNullException.ThrowIfNull(ifSuccessFunction);
+        ArgumentNullException.ThrowIfNull(ifErrorAction);
+
+        var result = await resultTask.ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
+
+        if (result is null)
+            throw new InvalidOperationException("The asynchronous operation returned null.");
+
+        if (result.IsSuccess())
+        {
+            return Result.FromError(await ifSuccessFunction(result.Value)
+                .ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext));
+        }
 
         await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
         return result.Error;

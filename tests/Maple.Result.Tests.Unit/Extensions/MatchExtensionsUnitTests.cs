@@ -11,6 +11,10 @@
 using Maple.Result.Extensions;
 using Moq;
 using System;
+using System.ComponentModel;
+using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Maple.Result.Tests.Unit.Extensions;
 
@@ -1792,6 +1796,212 @@ public class MatchExtensionsUnitTests
     private static Result<T> GetErrorResult<T>()
     {
         return Error.Failure(ErrorUri.None(), "3d7a81ec-801d-45f4-b4b0-8d58e93b1d89", "Error title 7");
+    }
+
+    #endregion
+
+    #region Match with a function returning a task (overload trap, issue #119)
+
+    [Fact]
+    public void Match_FunctionReturningTaskOverloads_AreHiddenCompileErrors()
+    {
+        // Arrange
+        var overloads = typeof(MatchExtensions).GetMethods()
+            .Where(m => m.GetCustomAttribute<ObsoleteAttribute>() is not null)
+            .ToArray();
+
+        // Act & Assert
+        overloads.Length.ShouldBe(8);
+        overloads.ShouldAllBe(m => m.Name == "Match"
+                                   && m.GetCustomAttribute<ObsoleteAttribute>()!.IsError
+                                   && m.GetCustomAttribute<EditorBrowsableAttribute>()!.State == EditorBrowsableState.Never);
+    }
+
+    [Fact]
+    public void Match_SuccessfulResultWithTaskFunctionAndExplicitTypeArgument_ReturnsResultWithTaskNotAwaited()
+    {
+        // Arrange
+        var sut = Result.Success();
+        var taskSource = new TaskCompletionSource();
+
+        // Act
+        Result<Task> result = sut.Match<Task>(() => taskSource.Task, _ => { });
+
+        // Assert
+        result.IsSuccess().ShouldBeTrue();
+        result.Value.ShouldBeSameAs(taskSource.Task);
+        result.Value.IsCompleted.ShouldBeFalse();
+    }
+
+    [Fact]
+    public void Match_SuccessfulResultOfTWithTaskFunctionAndExplicitTypeArguments_ReturnsResultWithTaskNotAwaited()
+    {
+        // Arrange
+        var sut = Result<int>.FromValue(5);
+        var taskSource = new TaskCompletionSource();
+
+        // Act
+        Result<Task> result = sut.Match<int, Task>(_ => taskSource.Task, _ => { });
+
+        // Assert
+        result.IsSuccess().ShouldBeTrue();
+        result.Value.ShouldBeSameAs(taskSource.Task);
+        result.Value.IsCompleted.ShouldBeFalse();
+    }
+
+    [Fact]
+    public void Match_SuccessfulResultWithTaskFunctions_ReturnsTaskOfSuccessFunction()
+    {
+        // Arrange
+        var sut = Result.Success();
+        var taskSource = new TaskCompletionSource();
+
+        // Act
+        Task result = sut.Match(() => taskSource.Task, _ => Task.CompletedTask);
+
+        // Assert
+        result.ShouldBeSameAs(taskSource.Task);
+    }
+
+    #endregion
+
+    #region Match with a function returning an Error (overload trap, issue #119)
+
+    private static readonly Error TrapError = Error.Conflict(ErrorUri.Tag("tag:test.com,2024:Trap"), "Trap title");
+
+    [Fact]
+    public void Match_SuccessfulResultWithErrorFunction_ReturnsFailedResultWithReturnedError()
+    {
+        // Arrange
+        var sut = Result.Success();
+        var actionCalled = false;
+
+        // Act
+        Result result = sut.Match(() => TrapError, _ => { actionCalled = true; });
+
+        // Assert
+        result.IsSuccess().ShouldBeFalse();
+        result.Error.ShouldBeSameAs(TrapError);
+        actionCalled.ShouldBeFalse();
+    }
+
+    [Fact]
+    public void Match_ErrorResultWithErrorFunction_ReturnsOriginalResultAndCallsAction()
+    {
+        // Arrange
+        var sut = GetErrorResult();
+        var functionCalled = false;
+        Error? passedError = null;
+
+        // Act
+        Result result = sut.Match(() =>
+        {
+            functionCalled = true;
+            return TrapError;
+        }, e => { passedError = e; });
+
+        // Assert
+        result.ShouldBeSameAs(sut);
+        passedError.ShouldBeSameAs(sut.Error);
+        functionCalled.ShouldBeFalse();
+    }
+
+    [Fact]
+    public void Match_SuccessfulResultWithErrorFunctionReturningNull_ThrowsArgumentNullException()
+    {
+        // Arrange
+        var sut = Result.Success();
+
+        // Act
+        var exception = Record.Exception(() => sut.Match(() => (Error)null!, _ => { }));
+
+        // Assert
+        exception.ShouldBeOfType<ArgumentNullException>();
+    }
+
+    [Fact]
+    public void Match_SuccessfulResultWithErrorFunctionAndExplicitTypeArgument_ReturnsSuccessfulResultOfError()
+    {
+        // Arrange
+        var sut = Result.Success();
+
+        // Act
+        Result<Error> result = sut.Match<Error>(() => TrapError, _ => { });
+
+        // Assert
+        result.IsSuccess().ShouldBeTrue();
+        result.Value.ShouldBeSameAs(TrapError);
+    }
+
+    [Fact]
+    public void Match_SuccessfulResultOfTWithErrorFunction_ReturnsFailedResultWithReturnedError()
+    {
+        // Arrange
+        var sut = Result<int>.FromValue(5);
+        var passedValue = 0;
+        var actionCalled = false;
+
+        // Act
+        Result result = sut.Match(x =>
+        {
+            passedValue = x;
+            return TrapError;
+        }, _ => { actionCalled = true; });
+
+        // Assert
+        result.IsSuccess().ShouldBeFalse();
+        result.Error.ShouldBeSameAs(TrapError);
+        passedValue.ShouldBe(5);
+        actionCalled.ShouldBeFalse();
+    }
+
+    [Fact]
+    public void Match_ErrorResultOfTWithErrorFunction_ReturnsFailedResultWithOriginalErrorAndCallsAction()
+    {
+        // Arrange
+        var sut = GetErrorResult<int>();
+        var functionCalled = false;
+        Error? passedError = null;
+
+        // Act
+        Result result = sut.Match(_ =>
+        {
+            functionCalled = true;
+            return TrapError;
+        }, e => { passedError = e; });
+
+        // Assert
+        result.IsSuccess().ShouldBeFalse();
+        result.Error.ShouldBeSameAs(sut.Error);
+        passedError.ShouldBeSameAs(sut.Error);
+        functionCalled.ShouldBeFalse();
+    }
+
+    [Fact]
+    public void Match_SuccessfulResultOfTWithErrorFunctionReturningNull_ThrowsArgumentNullException()
+    {
+        // Arrange
+        var sut = Result<int>.FromValue(5);
+
+        // Act
+        var exception = Record.Exception(() => sut.Match(_ => (Error)null!, _ => { }));
+
+        // Assert
+        exception.ShouldBeOfType<ArgumentNullException>();
+    }
+
+    [Fact]
+    public void Match_SuccessfulResultOfTWithErrorFunctionAndExplicitTypeArguments_ReturnsSuccessfulResultOfError()
+    {
+        // Arrange
+        var sut = Result<int>.FromValue(5);
+
+        // Act
+        Result<Error> result = sut.Match<int, Error>(_ => TrapError, _ => { });
+
+        // Assert
+        result.IsSuccess().ShouldBeTrue();
+        result.Value.ShouldBeSameAs(TrapError);
     }
 
     #endregion

@@ -470,6 +470,17 @@ var userTokenResult =
     select token;
 ```
 
+Synchronous and asynchronous `from` clauses can be mixed in one query; the query is then asynchronous and has to be awaited:
+```csharp
+var userTokenResult =
+    await from userData in _validationService.ValidateUserData(addUserRequest)   // synchronous
+    from user in _userService.GetUserAsync(userData)                             // asynchronous
+    select user.Token;
+```
+
+> [!NOTE]
+> The query syntax needs a value in every `from` clause, so it works with `Result<T>` (and its `Task` and `ValueTask`) but not with the non-generic `Result`. Chain operations that return a `Result` with `IfSuccess()` / `IfSuccessAsync()` instead. Mixing a `Task` and a `ValueTask` in one query is not supported.
+
 ### Asynchronous methods in UI applications
 The asynchronous extension methods that take a `Task` or `ValueTask` of a result await it with `ConfigureAwait(false)` by default, so the delegates you pass run on a thread-pool thread. That is the right choice for ASP.NET Core, console applications, Azure Functions and background services.
 

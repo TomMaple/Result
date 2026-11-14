@@ -19,6 +19,7 @@ Version 3.0 makes `Result`, `Result<T>` and `Error` **immutable** and **always v
   * [Other behaviour changes](#other-behaviour-changes)
   * [`continueOnCapturedContext` is `bool?`](#continueoncapturedcontext-is-bool)
   * [`IResult` renamed to `IOperationResult`](#iresult-renamed-to-ioperationresult)
+  * [`IfSuccess` and `Match` with an `Error` or a task](#ifsuccess-and-match-with-an-error-or-a-task)
   * [Extension packages](#extension-packages)
 * [New features](#new-features)
 * [Search-and-replace reference](#search-and-replace-reference)
@@ -31,7 +32,8 @@ Version 3.0 makes `Result`, `Result<T>` and `Error` **immutable** and **always v
 5. If you **read** `Result`, `Result<T>` or `Error` from JSON (e.g., Azure Durable Functions, message queues, caches, HTTP clients), see [No JSON deserialization without converters](#no-json-deserialization-without-converters).
 6. If you compare or snapshot the **written** JSON, see [Changed JSON output](#changed-json-output).
 7. Make sure error titles are never `null` or blank, and pass `null` instead of `ErrorUri.None()` as an instance *URI*.
-8. Upgrade the `Maple.Result.Extensions.*` packages together with `Maple.Result` (see [Extension packages](#extension-packages)).
+8. Fix the calls of `IfSuccess`, `Match` and the LINQ queries that no longer compile or that now return a failed result (see [`IfSuccess` and `Match` with an `Error` or a task](#ifsuccess-and-match-with-an-error-or-a-task)).
+9. Upgrade the `Maple.Result.Extensions.*` packages together with `Maple.Result` (see [Extension packages](#extension-packages)).
 
 ## Breaking changes
 
@@ -252,6 +254,28 @@ void Log(Maple.Result.IResult result) { … }
 void Log(IOperationResult result) { … }
 ```
 
+### `IfSuccess` and `Match` with an `Error` or a task
+Two kinds of calls compiled in 2.x but did not do what they looked like:
+
+* **A function that returns an `Error`** bound to the generic overload and returned a **successful** `Result<Error>`. In 3.0, `IfSuccess`, `IfSuccessAsync`, `Match` and `MatchAsync` (the overloads with an error action) have overloads for such functions that return a **failed** `Result` with that error. The same applies to a LINQ query that selects an `Error` (`from user in GetUser(id) select Error…`). Code that read `.Value` of the `Result<Error>` no longer compiles; if you need it, specify the type arguments.
+* **A function that returns a `Task`, `Task<T>`, `ValueTask` or `ValueTask<T>`** passed to `IfSuccess`, or to the `Match` overloads with an `Action<Error>`, was wrapped in a `Result<Task>` and **never awaited**. In 3.0 such a call is a compile error (CS0619); use the asynchronous method, or specify the type argument to keep the task on purpose.
+
+```csharp
+// 2.x: a successful Result<Error>; 3.0: a failed Result with the error
+var result = userResult.IfSuccess(user => Error.Conflict(typeUri, "The user already exists."));
+var result = userResult.Match(user => Error.Conflict(typeUri, "The user already exists."), error => Log(error));
+var result = from user in userResult select Error.Conflict(typeUri, "The user already exists.");
+
+// 2.x: the task was never awaited; 3.0: a compile error
+var result = Result.Success().IfSuccess(() => SaveAsync());
+
+// 3.0: await it…
+var result = await Result.Success().IfSuccessAsync(() => SaveAsync());
+
+// …or keep the task on purpose
+Result<Task> result = Result.Success().IfSuccess<Task>(() => SaveAsync());
+```
+
 ### Extension packages
 The current (2.x-based) version of `Maple.Result.Extensions.HttpClient` calls an internal method of `Maple.Result` 2.x that no longer exists, so using it with `Maple.Result` 3.0 fails at runtime. Upgrade all `Maple.Result.Extensions.*` packages to versions built for 3.0 together with `Maple.Result`, and do not mix 2.x and 3.0 packages.
 
@@ -262,6 +286,7 @@ The current (2.x-based) version of `Maple.Result.Extensions.HttpClient` calls an
 * **`Error.WithErrorDetail()`** and **`Error.ToBuilder()`** — see above.
 * **`ErrorCategory.LimitExceeded`** — see above.
 * **`ErrorUri.Urn()`** and **`ErrorUri.Relative()`** — `urn:` types and instances (*RFC 8141*), and relative references with the full path (e.g., the *RFC 9457* example `/account/12345/msgs/abc`). See [ErrorUri](Reference/ErrorUri/ErrorUri.md).
+* **Mixed LINQ queries** — synchronous and asynchronous `from` clauses can be mixed in one query (e.g., `from user in GetUserAsync(id) from address in GetAddress(user) select …`); the query is then asynchronous and has to be awaited. See [SelectMany](Reference/Extensions/LinqTaskAsyncExtensions_SelectMany.md).
 * **`ResultConfiguration.ContinueOnCapturedContext`** — a global default for the `continueOnCapturedContext` argument of the asynchronous extension methods and for the LINQ query operators; see above.
 * **Native AOT and trimming** — the core package no longer contains JSON code and produces no trimming or AOT warnings.
 
@@ -278,6 +303,9 @@ The current (2.x-based) version of `Maple.Result.Extensions.HttpClient` calls an
 | `new Result<T> { Error = e }` | `Result<T>.FromError(e)` |
 | `new ErrorUri(s)` | `ErrorUri.Tag(s)` / `ErrorUri.Locator(s)` / `ErrorUri.Urn(s)` / `ErrorUri.Relative(s)` / `ErrorUri.None()` |
 | `instanceUri: ErrorUri.None()` / `WithInstanceUri(ErrorUri.None())` | `instanceUri: null` / `WithInstanceUri(null)` |
+| `result.IfSuccess(() => SaveAsync())` (a function returning a task) | `await result.IfSuccessAsync(() => SaveAsync())` |
+| `result.IfSuccess(x => Error…)` relied on as a `Result<Error>` | `result.IfSuccess<T, Error>(x => Error…)` |
+| `result.Match(x => Error…, e => …)` relied on as a `Result<Error>` | `result.Match<T, Error>(x => Error…, e => …)` |
 | `Dictionary<string, object>` passed as named values | `Dictionary<string, object?>` |
 | `IResult` (`Maple.Result`) | `IOperationResult` |
 | `WithErrorDetail(…, messageId: …, namedValues: …)` (named arguments) | `WithErrorDetail(…, detailTemplateId: …, detailNamedValues: …)` |

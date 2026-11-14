@@ -9,6 +9,9 @@
  */
 
 using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 
 namespace Maple.Result.Extensions;
 
@@ -78,6 +81,44 @@ public static class IfSuccessExtensions
 
         if (result.IsSuccess())
             return ifSuccessFunction();
+
+        return result;
+    }
+
+    /// <summary>
+    ///     Invokes the specified function if the <paramref name="result" /> represents a successful outcome and returns a failed <see cref="Result" />
+    ///     with the <see cref="Error" /> it returns; otherwise, returns the original <paramref name="result" />.
+    /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///         Use it to turn a successful <see cref="Result" /> into a failure, e.g., <c>result.IfSuccess(() => Error.Conflict(…))</c>.
+    ///         The returned <see cref="Result" /> is always failed.
+    ///     </para>
+    ///     <para>
+    ///         Without this overload, such a call would bind to <see cref="IfSuccess{T}(Result, Func{T})" /> and return a <b>successful</b>
+    ///         <c>Result&lt;Error&gt;</c>. To get that on purpose, specify the type argument: <c>IfSuccess&lt;Error&gt;(…)</c>.
+    ///     </para>
+    /// </remarks>
+    /// <param name="result">The <see cref="Result" /> to evaluate for success. Must not be <see langword="null" />.</param>
+    /// <param name="ifSuccessFunction">
+    ///     The function to execute if <paramref name="result" /> is successful.
+    ///     It returns the <see cref="Error" /> of the failed <see cref="Result" />. Must not be <see langword="null" />.
+    /// </param>
+    /// <returns>
+    ///     A failed <see cref="Result" /> with the <see cref="Error" /> returned by <paramref name="ifSuccessFunction" /> if <paramref name="result" /> is
+    ///     successful; otherwise, the original <paramref name="result" />.
+    /// </returns>
+    /// <exception cref="ArgumentNullException">
+    ///     If any of the <paramref name="result" /> or <paramref name="ifSuccessFunction" /> parameters are <see langword="null" />,
+    ///     or if <paramref name="ifSuccessFunction" /> returns <see langword="null" />.
+    /// </exception>
+    public static Result IfSuccess(this Result result, Func<Error> ifSuccessFunction)
+    {
+        ArgumentNullException.ThrowIfNull(result);
+        ArgumentNullException.ThrowIfNull(ifSuccessFunction);
+
+        if (result.IsSuccess())
+            return Result.FromError(ifSuccessFunction());
 
         return result;
     }
@@ -211,6 +252,45 @@ public static class IfSuccessExtensions
     }
 
     /// <summary>
+    ///     Invokes the specified function if the <paramref name="result" /> represents a successful outcome and returns a failed <see cref="Result" />
+    ///     with the <see cref="Error" /> it returns; otherwise, returns a failed <see cref="Result" /> with the original <see cref="Error" />.
+    /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///         Use it to turn a successful <see cref="Result{T}" /> into a failure, e.g., <c>result.IfSuccess(user => Error.Conflict(…))</c>.
+    ///         The returned <see cref="Result" /> is always failed.
+    ///     </para>
+    ///     <para>
+    ///         Without this overload, such a call would bind to <see cref="IfSuccess{T, TNext}(Result{T}, Func{T, TNext})" /> and return
+    ///         a <b>successful</b> <c>Result&lt;Error&gt;</c>. To get that on purpose, specify the type arguments: <c>IfSuccess&lt;T, Error&gt;(…)</c>.
+    ///     </para>
+    /// </remarks>
+    /// <typeparam name="T">The type of the value of the <paramref name="result" />.</typeparam>
+    /// <param name="result">The <see cref="Result{T}" /> to evaluate for success. Must not be <see langword="null" />.</param>
+    /// <param name="ifSuccessFunction">
+    ///     The function to execute if <paramref name="result" /> is successful. The value of the successful <see cref="Result{T}" /> is passed as a parameter.
+    ///     It returns the <see cref="Error" /> of the failed <see cref="Result" />. Must not be <see langword="null" />.
+    /// </param>
+    /// <returns>
+    ///     A failed <see cref="Result" /> with the <see cref="Error" /> returned by <paramref name="ifSuccessFunction" /> if <paramref name="result" /> is
+    ///     successful; otherwise, a failed <see cref="Result" /> with the original <see cref="Error" />.
+    /// </returns>
+    /// <exception cref="ArgumentNullException">
+    ///     If any of the <paramref name="result" /> or <paramref name="ifSuccessFunction" /> parameters are <see langword="null" />,
+    ///     or if <paramref name="ifSuccessFunction" /> returns <see langword="null" />.
+    /// </exception>
+    public static Result IfSuccess<T>(this Result<T> result, Func<T, Error> ifSuccessFunction)
+    {
+        ArgumentNullException.ThrowIfNull(result);
+        ArgumentNullException.ThrowIfNull(ifSuccessFunction);
+
+        if (result.IsSuccess())
+            return Result.FromError(ifSuccessFunction(result.Value));
+
+        return result.Error;
+    }
+
+    /// <summary>
     ///     Invokes the specified function and returns its output as a <see cref="Result{TNext}" /> if the operation represented by
     ///     the <paramref name="result" /> is successful; otherwise, returns a failed <see cref="Result{TNext}" /> with the original <see cref="Error" />.
     /// </summary>
@@ -284,6 +364,103 @@ public static class IfSuccessExtensions
             return ifSuccessFunction(result.Value);
 
         return result.Error;
+    }
+
+    #endregion
+
+    #region Not supported: functions returning a task
+
+    // These overloads turn a call with a function that returns a task into a compile error (CS0619). Without them, the call binds to the
+    // generic overload, which wraps the task in a successful result without awaiting it (issue #119). They are more specific than the
+    // generic overloads, so they are chosen first; an explicit type argument excludes them and selects the generic overload on purpose.
+    // The Task overloads have a higher priority than the ValueTask ones: an async lambda converts to both, which would be ambiguous (CS0121).
+
+    private const string TaskNotAwaitedMessage =
+        "The function returns a task, which IfSuccess does not await. Use IfSuccessAsync, or specify the type arguments " +
+        "(e.g., IfSuccess<Task>(…) or IfSuccess<T, Task>(…)) to keep the task.";
+
+    /// <summary>
+    ///     Not supported: the function returns a task, which <c>IfSuccess</c> does not await; use <c>IfSuccessAsync</c>.
+    /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Obsolete(TaskNotAwaitedMessage, error: true)]
+    [OverloadResolutionPriority(1)]
+    public static Result IfSuccess(this Result result, Func<Task> ifSuccessFunction)
+    {
+        throw new NotSupportedException(TaskNotAwaitedMessage);
+    }
+
+    /// <summary>
+    ///     Not supported: the function returns a task, which <c>IfSuccess</c> does not await; use <c>IfSuccessAsync</c>.
+    /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Obsolete(TaskNotAwaitedMessage, error: true)]
+    [OverloadResolutionPriority(1)]
+    public static Result IfSuccess<TNext>(this Result result, Func<Task<TNext>> ifSuccessFunction)
+    {
+        throw new NotSupportedException(TaskNotAwaitedMessage);
+    }
+
+    /// <summary>
+    ///     Not supported: the function returns a task, which <c>IfSuccess</c> does not await; use <c>IfSuccessAsync</c>.
+    /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Obsolete(TaskNotAwaitedMessage, error: true)]
+    public static Result IfSuccess(this Result result, Func<ValueTask> ifSuccessFunction)
+    {
+        throw new NotSupportedException(TaskNotAwaitedMessage);
+    }
+
+    /// <summary>
+    ///     Not supported: the function returns a task, which <c>IfSuccess</c> does not await; use <c>IfSuccessAsync</c>.
+    /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Obsolete(TaskNotAwaitedMessage, error: true)]
+    public static Result IfSuccess<TNext>(this Result result, Func<ValueTask<TNext>> ifSuccessFunction)
+    {
+        throw new NotSupportedException(TaskNotAwaitedMessage);
+    }
+
+    /// <summary>
+    ///     Not supported: the function returns a task, which <c>IfSuccess</c> does not await; use <c>IfSuccessAsync</c>.
+    /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Obsolete(TaskNotAwaitedMessage, error: true)]
+    [OverloadResolutionPriority(1)]
+    public static Result IfSuccess<T>(this Result<T> result, Func<T, Task> ifSuccessFunction)
+    {
+        throw new NotSupportedException(TaskNotAwaitedMessage);
+    }
+
+    /// <summary>
+    ///     Not supported: the function returns a task, which <c>IfSuccess</c> does not await; use <c>IfSuccessAsync</c>.
+    /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Obsolete(TaskNotAwaitedMessage, error: true)]
+    [OverloadResolutionPriority(1)]
+    public static Result IfSuccess<T, TNext>(this Result<T> result, Func<T, Task<TNext>> ifSuccessFunction)
+    {
+        throw new NotSupportedException(TaskNotAwaitedMessage);
+    }
+
+    /// <summary>
+    ///     Not supported: the function returns a task, which <c>IfSuccess</c> does not await; use <c>IfSuccessAsync</c>.
+    /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Obsolete(TaskNotAwaitedMessage, error: true)]
+    public static Result IfSuccess<T>(this Result<T> result, Func<T, ValueTask> ifSuccessFunction)
+    {
+        throw new NotSupportedException(TaskNotAwaitedMessage);
+    }
+
+    /// <summary>
+    ///     Not supported: the function returns a task, which <c>IfSuccess</c> does not await; use <c>IfSuccessAsync</c>.
+    /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Obsolete(TaskNotAwaitedMessage, error: true)]
+    public static Result IfSuccess<T, TNext>(this Result<T> result, Func<T, ValueTask<TNext>> ifSuccessFunction)
+    {
+        throw new NotSupportedException(TaskNotAwaitedMessage);
     }
 
     #endregion
