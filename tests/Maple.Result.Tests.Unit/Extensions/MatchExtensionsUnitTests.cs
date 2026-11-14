@@ -11,6 +11,10 @@
 using Maple.Result.Extensions;
 using Moq;
 using System;
+using System.ComponentModel;
+using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Maple.Result.Tests.Unit.Extensions;
 
@@ -1792,6 +1796,71 @@ public class MatchExtensionsUnitTests
     private static Result<T> GetErrorResult<T>()
     {
         return Error.Failure(ErrorUri.None(), "3d7a81ec-801d-45f4-b4b0-8d58e93b1d89", "Error title 7");
+    }
+
+    #endregion
+
+    #region Match with a function returning a task (overload trap, issue #119)
+
+    [Fact]
+    public void Match_FunctionReturningTaskOverloads_AreHiddenCompileErrors()
+    {
+        // Arrange
+        var overloads = typeof(MatchExtensions).GetMethods()
+            .Where(m => m.GetCustomAttribute<ObsoleteAttribute>() is not null)
+            .ToArray();
+
+        // Act & Assert
+        overloads.Length.ShouldBe(8);
+        overloads.ShouldAllBe(m => m.Name == "Match"
+                                   && m.GetCustomAttribute<ObsoleteAttribute>()!.IsError
+                                   && m.GetCustomAttribute<EditorBrowsableAttribute>()!.State == EditorBrowsableState.Never);
+    }
+
+    [Fact]
+    public void Match_SuccessfulResultWithTaskFunctionAndExplicitTypeArgument_ReturnsResultWithTaskNotAwaited()
+    {
+        // Arrange
+        var sut = Result.Success();
+        var taskSource = new TaskCompletionSource();
+
+        // Act
+        Result<Task> result = sut.Match<Task>(() => taskSource.Task, _ => { });
+
+        // Assert
+        result.IsSuccess().ShouldBeTrue();
+        result.Value.ShouldBeSameAs(taskSource.Task);
+        result.Value.IsCompleted.ShouldBeFalse();
+    }
+
+    [Fact]
+    public void Match_SuccessfulResultOfTWithTaskFunctionAndExplicitTypeArguments_ReturnsResultWithTaskNotAwaited()
+    {
+        // Arrange
+        var sut = Result<int>.FromValue(5);
+        var taskSource = new TaskCompletionSource();
+
+        // Act
+        Result<Task> result = sut.Match<int, Task>(_ => taskSource.Task, _ => { });
+
+        // Assert
+        result.IsSuccess().ShouldBeTrue();
+        result.Value.ShouldBeSameAs(taskSource.Task);
+        result.Value.IsCompleted.ShouldBeFalse();
+    }
+
+    [Fact]
+    public void Match_SuccessfulResultWithTaskFunctions_ReturnsTaskOfSuccessFunction()
+    {
+        // Arrange
+        var sut = Result.Success();
+        var taskSource = new TaskCompletionSource();
+
+        // Act
+        Task result = sut.Match(() => taskSource.Task, _ => Task.CompletedTask);
+
+        // Assert
+        result.ShouldBeSameAs(taskSource.Task);
     }
 
     #endregion

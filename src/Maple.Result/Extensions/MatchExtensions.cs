@@ -9,6 +9,8 @@
  */
 
 using System;
+using System.ComponentModel;
+using System.Threading.Tasks;
 
 namespace Maple.Result.Extensions;
 
@@ -446,6 +448,98 @@ public static class MatchExtensions
         return result.IsSuccess()
             ? ifSuccessFunction(result.Value)
             : ifErrorFunction(result.Error);
+    }
+
+    #endregion
+
+    #region Not supported: functions returning a task
+
+    // These overloads turn a call with a function that returns a task into a compile error (CS0619). Without them, the call binds to the
+    // generic overload, which wraps the task in a successful result without awaiting it (issue #119). They are more specific than the
+    // generic overloads, so they are chosen first; an explicit type argument excludes them and selects the generic overload on purpose.
+
+    private const string TaskNotAwaitedMessage =
+        "The function returns a task, which Match does not await. Use MatchAsync, or specify the type arguments " +
+        "(e.g., Match<Task>(…) or Match<T, Task>(…)) to keep the task.";
+
+    /// <summary>
+    ///     Not supported: the function returns a task, which <c>Match</c> does not await; use <c>MatchAsync</c>.
+    /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Obsolete(TaskNotAwaitedMessage, error: true)]
+    public static Result Match(this Result result, Func<Task> ifSuccessFunction, Action<Error> ifErrorAction)
+    {
+        throw new NotSupportedException(TaskNotAwaitedMessage);
+    }
+
+    /// <summary>
+    ///     Not supported: the function returns a task, which <c>Match</c> does not await; use <c>MatchAsync</c>.
+    /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Obsolete(TaskNotAwaitedMessage, error: true)]
+    public static Result Match<TNext>(this Result result, Func<Task<TNext>> ifSuccessFunction, Action<Error> ifErrorAction)
+    {
+        throw new NotSupportedException(TaskNotAwaitedMessage);
+    }
+
+    /// <summary>
+    ///     Not supported: the function returns a task, which <c>Match</c> does not await; use <c>MatchAsync</c>.
+    /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Obsolete(TaskNotAwaitedMessage, error: true)]
+    public static Result Match(this Result result, Func<ValueTask> ifSuccessFunction, Action<Error> ifErrorAction)
+    {
+        throw new NotSupportedException(TaskNotAwaitedMessage);
+    }
+
+    /// <summary>
+    ///     Not supported: the function returns a task, which <c>Match</c> does not await; use <c>MatchAsync</c>.
+    /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Obsolete(TaskNotAwaitedMessage, error: true)]
+    public static Result Match<TNext>(this Result result, Func<ValueTask<TNext>> ifSuccessFunction, Action<Error> ifErrorAction)
+    {
+        throw new NotSupportedException(TaskNotAwaitedMessage);
+    }
+
+    /// <summary>
+    ///     Not supported: the function returns a task, which <c>Match</c> does not await; use <c>MatchAsync</c>.
+    /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Obsolete(TaskNotAwaitedMessage, error: true)]
+    public static Result Match<T>(this Result<T> result, Func<T, Task> ifSuccessFunction, Action<Error> ifErrorAction)
+    {
+        throw new NotSupportedException(TaskNotAwaitedMessage);
+    }
+
+    /// <summary>
+    ///     Not supported: the function returns a task, which <c>Match</c> does not await; use <c>MatchAsync</c>.
+    /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Obsolete(TaskNotAwaitedMessage, error: true)]
+    public static Result Match<T, TNext>(this Result<T> result, Func<T, Task<TNext>> ifSuccessFunction, Action<Error> ifErrorAction)
+    {
+        throw new NotSupportedException(TaskNotAwaitedMessage);
+    }
+
+    /// <summary>
+    ///     Not supported: the function returns a task, which <c>Match</c> does not await; use <c>MatchAsync</c>.
+    /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Obsolete(TaskNotAwaitedMessage, error: true)]
+    public static Result Match<T>(this Result<T> result, Func<T, ValueTask> ifSuccessFunction, Action<Error> ifErrorAction)
+    {
+        throw new NotSupportedException(TaskNotAwaitedMessage);
+    }
+
+    /// <summary>
+    ///     Not supported: the function returns a task, which <c>Match</c> does not await; use <c>MatchAsync</c>.
+    /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Obsolete(TaskNotAwaitedMessage, error: true)]
+    public static Result Match<T, TNext>(this Result<T> result, Func<T, ValueTask<TNext>> ifSuccessFunction, Action<Error> ifErrorAction)
+    {
+        throw new NotSupportedException(TaskNotAwaitedMessage);
     }
 
     #endregion

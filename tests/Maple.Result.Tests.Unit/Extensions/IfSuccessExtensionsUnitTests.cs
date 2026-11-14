@@ -11,6 +11,10 @@
 using Maple.Result.Extensions;
 using Moq;
 using System;
+using System.ComponentModel;
+using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Maple.Result.Tests.Unit.Extensions;
 
@@ -1182,6 +1186,57 @@ public class IfSuccessExtensionsUnitTests
         // Assert
         result.IsSuccess().ShouldBeTrue();
         result.Value.ShouldBeSameAs(TrapError);
+    }
+
+    #endregion
+
+    #region IfSuccess with a function returning a task (overload trap, issue #119)
+
+    [Fact]
+    public void IfSuccess_FunctionReturningTaskOverloads_AreHiddenCompileErrors()
+    {
+        // Arrange
+        var overloads = typeof(IfSuccessExtensions).GetMethods()
+            .Where(m => m.GetCustomAttribute<ObsoleteAttribute>() is not null)
+            .ToArray();
+
+        // Act & Assert
+        overloads.Length.ShouldBe(8);
+        overloads.ShouldAllBe(m => m.Name == "IfSuccess"
+                                   && m.GetCustomAttribute<ObsoleteAttribute>()!.IsError
+                                   && m.GetCustomAttribute<EditorBrowsableAttribute>()!.State == EditorBrowsableState.Never);
+    }
+
+    [Fact]
+    public void IfSuccess_SuccessfulResultWithTaskFunctionAndExplicitTypeArgument_ReturnsResultWithTaskNotAwaited()
+    {
+        // Arrange
+        var sut = Result.Success();
+        var taskSource = new TaskCompletionSource();
+
+        // Act
+        Result<Task> result = sut.IfSuccess<Task>(() => taskSource.Task);
+
+        // Assert
+        result.IsSuccess().ShouldBeTrue();
+        result.Value.ShouldBeSameAs(taskSource.Task);
+        result.Value.IsCompleted.ShouldBeFalse();
+    }
+
+    [Fact]
+    public void IfSuccess_SuccessfulResultOfTWithTaskFunctionAndExplicitTypeArguments_ReturnsResultWithTaskNotAwaited()
+    {
+        // Arrange
+        var sut = Result<int>.FromValue(5);
+        var taskSource = new TaskCompletionSource();
+
+        // Act
+        Result<Task> result = sut.IfSuccess<int, Task>(_ => taskSource.Task);
+
+        // Assert
+        result.IsSuccess().ShouldBeTrue();
+        result.Value.ShouldBeSameAs(taskSource.Task);
+        result.Value.IsCompleted.ShouldBeFalse();
     }
 
     #endregion

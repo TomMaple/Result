@@ -9,6 +9,9 @@
  */
 
 using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 
 namespace Maple.Result.Extensions;
 
@@ -361,6 +364,103 @@ public static class IfSuccessExtensions
             return ifSuccessFunction(result.Value);
 
         return result.Error;
+    }
+
+    #endregion
+
+    #region Not supported: functions returning a task
+
+    // These overloads turn a call with a function that returns a task into a compile error (CS0619). Without them, the call binds to the
+    // generic overload, which wraps the task in a successful result without awaiting it (issue #119). They are more specific than the
+    // generic overloads, so they are chosen first; an explicit type argument excludes them and selects the generic overload on purpose.
+    // The Task overloads have a higher priority than the ValueTask ones: an async lambda converts to both, which would be ambiguous (CS0121).
+
+    private const string TaskNotAwaitedMessage =
+        "The function returns a task, which IfSuccess does not await. Use IfSuccessAsync, or specify the type arguments " +
+        "(e.g., IfSuccess<Task>(…) or IfSuccess<T, Task>(…)) to keep the task.";
+
+    /// <summary>
+    ///     Not supported: the function returns a task, which <c>IfSuccess</c> does not await; use <c>IfSuccessAsync</c>.
+    /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Obsolete(TaskNotAwaitedMessage, error: true)]
+    [OverloadResolutionPriority(1)]
+    public static Result IfSuccess(this Result result, Func<Task> ifSuccessFunction)
+    {
+        throw new NotSupportedException(TaskNotAwaitedMessage);
+    }
+
+    /// <summary>
+    ///     Not supported: the function returns a task, which <c>IfSuccess</c> does not await; use <c>IfSuccessAsync</c>.
+    /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Obsolete(TaskNotAwaitedMessage, error: true)]
+    [OverloadResolutionPriority(1)]
+    public static Result IfSuccess<TNext>(this Result result, Func<Task<TNext>> ifSuccessFunction)
+    {
+        throw new NotSupportedException(TaskNotAwaitedMessage);
+    }
+
+    /// <summary>
+    ///     Not supported: the function returns a task, which <c>IfSuccess</c> does not await; use <c>IfSuccessAsync</c>.
+    /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Obsolete(TaskNotAwaitedMessage, error: true)]
+    public static Result IfSuccess(this Result result, Func<ValueTask> ifSuccessFunction)
+    {
+        throw new NotSupportedException(TaskNotAwaitedMessage);
+    }
+
+    /// <summary>
+    ///     Not supported: the function returns a task, which <c>IfSuccess</c> does not await; use <c>IfSuccessAsync</c>.
+    /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Obsolete(TaskNotAwaitedMessage, error: true)]
+    public static Result IfSuccess<TNext>(this Result result, Func<ValueTask<TNext>> ifSuccessFunction)
+    {
+        throw new NotSupportedException(TaskNotAwaitedMessage);
+    }
+
+    /// <summary>
+    ///     Not supported: the function returns a task, which <c>IfSuccess</c> does not await; use <c>IfSuccessAsync</c>.
+    /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Obsolete(TaskNotAwaitedMessage, error: true)]
+    [OverloadResolutionPriority(1)]
+    public static Result IfSuccess<T>(this Result<T> result, Func<T, Task> ifSuccessFunction)
+    {
+        throw new NotSupportedException(TaskNotAwaitedMessage);
+    }
+
+    /// <summary>
+    ///     Not supported: the function returns a task, which <c>IfSuccess</c> does not await; use <c>IfSuccessAsync</c>.
+    /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Obsolete(TaskNotAwaitedMessage, error: true)]
+    [OverloadResolutionPriority(1)]
+    public static Result IfSuccess<T, TNext>(this Result<T> result, Func<T, Task<TNext>> ifSuccessFunction)
+    {
+        throw new NotSupportedException(TaskNotAwaitedMessage);
+    }
+
+    /// <summary>
+    ///     Not supported: the function returns a task, which <c>IfSuccess</c> does not await; use <c>IfSuccessAsync</c>.
+    /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Obsolete(TaskNotAwaitedMessage, error: true)]
+    public static Result IfSuccess<T>(this Result<T> result, Func<T, ValueTask> ifSuccessFunction)
+    {
+        throw new NotSupportedException(TaskNotAwaitedMessage);
+    }
+
+    /// <summary>
+    ///     Not supported: the function returns a task, which <c>IfSuccess</c> does not await; use <c>IfSuccessAsync</c>.
+    /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Obsolete(TaskNotAwaitedMessage, error: true)]
+    public static Result IfSuccess<T, TNext>(this Result<T> result, Func<T, ValueTask<TNext>> ifSuccessFunction)
+    {
+        throw new NotSupportedException(TaskNotAwaitedMessage);
     }
 
     #endregion
