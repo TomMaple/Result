@@ -202,7 +202,7 @@ public sealed class SynchronizationContextUnitTests : IDisposable
             CompleteOnThreadPool(source, 1);
             await chain;
 
-            return ((SynchronizationContext)context, captured);
+            return (context, captured);
         });
     }
 
@@ -218,7 +218,7 @@ public sealed class SynchronizationContextUnitTests : IDisposable
             CompleteOnThreadPool(source, 1);
             await query;
 
-            return ((SynchronizationContext)context, holder.Value);
+            return (context, holder.Value);
         });
     }
 
