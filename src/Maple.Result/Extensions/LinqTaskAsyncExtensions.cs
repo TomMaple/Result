@@ -8,6 +8,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+using Maple.Result.Helpers;
 using System;
 using System.Threading.Tasks;
 
@@ -55,17 +56,22 @@ public static class LinqTaskAsyncExtensions
     ///     This method enables the single-clause LINQ query syntax (a <c>from … select …</c> query without an intermediate <c>from</c>) on
     ///     a <see cref="Task{TResult}" /> of a <see cref="Result{T}" />, projecting a successful value while propagating an error unchanged.
     /// </remarks>
-    public static async Task<Result<TNext>> Select<T, TNext>(this Task<Result<T>> result, Func<T, TNext> selector)
+    public static Task<Result<TNext>> Select<T, TNext>(this Task<Result<T>> result, Func<T, TNext> selector)
     {
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(selector);
 
-        var resultValue = await result.ConfigureAwait(ResultConfiguration.ContinueOnCapturedContext);
+        return Core(result, selector);
 
-        if (resultValue is null)
-            throw new InvalidOperationException("The asynchronous operation represented by ‘result’ returned null.");
+        static async Task<Result<TNext>> Core(Task<Result<T>> result, Func<T, TNext> selector)
+        {
+            var resultValue = await result.ConfigureAwait(ResultConfiguration.ContinueOnCapturedContext);
 
-        return resultValue.IfSuccess(selector);
+            if (resultValue is null)
+                throw Returned.NullAwaited(nameof(result));
+
+            return resultValue.IfSuccess(selector);
+        }
     }
 
     /// <summary>
@@ -85,11 +91,11 @@ public static class LinqTaskAsyncExtensions
     ///     otherwise, a failed <see cref="Result" /> with the original <see cref="Error" />.
     /// </returns>
     /// <exception cref="ArgumentNullException">
-    ///     If any of the <paramref name="result" /> or <paramref name="selector" /> parameters are <see langword="null" />,
-    ///     or if <paramref name="selector" /> returns <see langword="null" />.
+    ///     If any of the <paramref name="result" /> or <paramref name="selector" /> parameters are <see langword="null" />.
     /// </exception>
     /// <exception cref="InvalidOperationException">
-    ///     If the asynchronous operation represented by <paramref name="result" /> returns <see langword="null" />.
+    ///     If the asynchronous operation represented by <paramref name="result" /> returns <see langword="null" />,
+    ///     or <paramref name="selector" /> returns <see langword="null" />.
     /// </exception>
     /// <remarks>
     ///     <para>
@@ -100,17 +106,25 @@ public static class LinqTaskAsyncExtensions
     ///         Without this overload, such a query would return a <b>successful</b> <c>Result&lt;Error&gt;</c>.
     ///     </para>
     /// </remarks>
-    public static async Task<Result> Select<T>(this Task<Result<T>> result, Func<T, Error> selector)
+    public static Task<Result> Select<T>(this Task<Result<T>> result, Func<T, Error> selector)
     {
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(selector);
 
-        var resultValue = await result.ConfigureAwait(ResultConfiguration.ContinueOnCapturedContext);
+        return Core(result, selector);
 
-        if (resultValue is null)
-            throw new InvalidOperationException("The asynchronous operation represented by ‘result’ returned null.");
+        static async Task<Result> Core(Task<Result<T>> result, Func<T, Error> selector)
+        {
+            var resultValue = await result.ConfigureAwait(ResultConfiguration.ContinueOnCapturedContext);
 
-        return resultValue.IfSuccess(selector);
+            if (resultValue is null)
+                throw Returned.NullAwaited(nameof(result));
+
+            if (!resultValue.IsSuccess())
+                return resultValue.Error;
+
+            return Result.FromError(Returned.NotNull(selector(resultValue.Value), nameof(selector)));
+        }
     }
 
     /// <summary>
@@ -143,13 +157,14 @@ public static class LinqTaskAsyncExtensions
     ///     <see langword="null" />.
     /// </exception>
     /// <exception cref="InvalidOperationException">
-    ///     If the asynchronous operation represented by <paramref name="result" /> returns <see langword="null" />.
+    ///     If the asynchronous operation represented by <paramref name="result" /> returns <see langword="null" />,
+    ///     or <paramref name="collectionSelector" /> returns a <see langword="null" /> task or a task with a <see langword="null" /> result.
     /// </exception>
     /// <returns>
     ///     A <see cref="Task{TResult}" /> that represents the result of applying the provided collection selector and a result selector functions
     ///     if the current <paramref name="result" /> is successful; otherwise, a <see cref="Task{TResult}" /> that represents a failed result.
     /// </returns>
-    public static async Task<Result<TNext>> SelectMany<T, TMiddle, TNext>(
+    public static Task<Result<TNext>> SelectMany<T, TMiddle, TNext>(
         this Task<Result<T>> result,
         Func<T, Task<Result<TMiddle>>> collectionSelector,
         Func<T, TMiddle, TNext> resultSelector)
@@ -158,16 +173,22 @@ public static class LinqTaskAsyncExtensions
         ArgumentNullException.ThrowIfNull(collectionSelector);
         ArgumentNullException.ThrowIfNull(resultSelector);
 
-        var resultValue = await result.ConfigureAwait(ResultConfiguration.ContinueOnCapturedContext);
+        return Core(result, collectionSelector, resultSelector);
 
-        if (resultValue is null)
-            throw new InvalidOperationException("The asynchronous operation represented by ‘result’ returned null.");
-
-        return await resultValue.IfSuccessAsync(async Task<Result<TNext>> (x) =>
+        static async Task<Result<TNext>> Core(Task<Result<T>> result, Func<T, Task<Result<TMiddle>>> collectionSelector, Func<T, TMiddle, TNext> resultSelector)
         {
-            var collectionResult = await collectionSelector(x).ConfigureAwait(ResultConfiguration.ContinueOnCapturedContext);
-            return collectionResult.IfSuccess(y => resultSelector(x, y));
-        }).ConfigureAwait(ResultConfiguration.ContinueOnCapturedContext);
+            var resultValue = await result.ConfigureAwait(ResultConfiguration.ContinueOnCapturedContext);
+
+            if (resultValue is null)
+                throw Returned.NullAwaited(nameof(result));
+
+            return await resultValue.IfSuccessAsync(async Task<Result<TNext>> (x) =>
+            {
+                var collectionResult = await Returned.NotNullResult(
+                    collectionSelector(x), nameof(collectionSelector), ResultConfiguration.ContinueOnCapturedContext);
+                return collectionResult.IfSuccess(y => resultSelector(x, y));
+            }).ConfigureAwait(ResultConfiguration.ContinueOnCapturedContext);
+        }
     }
 
     /// <summary>
@@ -200,9 +221,10 @@ public static class LinqTaskAsyncExtensions
     ///     <paramref name="collectionSelector" /> or <paramref name="resultSelector" /> parameters are <see langword="null" />.
     /// </exception>
     /// <exception cref="InvalidOperationException">
-    ///     If the asynchronous operation represented by <paramref name="result" /> returns <see langword="null" />.
+    ///     If the asynchronous operation represented by <paramref name="result" /> returns <see langword="null" />,
+    ///     or <paramref name="collectionSelector" /> returns <see langword="null" />.
     /// </exception>
-    public static async Task<Result<TNext>> SelectMany<T, TMiddle, TNext>(
+    public static Task<Result<TNext>> SelectMany<T, TMiddle, TNext>(
         this Task<Result<T>> result,
         Func<T, Result<TMiddle>> collectionSelector,
         Func<T, TMiddle, TNext> resultSelector)
@@ -211,12 +233,17 @@ public static class LinqTaskAsyncExtensions
         ArgumentNullException.ThrowIfNull(collectionSelector);
         ArgumentNullException.ThrowIfNull(resultSelector);
 
-        var resultValue = await result.ConfigureAwait(ResultConfiguration.ContinueOnCapturedContext);
+        return Core(result, collectionSelector, resultSelector);
 
-        if (resultValue is null)
-            throw new InvalidOperationException("The asynchronous operation represented by ‘result’ returned null.");
+        static async Task<Result<TNext>> Core(Task<Result<T>> result, Func<T, Result<TMiddle>> collectionSelector, Func<T, TMiddle, TNext> resultSelector)
+        {
+            var resultValue = await result.ConfigureAwait(ResultConfiguration.ContinueOnCapturedContext);
 
-        return resultValue.SelectMany(collectionSelector, resultSelector);
+            if (resultValue is null)
+                throw Returned.NullAwaited(nameof(result));
+
+            return resultValue.SelectMany(collectionSelector, resultSelector);
+        }
     }
 
     /// <summary>
@@ -247,7 +274,10 @@ public static class LinqTaskAsyncExtensions
     ///     If any of the <paramref name="result" />,
     ///     <paramref name="collectionSelector" /> or <paramref name="resultSelector" /> parameters are <see langword="null" />.
     /// </exception>
-    public static async Task<Result<TNext>> SelectMany<T, TMiddle, TNext>(
+    /// <exception cref="InvalidOperationException">
+    ///     If <paramref name="collectionSelector" /> returns a <see langword="null" /> task or a task with a <see langword="null" /> result.
+    /// </exception>
+    public static Task<Result<TNext>> SelectMany<T, TMiddle, TNext>(
         this Result<T> result,
         Func<T, Task<Result<TMiddle>>> collectionSelector,
         Func<T, TMiddle, TNext> resultSelector)
@@ -256,11 +286,17 @@ public static class LinqTaskAsyncExtensions
         ArgumentNullException.ThrowIfNull(collectionSelector);
         ArgumentNullException.ThrowIfNull(resultSelector);
 
-        if (!result.IsSuccess())
-            return result.Error;
+        return Core(result, collectionSelector, resultSelector);
 
-        var collectionResult = await collectionSelector(result.Value).ConfigureAwait(ResultConfiguration.ContinueOnCapturedContext);
-        return collectionResult.IfSuccess(y => resultSelector(result.Value, y));
+        static async Task<Result<TNext>> Core(Result<T> result, Func<T, Task<Result<TMiddle>>> collectionSelector, Func<T, TMiddle, TNext> resultSelector)
+        {
+            if (!result.IsSuccess())
+                return result.Error;
+
+            var collectionResult = await Returned.NotNullResult(
+                collectionSelector(result.Value), nameof(collectionSelector), ResultConfiguration.ContinueOnCapturedContext);
+            return collectionResult.IfSuccess(y => resultSelector(result.Value, y));
+        }
     }
 
     /// <summary>
@@ -286,11 +322,13 @@ public static class LinqTaskAsyncExtensions
     ///     otherwise, a failed <see cref="Result" /> with the first <see cref="Error" />.
     /// </returns>
     /// <exception cref="ArgumentNullException">
-    ///     If any of the <paramref name="result" />, <paramref name="collectionSelector" /> or <paramref name="resultSelector" /> parameters are
-    ///     <see langword="null" />, or if <paramref name="resultSelector" /> returns <see langword="null" />.
+    ///     If any of the <paramref name="result" />, <paramref name="collectionSelector" /> or <paramref name="resultSelector" /> parameters are <see
+    ///     langword="null" />.
     /// </exception>
     /// <exception cref="InvalidOperationException">
-    ///     If the asynchronous operation represented by <paramref name="result" /> returns <see langword="null" />.
+    ///     If the asynchronous operation represented by <paramref name="result" /> returns <see langword="null" />,
+    ///     <paramref name="collectionSelector" /> returns a <see langword="null" /> task or a task with a <see langword="null" /> result,
+    ///     or <paramref name="resultSelector" /> returns <see langword="null" />.
     /// </exception>
     /// <remarks>
     ///     <para>
@@ -301,7 +339,7 @@ public static class LinqTaskAsyncExtensions
     ///         Without this overload, such a query would return a <b>successful</b> <c>Result&lt;Error&gt;</c>.
     ///     </para>
     /// </remarks>
-    public static async Task<Result> SelectMany<T, TMiddle>(
+    public static Task<Result> SelectMany<T, TMiddle>(
         this Task<Result<T>> result,
         Func<T, Task<Result<TMiddle>>> collectionSelector,
         Func<T, TMiddle, Error> resultSelector)
@@ -310,16 +348,22 @@ public static class LinqTaskAsyncExtensions
         ArgumentNullException.ThrowIfNull(collectionSelector);
         ArgumentNullException.ThrowIfNull(resultSelector);
 
-        var resultValue = await result.ConfigureAwait(ResultConfiguration.ContinueOnCapturedContext);
+        return Core(result, collectionSelector, resultSelector);
 
-        if (resultValue is null)
-            throw new InvalidOperationException("The asynchronous operation represented by ‘result’ returned null.");
+        static async Task<Result> Core(Task<Result<T>> result, Func<T, Task<Result<TMiddle>>> collectionSelector, Func<T, TMiddle, Error> resultSelector)
+        {
+            var resultValue = await result.ConfigureAwait(ResultConfiguration.ContinueOnCapturedContext);
 
-        if (!resultValue.IsSuccess())
-            return resultValue.Error;
+            if (resultValue is null)
+                throw Returned.NullAwaited(nameof(result));
 
-        var collectionResult = await collectionSelector(resultValue.Value).ConfigureAwait(ResultConfiguration.ContinueOnCapturedContext);
-        return collectionResult.IfSuccess(y => resultSelector(resultValue.Value, y));
+            if (!resultValue.IsSuccess())
+                return resultValue.Error;
+
+            var collectionResult = await Returned.NotNullResult(
+                collectionSelector(resultValue.Value), nameof(collectionSelector), ResultConfiguration.ContinueOnCapturedContext);
+            return collectionResult.IfSuccess(y => Returned.NotNull(resultSelector(resultValue.Value, y), nameof(resultSelector)));
+        }
     }
 
     /// <summary>
@@ -345,11 +389,12 @@ public static class LinqTaskAsyncExtensions
     ///     otherwise, a failed <see cref="Result" /> with the first <see cref="Error" />.
     /// </returns>
     /// <exception cref="ArgumentNullException">
-    ///     If any of the <paramref name="result" />, <paramref name="collectionSelector" /> or <paramref name="resultSelector" /> parameters are
-    ///     <see langword="null" />, or if <paramref name="resultSelector" /> returns <see langword="null" />.
+    ///     If any of the <paramref name="result" />, <paramref name="collectionSelector" /> or <paramref name="resultSelector" /> parameters are <see
+    ///     langword="null" />.
     /// </exception>
     /// <exception cref="InvalidOperationException">
-    ///     If the asynchronous operation represented by <paramref name="result" /> returns <see langword="null" />.
+    ///     If the asynchronous operation represented by <paramref name="result" /> returns <see langword="null" />,
+    ///     <paramref name="collectionSelector" /> returns <see langword="null" />, or <paramref name="resultSelector" /> returns <see langword="null" />.
     /// </exception>
     /// <remarks>
     ///     <para>
@@ -360,7 +405,7 @@ public static class LinqTaskAsyncExtensions
     ///         Without this overload, such a query would return a <b>successful</b> <c>Result&lt;Error&gt;</c>.
     ///     </para>
     /// </remarks>
-    public static async Task<Result> SelectMany<T, TMiddle>(
+    public static Task<Result> SelectMany<T, TMiddle>(
         this Task<Result<T>> result,
         Func<T, Result<TMiddle>> collectionSelector,
         Func<T, TMiddle, Error> resultSelector)
@@ -369,12 +414,17 @@ public static class LinqTaskAsyncExtensions
         ArgumentNullException.ThrowIfNull(collectionSelector);
         ArgumentNullException.ThrowIfNull(resultSelector);
 
-        var resultValue = await result.ConfigureAwait(ResultConfiguration.ContinueOnCapturedContext);
+        return Core(result, collectionSelector, resultSelector);
 
-        if (resultValue is null)
-            throw new InvalidOperationException("The asynchronous operation represented by ‘result’ returned null.");
+        static async Task<Result> Core(Task<Result<T>> result, Func<T, Result<TMiddle>> collectionSelector, Func<T, TMiddle, Error> resultSelector)
+        {
+            var resultValue = await result.ConfigureAwait(ResultConfiguration.ContinueOnCapturedContext);
 
-        return resultValue.SelectMany(collectionSelector, resultSelector);
+            if (resultValue is null)
+                throw Returned.NullAwaited(nameof(result));
+
+            return resultValue.SelectMany(collectionSelector, resultSelector);
+        }
     }
 
     /// <summary>
@@ -399,8 +449,12 @@ public static class LinqTaskAsyncExtensions
     ///     otherwise, a failed <see cref="Result" /> with the first <see cref="Error" />.
     /// </returns>
     /// <exception cref="ArgumentNullException">
-    ///     If any of the <paramref name="result" />, <paramref name="collectionSelector" /> or <paramref name="resultSelector" /> parameters are
-    ///     <see langword="null" />, or if <paramref name="resultSelector" /> returns <see langword="null" />.
+    ///     If any of the <paramref name="result" />, <paramref name="collectionSelector" /> or <paramref name="resultSelector" /> parameters are <see
+    ///     langword="null" />.
+    /// </exception>
+    /// <exception cref="InvalidOperationException">
+    ///     If <paramref name="collectionSelector" /> returns a <see langword="null" /> task or a task with a <see langword="null" /> result,
+    ///     or <paramref name="resultSelector" /> returns <see langword="null" />.
     /// </exception>
     /// <remarks>
     ///     <para>
@@ -411,7 +465,7 @@ public static class LinqTaskAsyncExtensions
     ///         Without this overload, such a query would return a <b>successful</b> <c>Result&lt;Error&gt;</c>.
     ///     </para>
     /// </remarks>
-    public static async Task<Result> SelectMany<T, TMiddle>(
+    public static Task<Result> SelectMany<T, TMiddle>(
         this Result<T> result,
         Func<T, Task<Result<TMiddle>>> collectionSelector,
         Func<T, TMiddle, Error> resultSelector)
@@ -420,10 +474,16 @@ public static class LinqTaskAsyncExtensions
         ArgumentNullException.ThrowIfNull(collectionSelector);
         ArgumentNullException.ThrowIfNull(resultSelector);
 
-        if (!result.IsSuccess())
-            return result.Error;
+        return Core(result, collectionSelector, resultSelector);
 
-        var collectionResult = await collectionSelector(result.Value).ConfigureAwait(ResultConfiguration.ContinueOnCapturedContext);
-        return collectionResult.IfSuccess(y => resultSelector(result.Value, y));
+        static async Task<Result> Core(Result<T> result, Func<T, Task<Result<TMiddle>>> collectionSelector, Func<T, TMiddle, Error> resultSelector)
+        {
+            if (!result.IsSuccess())
+                return result.Error;
+
+            var collectionResult = await Returned.NotNullResult(
+                collectionSelector(result.Value), nameof(collectionSelector), ResultConfiguration.ContinueOnCapturedContext);
+            return collectionResult.IfSuccess(y => Returned.NotNull(resultSelector(result.Value, y), nameof(resultSelector)));
+        }
     }
 }

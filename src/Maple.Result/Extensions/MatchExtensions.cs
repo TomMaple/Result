@@ -8,6 +8,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+using Maple.Result.Helpers;
 using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
@@ -81,6 +82,7 @@ public static class MatchExtensions
     ///     If any of the <paramref name="result" />, <paramref name="ifSuccessFunction" />,
     ///     or <paramref name="ifErrorAction" /> parameters are <see langword="null" />.
     /// </exception>
+    /// <exception cref="InvalidOperationException">If <paramref name="ifSuccessFunction" /> returns <see langword="null" />.</exception>
     public static Result Match(this Result result, Func<Result> ifSuccessFunction, Action<Error> ifErrorAction)
     {
         ArgumentNullException.ThrowIfNull(result);
@@ -88,7 +90,7 @@ public static class MatchExtensions
         ArgumentNullException.ThrowIfNull(ifErrorAction);
 
         if (result.IsSuccess())
-            return ifSuccessFunction();
+            return Returned.NotNull(ifSuccessFunction(), nameof(ifSuccessFunction));
 
         ifErrorAction(result.Error);
         return result;
@@ -113,6 +115,9 @@ public static class MatchExtensions
     ///     If any of the <paramref name="result" />, <paramref name="ifSuccessFunction" />,
     ///     or <paramref name="ifErrorFunction" /> parameters are <see langword="null" />.
     /// </exception>
+    /// <exception cref="InvalidOperationException">
+    ///     If <paramref name="ifSuccessFunction" /> returns <see langword="null" />, or <paramref name="ifErrorFunction" /> returns <see langword="null" />.
+    /// </exception>
     public static Result Match(this Result result, Func<Result> ifSuccessFunction, Func<Error, Result> ifErrorFunction)
     {
         ArgumentNullException.ThrowIfNull(result);
@@ -120,8 +125,8 @@ public static class MatchExtensions
         ArgumentNullException.ThrowIfNull(ifErrorFunction);
 
         return result.IsSuccess()
-            ? ifSuccessFunction()
-            : ifErrorFunction(result.Error);
+            ? Returned.NotNull(ifSuccessFunction(), nameof(ifSuccessFunction))
+            : Returned.NotNull(ifErrorFunction(result.Error), nameof(ifErrorFunction));
     }
 
     /// <summary>
@@ -190,9 +195,10 @@ public static class MatchExtensions
     ///     successful; otherwise, the original <paramref name="result" /> after invoking <paramref name="ifErrorAction" />.
     /// </returns>
     /// <exception cref="ArgumentNullException">
-    ///     If any of the <paramref name="result" />, <paramref name="ifSuccessFunction" />, or <paramref name="ifErrorAction" /> parameters are
-    ///     <see langword="null" />, or if <paramref name="ifSuccessFunction" /> returns <see langword="null" />.
+    ///     If any of the <paramref name="result" />, <paramref name="ifSuccessFunction" />, or <paramref name="ifErrorAction" /> parameters are <see
+    ///     langword="null" />.
     /// </exception>
+    /// <exception cref="InvalidOperationException">If <paramref name="ifSuccessFunction" /> returns <see langword="null" />.</exception>
     public static Result Match(this Result result, Func<Error> ifSuccessFunction, Action<Error> ifErrorAction)
     {
         ArgumentNullException.ThrowIfNull(result);
@@ -200,7 +206,7 @@ public static class MatchExtensions
         ArgumentNullException.ThrowIfNull(ifErrorAction);
 
         if (result.IsSuccess())
-            return Result.FromError(ifSuccessFunction());
+            return Result.FromError(Returned.NotNull(ifSuccessFunction(), nameof(ifSuccessFunction)));
 
         ifErrorAction(result.Error);
         return result;
@@ -262,6 +268,7 @@ public static class MatchExtensions
     ///     If any of the <paramref name="result" />, <paramref name="ifSuccessFunction" />,
     ///     or <paramref name="ifErrorAction" /> parameters are <see langword="null" />.
     /// </exception>
+    /// <exception cref="InvalidOperationException">If <paramref name="ifSuccessFunction" /> returns <see langword="null" />.</exception>
     public static Result<T> Match<T>(this Result result, Func<Result<T>> ifSuccessFunction, Action<Error> ifErrorAction)
     {
         ArgumentNullException.ThrowIfNull(result);
@@ -269,7 +276,7 @@ public static class MatchExtensions
         ArgumentNullException.ThrowIfNull(ifErrorAction);
 
         if (result.IsSuccess())
-            return ifSuccessFunction();
+            return Returned.NotNull(ifSuccessFunction(), nameof(ifSuccessFunction));
 
         ifErrorAction(result.Error);
         return result.Error;
@@ -297,6 +304,9 @@ public static class MatchExtensions
     ///     If any of the <paramref name="result" />, <paramref name="ifSuccessFunction" />,
     ///     or <paramref name="ifErrorFunction" /> parameters are <see langword="null" />.
     /// </exception>
+    /// <exception cref="InvalidOperationException">
+    ///     If <paramref name="ifSuccessFunction" /> returns <see langword="null" />, or <paramref name="ifErrorFunction" /> returns <see langword="null" />.
+    /// </exception>
     public static Result<T> Match<T>(this Result result, Func<Result<T>> ifSuccessFunction, Func<Error, Result<T>> ifErrorFunction)
     {
         ArgumentNullException.ThrowIfNull(result);
@@ -304,8 +314,8 @@ public static class MatchExtensions
         ArgumentNullException.ThrowIfNull(ifErrorFunction);
 
         return result.IsSuccess()
-            ? ifSuccessFunction()
-            : ifErrorFunction(result.Error);
+            ? Returned.NotNull(ifSuccessFunction(), nameof(ifSuccessFunction))
+            : Returned.NotNull(ifErrorFunction(result.Error), nameof(ifErrorFunction));
     }
 
     #endregion
@@ -420,9 +430,10 @@ public static class MatchExtensions
     ///     successful; otherwise, a failed <see cref="Result" /> with the original <see cref="Error" /> after invoking <paramref name="ifErrorAction" />.
     /// </returns>
     /// <exception cref="ArgumentNullException">
-    ///     If any of the <paramref name="result" />, <paramref name="ifSuccessFunction" />, or <paramref name="ifErrorAction" /> parameters are
-    ///     <see langword="null" />, or if <paramref name="ifSuccessFunction" /> returns <see langword="null" />.
+    ///     If any of the <paramref name="result" />, <paramref name="ifSuccessFunction" />, or <paramref name="ifErrorAction" /> parameters are <see
+    ///     langword="null" />.
     /// </exception>
+    /// <exception cref="InvalidOperationException">If <paramref name="ifSuccessFunction" /> returns <see langword="null" />.</exception>
     public static Result Match<T>(this Result<T> result, Func<T, Error> ifSuccessFunction, Action<Error> ifErrorAction)
     {
         ArgumentNullException.ThrowIfNull(result);
@@ -430,7 +441,7 @@ public static class MatchExtensions
         ArgumentNullException.ThrowIfNull(ifErrorAction);
 
         if (result.IsSuccess())
-            return Result.FromError(ifSuccessFunction(result.Value));
+            return Result.FromError(Returned.NotNull(ifSuccessFunction(result.Value), nameof(ifSuccessFunction)));
 
         ifErrorAction(result.Error);
         return result.Error;
@@ -496,6 +507,7 @@ public static class MatchExtensions
     ///     If any of the <paramref name="result" />, <paramref name="ifSuccessFunction" />,
     ///     or <paramref name="ifErrorAction" /> parameters are <see langword="null" />.
     /// </exception>
+    /// <exception cref="InvalidOperationException">If <paramref name="ifSuccessFunction" /> returns <see langword="null" />.</exception>
     public static Result<TNext> Match<T, TNext>(this Result<T> result, Func<T, Result<TNext>> ifSuccessFunction, Action<Error> ifErrorAction)
     {
         ArgumentNullException.ThrowIfNull(result);
@@ -503,7 +515,7 @@ public static class MatchExtensions
         ArgumentNullException.ThrowIfNull(ifErrorAction);
 
         if (result.IsSuccess())
-            return ifSuccessFunction(result.Value);
+            return Returned.NotNull(ifSuccessFunction(result.Value), nameof(ifSuccessFunction));
 
         ifErrorAction(result.Error);
         return result.Error;
@@ -533,6 +545,9 @@ public static class MatchExtensions
     ///     If any of the <paramref name="result" />, <paramref name="ifSuccessFunction" />,
     ///     or <paramref name="ifErrorFunction" /> parameters are <see langword="null" />.
     /// </exception>
+    /// <exception cref="InvalidOperationException">
+    ///     If <paramref name="ifSuccessFunction" /> returns <see langword="null" />, or <paramref name="ifErrorFunction" /> returns <see langword="null" />.
+    /// </exception>
     public static Result<TNext> Match<T, TNext>(this Result<T> result, Func<T, Result<TNext>> ifSuccessFunction, Func<Error, Result<TNext>> ifErrorFunction)
     {
         ArgumentNullException.ThrowIfNull(result);
@@ -540,8 +555,8 @@ public static class MatchExtensions
         ArgumentNullException.ThrowIfNull(ifErrorFunction);
 
         return result.IsSuccess()
-            ? ifSuccessFunction(result.Value)
-            : ifErrorFunction(result.Error);
+            ? Returned.NotNull(ifSuccessFunction(result.Value), nameof(ifSuccessFunction))
+            : Returned.NotNull(ifErrorFunction(result.Error), nameof(ifErrorFunction));
     }
 
     #endregion

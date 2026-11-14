@@ -9,6 +9,7 @@
  */
 
 using Maple.Result.Extensions.ValueTasks;
+using Maple.Result.Tests.Unit.Helpers;
 using Moq;
 using System;
 using System.Threading.Tasks;
@@ -216,7 +217,7 @@ public class IfErrorValueTaskAsyncExtensionsUnitTests
     public async Task IfErrorAsync_ErrorResultWithResultFunction_CallsFunction()
     {
         // Arrange
-        var functionMock = new Mock<Func<Error, ValueTask<Result>>>();
+        var functionMock = new Mock<Func<Error, ValueTask<Result>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         var sut = GetErrorResult();
 
@@ -470,7 +471,7 @@ public class IfErrorValueTaskAsyncExtensionsUnitTests
     public async Task IfErrorAsync_ErrorGenericResultWithGenericResultFunction_CallsFunction()
     {
         // Arrange
-        var functionMock = new Mock<Func<Error, ValueTask<Result<int>>>>();
+        var functionMock = new Mock<Func<Error, ValueTask<Result<int>>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         var sut = GetErrorResult<int>();
 
@@ -690,7 +691,7 @@ public class IfErrorValueTaskAsyncExtensionsUnitTests
     public async Task IfErrorAsync_ErrorResultValueTaskWithResultFunction_CallsFunction()
     {
         // Arrange
-        var functionMock = new Mock<Func<Error, ValueTask<Result>>>();
+        var functionMock = new Mock<Func<Error, ValueTask<Result>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         var errorResult = GetErrorResult();
         var sut = ValueTask.FromResult(errorResult);
@@ -920,7 +921,7 @@ public class IfErrorValueTaskAsyncExtensionsUnitTests
     public async Task IfErrorAsync_ErrorGenericResultValueTaskWithGenericResultFunction_CallsFunction()
     {
         // Arrange
-        var functionMock = new Mock<Func<Error, ValueTask<Result<int>>>>();
+        var functionMock = new Mock<Func<Error, ValueTask<Result<int>>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         var errorResult = GetErrorResult<int>();
         var sut = ValueTask.FromResult(errorResult);

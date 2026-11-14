@@ -9,6 +9,7 @@
  */
 
 using Maple.Result.Extensions;
+using Maple.Result.Tests.Unit.Helpers;
 using Moq;
 using System;
 using System.ComponentModel;
@@ -215,7 +216,7 @@ public class MatchExtensionsUnitTests
     public void Match_SuccessfulResultWithSuccessResultFunctionAndErrorAction_CallsSuccessFunction()
     {
         // Arrange
-        var successFunctionMock = new Mock<Func<Result>>();
+        var successFunctionMock = new Mock<Func<Result>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         var sut = Result.Success();
 
@@ -374,7 +375,7 @@ public class MatchExtensionsUnitTests
     public void Match_SuccessfulResultWithSuccessAndErrorResultFunctions_CallsSuccessFunction()
     {
         // Arrange
-        var successFunctionMock = new Mock<Func<Result>>();
+        var successFunctionMock = new Mock<Func<Result>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         var sut = Result.Success();
 
@@ -435,7 +436,7 @@ public class MatchExtensionsUnitTests
     public void Match_ErrorResultWithSuccessAndErrorResultFunctions_CallsErrorFunction()
     {
         // Arrange
-        var errorFunctionMock = new Mock<Func<Error, Result>>();
+        var errorFunctionMock = new Mock<Func<Error, Result>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         var sut = GetErrorResult();
 
@@ -807,7 +808,7 @@ public class MatchExtensionsUnitTests
     public void Match_SuccessfulResultWithGenericResultSuccessFunctionAndErrorAction_CallsSuccessFunction()
     {
         // Arrange
-        var successFunctionMock = new Mock<Func<Result<int>>>();
+        var successFunctionMock = new Mock<Func<Result<int>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         var sut = Result.Success();
 
@@ -952,7 +953,7 @@ public class MatchExtensionsUnitTests
     public void Match_SuccessfulResultWithGenericResultSuccessAndErrorFunctions_CallsSuccessFunction()
     {
         // Arrange
-        var successFunctionMock = new Mock<Func<Result<int>>>();
+        var successFunctionMock = new Mock<Func<Result<int>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         var sut = Result.Success();
 
@@ -1014,7 +1015,7 @@ public class MatchExtensionsUnitTests
     public void Match_ErrorResultWithGenericResultSuccessAndErrorFunctions_CallsErrorFunction()
     {
         // Arrange
-        var errorFunctionMock = new Mock<Func<Error, Result<int>>>();
+        var errorFunctionMock = new Mock<Func<Error, Result<int>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         var sut = GetErrorResult();
 
@@ -1543,7 +1544,7 @@ public class MatchExtensionsUnitTests
     {
         // Arrange
         const int Value = 88;
-        var successFunctionMock = new Mock<Func<int, Result<string>>>();
+        var successFunctionMock = new Mock<Func<int, Result<string>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         Result<int> sut = 88;
 
@@ -1693,7 +1694,7 @@ public class MatchExtensionsUnitTests
     {
         // Arrange
         const int Value = 90;
-        var successFunctionMock = new Mock<Func<int, Result<string>>>();
+        var successFunctionMock = new Mock<Func<int, Result<string>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         Result<int> sut = Value;
 
@@ -1756,7 +1757,7 @@ public class MatchExtensionsUnitTests
     public void Match_ErrorGenericResultWithGenericResultSuccessAndErrorFunctions_CallsErrorFunction()
     {
         // Arrange
-        var errorFunctionMock = new Mock<Func<Error, Result<string>>>();
+        var errorFunctionMock = new Mock<Func<Error, Result<string>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         var sut = GetErrorResult<int>();
 
@@ -1907,7 +1908,7 @@ public class MatchExtensionsUnitTests
     }
 
     [Fact]
-    public void Match_SuccessfulResultWithErrorFunctionReturningNull_ThrowsArgumentNullException()
+    public void Match_SuccessfulResultWithErrorFunctionReturningNull_ThrowsInvalidOperationException()
     {
         // Arrange
         var sut = Result.Success();
@@ -1916,7 +1917,7 @@ public class MatchExtensionsUnitTests
         var exception = Record.Exception(() => sut.Match(() => (Error)null!, _ => { }));
 
         // Assert
-        exception.ShouldBeOfType<ArgumentNullException>();
+        exception.ShouldBeOfType<InvalidOperationException>().Message.ShouldBe("The function ‘ifSuccessFunction’ returned null.");
     }
 
     [Fact]
@@ -1978,7 +1979,7 @@ public class MatchExtensionsUnitTests
     }
 
     [Fact]
-    public void Match_SuccessfulResultOfTWithErrorFunctionReturningNull_ThrowsArgumentNullException()
+    public void Match_SuccessfulResultOfTWithErrorFunctionReturningNull_ThrowsInvalidOperationException()
     {
         // Arrange
         var sut = Result<int>.FromValue(5);
@@ -1987,7 +1988,7 @@ public class MatchExtensionsUnitTests
         var exception = Record.Exception(() => sut.Match(_ => (Error)null!, _ => { }));
 
         // Assert
-        exception.ShouldBeOfType<ArgumentNullException>();
+        exception.ShouldBeOfType<InvalidOperationException>().Message.ShouldBe("The function ‘ifSuccessFunction’ returned null.");
     }
 
     [Fact]

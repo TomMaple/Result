@@ -9,6 +9,7 @@
  */
 
 using Maple.Result.Extensions;
+using Maple.Result.Tests.Unit.Helpers;
 using Moq;
 using System;
 using System.Threading.Tasks;
@@ -216,7 +217,7 @@ public class IfErrorTaskAsyncExtensionsUnitTests
     public async Task IfErrorAsync_ErrorResultWithResultFunction_CallsFunction()
     {
         // Arrange
-        var functionMock = new Mock<Func<Error, Task<Result>>>();
+        var functionMock = new Mock<Func<Error, Task<Result>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         var sut = GetErrorResult();
 
@@ -470,7 +471,7 @@ public class IfErrorTaskAsyncExtensionsUnitTests
     public async Task IfErrorAsync_ErrorGenericResultWithGenericResultFunction_CallsFunction()
     {
         // Arrange
-        var functionMock = new Mock<Func<Error, Task<Result<int>>>>();
+        var functionMock = new Mock<Func<Error, Task<Result<int>>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         var sut = GetErrorResult<int>();
 
@@ -720,7 +721,7 @@ public class IfErrorTaskAsyncExtensionsUnitTests
     public async Task IfErrorAsync_ErrorResultTaskWithResultFunction_CallsFunction()
     {
         // Arrange
-        var functionMock = new Mock<Func<Error, Task<Result>>>();
+        var functionMock = new Mock<Func<Error, Task<Result>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         var errorResult = GetErrorResult();
         var sut = Task.FromResult(errorResult);
@@ -980,7 +981,7 @@ public class IfErrorTaskAsyncExtensionsUnitTests
     public async Task IfErrorAsync_ErrorGenericResultTaskWithGenericResultFunction_CallsFunction()
     {
         // Arrange
-        var functionMock = new Mock<Func<Error, Task<Result<int>>>>();
+        var functionMock = new Mock<Func<Error, Task<Result<int>>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         var errorResult = GetErrorResult<int>();
         var sut = Task.FromResult(errorResult);

@@ -653,13 +653,13 @@ public class LinqExtensionsUnitTests
     }
 
     [Fact]
-    public void Select_SuccessfulResultWithErrorSelectorReturningNull_ThrowsArgumentNullException()
+    public void Select_SuccessfulResultWithErrorSelectorReturningNull_ThrowsInvalidOperationException()
     {
         // Act
         var exception = Record.Exception(() => Get(5).Select(_ => (Error)null!));
 
         // Assert
-        exception.ShouldBeOfType<ArgumentNullException>();
+        exception.ShouldBeOfType<InvalidOperationException>().Message.ShouldBe("The function ‘selector’ returned null.");
     }
 
     [Fact]

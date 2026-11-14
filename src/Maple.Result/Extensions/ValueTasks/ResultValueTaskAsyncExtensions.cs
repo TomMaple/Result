@@ -8,6 +8,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+using Maple.Result.Helpers;
 using System;
 using System.Threading.Tasks;
 
@@ -50,7 +51,7 @@ public static class ResultValueTaskAsyncExtensions
         var result = await resultTask.ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
         if (result is null)
-            throw new InvalidOperationException("The asynchronous operation returned null.");
+            throw Returned.NullAwaited(nameof(resultTask));
 
         return result.IsSuccess()
             ? Result.Success()

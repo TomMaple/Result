@@ -9,6 +9,7 @@
  */
 
 using Maple.Result.Extensions;
+using Maple.Result.Tests.Unit.Helpers;
 using Moq;
 using System;
 
@@ -214,7 +215,7 @@ public class IfErrorExtensionsUnitTests
     public void IfError_ErrorResultWithResultFunction_CallsFunction()
     {
         // Arrange
-        var functionMock = new Mock<Func<Error, Result>>();
+        var functionMock = new Mock<Func<Error, Result>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         var sut = GetErrorResult();
 
@@ -468,7 +469,7 @@ public class IfErrorExtensionsUnitTests
     public void IfError_ErrorGenericResultWithGenericResultFunction_CallsFunction()
     {
         // Arrange
-        var functionMock = new Mock<Func<Error, Result<int>>>();
+        var functionMock = new Mock<Func<Error, Result<int>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         var sut = GetErrorResult<int>();
 

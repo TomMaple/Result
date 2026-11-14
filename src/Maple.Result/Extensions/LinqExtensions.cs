@@ -8,6 +8,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+using Maple.Result.Helpers;
 using System;
 
 namespace Maple.Result.Extensions;
@@ -69,9 +70,9 @@ public static class LinqExtensions
     ///     successful; otherwise, a failed <see cref="Result" /> with the original <see cref="Error" />.
     /// </returns>
     /// <exception cref="ArgumentNullException">
-    ///     If any of the <paramref name="result" /> or <paramref name="selector" /> parameters are <see langword="null" />,
-    ///     or if <paramref name="selector" /> returns <see langword="null" />.
+    ///     If any of the <paramref name="result" /> or <paramref name="selector" /> parameters are <see langword="null" />.
     /// </exception>
+    /// <exception cref="InvalidOperationException">If <paramref name="selector" /> returns <see langword="null" />.</exception>
     /// <remarks>
     ///     <para>
     ///         This method makes a query that selects an <see cref="Error" />, e.g., <c>from user in GetUser(id) select Error.Conflict(…)</c>,
@@ -87,7 +88,10 @@ public static class LinqExtensions
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(selector);
 
-        return result.IfSuccess(selector);
+        if (!result.IsSuccess())
+            return result.Error;
+
+        return Result.FromError(Returned.NotNull(selector(result.Value), nameof(selector)));
     }
 
     /// <summary>
@@ -120,6 +124,7 @@ public static class LinqExtensions
     ///     If any of the <paramref name="result" /> or <paramref name="collectionSelector" /> or <paramref name="resultSelector" /> parameters are
     ///     <see langword="null" />.
     /// </exception>
+    /// <exception cref="InvalidOperationException">If <paramref name="collectionSelector" /> returns <see langword="null" />.</exception>
     /// <remarks>
     ///     This method enables chaining of operations on successful results while propagating errors in LINQ query syntax without additional boilerplate code.
     /// </remarks>
@@ -134,7 +139,7 @@ public static class LinqExtensions
 
         return result.IfSuccess(x =>
         {
-            var collectionResult = collectionSelector(x);
+            var collectionResult = Returned.NotNull(collectionSelector(x), nameof(collectionSelector));
             return collectionResult.IfSuccess(y => resultSelector(x, y));
         });
     }
@@ -160,8 +165,11 @@ public static class LinqExtensions
     ///     the intermediate results are successful; otherwise, a failed <see cref="Result" /> with the first <see cref="Error" />.
     /// </returns>
     /// <exception cref="ArgumentNullException">
-    ///     If any of the <paramref name="result" />, <paramref name="collectionSelector" /> or <paramref name="resultSelector" /> parameters are
-    ///     <see langword="null" />, or if <paramref name="resultSelector" /> returns <see langword="null" />.
+    ///     If any of the <paramref name="result" />, <paramref name="collectionSelector" /> or <paramref name="resultSelector" /> parameters are <see
+    ///     langword="null" />.
+    /// </exception>
+    /// <exception cref="InvalidOperationException">
+    ///     If <paramref name="collectionSelector" /> returns <see langword="null" />, or <paramref name="resultSelector" /> returns <see langword="null" />.
     /// </exception>
     /// <remarks>
     ///     <para>
@@ -185,8 +193,8 @@ public static class LinqExtensions
 
         return result.IfSuccess(x =>
         {
-            var collectionResult = collectionSelector(x);
-            return collectionResult.IfSuccess(y => resultSelector(x, y));
+            var collectionResult = Returned.NotNull(collectionSelector(x), nameof(collectionSelector));
+            return collectionResult.IfSuccess(y => Returned.NotNull(resultSelector(x, y), nameof(resultSelector)));
         });
     }
 }

@@ -8,6 +8,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+using Maple.Result.Helpers;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
@@ -35,7 +36,7 @@ public static class IfErrorValueTaskAsyncExtensions
     ///     regardless of whether the action was invoked.
     /// </returns>
     /// <inheritdoc cref="IfErrorTaskAsyncExtensions.IfErrorAsync{TResult}(TResult, Func{Error, Task}, bool?)" />
-    public static async ValueTask<TResult> IfErrorAsync<TResult>(
+    public static ValueTask<TResult> IfErrorAsync<TResult>(
         [DisallowNull] this TResult result,
         Func<Error, ValueTask> ifErrorAction,
         bool? continueOnCapturedContext = null
@@ -45,10 +46,15 @@ public static class IfErrorValueTaskAsyncExtensions
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifErrorAction);
 
-        if (!result.IsSuccess())
-            await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
+        return Core(result, ifErrorAction, continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
-        return result;
+        static async ValueTask<TResult> Core(TResult result, Func<Error, ValueTask> ifErrorAction, bool continueOnCapturedContext)
+        {
+            if (!result.IsSuccess())
+                await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext);
+
+            return result;
+        }
     }
 
     /// <returns>
@@ -56,8 +62,11 @@ public static class IfErrorValueTaskAsyncExtensions
     ///     The <see cref="ValueTask{IOperationResult}" /> is either the original <paramref name="result" /> if it indicates success,
     ///     or the result returned by the <paramref name="ifErrorFunction" /> if an <see cref="Error" /> is present.
     /// </returns>
+    /// <exception cref="InvalidOperationException">
+    ///     If <paramref name="ifErrorFunction" /> returns a value task with a <see langword="null" /> result.
+    /// </exception>
     /// <inheritdoc cref="IfErrorTaskAsyncExtensions.IfErrorAsync{TResult}(TResult, Func{Error, Task{TResult}}, bool?)" />
-    public static async ValueTask<TResult> IfErrorAsync<TResult>(
+    public static ValueTask<TResult> IfErrorAsync<TResult>(
         [DisallowNull] this TResult result,
         Func<Error, ValueTask<TResult>> ifErrorFunction,
         bool? continueOnCapturedContext = null
@@ -67,10 +76,15 @@ public static class IfErrorValueTaskAsyncExtensions
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(ifErrorFunction);
 
-        if (result.IsSuccess())
-            return result;
+        return Core(result, ifErrorFunction, continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
-        return await ifErrorFunction(result.Error).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
+        static async ValueTask<TResult> Core(TResult result, Func<Error, ValueTask<TResult>> ifErrorFunction, bool continueOnCapturedContext)
+        {
+            if (result.IsSuccess())
+                return result;
+
+            return await Returned.NotNullResult(ifErrorFunction(result.Error), nameof(ifErrorFunction), continueOnCapturedContext);
+        }
     }
 
     /// <summary>
@@ -109,7 +123,7 @@ public static class IfErrorValueTaskAsyncExtensions
     /// <exception cref="InvalidOperationException">
     ///     If the asynchronous operation represented by <paramref name="resultTask" /> returns <see langword="null" />.
     /// </exception>
-    public static async ValueTask<TResult> IfErrorAsync<TResult>(
+    public static ValueTask<TResult> IfErrorAsync<TResult>(
         this ValueTask<TResult> resultTask,
         Func<Error, ValueTask> ifErrorAction,
         bool? continueOnCapturedContext = null
@@ -118,15 +132,20 @@ public static class IfErrorValueTaskAsyncExtensions
     {
         ArgumentNullException.ThrowIfNull(ifErrorAction);
 
-        var result = await resultTask.ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
+        return Core(resultTask, ifErrorAction, continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
-        if (result is null)
-            throw new InvalidOperationException("The asynchronous operation returned null.");
+        static async ValueTask<TResult> Core(ValueTask<TResult> resultTask, Func<Error, ValueTask> ifErrorAction, bool continueOnCapturedContext)
+        {
+            var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
 
-        if (!result.IsSuccess())
-            await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
+            if (result is null)
+                throw Returned.NullAwaited(nameof(resultTask));
 
-        return result;
+            if (!result.IsSuccess())
+                await ifErrorAction(result.Error).ConfigureAwait(continueOnCapturedContext);
+
+            return result;
+        }
     }
 
     /// <summary>
@@ -165,9 +184,10 @@ public static class IfErrorValueTaskAsyncExtensions
     ///     If the <paramref name="ifErrorFunction" /> parameter is <see langword="null" />.
     /// </exception>
     /// <exception cref="InvalidOperationException">
-    ///     If the asynchronous operation represented by <paramref name="resultTask" /> returns <see langword="null" />.
+    ///     If the asynchronous operation represented by <paramref name="resultTask" /> returns <see langword="null" />,
+    ///     or <paramref name="ifErrorFunction" /> returns a value task with a <see langword="null" /> result.
     /// </exception>
-    public static async ValueTask<TResult> IfErrorAsync<TResult>(
+    public static ValueTask<TResult> IfErrorAsync<TResult>(
         this ValueTask<TResult> resultTask,
         Func<Error, ValueTask<TResult>> ifErrorFunction,
         bool? continueOnCapturedContext = null
@@ -176,14 +196,19 @@ public static class IfErrorValueTaskAsyncExtensions
     {
         ArgumentNullException.ThrowIfNull(ifErrorFunction);
 
-        var result = await resultTask.ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
+        return Core(resultTask, ifErrorFunction, continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
-        if (result is null)
-            throw new InvalidOperationException("The asynchronous operation returned null.");
+        static async ValueTask<TResult> Core(ValueTask<TResult> resultTask, Func<Error, ValueTask<TResult>> ifErrorFunction, bool continueOnCapturedContext)
+        {
+            var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
 
-        if (result.IsSuccess())
-            return result;
+            if (result is null)
+                throw Returned.NullAwaited(nameof(resultTask));
 
-        return await ifErrorFunction(result.Error).ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
+            if (result.IsSuccess())
+                return result;
+
+            return await Returned.NotNullResult(ifErrorFunction(result.Error), nameof(ifErrorFunction), continueOnCapturedContext);
+        }
     }
 }
