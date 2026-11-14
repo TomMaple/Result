@@ -34,11 +34,6 @@ var areEqual = default(ErrorUri) == ErrorUri.None();
 ```
 
 ```csharp
-// true — a null value is treated as an unspecified type, i.e., `about:blank`.
-var areEqual = new ErrorUri(null!) == ErrorUri.None();
-```
-
-```csharp
 // false — the values differ.
 var areEqual = ErrorUri.None() == ErrorUri.Locator("https://exampleapp.com/docs/errors/signup/email-required");
 ```
