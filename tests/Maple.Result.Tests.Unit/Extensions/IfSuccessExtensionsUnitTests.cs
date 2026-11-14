@@ -9,6 +9,7 @@
  */
 
 using Maple.Result.Extensions;
+using Maple.Result.Tests.Unit.Helpers;
 using Moq;
 using System;
 using System.ComponentModel;
@@ -190,7 +191,7 @@ public class IfSuccessExtensionsUnitTests
     public void IfSuccess_SuccessfulResultWithResultFunction_CallsFunction()
     {
         // Arrange
-        var functionMock = new Mock<Func<Result>>();
+        var functionMock = new Mock<Func<Result>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         var sut = Result.Success();
 
@@ -441,7 +442,7 @@ public class IfSuccessExtensionsUnitTests
     public void IfSuccess_SuccessfulResultWithGenericResultFunction_CallsFunction()
     {
         // Arrange
-        var functionMock = new Mock<Func<Result<int>>>();
+        var functionMock = new Mock<Func<Result<int>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         var sut = Result.Success();
 
@@ -697,7 +698,7 @@ public class IfSuccessExtensionsUnitTests
     {
         // Arrange
         const string InitialValue = "Start";
-        var functionMock = new Mock<Func<string, Result>>();
+        var functionMock = new Mock<Func<string, Result>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         Result<string> sut = InitialValue;
 
@@ -956,7 +957,7 @@ public class IfSuccessExtensionsUnitTests
     {
         // Arrange
         const int InitialValue = 39;
-        var functionMock = new Mock<Func<int, Result<string>>>();
+        var functionMock = new Mock<Func<int, Result<string>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         Result<int> sut = InitialValue;
 
@@ -1095,7 +1096,7 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_SuccessfulResultWithErrorFunctionReturningNull_ThrowsArgumentNullException()
+    public void IfSuccess_SuccessfulResultWithErrorFunctionReturningNull_ThrowsInvalidOperationException()
     {
         // Arrange
         var sut = Result.Success();
@@ -1104,7 +1105,7 @@ public class IfSuccessExtensionsUnitTests
         var exception = Record.Exception(() => sut.IfSuccess(() => (Error)null!));
 
         // Assert
-        exception.ShouldBeOfType<ArgumentNullException>();
+        exception.ShouldBeOfType<InvalidOperationException>().Message.ShouldBe("The function ‘ifSuccessFunction’ returned null.");
     }
 
     [Fact]
@@ -1162,7 +1163,7 @@ public class IfSuccessExtensionsUnitTests
     }
 
     [Fact]
-    public void IfSuccess_SuccessfulResultOfTWithErrorFunctionReturningNull_ThrowsArgumentNullException()
+    public void IfSuccess_SuccessfulResultOfTWithErrorFunctionReturningNull_ThrowsInvalidOperationException()
     {
         // Arrange
         var sut = Result<int>.FromValue(5);
@@ -1171,7 +1172,7 @@ public class IfSuccessExtensionsUnitTests
         var exception = Record.Exception(() => sut.IfSuccess(_ => (Error)null!));
 
         // Assert
-        exception.ShouldBeOfType<ArgumentNullException>();
+        exception.ShouldBeOfType<InvalidOperationException>().Message.ShouldBe("The function ‘ifSuccessFunction’ returned null.");
     }
 
     [Fact]

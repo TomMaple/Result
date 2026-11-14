@@ -20,6 +20,7 @@ Version 3.0 makes `Result`, `Result<T>` and `Error` **immutable** and **always v
   * [`continueOnCapturedContext` is `bool?`](#continueoncapturedcontext-is-bool)
   * [`IResult` renamed to `IOperationResult`](#iresult-renamed-to-ioperationresult)
   * [`IfSuccess` and `Match` with an `Error` or a task](#ifsuccess-and-match-with-an-error-or-a-task)
+  * [Null results and null arguments of the extension methods](#null-results-and-null-arguments-of-the-extension-methods)
   * [Extension packages](#extension-packages)
 * [New features](#new-features)
 * [Search-and-replace reference](#search-and-replace-reference)
@@ -33,7 +34,8 @@ Version 3.0 makes `Result`, `Result<T>` and `Error` **immutable** and **always v
 6. If you compare or snapshot the **written** JSON, see [Changed JSON output](#changed-json-output).
 7. Make sure error titles are never `null` or blank, and pass `null` instead of `ErrorUri.None()` as an instance *URI*.
 8. Fix the calls of `IfSuccess`, `Match` and the LINQ queries that no longer compile or that now return a failed result (see [`IfSuccess` and `Match` with an `Error` or a task](#ifsuccess-and-match-with-an-error-or-a-task)).
-9. Upgrade the `Maple.Result.Extensions.*` packages together with `Maple.Result` (see [Extension packages](#extension-packages)).
+9. Make sure the functions passed to the extension methods never return `null` where a result, an `Error` or a task is expected (see [Null results and null arguments of the extension methods](#null-results-and-null-arguments-of-the-extension-methods)).
+10. Upgrade the `Maple.Result.Extensions.*` packages together with `Maple.Result` (see [Extension packages](#extension-packages)).
 
 ## Breaking changes
 
@@ -276,6 +278,21 @@ var result = await Result.Success().IfSuccessAsync(() => SaveAsync());
 Result<Task> result = Result.Success().IfSuccess<Task>(() => SaveAsync());
 ```
 
+### Null results and null arguments of the extension methods
+In 2.x, a `null` returned by a function passed to `IfSuccess`, `IfError`, `Match` or a LINQ query was returned to the caller, caused a `NullReferenceException` inside the library, or an `ArgumentNullException` for a parameter the caller did not pass. In 3.0 the rules are the same for all extension methods (sync, `Task` and `ValueTask`):
+
+* **A `null` argument** throws an `ArgumentNullException`. The asynchronous methods now throw it **from the call**, not from `await`: `var task = result.IfSuccessAsync(null!)` throws immediately. This only changes code that stored such a task and awaited it inside a `try`.
+* **A function that returns `null`** where a `Result`, `Result<T>`, `Error` or a task is required — a `null` result, a `null` task, or a task with a `null` result — throws an `InvalidOperationException` that names the function, e.g., "The function ‘ifSuccessFunction’ returned null." A `null` **value** returned for a `Result<T>` is still a successful result.
+* **An awaited source** (`Task<Result>`, `ValueTask<Result<T>>`, …) that returns `null` throws an `InvalidOperationException` as before; the message now names the parameter: "The asynchronous operation represented by ‘resultTask’ returned null."
+
+```csharp
+// 2.x: returned null; 3.0: InvalidOperationException
+var result = Result.Success().IfSuccess(() => (Result)null!);
+
+// 2.x: the exception surfaced at await; 3.0: thrown by the call
+var task = result.IfSuccessAsync((Func<Task<Result>>)null!);
+```
+
 ### Extension packages
 The current (2.x-based) version of `Maple.Result.Extensions.HttpClient` calls an internal method of `Maple.Result` 2.x that no longer exists, so using it with `Maple.Result` 3.0 fails at runtime. Upgrade all `Maple.Result.Extensions.*` packages to versions built for 3.0 together with `Maple.Result`, and do not mix 2.x and 3.0 packages.
 
@@ -317,3 +334,4 @@ The current (2.x-based) version of `Maple.Result.Extensions.HttpClient` calls an
 * [Reference documentation](Reference/namespace.md)
 * [Issue #102: Simplify Result and Error](https://github.com/TomMaple/Maple.Result/issues/102)
 * [Issue #105: SynchronizationContext of the asynchronous extension methods](https://github.com/TomMaple/Maple.Result/issues/105)
+* [Issue #121: Null results and synchronous argument checks of the extension methods](https://github.com/TomMaple/Maple.Result/issues/121)

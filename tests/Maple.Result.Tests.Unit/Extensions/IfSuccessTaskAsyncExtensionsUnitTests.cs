@@ -9,6 +9,7 @@
  */
 
 using Maple.Result.Extensions;
+using Maple.Result.Tests.Unit.Helpers;
 using Moq;
 using System;
 using System.Threading.Tasks;
@@ -187,7 +188,7 @@ public class IfSuccessTaskAsyncExtensionsUnitTests
     public async Task IfSuccessAsync_SuccessfulResultWithResultFunction_CallsFunction()
     {
         // Arrange
-        var functionMock = new Mock<Func<Task<Result>>>();
+        var functionMock = new Mock<Func<Task<Result>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         var sut = Result.Success();
 
@@ -439,7 +440,7 @@ public class IfSuccessTaskAsyncExtensionsUnitTests
     public async Task IfSuccessAsync_SuccessfulResultWithGenericResultFunction_CallsFunction()
     {
         // Arrange
-        var functionMock = new Mock<Func<Task<Result<int>>>>();
+        var functionMock = new Mock<Func<Task<Result<int>>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         var sut = Result.Success();
 
@@ -695,7 +696,7 @@ public class IfSuccessTaskAsyncExtensionsUnitTests
     {
         // Arrange
         const string InitialValue = "Start";
-        var functionMock = new Mock<Func<string, Task<Result>>>();
+        var functionMock = new Mock<Func<string, Task<Result>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         Result<string> sut = InitialValue;
 
@@ -953,7 +954,7 @@ public class IfSuccessTaskAsyncExtensionsUnitTests
     {
         // Arrange
         const int InitialValue = 39;
-        var functionMock = new Mock<Func<int, Task<Result<string>>>>();
+        var functionMock = new Mock<Func<int, Task<Result<string>>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         Result<int> sut = InitialValue;
 
@@ -1207,7 +1208,7 @@ public class IfSuccessTaskAsyncExtensionsUnitTests
     public async Task IfSuccessAsync_SuccessfulResultTaskWithResultFunction_CallsFunction()
     {
         // Arrange
-        var functionMock = new Mock<Func<Task<Result>>>();
+        var functionMock = new Mock<Func<Task<Result>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         var sut = Task.FromResult(Result.Success());
 
@@ -1460,7 +1461,7 @@ public class IfSuccessTaskAsyncExtensionsUnitTests
     public async Task IfSuccessAsync_SuccessfulResultTaskWithGenericResultFunction_CallsFunction()
     {
         // Arrange
-        var functionMock = new Mock<Func<Task<Result<int>>>>();
+        var functionMock = new Mock<Func<Task<Result<int>>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         var sut = Task.FromResult(Result.Success());
 
@@ -1718,7 +1719,7 @@ public class IfSuccessTaskAsyncExtensionsUnitTests
     {
         // Arrange
         const string InitialValue = "Start";
-        var functionMock = new Mock<Func<string, Task<Result>>>();
+        var functionMock = new Mock<Func<string, Task<Result>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         var sut = Task.FromResult(Result.FromValue(InitialValue));
 
@@ -1978,7 +1979,7 @@ public class IfSuccessTaskAsyncExtensionsUnitTests
     {
         // Arrange
         const int InitialValue = 39;
-        var functionMock = new Mock<Func<int, Task<Result<string>>>>();
+        var functionMock = new Mock<Func<int, Task<Result<string>>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         var sut = Task.FromResult(Result.FromValue(InitialValue));
 
@@ -2118,7 +2119,7 @@ public class IfSuccessTaskAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfSuccessAsync_SuccessfulResultWithErrorFunctionReturningNull_ThrowsArgumentNullException()
+    public async Task IfSuccessAsync_SuccessfulResultWithErrorFunctionReturningNull_ThrowsInvalidOperationException()
     {
         // Arrange
         var sut = Result.Success();
@@ -2127,7 +2128,7 @@ public class IfSuccessTaskAsyncExtensionsUnitTests
         var exception = await Record.ExceptionAsync(async () => await sut.IfSuccessAsync(() => Task.FromResult((Error)null!)));
 
         // Assert
-        exception.ShouldBeOfType<ArgumentNullException>();
+        exception.ShouldBeOfType<InvalidOperationException>().Message.ShouldBe("The function ‘ifSuccessFunction’ returned null.");
     }
 
     [Fact]

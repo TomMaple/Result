@@ -8,6 +8,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+using Maple.Result.Helpers;
 using System;
 using System.Diagnostics.CodeAnalysis;
 
@@ -70,6 +71,7 @@ public static class IfErrorExtensions
     /// <exception cref="ArgumentNullException">
     ///     If any of the <paramref name="result" /> or <paramref name="ifErrorFunction" /> parameters are <see langword="null" />.
     /// </exception>
+    /// <exception cref="InvalidOperationException">If <paramref name="ifErrorFunction" /> returns <see langword="null" />.</exception>
     public static TResult IfError<TResult>([DisallowNull] this TResult result, Func<Error, TResult> ifErrorFunction)
         where TResult : IOperationResult
     {
@@ -79,6 +81,6 @@ public static class IfErrorExtensions
         if (result.IsSuccess())
             return result;
 
-        return ifErrorFunction(result.Error);
+        return Returned.NotNull(ifErrorFunction(result.Error), nameof(ifErrorFunction));
     }
 }

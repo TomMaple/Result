@@ -1,8 +1,8 @@
-# ResultValueTaskAsyncExtensions.ToResultAsync(ValueTask&lt;Result&lt;T&gt;&gt;) Method
+# ResultValueTaskAsyncExtensions.ToResultAsync(ValueTask&lt;Result&lt;T&gt;&gt;, Boolean) Method
 ## Definition
 Namespace: [Maple.Result.Extensions.ValueTasks](namespace.md)<br>
 Assembly: Maple.Result.dll<br>
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/ValueTasks/ResultValueTaskAsyncExtensions.cs#L48" target="_blank">ResultValueTaskAsyncExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/ValueTasks/ResultValueTaskAsyncExtensions.cs#L49" target="_blank">ResultValueTaskAsyncExtensions.cs</a>
 
 Asynchronously converts the outcome of the asynchronous operation represented by the [Result&lt;T&gt;](../../ResultT/ResultT.md) to the non-generic [Result](../../Result/Result.md).
 
@@ -30,6 +30,8 @@ The default value is: `null`.
 The value task object representing the asynchronous operation.
 
 ### Exceptions
+
+
 #### [InvalidOperationException](https://learn.microsoft.com/dotnet/api/system.invalidoperationexception)
 The asynchronous operation represented by `resultTask` returns `null`.
 

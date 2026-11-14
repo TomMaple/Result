@@ -25,7 +25,7 @@ A function that returns an [Error](../Error/Error.md) makes the result fail: see
 A function that returns a `Task`, `Task<T>`, `ValueTask` or `ValueTask<T>` is not supported: `IfSuccess` does not await it, so such a call is a compile error (CS0619). Use [IfSuccessAsync](IfSuccessTaskAsyncExtensions_IfSuccessAsync.md) instead, or specify the type arguments (e.g., `IfSuccess<Task>(…)` or `IfSuccess<T, Task>(…)`) to keep the task in the result on purpose.
 
 ## IfSuccess(Result, Action)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L46" target="_blank">IfSuccessExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L47" target="_blank">IfSuccessExtensions.cs</a>
 
 Executes the provided action, only if the instance of [Result](../Result/Result.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)).
 
@@ -60,7 +60,7 @@ createUserResult.IfSuccess(() =>
 
 
 ## IfSuccess(Result, Func&lt;Result&gt;)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L77" target="_blank">IfSuccessExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L79" target="_blank">IfSuccessExtensions.cs</a>
 
 Executes the provided function only if the instance of [Result](../Result/Result.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)).
 
@@ -83,6 +83,9 @@ The original `result` passed as a parameter. Can be used for method chaining.
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` parameter is `null` or `ifSuccessFunction` parameter is `null`.
 
+#### [InvalidOperationException](https://learn.microsoft.com/dotnet/api/system.invalidoperationexception)
+The `ifSuccessFunction` function returns `null`.
+
 ### Examples
 ```csharp
 var createUserResult = _userService.CreateUser(userData);
@@ -95,7 +98,7 @@ var userAddedResult = createUserResult.IfSuccess(() =>
 
 
 ## IfSuccess(Result, Func&lt;Error&gt;)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L115" target="_blank">IfSuccessExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L117" target="_blank">IfSuccessExtensions.cs</a>
 
 Executes the provided function only if the instance of [Result](../Result/Result.md) represents a successful operation, and returns a failed [Result](../Result/Result.md) with the [Error](../Error/Error.md) returned by the function.
 
@@ -116,7 +119,10 @@ A failed [Result](../Result/Result.md) with the [Error](../Error/Error.md) retur
 
 ### Exceptions
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
-The `result` or `ifSuccessFunction` parameter is `null`, or `ifSuccessFunction` returns `null`.
+The `result` or `ifSuccessFunction` parameter is `null`.
+
+#### [InvalidOperationException](https://learn.microsoft.com/dotnet/api/system.invalidoperationexception)
+The `ifSuccessFunction` function returns `null`.
 
 ### Remarks
 Without this overload, a function returning an [Error](../Error/Error.md) would bind to [IfSuccess&lt;T&gt;(Result, Func&lt;T&gt;)](#ifsuccesstresult-funct) and return a **successful** `Result<Error>`. To get that on purpose, specify the type argument: `IfSuccess<Error>(…)`.
@@ -129,7 +135,7 @@ var result = _userService.DeleteUser(userId)
 
 
 ## IfSuccess&lt;T&gt;(Result, Func&lt;T&gt;)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L147" target="_blank">IfSuccessExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L149" target="_blank">IfSuccessExtensions.cs</a>
 
 Executes the provided function only if the instance of [Result](../Result/Result.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)).
 
@@ -168,7 +174,7 @@ var companyResult = createUserResult.IfSuccess(() =>
 
 
 ## IfSuccess&lt;T&gt;(Result, Func&lt;Result&lt;T&gt;&gt;)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L179" target="_blank">IfSuccessExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L182" target="_blank">IfSuccessExtensions.cs</a>
 
 Executes the provided function only if the instance of [Result](../Result/Result.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)).
 
@@ -195,6 +201,9 @@ If the `result` is successful, the [Result](../ResultT/ResultT.md)&lt;T&gt; reco
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` parameter is `null` or `ifSuccessFunction` parameter is `null`.
 
+#### [InvalidOperationException](https://learn.microsoft.com/dotnet/api/system.invalidoperationexception)
+The `ifSuccessFunction` function returns `null`.
+
 ### Examples
 ```csharp
 var createUserResult = _userService.CreateUser(userData);
@@ -207,7 +216,7 @@ var companyResult = createUserResult.IfSuccess(() =>
 
 
 ## IfSuccess&lt;T&gt;(Result&lt;T&gt;, Action&lt;T&gt;)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L212" target="_blank">IfSuccessExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L215" target="_blank">IfSuccessExtensions.cs</a>
 
 Executes the provided action, only if the instance of [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)).
 
@@ -246,7 +255,7 @@ userResult.IfSuccess(user =>
 
 
 ## IfSuccess&lt;T&gt;(Result&lt;T&gt;, Func&lt;T, Result&gt;)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L243" target="_blank">IfSuccessExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L247" target="_blank">IfSuccessExtensions.cs</a>
 
 Executes the provided function only if the instance of [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)).
 
@@ -273,6 +282,9 @@ If the `result` is successful, the [Result](../Result/Result.md) returned by the
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` parameter is `null` or `ifSuccessFunction` parameter is `null`.
 
+#### [InvalidOperationException](https://learn.microsoft.com/dotnet/api/system.invalidoperationexception)
+The `ifSuccessFunction` function returns `null`.
+
 ### Examples
 ```csharp
 var createUserResult = _userService.CreateUser(userData);
@@ -285,7 +297,7 @@ var userAddedResult = createUserResult.IfSuccess(user =>
 
 
 ## IfSuccess&lt;T&gt;(Result&lt;T&gt;, Func&lt;T, Error&gt;)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L282" target="_blank">IfSuccessExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L286" target="_blank">IfSuccessExtensions.cs</a>
 
 Executes the provided function only if the instance of [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation, and returns a failed [Result](../Result/Result.md) with the [Error](../Error/Error.md) returned by the function.
 
@@ -310,7 +322,10 @@ A failed [Result](../Result/Result.md) with the [Error](../Error/Error.md) retur
 
 ### Exceptions
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
-The `result` or `ifSuccessFunction` parameter is `null`, or `ifSuccessFunction` returns `null`.
+The `result` or `ifSuccessFunction` parameter is `null`.
+
+#### [InvalidOperationException](https://learn.microsoft.com/dotnet/api/system.invalidoperationexception)
+The `ifSuccessFunction` function returns `null`.
 
 ### Remarks
 Without this overload, a function returning an [Error](../Error/Error.md) would bind to [IfSuccess&lt;T, TNext&gt;(Result&lt;T&gt;, Func&lt;T, TNext&gt;)](#ifsuccesst-tnextresultt-funct-tnext) and return a **successful** `Result<Error>`. To get that on purpose, specify the type arguments: `IfSuccess<T, Error>(…)`.
@@ -323,7 +338,7 @@ var result = _userService.GetUser(userId)
 
 
 ## IfSuccess&lt;T, TNext&gt;(Result&lt;T&gt;, Func&lt;T, TNext&gt;)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L320" target="_blank">IfSuccessExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L324" target="_blank">IfSuccessExtensions.cs</a>
 
 Executes the provided function only if the instance of [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)).
 
@@ -365,7 +380,7 @@ var companyResult = createUserResult.IfSuccess(user =>
 
 
 ## IfSuccess&lt;T, TNext&gt;(Result&lt;T&gt;, Func&lt;T, Result&lt;TNext&gt;&gt;)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L358" target="_blank">IfSuccessExtensions.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Extensions/IfSuccessExtensions.cs#L363" target="_blank">IfSuccessExtensions.cs</a>
 
 Executes the provided function only if the instance of [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)).
 
@@ -394,6 +409,9 @@ If the `result` is successful, the [Result&lt;TNext&gt;](../ResultT/ResultT.md) 
 ### Exceptions
 #### [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 The `result` parameter is `null` or `ifSuccessFunction` parameter is `null`.
+
+#### [InvalidOperationException](https://learn.microsoft.com/dotnet/api/system.invalidoperationexception)
+The `ifSuccessFunction` function returns `null`.
 
 ### Examples
 ```csharp

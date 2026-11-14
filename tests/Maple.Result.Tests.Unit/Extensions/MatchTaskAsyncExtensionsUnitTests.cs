@@ -9,6 +9,7 @@
  */
 
 using Maple.Result.Extensions;
+using Maple.Result.Tests.Unit.Helpers;
 using Moq;
 using System;
 using System.Threading.Tasks;
@@ -215,7 +216,7 @@ public class MatchTaskAsyncExtensionsUnitTests
     public async Task MatchAsync_SuccessfulResultWithSuccessResultFunctionAndErrorAction_CallsSuccessFunction()
     {
         // Arrange
-        var successFunctionMock = new Mock<Func<Task<Result>>>();
+        var successFunctionMock = new Mock<Func<Task<Result>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         var sut = Result.Success();
 
@@ -377,7 +378,7 @@ public class MatchTaskAsyncExtensionsUnitTests
     public async Task MatchAsync_SuccessfulResultWithSuccessAndErrorResultFunctions_CallsSuccessFunction()
     {
         // Arrange
-        var successFunctionMock = new Mock<Func<Task<Result>>>();
+        var successFunctionMock = new Mock<Func<Task<Result>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         var sut = Result.Success();
 
@@ -440,7 +441,7 @@ public class MatchTaskAsyncExtensionsUnitTests
     public async Task MatchAsync_ErrorResultWithSuccessAndErrorResultFunctions_CallsErrorFunction()
     {
         // Arrange
-        var errorFunctionMock = new Mock<Func<Error, Task<Result>>>();
+        var errorFunctionMock = new Mock<Func<Error, Task<Result>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         var sut = GetErrorResult();
 
@@ -818,7 +819,7 @@ public class MatchTaskAsyncExtensionsUnitTests
     public async Task MatchAsync_SuccessfulResultWithGenericResultSuccessFunctionAndErrorAction_CallsSuccessFunction()
     {
         // Arrange
-        var successFunctionMock = new Mock<Func<Task<Result<int>>>>();
+        var successFunctionMock = new Mock<Func<Task<Result<int>>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         var sut = Result.Success();
 
@@ -966,7 +967,7 @@ public class MatchTaskAsyncExtensionsUnitTests
     public async Task MatchAsync_SuccessfulResultWithGenericResultSuccessAndErrorFunctions_CallsSuccessFunction()
     {
         // Arrange
-        var successFunctionMock = new Mock<Func<Task<Result<int>>>>();
+        var successFunctionMock = new Mock<Func<Task<Result<int>>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         var sut = Result.Success();
 
@@ -1030,7 +1031,7 @@ public class MatchTaskAsyncExtensionsUnitTests
     public async Task MatchAsync_ErrorResultWithGenericResultSuccessAndErrorFunctions_CallsErrorFunction()
     {
         // Arrange
-        var errorFunctionMock = new Mock<Func<Error, Task<Result<int>>>>();
+        var errorFunctionMock = new Mock<Func<Error, Task<Result<int>>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         var sut = GetErrorResult();
 
@@ -1567,7 +1568,7 @@ public class MatchTaskAsyncExtensionsUnitTests
     {
         // Arrange
         const int Value = 88;
-        var successFunctionMock = new Mock<Func<int, Task<Result<string>>>>();
+        var successFunctionMock = new Mock<Func<int, Task<Result<string>>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         Result<int> sut = 88;
 
@@ -1724,7 +1725,7 @@ public class MatchTaskAsyncExtensionsUnitTests
     {
         // Arrange
         const int Value = 90;
-        var successFunctionMock = new Mock<Func<int, Task<Result<string>>>>();
+        var successFunctionMock = new Mock<Func<int, Task<Result<string>>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         Result<int> sut = Value;
 
@@ -1789,7 +1790,7 @@ public class MatchTaskAsyncExtensionsUnitTests
     public async Task MatchAsync_ErrorGenericResultWithGenericResultSuccessAndErrorFunctions_CallsErrorFunction()
     {
         // Arrange
-        var errorFunctionMock = new Mock<Func<Error, Task<Result<string>>>>();
+        var errorFunctionMock = new Mock<Func<Error, Task<Result<string>>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         var sut = GetErrorResult<int>();
 
@@ -2022,7 +2023,7 @@ public class MatchTaskAsyncExtensionsUnitTests
     public async Task MatchAsync_SuccessfulResultTaskWithSuccessResultFunctionAndErrorAction_CallsSuccessFunction()
     {
         // Arrange
-        var successFunctionMock = new Mock<Func<Task<Result>>>();
+        var successFunctionMock = new Mock<Func<Task<Result>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         var sut = Task.FromResult(Result.Success());
 
@@ -2186,7 +2187,7 @@ public class MatchTaskAsyncExtensionsUnitTests
     public async Task MatchAsync_SuccessfulResultTaskWithSuccessAndErrorResultFunctions_CallsSuccessFunction()
     {
         // Arrange
-        var successFunctionMock = new Mock<Func<Task<Result>>>();
+        var successFunctionMock = new Mock<Func<Task<Result>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         var sut = Task.FromResult(Result.Success());
 
@@ -2249,7 +2250,7 @@ public class MatchTaskAsyncExtensionsUnitTests
     public async Task MatchAsync_ErrorResultTaskWithSuccessAndErrorResultFunctions_CallsErrorFunction()
     {
         // Arrange
-        var errorFunctionMock = new Mock<Func<Error, Task<Result>>>();
+        var errorFunctionMock = new Mock<Func<Error, Task<Result>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         var errorResult = GetErrorResult();
         var sut = Task.FromResult(errorResult);
@@ -2631,7 +2632,7 @@ public class MatchTaskAsyncExtensionsUnitTests
     public async Task MatchAsync_SuccessfulResultTaskWithGenericResultSuccessFunctionAndErrorAction_CallsSuccessFunction()
     {
         // Arrange
-        var successFunctionMock = new Mock<Func<Task<Result<int>>>>();
+        var successFunctionMock = new Mock<Func<Task<Result<int>>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         var sut = Task.FromResult(Result.Success());
 
@@ -2781,7 +2782,7 @@ public class MatchTaskAsyncExtensionsUnitTests
     public async Task MatchAsync_SuccessfulResultTaskWithGenericResultSuccessAndErrorFunctions_CallsSuccessFunction()
     {
         // Arrange
-        var successFunctionMock = new Mock<Func<Task<Result<int>>>>();
+        var successFunctionMock = new Mock<Func<Task<Result<int>>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         var sut = Task.FromResult(Result.Success());
 
@@ -2845,7 +2846,7 @@ public class MatchTaskAsyncExtensionsUnitTests
     public async Task MatchAsync_ErrorResultTaskWithGenericResultSuccessAndErrorFunctions_CallsErrorFunction()
     {
         // Arrange
-        var errorFunctionMock = new Mock<Func<Error, Task<Result<int>>>>();
+        var errorFunctionMock = new Mock<Func<Error, Task<Result<int>>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         var errorResult = GetErrorResult();
         var sut = Task.FromResult(errorResult);
@@ -3399,7 +3400,7 @@ public class MatchTaskAsyncExtensionsUnitTests
     {
         // Arrange
         const int Value = 88;
-        var successFunctionMock = new Mock<Func<int, Task<Result<string>>>>();
+        var successFunctionMock = new Mock<Func<int, Task<Result<string>>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         var sut = Task.FromResult(Result.FromValue(Value));
 
@@ -3561,7 +3562,7 @@ public class MatchTaskAsyncExtensionsUnitTests
     {
         // Arrange
         const int Value = 90;
-        var successFunctionMock = new Mock<Func<int, Task<Result<string>>>>();
+        var successFunctionMock = new Mock<Func<int, Task<Result<string>>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         var sut = Task.FromResult(Result.FromValue(Value));
 
@@ -3627,7 +3628,7 @@ public class MatchTaskAsyncExtensionsUnitTests
     public async Task MatchAsync_ErrorGenericResultTaskWithGenericResultSuccessAndErrorFunctions_CallsErrorFunction()
     {
         // Arrange
-        var errorFunctionMock = new Mock<Func<Error, Task<Result<string>>>>();
+        var errorFunctionMock = new Mock<Func<Error, Task<Result<string>>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         var errorResult = GetErrorResult<int>();
         var sut = Task.FromResult(errorResult);
@@ -3724,7 +3725,7 @@ public class MatchTaskAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task MatchAsync_SuccessfulResultWithErrorFunctionReturningNull_ThrowsArgumentNullException()
+    public async Task MatchAsync_SuccessfulResultWithErrorFunctionReturningNull_ThrowsInvalidOperationException()
     {
         // Arrange
         var sut = Result.Success();
@@ -3734,7 +3735,7 @@ public class MatchTaskAsyncExtensionsUnitTests
             await sut.MatchAsync(() => Task.FromResult<Error>(null!), _ => Task.CompletedTask));
 
         // Assert
-        exception.ShouldBeOfType<ArgumentNullException>();
+        exception.ShouldBeOfType<InvalidOperationException>().Message.ShouldBe("The function ‘ifSuccessFunction’ returned null.");
     }
 
     [Fact]

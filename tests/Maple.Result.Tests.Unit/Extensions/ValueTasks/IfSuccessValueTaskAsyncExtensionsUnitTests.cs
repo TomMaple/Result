@@ -9,6 +9,7 @@
  */
 
 using Maple.Result.Extensions.ValueTasks;
+using Maple.Result.Tests.Unit.Helpers;
 using Moq;
 using System;
 using System.Threading.Tasks;
@@ -187,7 +188,7 @@ public class IfSuccessValueTaskAsyncExtensionsUnitTests
     public async Task IfSuccessAsync_SuccessfulResultWithResultFunction_CallsFunction()
     {
         // Arrange
-        var functionMock = new Mock<Func<ValueTask<Result>>>();
+        var functionMock = new Mock<Func<ValueTask<Result>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         var sut = Result.Success();
 
@@ -439,7 +440,7 @@ public class IfSuccessValueTaskAsyncExtensionsUnitTests
     public async Task IfSuccessAsync_SuccessfulResultWithGenericResultFunction_CallsFunction()
     {
         // Arrange
-        var functionMock = new Mock<Func<ValueTask<Result<int>>>>();
+        var functionMock = new Mock<Func<ValueTask<Result<int>>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         var sut = Result.Success();
 
@@ -695,7 +696,7 @@ public class IfSuccessValueTaskAsyncExtensionsUnitTests
     {
         // Arrange
         const string InitialValue = "Start";
-        var functionMock = new Mock<Func<string, ValueTask<Result>>>();
+        var functionMock = new Mock<Func<string, ValueTask<Result>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         Result<string> sut = InitialValue;
 
@@ -953,7 +954,7 @@ public class IfSuccessValueTaskAsyncExtensionsUnitTests
     {
         // Arrange
         const int InitialValue = 39;
-        var functionMock = new Mock<Func<int, ValueTask<Result<string>>>>();
+        var functionMock = new Mock<Func<int, ValueTask<Result<string>>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         Result<int> sut = InitialValue;
 
@@ -1177,7 +1178,7 @@ public class IfSuccessValueTaskAsyncExtensionsUnitTests
     public async Task IfSuccessAsync_SuccessfulResultValueTaskWithResultFunction_CallsFunction()
     {
         // Arrange
-        var functionMock = new Mock<Func<ValueTask<Result>>>();
+        var functionMock = new Mock<Func<ValueTask<Result>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         var sut = ValueTask.FromResult(Result.Success());
 
@@ -1400,7 +1401,7 @@ public class IfSuccessValueTaskAsyncExtensionsUnitTests
     public async Task IfSuccessAsync_SuccessfulResultValueTaskWithGenericResultFunction_CallsFunction()
     {
         // Arrange
-        var functionMock = new Mock<Func<ValueTask<Result<int>>>>();
+        var functionMock = new Mock<Func<ValueTask<Result<int>>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         var sut = ValueTask.FromResult(Result.Success());
 
@@ -1628,7 +1629,7 @@ public class IfSuccessValueTaskAsyncExtensionsUnitTests
     {
         // Arrange
         const string InitialValue = "Start";
-        var functionMock = new Mock<Func<string, ValueTask<Result>>>();
+        var functionMock = new Mock<Func<string, ValueTask<Result>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         var sut = ValueTask.FromResult(Result.FromValue(InitialValue));
 
@@ -1857,7 +1858,7 @@ public class IfSuccessValueTaskAsyncExtensionsUnitTests
     {
         // Arrange
         const int InitialValue = 39;
-        var functionMock = new Mock<Func<int, ValueTask<Result<string>>>>();
+        var functionMock = new Mock<Func<int, ValueTask<Result<string>>>> { DefaultValueProvider = ResultDefaultValueProvider.Instance };
 
         var sut = ValueTask.FromResult(Result.FromValue(InitialValue));
 
@@ -1997,7 +1998,7 @@ public class IfSuccessValueTaskAsyncExtensionsUnitTests
     }
 
     [Fact]
-    public async Task IfSuccessAsync_SuccessfulResultWithErrorFunctionReturningNull_ThrowsArgumentNullException()
+    public async Task IfSuccessAsync_SuccessfulResultWithErrorFunctionReturningNull_ThrowsInvalidOperationException()
     {
         // Arrange
         var sut = Result.Success();
@@ -2006,7 +2007,7 @@ public class IfSuccessValueTaskAsyncExtensionsUnitTests
         var exception = await Record.ExceptionAsync(async () => await sut.IfSuccessAsync(() => ValueTask.FromResult((Error)null!)));
 
         // Assert
-        exception.ShouldBeOfType<ArgumentNullException>();
+        exception.ShouldBeOfType<InvalidOperationException>().Message.ShouldBe("The function ‘ifSuccessFunction’ returned null.");
     }
 
     [Fact]

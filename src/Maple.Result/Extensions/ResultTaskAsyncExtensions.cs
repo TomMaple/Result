@@ -8,6 +8,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+using Maple.Result.Helpers;
 using System;
 using System.Threading.Tasks;
 
@@ -44,17 +45,22 @@ public static class ResultTaskAsyncExtensions
     /// <exception cref="InvalidOperationException">
     ///     If the asynchronous operation represented by <paramref name="resultTask" /> returns <see langword="null" />.
     /// </exception>
-    public static async Task<Result> ToResultAsync<T>(this Task<Result<T>> resultTask, bool? continueOnCapturedContext = null)
+    public static Task<Result> ToResultAsync<T>(this Task<Result<T>> resultTask, bool? continueOnCapturedContext = null)
     {
         ArgumentNullException.ThrowIfNull(resultTask);
 
-        var result = await resultTask.ConfigureAwait(continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
+        return Core(resultTask, continueOnCapturedContext ?? ResultConfiguration.ContinueOnCapturedContext);
 
-        if (result is null)
-            throw new InvalidOperationException("The asynchronous operation returned null.");
+        static async Task<Result> Core(Task<Result<T>> resultTask, bool continueOnCapturedContext)
+        {
+            var result = await resultTask.ConfigureAwait(continueOnCapturedContext);
 
-        return result.IsSuccess()
-            ? Result.Success()
-            : Result.FromError(result.Error);
+            if (result is null)
+                throw Returned.NullAwaited(nameof(resultTask));
+
+            return result.IsSuccess()
+                ? Result.Success()
+                : Result.FromError(result.Error);
+        }
     }
 }

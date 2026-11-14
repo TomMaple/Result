@@ -43,7 +43,7 @@ public class ResultTaskAsyncExtensionsUnitTests
         // Assert
         exception.ShouldNotBeNull();
         exception.ShouldBeOfType<InvalidOperationException>();
-        exception.Message.ShouldStartWith("The asynchronous operation returned null.");
+        exception.Message.ShouldStartWith("The asynchronous operation represented by ‘resultTask’ returned null.");
     }
 
     [Fact]
