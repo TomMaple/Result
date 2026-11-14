@@ -206,6 +206,11 @@ Changes that can break existing code:
 * **`Deconstruct` is gone.** `var (id, parameters) = message;` and positional patterns such as `message is ("errors.length", var p)` no longer compile; use a property pattern instead: `message is { TemplateId: "errors.length", Params: var p }`.
 * **Repeated or `null` parameter names throw** (see [Stricter validation](#stricter-validation)).
 
+The named values of the factory methods (`detailNamedValues`), `WithErrorDetail`, `ErrorBuilder.AddErrorDetail` and `ErrorBuilder.WithDetailTemplated` are now `params ReadOnlySpan<(string Key, object? Value)>` instead of `params (string Key, object? Value)[]`, so a call no longer allocates an array:
+* inline values, arrays and collection expressions still compile; recompile the calling code (the signatures changed);
+* an explicit `null` is now an empty list (e.g., `WithDetailTemplated("id", null)` no longer throws);
+* a call with named values cannot appear inside an expression tree (e.g., a Moq `Setup(x => …)` or an EF query); build the error outside the expression.
+
 ### Other behaviour changes
 * **`Result.Success()`** returns the same, shared instance on every call. It is immutable, so this is safe; only code that relied on reference inequality of two successful results is affected.
 * **`ToString()`** of `Error` and `TemplatedMessage` now prints the contents of `ErrorDetails`, `Metadata` and `Params` (instead of their type names), and `ErrorUri.ToString()` returns just the *URI* (instead of `ErrorUri { Value = … }`). Update tests or log parsers that depend on the old text.
@@ -244,6 +249,7 @@ The current (2.x-based) version of `Maple.Result.Extensions.HttpClient` calls an
 ## New features
 * **`ErrorBuilder`** — a mutable builder of an immutable `Error`. Create it with `new ErrorBuilder(category, typeUri, title)`, a static method per category (e.g., `ErrorBuilder.Validation(...)`) or `error.ToBuilder()`; set the members with `With…` / `AddErrorDetail` methods; call `Build()`. Every argument is validated when it is passed, so `Build()` never throws. See [ErrorBuilder](Reference/ErrorBuilder/ErrorBuilder.md).
 * **`Error.Metadata`** — machine-readable, response-level values (RFC 9457 *extension members*), with `WithMetadata()`, `WithoutMetadata()` (one key or all) and `TryGetMetadata<T>()`. `TryGetMetadata<T>()` is strict: it returns `true` only when the stored value is a `T` (a stored `int` is not read as `long`), and never for a `null` value. See [Metadata](Reference/Error/Error_Metadata.md).
+* **`WithMetadata` with tuples** — `error.WithMetadata(("limit", 100), ("remaining", 0))` on `Error` and `ErrorBuilder` adds several entries in one call.
 * **`Error.WithErrorDetail()`** and **`Error.ToBuilder()`** — see above.
 * **`ErrorCategory.LimitExceeded`** — see above.
 * **`ResultConfiguration.ContinueOnCapturedContext`** — a global default for the `continueOnCapturedContext` argument of the asynchronous extension methods and for the LINQ query operators; see above.

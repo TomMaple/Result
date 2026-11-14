@@ -16,7 +16,7 @@ The details are kept in the order they were added. Unlike [Error.WithErrorDetail
 
 
 ## AddErrorDetail(ErrorDetail)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/ErrorBuilder.cs#L325" target="_blank">ErrorBuilder.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/ErrorBuilder.cs#L322" target="_blank">ErrorBuilder.cs</a>
 
 Appends the specified individual error occurrence.
 
@@ -48,7 +48,7 @@ foreach (var errorDetail in validationResult.ErrorDetails)
 
 
 ## AddErrorDetail(String, String, String, (String, Object)[])
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/ErrorBuilder.cs#L358" target="_blank">ErrorBuilder.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/ErrorBuilder.cs#L355" target="_blank">ErrorBuilder.cs</a>
 
 Appends a new individual error occurrence.
 
@@ -57,7 +57,7 @@ public ErrorBuilder AddErrorDetail(
         string? propertyPointer,
         string detail,
         string? detailTemplateId = null,
-        params (string Key, object? Value)[] detailNamedValues);
+        params ReadOnlySpan<(string Key, object? Value)> detailNamedValues);
 ```
 
 ### Parameters
@@ -70,8 +70,8 @@ A mandatory human-readable message that describes the specific error occurrence.
 #### `detailTemplateId` [String](https://learn.microsoft.com/dotnet/api/system.string)
 An optional identifier of the message template to generate localized message. When it is `null`, no [DetailTemplated](../ErrorDetail/ErrorDetail_DetailTemplated.md) is set.
 
-#### `detailNamedValues` ([String](https://learn.microsoft.com/dotnet/api/system.string), [Object](https://learn.microsoft.com/en-us/dotnet/api/system.object))[]
-An optional array of named values to be used when rendering the templated message. Values can be `null`; names must be unique. Requires `detailTemplateId`.
+#### `detailNamedValues` [ReadOnlySpan](https://learn.microsoft.com/dotnet/api/system.readonlyspan-1)&lt;([String](https://learn.microsoft.com/dotnet/api/system.string), [Object](https://learn.microsoft.com/dotnet/api/system.object))&gt;
+Optional named values (inline, an array or a collection expression) to be used when rendering the templated message. Values can be `null`; names must be unique. Requires `detailTemplateId`.
 
 ### Returns
 [ErrorBuilder](ErrorBuilder.md)

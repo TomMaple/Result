@@ -80,6 +80,7 @@ The default serializers (*System.Text.Json* and *Newtonsoft.Json*) can write an 
 | [WithErrorDetail(String, String, String, (String, Object)[])](Error_WithErrorDetail.md#witherrordetailstring-string-string-string-object) | Returns a copy of the error with a new error detail appended. |
 | [WithMetadata(String, Object)](Error_WithMetadata.md#withmetadatastring-object) | Returns a copy of the error with the specified metadata entry added or replaced. |
 | [WithMetadata(IEnumerable&lt;KeyValuePair&lt;String, Object&gt;&gt;)](Error_WithMetadata.md#withmetadataienumerablekeyvaluepairstring-object) | Returns a copy of the error with the specified metadata entries added or replaced. |
+| [WithMetadata(ReadOnlySpan&lt;(String, Object)&gt;)](Error_WithMetadata.md#withmetadatareadonlyspanstring-object) | Returns a copy of the error with the specified metadata entries, given as key-value tuples, added or replaced. |
 | [WithoutMetadata()](Error_WithoutMetadata.md#withoutmetadata) | Returns a copy of the error without any metadata. |
 | [WithoutMetadata(String)](Error_WithoutMetadata.md#withoutmetadatastring) | Returns a copy of the error without the metadata entry of the specified key. |
 | [Conflict(ErrorUri, String, String, ErrorUri, String, (String, Object)[])](Error_Conflict.md#conflicterroruri-string-string-erroruri-string-string-object) | Creates a new conflict error with specified parameters. |

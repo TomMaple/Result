@@ -61,7 +61,7 @@ public Error WithErrorDetail(
         string? propertyPointer,
         string detail,
         string? detailTemplateId = null,
-        params (string Key, object? Value)[] detailNamedValues);
+        params ReadOnlySpan<(string Key, object? Value)> detailNamedValues);
 ```
 
 ### Parameters
@@ -74,8 +74,8 @@ A mandatory human-readable message that describes the specific error occurrence.
 #### `detailTemplateId` [String](https://learn.microsoft.com/dotnet/api/system.string)
 An optional identifier of the message template to generate localized message. When it is `null`, no [DetailTemplated](../ErrorDetail/ErrorDetail_DetailTemplated.md) is set.
 
-#### `detailNamedValues` ([String](https://learn.microsoft.com/dotnet/api/system.string), [Object](https://learn.microsoft.com/en-us/dotnet/api/system.object))[]
-An optional array of named values to be used when rendering the templated message. Values can be `null`; names must be unique. Requires `detailTemplateId`.
+#### `detailNamedValues` [ReadOnlySpan](https://learn.microsoft.com/dotnet/api/system.readonlyspan-1)&lt;([String](https://learn.microsoft.com/dotnet/api/system.string), [Object](https://learn.microsoft.com/dotnet/api/system.object))&gt;
+Optional named values (inline, an array or a collection expression) to be used when rendering the templated message. Values can be `null`; names must be unique. Requires `detailTemplateId`.
 
 ### Returns
 [Error](Error.md)

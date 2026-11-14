@@ -18,7 +18,7 @@ It relates to `400` HTTP status code (Bad Request), but can also be used in othe
 
 
 ## Validation(ErrorUri, String, String, ErrorUri, String, (String, Object)[])
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L1319" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L1342" target="_blank">Error.cs</a>
 
 Creates a new instance of the [Error](Error.md) object of the *Validation* category with specified parameters.
 
@@ -29,7 +29,7 @@ public static Error Validation(
         string? detail = null,
         ErrorUri? instanceUri = null,
         string? detailTemplateId = null,
-        params (string Key, object? Value)[] detailNamedValues);
+        params ReadOnlySpan<(string Key, object? Value)> detailNamedValues);
 ```
 
 ### Parameters
@@ -48,8 +48,8 @@ An optional *URI* reference that identifies the specific occurrence of the probl
 #### `detailTemplateId` [String](https://learn.microsoft.com/dotnet/api/system.string)
 An optional identifier of the message template to generate custom, localized message.
 
-#### `detailNamedValues` ([String](https://learn.microsoft.com/dotnet/api/system.string), [Object](https://learn.microsoft.com/en-us/dotnet/api/system.object))[]
-An optional array of named values to be used when rendering the templated message. Values can be `null`; names must be unique and not `null`. Requires `detailTemplateId`: passing values without it throws an [ArgumentException](https://learn.microsoft.com/dotnet/api/system.argumentexception).
+#### `detailNamedValues` [ReadOnlySpan](https://learn.microsoft.com/dotnet/api/system.readonlyspan-1)&lt;([String](https://learn.microsoft.com/dotnet/api/system.string), [Object](https://learn.microsoft.com/dotnet/api/system.object))&gt;
+Optional named values (inline, an array or a collection expression) to be used when rendering the templated message. Values can be `null`; names must be unique and not `null`. Requires `detailTemplateId`: passing values without it throws an [ArgumentException](https://learn.microsoft.com/dotnet/api/system.argumentexception).
 
 ### Returns
 [Error](Error.md)
@@ -94,7 +94,7 @@ error = error.WithErrorDetail(
 
 
 ## Validation(ErrorUri, String, String, ErrorUri, String, IEnumerable&lt;KeyValuePair&lt;String, Object&gt;&gt;)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L1358" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L1381" target="_blank">Error.cs</a>
 
 Creates a new instance of the [Error](Error.md) object of the *Validation* category with specified parameters.
 

@@ -43,20 +43,20 @@ var withoutTemplate = error.ToBuilder()
 
 
 ## WithDetailTemplated(String, (String, Object)[])
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/ErrorBuilder.cs#L293" target="_blank">ErrorBuilder.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/ErrorBuilder.cs#L292" target="_blank">ErrorBuilder.cs</a>
 
 Sets the [DetailTemplated](../Error/Error_DetailTemplated.md) of the error to build to a new [TemplatedMessage](../TemplatedMessage/TemplatedMessage.md).
 
 ```csharp
-public ErrorBuilder WithDetailTemplated(string templateId, params (string Key, object? Value)[] namedValues);
+public ErrorBuilder WithDetailTemplated(string templateId, params ReadOnlySpan<(string Key, object? Value)> namedValues);
 ```
 
 ### Parameters
 #### `templateId` [String](https://learn.microsoft.com/dotnet/api/system.string)
 A mandatory identifier of the message template.
 
-#### `namedValues` ([String](https://learn.microsoft.com/dotnet/api/system.string), [Object](https://learn.microsoft.com/en-us/dotnet/api/system.object))[]
-An optional array of named values to be used when rendering the templated message. Values can be `null`.
+#### `namedValues` [ReadOnlySpan](https://learn.microsoft.com/dotnet/api/system.readonlyspan-1)&lt;([String](https://learn.microsoft.com/dotnet/api/system.string), [Object](https://learn.microsoft.com/dotnet/api/system.object))&gt;
+Optional named values (inline, an array or a collection expression) to be used when rendering the templated message. Values can be `null`.
 
 ### Returns
 [ErrorBuilder](ErrorBuilder.md)
@@ -66,7 +66,7 @@ The current instance of the [ErrorBuilder](ErrorBuilder.md) class.
 ### Exceptions
 [ArgumentNullException](https://learn.microsoft.com/dotnet/api/system.argumentnullexception)
 
-The `templateId`, the `namedValues` array or a parameter name is `null`.
+The `templateId` or a parameter name is `null`.
 
 [ArgumentException](https://learn.microsoft.com/dotnet/api/system.argumentexception)
 
