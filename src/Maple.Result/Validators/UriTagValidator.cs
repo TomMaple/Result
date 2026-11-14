@@ -24,6 +24,8 @@ internal static partial class UriTagValidator
     //   date          = year ["-" month ["-" day]]
     // The date is validated partially: the year is 1xxx or 2xxx, the month is 01-12 and the day is 01-31, each as two digits per the RFC's 2DIGIT grammar.
     // This rejects impossible values such as month 13 or day 32 without asserting a real calendar date (for example, it still accepts 02-30).
+    //   specific = *( pchar / "/" / "?" ), fragment = *( pchar / "/" / "?" ), where pchar allows "%" only as pct-encoded = "%" HEXDIG HEXDIG.
+    // The pattern ends with \z, not $, which would also match before a trailing newline.
     [GeneratedRegex(
         "^tag:" +
         // authorityName = DNSname / emailAddress
@@ -32,7 +34,7 @@ internal static partial class UriTagValidator
         // "," date
         @",[12][0-9]{3}(?:-(?:0[1-9]|1[0-2])(?:-(?:0[1-9]|[12][0-9]|3[01]))?)?" +
         // ":" specific [ "#" fragment ]
-        @":[A-Za-z0-9\-._~%!$&'()*+,;=:@/?]*(?:#[A-Za-z0-9\-._~%!$&'()*+,;=:@/?]*)?$",
+        @":(?:[A-Za-z0-9\-._~!$&'()*+,;=:@/?]|%[0-9A-Fa-f]{2})*(?:#(?:[A-Za-z0-9\-._~!$&'()*+,;=:@/?]|%[0-9A-Fa-f]{2})*)?\z",
         RegexOptions.CultureInvariant)]
     private static partial Regex TagPattern();
 

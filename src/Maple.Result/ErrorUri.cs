@@ -96,6 +96,18 @@ public readonly record struct ErrorUri
     /// <summary>
     ///     Returns a new instance of the <see cref="ErrorUri" /> with a valid <i>URI Locator</i>.
     /// </summary>
+    /// <param name="uriLocator">
+    ///     The absolute <c>http</c> or <c>https</c> <i>URI</i>, e.g., <c>https://example.com/probs/out-of-credit</c>; non-ASCII characters must be
+    ///     percent-encoded, and an internationalized domain name must use its punycode (<c>xn--</c>) form.
+    /// </param>
+    /// <returns>A new instance of the <see cref="ErrorUri" /> with the specified <i>URI Locator</i>.</returns>
+    /// <remarks>
+    ///     The value is stored as passed, so it must already be a valid <i>URI</i> (<i>RFC 3986</i>): leading or trailing white space,
+    ///     spaces and other characters that would need escaping, invalid percent-encoding (e.g., <c>%zz</c>) and a second <c>#</c> are rejected
+    ///     rather than normalized.
+    /// </remarks>
+    /// <exception cref="ArgumentNullException">If the <paramref name="uriLocator" /> is <see langword="null" />.</exception>
+    /// <exception cref="UriFormatException">If the <paramref name="uriLocator" /> is not a valid <i>URI Locator</i>.</exception>
     public static ErrorUri Locator(string uriLocator)
     {
         UriLocatorValidator.Validate(uriLocator);
@@ -106,6 +118,17 @@ public readonly record struct ErrorUri
     /// <summary>
     ///     Returns a new instance of the <see cref="ErrorUri" /> with a valid <i>URI Tag</i>.
     /// </summary>
+    /// <param name="uriTag">
+    ///     The <i>URI Tag</i> (<i>RFC 4151</i>), e.g., <c>tag:example.com,2026:errors:out-of-credit</c>; non-ASCII characters must be
+    ///     percent-encoded, and an internationalized domain name must use its punycode (<c>xn--</c>) form.
+    /// </param>
+    /// <returns>A new instance of the <see cref="ErrorUri" /> with the specified <i>URI Tag</i>.</returns>
+    /// <remarks>
+    ///     The value is stored as passed, so it must match the <i>RFC 4151</i> syntax exactly: white space (including a trailing new line)
+    ///     and invalid percent-encoding (e.g., <c>%zz</c>) are rejected.
+    /// </remarks>
+    /// <exception cref="ArgumentNullException">If the <paramref name="uriTag" /> is <see langword="null" />.</exception>
+    /// <exception cref="UriFormatException">If the <paramref name="uriTag" /> is not a valid <i>URI Tag</i>.</exception>
     public static ErrorUri Tag(string uriTag)
     {
         UriTagValidator.Validate(uriTag);
