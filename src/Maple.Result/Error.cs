@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using Maple.Result.Helpers;
 
@@ -249,13 +250,13 @@ public sealed record Error
     /// </summary>
     /// <param name="propertyPointer">The JSON Pointer which identifies the invalid value in the input data.</param>
     /// <param name="detail">The human-readable explanation specific to this individual error occurrence.</param>
-    /// <param name="messageId">
+    /// <param name="detailTemplateId">
     ///     The identifier of the message template; when <see langword="null" />, no
-    ///     <see cref="ErrorDetail.DetailTemplated" /> is set and the <paramref name="namedValues" /> are ignored.
+    ///     <see cref="ErrorDetail.DetailTemplated" /> is set.
     /// </param>
-    /// <param name="namedValues">
-    ///     The optional collection of parameters (names and values) that might be required to generate
-    ///     a localized message.
+    /// <param name="detailNamedValues">
+    ///     The optional parameters (names and values) that might be required to generate a localized message; they
+    ///     require <paramref name="detailTemplateId" />.
     /// </param>
     /// <returns>A new instance of the <see cref="Error" /> object; the current instance is not modified.</returns>
     /// <remarks>
@@ -269,17 +270,18 @@ public sealed record Error
     ///     </para>
     /// </remarks>
     /// <exception cref="ArgumentNullException">
-    ///     If the <paramref name="detail" /> is <see langword="null" />, or the <paramref name="messageId" /> is set
-    ///     and a name is <see langword="null" />.
+    ///     If the <paramref name="detail" /> or a parameter name in <paramref name="detailNamedValues" /> is
+    ///     <see langword="null" />.
     /// </exception>
     /// <exception cref="ArgumentException">
-    ///     If the <paramref name="messageId" /> is empty or whitespace-only, or a name is repeated.
+    ///     If the <paramref name="detailTemplateId" /> is empty or whitespace-only, a parameter name is repeated, or
+    ///     <paramref name="detailNamedValues" /> are passed without a <paramref name="detailTemplateId" />.
     /// </exception>
-    public Error WithErrorDetail(string? propertyPointer, string detail, string? messageId = null,
-        params (string key, object? value)[] namedValues)
+    public Error WithErrorDetail(string? propertyPointer, string detail, string? detailTemplateId = null,
+        params (string Key, object? Value)[] detailNamedValues)
     {
         return ToBuilder()
-            .AddErrorDetail(propertyPointer, detail, messageId, namedValues)
+            .AddErrorDetail(propertyPointer, detail, detailTemplateId, detailNamedValues)
             .Build();
     }
 
@@ -484,12 +486,26 @@ public sealed record Error
     #region factory methods
 
     private static Error Create(ErrorCategory category, ErrorUri typeUri, string title, string? detail,
+        ErrorUri? instanceUri, string? detailTemplateId, ReadOnlySpan<(string Key, object? Value)> detailNamedValues)
+    {
+        var detailTemplated = TemplatedMessage.CreateOptional(detailTemplateId, detailNamedValues,
+            nameof(detailTemplateId), nameof(detailNamedValues));
+
+        return Create(category, typeUri, title, detail, instanceUri, detailTemplated);
+    }
+
+    private static Error Create(ErrorCategory category, ErrorUri typeUri, string title, string? detail,
         ErrorUri? instanceUri, string? detailTemplateId, IEnumerable<KeyValuePair<string, object?>>? detailNamedValues)
     {
-        var detailTemplated = detailTemplateId is null
-            ? null
-            : new TemplatedMessage(detailTemplateId, detailNamedValues?.ToDictionary(x => x.Key, x => x.Value));
+        var detailTemplated = TemplatedMessage.CreateOptional(detailTemplateId, detailNamedValues,
+            nameof(detailTemplateId), nameof(detailNamedValues));
 
+        return Create(category, typeUri, title, detail, instanceUri, detailTemplated);
+    }
+
+    private static Error Create(ErrorCategory category, ErrorUri typeUri, string title, string? detail,
+        ErrorUri? instanceUri, TemplatedMessage? detailTemplated)
+    {
         return new ErrorBuilder(category, typeUri, title)
             .WithDetail(detail)
             .WithDetailTemplated(detailTemplated)
@@ -497,11 +513,6 @@ public sealed record Error
             .Build();
     }
 
-    private static IEnumerable<KeyValuePair<string, object?>>? ToPairs((string Key, object? Value)[]? namedValues)
-    {
-        return namedValues?.Select(x => new KeyValuePair<string, object?>(x.Key, x.Value));
-    }
-
     /// <summary>
     ///     Creates a new instance of the <see cref="Error" /> object of the <see cref="ErrorCategory.Conflict" /> category.
     /// </summary>
@@ -515,24 +526,29 @@ public sealed record Error
     /// </param>
     /// <param name="detailNamedValues">
     ///     An optional collection of parameters (names and values) to generate a localized detail
-    ///     message (the human-readable explanation specific to this occurrence of the problem).
+    ///     message (the human-readable explanation specific to this occurrence of the problem); they require
+    ///     <paramref name="detailTemplateId" />.
     /// </param>
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
     /// <remarks>
     ///     Indicates that the operation failed because of a data or state conflict (such as a unique constraint violation).<br />
     ///     It can be mapped to the 409 HTTP status code (Conflict) response.
     /// </remarks>
-    /// <exception cref="ArgumentNullException">If the <paramref name="title" /> is <see langword="null" />.</exception>
+    /// <exception cref="ArgumentNullException">
+    ///     If the <paramref name="title" /> or a parameter name in <paramref name="detailNamedValues" /> is
+    ///     <see langword="null" />.
+    /// </exception>
     /// <exception cref="ArgumentException">
-    ///     If the <paramref name="title" /> is empty or whitespace-only, or the <paramref name="detailTemplateId" /> is
-    ///     empty or whitespace-only.
+    ///     If the <paramref name="title" /> or the <paramref name="detailTemplateId" /> is empty or whitespace-only, a
+    ///     parameter name is repeated, or <paramref name="detailNamedValues" /> are passed without a
+    ///     <paramref name="detailTemplateId" />.
     /// </exception>
     public static Error Conflict(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
         params (string Key, object? Value)[] detailNamedValues)
     {
         return Create(ErrorCategory.Conflict, typeUri, title, detail, instanceUri, detailTemplateId,
-            ToPairs(detailNamedValues));
+            detailNamedValues);
     }
 
     /// <summary>
@@ -548,18 +564,24 @@ public sealed record Error
     /// </param>
     /// <param name="detailNamedValues">
     ///     An optional sequence of parameters (names and values) to generate a localized detail
-    ///     message (the human-readable explanation specific to this occurrence of the problem).
+    ///     message (the human-readable explanation specific to this occurrence of the problem); they require
+    ///     <paramref name="detailTemplateId" />.
     /// </param>
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
     /// <remarks>
     ///     Indicates that the operation failed because of a data or state conflict (such as a unique constraint violation).<br />
     ///     It can be mapped to the 409 HTTP status code (Conflict) response.
     /// </remarks>
-    /// <exception cref="ArgumentNullException">If the <paramref name="title" /> is <see langword="null" />.</exception>
-    /// <exception cref="ArgumentException">
-    ///     If the <paramref name="title" /> is empty or whitespace-only, or the <paramref name="detailTemplateId" /> is
-    ///     empty or whitespace-only.
+    /// <exception cref="ArgumentNullException">
+    ///     If the <paramref name="title" /> or a parameter name in <paramref name="detailNamedValues" /> is
+    ///     <see langword="null" />.
     /// </exception>
+    /// <exception cref="ArgumentException">
+    ///     If the <paramref name="title" /> or the <paramref name="detailTemplateId" /> is empty or whitespace-only, a
+    ///     parameter name is repeated, or <paramref name="detailNamedValues" /> are passed without a
+    ///     <paramref name="detailTemplateId" />.
+    /// </exception>
+    [OverloadResolutionPriority(1)]
     public static Error Conflict(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
         IEnumerable<KeyValuePair<string, object?>>? detailNamedValues = null)
@@ -581,24 +603,29 @@ public sealed record Error
     /// </param>
     /// <param name="detailNamedValues">
     ///     An optional collection of parameters (names and values) to generate a localized detail
-    ///     message (the human-readable explanation specific to this occurrence of the problem).
+    ///     message (the human-readable explanation specific to this occurrence of the problem); they require
+    ///     <paramref name="detailTemplateId" />.
     /// </param>
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
     /// <remarks>
     ///     Indicates an unexpected, critical error.<br />
     ///     It can be mapped to the 500 HTTP status code (Internal Server Error) response.
     /// </remarks>
-    /// <exception cref="ArgumentNullException">If the <paramref name="title" /> is <see langword="null" />.</exception>
+    /// <exception cref="ArgumentNullException">
+    ///     If the <paramref name="title" /> or a parameter name in <paramref name="detailNamedValues" /> is
+    ///     <see langword="null" />.
+    /// </exception>
     /// <exception cref="ArgumentException">
-    ///     If the <paramref name="title" /> is empty or whitespace-only, or the <paramref name="detailTemplateId" /> is
-    ///     empty or whitespace-only.
+    ///     If the <paramref name="title" /> or the <paramref name="detailTemplateId" /> is empty or whitespace-only, a
+    ///     parameter name is repeated, or <paramref name="detailNamedValues" /> are passed without a
+    ///     <paramref name="detailTemplateId" />.
     /// </exception>
     public static Error Critical(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
         params (string Key, object? Value)[] detailNamedValues)
     {
         return Create(ErrorCategory.Critical, typeUri, title, detail, instanceUri, detailTemplateId,
-            ToPairs(detailNamedValues));
+            detailNamedValues);
     }
 
     /// <summary>
@@ -614,18 +641,24 @@ public sealed record Error
     /// </param>
     /// <param name="detailNamedValues">
     ///     An optional sequence of parameters (names and values) to generate a localized detail
-    ///     message (the human-readable explanation specific to this occurrence of the problem).
+    ///     message (the human-readable explanation specific to this occurrence of the problem); they require
+    ///     <paramref name="detailTemplateId" />.
     /// </param>
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
     /// <remarks>
     ///     Indicates an unexpected, critical error.<br />
     ///     It can be mapped to the 500 HTTP status code (Internal Server Error) response.
     /// </remarks>
-    /// <exception cref="ArgumentNullException">If the <paramref name="title" /> is <see langword="null" />.</exception>
-    /// <exception cref="ArgumentException">
-    ///     If the <paramref name="title" /> is empty or whitespace-only, or the <paramref name="detailTemplateId" /> is
-    ///     empty or whitespace-only.
+    /// <exception cref="ArgumentNullException">
+    ///     If the <paramref name="title" /> or a parameter name in <paramref name="detailNamedValues" /> is
+    ///     <see langword="null" />.
     /// </exception>
+    /// <exception cref="ArgumentException">
+    ///     If the <paramref name="title" /> or the <paramref name="detailTemplateId" /> is empty or whitespace-only, a
+    ///     parameter name is repeated, or <paramref name="detailNamedValues" /> are passed without a
+    ///     <paramref name="detailTemplateId" />.
+    /// </exception>
+    [OverloadResolutionPriority(1)]
     public static Error Critical(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
         IEnumerable<KeyValuePair<string, object?>>? detailNamedValues = null)
@@ -647,24 +680,29 @@ public sealed record Error
     /// </param>
     /// <param name="detailNamedValues">
     ///     An optional collection of parameters (names and values) to generate a localized detail
-    ///     message (the human-readable explanation specific to this occurrence of the problem).
+    ///     message (the human-readable explanation specific to this occurrence of the problem); they require
+    ///     <paramref name="detailTemplateId" />.
     /// </param>
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
     /// <remarks>
     ///     Indicates an expected error that is not critical to the operation.<br />
     ///     It can be mapped to the 422 HTTP status code (Unprocessable Content) response.
     /// </remarks>
-    /// <exception cref="ArgumentNullException">If the <paramref name="title" /> is <see langword="null" />.</exception>
+    /// <exception cref="ArgumentNullException">
+    ///     If the <paramref name="title" /> or a parameter name in <paramref name="detailNamedValues" /> is
+    ///     <see langword="null" />.
+    /// </exception>
     /// <exception cref="ArgumentException">
-    ///     If the <paramref name="title" /> is empty or whitespace-only, or the <paramref name="detailTemplateId" /> is
-    ///     empty or whitespace-only.
+    ///     If the <paramref name="title" /> or the <paramref name="detailTemplateId" /> is empty or whitespace-only, a
+    ///     parameter name is repeated, or <paramref name="detailNamedValues" /> are passed without a
+    ///     <paramref name="detailTemplateId" />.
     /// </exception>
     public static Error Failure(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
         params (string Key, object? Value)[] detailNamedValues)
     {
         return Create(ErrorCategory.Failure, typeUri, title, detail, instanceUri, detailTemplateId,
-            ToPairs(detailNamedValues));
+            detailNamedValues);
     }
 
     /// <summary>
@@ -680,18 +718,24 @@ public sealed record Error
     /// </param>
     /// <param name="detailNamedValues">
     ///     An optional sequence of parameters (names and values) to generate a localized detail
-    ///     message (the human-readable explanation specific to this occurrence of the problem).
+    ///     message (the human-readable explanation specific to this occurrence of the problem); they require
+    ///     <paramref name="detailTemplateId" />.
     /// </param>
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
     /// <remarks>
     ///     Indicates an expected error that is not critical to the operation.<br />
     ///     It can be mapped to the 422 HTTP status code (Unprocessable Content) response.
     /// </remarks>
-    /// <exception cref="ArgumentNullException">If the <paramref name="title" /> is <see langword="null" />.</exception>
-    /// <exception cref="ArgumentException">
-    ///     If the <paramref name="title" /> is empty or whitespace-only, or the <paramref name="detailTemplateId" /> is
-    ///     empty or whitespace-only.
+    /// <exception cref="ArgumentNullException">
+    ///     If the <paramref name="title" /> or a parameter name in <paramref name="detailNamedValues" /> is
+    ///     <see langword="null" />.
     /// </exception>
+    /// <exception cref="ArgumentException">
+    ///     If the <paramref name="title" /> or the <paramref name="detailTemplateId" /> is empty or whitespace-only, a
+    ///     parameter name is repeated, or <paramref name="detailNamedValues" /> are passed without a
+    ///     <paramref name="detailTemplateId" />.
+    /// </exception>
+    [OverloadResolutionPriority(1)]
     public static Error Failure(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
         IEnumerable<KeyValuePair<string, object?>>? detailNamedValues = null)
@@ -713,7 +757,8 @@ public sealed record Error
     /// </param>
     /// <param name="detailNamedValues">
     ///     An optional collection of parameters (names and values) to generate a localized detail
-    ///     message (the human-readable explanation specific to this occurrence of the problem).
+    ///     message (the human-readable explanation specific to this occurrence of the problem); they require
+    ///     <paramref name="detailTemplateId" />.
     /// </param>
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
     /// <remarks>
@@ -721,17 +766,21 @@ public sealed record Error
     ///     The operation may succeed later or once the limit is raised.<br />
     ///     It can be mapped to the 429 HTTP status code (Too Many Requests) response.
     /// </remarks>
-    /// <exception cref="ArgumentNullException">If the <paramref name="title" /> is <see langword="null" />.</exception>
+    /// <exception cref="ArgumentNullException">
+    ///     If the <paramref name="title" /> or a parameter name in <paramref name="detailNamedValues" /> is
+    ///     <see langword="null" />.
+    /// </exception>
     /// <exception cref="ArgumentException">
-    ///     If the <paramref name="title" /> is empty or whitespace-only, or the <paramref name="detailTemplateId" /> is
-    ///     empty or whitespace-only.
+    ///     If the <paramref name="title" /> or the <paramref name="detailTemplateId" /> is empty or whitespace-only, a
+    ///     parameter name is repeated, or <paramref name="detailNamedValues" /> are passed without a
+    ///     <paramref name="detailTemplateId" />.
     /// </exception>
     public static Error LimitExceeded(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
         params (string Key, object? Value)[] detailNamedValues)
     {
         return Create(ErrorCategory.LimitExceeded, typeUri, title, detail, instanceUri, detailTemplateId,
-            ToPairs(detailNamedValues));
+            detailNamedValues);
     }
 
     /// <summary>
@@ -747,7 +796,8 @@ public sealed record Error
     /// </param>
     /// <param name="detailNamedValues">
     ///     An optional sequence of parameters (names and values) to generate a localized detail
-    ///     message (the human-readable explanation specific to this occurrence of the problem).
+    ///     message (the human-readable explanation specific to this occurrence of the problem); they require
+    ///     <paramref name="detailTemplateId" />.
     /// </param>
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
     /// <remarks>
@@ -755,11 +805,16 @@ public sealed record Error
     ///     The operation may succeed later or once the limit is raised.<br />
     ///     It can be mapped to the 429 HTTP status code (Too Many Requests) response.
     /// </remarks>
-    /// <exception cref="ArgumentNullException">If the <paramref name="title" /> is <see langword="null" />.</exception>
-    /// <exception cref="ArgumentException">
-    ///     If the <paramref name="title" /> is empty or whitespace-only, or the <paramref name="detailTemplateId" /> is
-    ///     empty or whitespace-only.
+    /// <exception cref="ArgumentNullException">
+    ///     If the <paramref name="title" /> or a parameter name in <paramref name="detailNamedValues" /> is
+    ///     <see langword="null" />.
     /// </exception>
+    /// <exception cref="ArgumentException">
+    ///     If the <paramref name="title" /> or the <paramref name="detailTemplateId" /> is empty or whitespace-only, a
+    ///     parameter name is repeated, or <paramref name="detailNamedValues" /> are passed without a
+    ///     <paramref name="detailTemplateId" />.
+    /// </exception>
+    [OverloadResolutionPriority(1)]
     public static Error LimitExceeded(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
         IEnumerable<KeyValuePair<string, object?>>? detailNamedValues = null)
@@ -781,24 +836,29 @@ public sealed record Error
     /// </param>
     /// <param name="detailNamedValues">
     ///     An optional collection of parameters (names and values) to generate a localized detail
-    ///     message (the human-readable explanation specific to this occurrence of the problem).
+    ///     message (the human-readable explanation specific to this occurrence of the problem); they require
+    ///     <paramref name="detailTemplateId" />.
     /// </param>
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
     /// <remarks>
     ///     Indicates that the requested resource has not been found.<br />
     ///     It can be mapped to the 404 HTTP status code (Not Found) response.
     /// </remarks>
-    /// <exception cref="ArgumentNullException">If the <paramref name="title" /> is <see langword="null" />.</exception>
+    /// <exception cref="ArgumentNullException">
+    ///     If the <paramref name="title" /> or a parameter name in <paramref name="detailNamedValues" /> is
+    ///     <see langword="null" />.
+    /// </exception>
     /// <exception cref="ArgumentException">
-    ///     If the <paramref name="title" /> is empty or whitespace-only, or the <paramref name="detailTemplateId" /> is
-    ///     empty or whitespace-only.
+    ///     If the <paramref name="title" /> or the <paramref name="detailTemplateId" /> is empty or whitespace-only, a
+    ///     parameter name is repeated, or <paramref name="detailNamedValues" /> are passed without a
+    ///     <paramref name="detailTemplateId" />.
     /// </exception>
     public static Error NotFound(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
         params (string Key, object? Value)[] detailNamedValues)
     {
         return Create(ErrorCategory.NotFound, typeUri, title, detail, instanceUri, detailTemplateId,
-            ToPairs(detailNamedValues));
+            detailNamedValues);
     }
 
     /// <summary>
@@ -814,18 +874,24 @@ public sealed record Error
     /// </param>
     /// <param name="detailNamedValues">
     ///     An optional sequence of parameters (names and values) to generate a localized detail
-    ///     message (the human-readable explanation specific to this occurrence of the problem).
+    ///     message (the human-readable explanation specific to this occurrence of the problem); they require
+    ///     <paramref name="detailTemplateId" />.
     /// </param>
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
     /// <remarks>
     ///     Indicates that the requested resource has not been found.<br />
     ///     It can be mapped to the 404 HTTP status code (Not Found) response.
     /// </remarks>
-    /// <exception cref="ArgumentNullException">If the <paramref name="title" /> is <see langword="null" />.</exception>
-    /// <exception cref="ArgumentException">
-    ///     If the <paramref name="title" /> is empty or whitespace-only, or the <paramref name="detailTemplateId" /> is
-    ///     empty or whitespace-only.
+    /// <exception cref="ArgumentNullException">
+    ///     If the <paramref name="title" /> or a parameter name in <paramref name="detailNamedValues" /> is
+    ///     <see langword="null" />.
     /// </exception>
+    /// <exception cref="ArgumentException">
+    ///     If the <paramref name="title" /> or the <paramref name="detailTemplateId" /> is empty or whitespace-only, a
+    ///     parameter name is repeated, or <paramref name="detailNamedValues" /> are passed without a
+    ///     <paramref name="detailTemplateId" />.
+    /// </exception>
+    [OverloadResolutionPriority(1)]
     public static Error NotFound(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
         IEnumerable<KeyValuePair<string, object?>>? detailNamedValues = null)
@@ -847,24 +913,29 @@ public sealed record Error
     /// </param>
     /// <param name="detailNamedValues">
     ///     An optional collection of parameters (names and values) to generate a localized detail
-    ///     message (the human-readable explanation specific to this occurrence of the problem).
+    ///     message (the human-readable explanation specific to this occurrence of the problem); they require
+    ///     <paramref name="detailTemplateId" />.
     /// </param>
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
     /// <remarks>
     ///     Indicates that the operation, feature or case is not implemented.<br />
     ///     It can be mapped to the 501 HTTP status code (Not Implemented) response.
     /// </remarks>
-    /// <exception cref="ArgumentNullException">If the <paramref name="title" /> is <see langword="null" />.</exception>
+    /// <exception cref="ArgumentNullException">
+    ///     If the <paramref name="title" /> or a parameter name in <paramref name="detailNamedValues" /> is
+    ///     <see langword="null" />.
+    /// </exception>
     /// <exception cref="ArgumentException">
-    ///     If the <paramref name="title" /> is empty or whitespace-only, or the <paramref name="detailTemplateId" /> is
-    ///     empty or whitespace-only.
+    ///     If the <paramref name="title" /> or the <paramref name="detailTemplateId" /> is empty or whitespace-only, a
+    ///     parameter name is repeated, or <paramref name="detailNamedValues" /> are passed without a
+    ///     <paramref name="detailTemplateId" />.
     /// </exception>
     public static Error NotImplemented(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
         params (string Key, object? Value)[] detailNamedValues)
     {
         return Create(ErrorCategory.NotImplemented, typeUri, title, detail, instanceUri, detailTemplateId,
-            ToPairs(detailNamedValues));
+            detailNamedValues);
     }
 
     /// <summary>
@@ -880,18 +951,24 @@ public sealed record Error
     /// </param>
     /// <param name="detailNamedValues">
     ///     An optional sequence of parameters (names and values) to generate a localized detail
-    ///     message (the human-readable explanation specific to this occurrence of the problem).
+    ///     message (the human-readable explanation specific to this occurrence of the problem); they require
+    ///     <paramref name="detailTemplateId" />.
     /// </param>
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
     /// <remarks>
     ///     Indicates that the operation, feature or case is not implemented.<br />
     ///     It can be mapped to the 501 HTTP status code (Not Implemented) response.
     /// </remarks>
-    /// <exception cref="ArgumentNullException">If the <paramref name="title" /> is <see langword="null" />.</exception>
-    /// <exception cref="ArgumentException">
-    ///     If the <paramref name="title" /> is empty or whitespace-only, or the <paramref name="detailTemplateId" /> is
-    ///     empty or whitespace-only.
+    /// <exception cref="ArgumentNullException">
+    ///     If the <paramref name="title" /> or a parameter name in <paramref name="detailNamedValues" /> is
+    ///     <see langword="null" />.
     /// </exception>
+    /// <exception cref="ArgumentException">
+    ///     If the <paramref name="title" /> or the <paramref name="detailTemplateId" /> is empty or whitespace-only, a
+    ///     parameter name is repeated, or <paramref name="detailNamedValues" /> are passed without a
+    ///     <paramref name="detailTemplateId" />.
+    /// </exception>
+    [OverloadResolutionPriority(1)]
     public static Error NotImplemented(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
         IEnumerable<KeyValuePair<string, object?>>? detailNamedValues = null)
@@ -913,24 +990,29 @@ public sealed record Error
     /// </param>
     /// <param name="detailNamedValues">
     ///     An optional collection of parameters (names and values) to generate a localized detail
-    ///     message (the human-readable explanation specific to this occurrence of the problem).
+    ///     message (the human-readable explanation specific to this occurrence of the problem); they require
+    ///     <paramref name="detailTemplateId" />.
     /// </param>
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
     /// <remarks>
     ///     Indicates that the operation failed because it was not completed within the allotted time.<br />
     ///     It can be mapped to the 408 HTTP status code (Request Timeout) response.
     /// </remarks>
-    /// <exception cref="ArgumentNullException">If the <paramref name="title" /> is <see langword="null" />.</exception>
+    /// <exception cref="ArgumentNullException">
+    ///     If the <paramref name="title" /> or a parameter name in <paramref name="detailNamedValues" /> is
+    ///     <see langword="null" />.
+    /// </exception>
     /// <exception cref="ArgumentException">
-    ///     If the <paramref name="title" /> is empty or whitespace-only, or the <paramref name="detailTemplateId" /> is
-    ///     empty or whitespace-only.
+    ///     If the <paramref name="title" /> or the <paramref name="detailTemplateId" /> is empty or whitespace-only, a
+    ///     parameter name is repeated, or <paramref name="detailNamedValues" /> are passed without a
+    ///     <paramref name="detailTemplateId" />.
     /// </exception>
     public static Error Timeout(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
         params (string Key, object? Value)[] detailNamedValues)
     {
         return Create(ErrorCategory.Timeout, typeUri, title, detail, instanceUri, detailTemplateId,
-            ToPairs(detailNamedValues));
+            detailNamedValues);
     }
 
     /// <summary>
@@ -946,18 +1028,24 @@ public sealed record Error
     /// </param>
     /// <param name="detailNamedValues">
     ///     An optional sequence of parameters (names and values) to generate a localized detail
-    ///     message (the human-readable explanation specific to this occurrence of the problem).
+    ///     message (the human-readable explanation specific to this occurrence of the problem); they require
+    ///     <paramref name="detailTemplateId" />.
     /// </param>
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
     /// <remarks>
     ///     Indicates that the operation failed because it was not completed within the allotted time.<br />
     ///     It can be mapped to the 408 HTTP status code (Request Timeout) response.
     /// </remarks>
-    /// <exception cref="ArgumentNullException">If the <paramref name="title" /> is <see langword="null" />.</exception>
-    /// <exception cref="ArgumentException">
-    ///     If the <paramref name="title" /> is empty or whitespace-only, or the <paramref name="detailTemplateId" /> is
-    ///     empty or whitespace-only.
+    /// <exception cref="ArgumentNullException">
+    ///     If the <paramref name="title" /> or a parameter name in <paramref name="detailNamedValues" /> is
+    ///     <see langword="null" />.
     /// </exception>
+    /// <exception cref="ArgumentException">
+    ///     If the <paramref name="title" /> or the <paramref name="detailTemplateId" /> is empty or whitespace-only, a
+    ///     parameter name is repeated, or <paramref name="detailNamedValues" /> are passed without a
+    ///     <paramref name="detailTemplateId" />.
+    /// </exception>
+    [OverloadResolutionPriority(1)]
     public static Error Timeout(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
         IEnumerable<KeyValuePair<string, object?>>? detailNamedValues = null)
@@ -980,24 +1068,29 @@ public sealed record Error
     /// </param>
     /// <param name="detailNamedValues">
     ///     An optional collection of parameters (names and values) to generate a localized detail
-    ///     message (the human-readable explanation specific to this occurrence of the problem).
+    ///     message (the human-readable explanation specific to this occurrence of the problem); they require
+    ///     <paramref name="detailTemplateId" />.
     /// </param>
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
     /// <remarks>
     ///     Indicates that the operation has failed because the authentication is missing or invalid.<br />
     ///     It can be mapped to the 401 HTTP status code (Unauthorized) response.
     /// </remarks>
-    /// <exception cref="ArgumentNullException">If the <paramref name="title" /> is <see langword="null" />.</exception>
+    /// <exception cref="ArgumentNullException">
+    ///     If the <paramref name="title" /> or a parameter name in <paramref name="detailNamedValues" /> is
+    ///     <see langword="null" />.
+    /// </exception>
     /// <exception cref="ArgumentException">
-    ///     If the <paramref name="title" /> is empty or whitespace-only, or the <paramref name="detailTemplateId" /> is
-    ///     empty or whitespace-only.
+    ///     If the <paramref name="title" /> or the <paramref name="detailTemplateId" /> is empty or whitespace-only, a
+    ///     parameter name is repeated, or <paramref name="detailNamedValues" /> are passed without a
+    ///     <paramref name="detailTemplateId" />.
     /// </exception>
     public static Error Unauthenticated(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
         params (string Key, object? Value)[] detailNamedValues)
     {
         return Create(ErrorCategory.Unauthenticated, typeUri, title, detail, instanceUri, detailTemplateId,
-            ToPairs(detailNamedValues));
+            detailNamedValues);
     }
 
     /// <summary>
@@ -1013,18 +1106,24 @@ public sealed record Error
     /// </param>
     /// <param name="detailNamedValues">
     ///     An optional sequence of parameters (names and values) to generate a localized detail
-    ///     message (the human-readable explanation specific to this occurrence of the problem).
+    ///     message (the human-readable explanation specific to this occurrence of the problem); they require
+    ///     <paramref name="detailTemplateId" />.
     /// </param>
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
     /// <remarks>
     ///     Indicates that the operation has failed because the authentication is missing or invalid.<br />
     ///     It can be mapped to the 401 HTTP status code (Unauthorized) response.
     /// </remarks>
-    /// <exception cref="ArgumentNullException">If the <paramref name="title" /> is <see langword="null" />.</exception>
-    /// <exception cref="ArgumentException">
-    ///     If the <paramref name="title" /> is empty or whitespace-only, or the <paramref name="detailTemplateId" /> is
-    ///     empty or whitespace-only.
+    /// <exception cref="ArgumentNullException">
+    ///     If the <paramref name="title" /> or a parameter name in <paramref name="detailNamedValues" /> is
+    ///     <see langword="null" />.
     /// </exception>
+    /// <exception cref="ArgumentException">
+    ///     If the <paramref name="title" /> or the <paramref name="detailTemplateId" /> is empty or whitespace-only, a
+    ///     parameter name is repeated, or <paramref name="detailNamedValues" /> are passed without a
+    ///     <paramref name="detailTemplateId" />.
+    /// </exception>
+    [OverloadResolutionPriority(1)]
     public static Error Unauthenticated(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
         IEnumerable<KeyValuePair<string, object?>>? detailNamedValues = null)
@@ -1046,24 +1145,29 @@ public sealed record Error
     /// </param>
     /// <param name="detailNamedValues">
     ///     An optional collection of parameters (names and values) to generate a localized detail
-    ///     message (the human-readable explanation specific to this occurrence of the problem).
+    ///     message (the human-readable explanation specific to this occurrence of the problem); they require
+    ///     <paramref name="detailTemplateId" />.
     /// </param>
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
     /// <remarks>
     ///     Indicates that the operation has failed because the identity does not have permission to perform it.<br />
     ///     It can be mapped to the 403 HTTP status code (Forbidden) response.
     /// </remarks>
-    /// <exception cref="ArgumentNullException">If the <paramref name="title" /> is <see langword="null" />.</exception>
+    /// <exception cref="ArgumentNullException">
+    ///     If the <paramref name="title" /> or a parameter name in <paramref name="detailNamedValues" /> is
+    ///     <see langword="null" />.
+    /// </exception>
     /// <exception cref="ArgumentException">
-    ///     If the <paramref name="title" /> is empty or whitespace-only, or the <paramref name="detailTemplateId" /> is
-    ///     empty or whitespace-only.
+    ///     If the <paramref name="title" /> or the <paramref name="detailTemplateId" /> is empty or whitespace-only, a
+    ///     parameter name is repeated, or <paramref name="detailNamedValues" /> are passed without a
+    ///     <paramref name="detailTemplateId" />.
     /// </exception>
     public static Error Unauthorized(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
         params (string Key, object? Value)[] detailNamedValues)
     {
         return Create(ErrorCategory.Unauthorized, typeUri, title, detail, instanceUri, detailTemplateId,
-            ToPairs(detailNamedValues));
+            detailNamedValues);
     }
 
     /// <summary>
@@ -1079,18 +1183,24 @@ public sealed record Error
     /// </param>
     /// <param name="detailNamedValues">
     ///     An optional sequence of parameters (names and values) to generate a localized detail
-    ///     message (the human-readable explanation specific to this occurrence of the problem).
+    ///     message (the human-readable explanation specific to this occurrence of the problem); they require
+    ///     <paramref name="detailTemplateId" />.
     /// </param>
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
     /// <remarks>
     ///     Indicates that the operation has failed because the identity does not have permission to perform it.<br />
     ///     It can be mapped to the 403 HTTP status code (Forbidden) response.
     /// </remarks>
-    /// <exception cref="ArgumentNullException">If the <paramref name="title" /> is <see langword="null" />.</exception>
-    /// <exception cref="ArgumentException">
-    ///     If the <paramref name="title" /> is empty or whitespace-only, or the <paramref name="detailTemplateId" /> is
-    ///     empty or whitespace-only.
+    /// <exception cref="ArgumentNullException">
+    ///     If the <paramref name="title" /> or a parameter name in <paramref name="detailNamedValues" /> is
+    ///     <see langword="null" />.
     /// </exception>
+    /// <exception cref="ArgumentException">
+    ///     If the <paramref name="title" /> or the <paramref name="detailTemplateId" /> is empty or whitespace-only, a
+    ///     parameter name is repeated, or <paramref name="detailNamedValues" /> are passed without a
+    ///     <paramref name="detailTemplateId" />.
+    /// </exception>
+    [OverloadResolutionPriority(1)]
     public static Error Unauthorized(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
         IEnumerable<KeyValuePair<string, object?>>? detailNamedValues = null)
@@ -1112,24 +1222,29 @@ public sealed record Error
     /// </param>
     /// <param name="detailNamedValues">
     ///     An optional collection of parameters (names and values) to generate a localized detail
-    ///     message (the human-readable explanation specific to this occurrence of the problem).
+    ///     message (the human-readable explanation specific to this occurrence of the problem); they require
+    ///     <paramref name="detailTemplateId" />.
     /// </param>
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
     /// <remarks>
     ///     Indicates that the service is not available and the operation can be retried later.<br />
     ///     It can be mapped to the 503 HTTP status code (Service Unavailable) response.
     /// </remarks>
-    /// <exception cref="ArgumentNullException">If the <paramref name="title" /> is <see langword="null" />.</exception>
+    /// <exception cref="ArgumentNullException">
+    ///     If the <paramref name="title" /> or a parameter name in <paramref name="detailNamedValues" /> is
+    ///     <see langword="null" />.
+    /// </exception>
     /// <exception cref="ArgumentException">
-    ///     If the <paramref name="title" /> is empty or whitespace-only, or the <paramref name="detailTemplateId" /> is
-    ///     empty or whitespace-only.
+    ///     If the <paramref name="title" /> or the <paramref name="detailTemplateId" /> is empty or whitespace-only, a
+    ///     parameter name is repeated, or <paramref name="detailNamedValues" /> are passed without a
+    ///     <paramref name="detailTemplateId" />.
     /// </exception>
     public static Error Unavailable(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
         params (string Key, object? Value)[] detailNamedValues)
     {
         return Create(ErrorCategory.Unavailable, typeUri, title, detail, instanceUri, detailTemplateId,
-            ToPairs(detailNamedValues));
+            detailNamedValues);
     }
 
     /// <summary>
@@ -1145,18 +1260,24 @@ public sealed record Error
     /// </param>
     /// <param name="detailNamedValues">
     ///     An optional sequence of parameters (names and values) to generate a localized detail
-    ///     message (the human-readable explanation specific to this occurrence of the problem).
+    ///     message (the human-readable explanation specific to this occurrence of the problem); they require
+    ///     <paramref name="detailTemplateId" />.
     /// </param>
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
     /// <remarks>
     ///     Indicates that the service is not available and the operation can be retried later.<br />
     ///     It can be mapped to the 503 HTTP status code (Service Unavailable) response.
     /// </remarks>
-    /// <exception cref="ArgumentNullException">If the <paramref name="title" /> is <see langword="null" />.</exception>
-    /// <exception cref="ArgumentException">
-    ///     If the <paramref name="title" /> is empty or whitespace-only, or the <paramref name="detailTemplateId" /> is
-    ///     empty or whitespace-only.
+    /// <exception cref="ArgumentNullException">
+    ///     If the <paramref name="title" /> or a parameter name in <paramref name="detailNamedValues" /> is
+    ///     <see langword="null" />.
     /// </exception>
+    /// <exception cref="ArgumentException">
+    ///     If the <paramref name="title" /> or the <paramref name="detailTemplateId" /> is empty or whitespace-only, a
+    ///     parameter name is repeated, or <paramref name="detailNamedValues" /> are passed without a
+    ///     <paramref name="detailTemplateId" />.
+    /// </exception>
+    [OverloadResolutionPriority(1)]
     public static Error Unavailable(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
         IEnumerable<KeyValuePair<string, object?>>? detailNamedValues = null)
@@ -1178,24 +1299,29 @@ public sealed record Error
     /// </param>
     /// <param name="detailNamedValues">
     ///     An optional collection of parameters (names and values) to generate a localized detail
-    ///     message (the human-readable explanation specific to this occurrence of the problem).
+    ///     message (the human-readable explanation specific to this occurrence of the problem); they require
+    ///     <paramref name="detailTemplateId" />.
     /// </param>
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
     /// <remarks>
     ///     Represents validation errors that prevent the underlying service from completing.<br />
     ///     It can be mapped to the 400 HTTP status code (Bad Request) response.
     /// </remarks>
-    /// <exception cref="ArgumentNullException">If the <paramref name="title" /> is <see langword="null" />.</exception>
+    /// <exception cref="ArgumentNullException">
+    ///     If the <paramref name="title" /> or a parameter name in <paramref name="detailNamedValues" /> is
+    ///     <see langword="null" />.
+    /// </exception>
     /// <exception cref="ArgumentException">
-    ///     If the <paramref name="title" /> is empty or whitespace-only, or the <paramref name="detailTemplateId" /> is
-    ///     empty or whitespace-only.
+    ///     If the <paramref name="title" /> or the <paramref name="detailTemplateId" /> is empty or whitespace-only, a
+    ///     parameter name is repeated, or <paramref name="detailNamedValues" /> are passed without a
+    ///     <paramref name="detailTemplateId" />.
     /// </exception>
     public static Error Validation(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
         params (string Key, object? Value)[] detailNamedValues)
     {
         return Create(ErrorCategory.Validation, typeUri, title, detail, instanceUri, detailTemplateId,
-            ToPairs(detailNamedValues));
+            detailNamedValues);
     }
 
     /// <summary>
@@ -1211,18 +1337,24 @@ public sealed record Error
     /// </param>
     /// <param name="detailNamedValues">
     ///     An optional collection of parameters (names and values) to generate a localized detail
-    ///     message (the human-readable explanation specific to this occurrence of the problem).
+    ///     message (the human-readable explanation specific to this occurrence of the problem); they require
+    ///     <paramref name="detailTemplateId" />.
     /// </param>
     /// <returns>A new instance of the <see cref="Error" /> object.</returns>
     /// <remarks>
     ///     Represents validation errors that prevent the underlying service from completing.<br />
     ///     It can be mapped to the 400 HTTP status code (Bad Request) response.
     /// </remarks>
-    /// <exception cref="ArgumentNullException">If the <paramref name="title" /> is <see langword="null" />.</exception>
-    /// <exception cref="ArgumentException">
-    ///     If the <paramref name="title" /> is empty or whitespace-only, or the <paramref name="detailTemplateId" /> is
-    ///     empty or whitespace-only.
+    /// <exception cref="ArgumentNullException">
+    ///     If the <paramref name="title" /> or a parameter name in <paramref name="detailNamedValues" /> is
+    ///     <see langword="null" />.
     /// </exception>
+    /// <exception cref="ArgumentException">
+    ///     If the <paramref name="title" /> or the <paramref name="detailTemplateId" /> is empty or whitespace-only, a
+    ///     parameter name is repeated, or <paramref name="detailNamedValues" /> are passed without a
+    ///     <paramref name="detailTemplateId" />.
+    /// </exception>
+    [OverloadResolutionPriority(1)]
     public static Error Validation(ErrorUri typeUri, string title, string? detail = null,
         ErrorUri? instanceUri = null, string? detailTemplateId = null,
         IEnumerable<KeyValuePair<string, object?>>? detailNamedValues = null)

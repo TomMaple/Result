@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Maple.Result.Validators;
 
 namespace Maple.Result;
@@ -264,9 +265,9 @@ public sealed class ErrorBuilder
     /// <param name="detailTemplated">The templated explanation, or <see langword="null" /> to clear it.</param>
     /// <returns>The current <see cref="ErrorBuilder" /> instance.</returns>
     /// <remarks>
-    ///     A bare <see langword="null" /> literal is ambiguous between the overloads of this method; to clear the
-    ///     value, write <c>WithDetailTemplated((TemplatedMessage?)null)</c>.
+    ///     <c>WithDetailTemplated(null)</c> binds to this overload and clears the value.
     /// </remarks>
+    [OverloadResolutionPriority(1)]
     public ErrorBuilder WithDetailTemplated(TemplatedMessage? detailTemplated)
     {
         _detailTemplated = detailTemplated;
@@ -278,21 +279,22 @@ public sealed class ErrorBuilder
     /// </summary>
     /// <param name="templateId">The identifier of the message template.</param>
     /// <param name="namedValues">
-    ///     The parameters (names and values) that might be required to generate a localized message.
+    ///     The parameters (names and values) that might be required to generate a localized message; values can be
+    ///     <see langword="null" />.
     /// </param>
     /// <returns>The current <see cref="ErrorBuilder" /> instance.</returns>
     /// <exception cref="ArgumentNullException">
-    ///     If the <paramref name="templateId" />, the <paramref name="namedValues" /> or any name is
+    ///     If the <paramref name="templateId" />, the <paramref name="namedValues" /> array or a parameter name is
     ///     <see langword="null" />.
     /// </exception>
     /// <exception cref="ArgumentException">
-    ///     If the <paramref name="templateId" /> is empty or whitespace-only, or a name is repeated.
+    ///     If the <paramref name="templateId" /> is empty or whitespace-only, or a parameter name is repeated.
     /// </exception>
     public ErrorBuilder WithDetailTemplated(string templateId, params (string Key, object? Value)[] namedValues)
     {
         ArgumentNullException.ThrowIfNull(namedValues);
 
-        _detailTemplated = new TemplatedMessage(templateId, namedValues.ToDictionary(x => x.Key, x => x.Value));
+        _detailTemplated = TemplatedMessage.Create(templateId, namedValues, nameof(templateId), nameof(namedValues));
         return this;
     }
 
@@ -333,33 +335,33 @@ public sealed class ErrorBuilder
     /// </summary>
     /// <param name="propertyPointer">The JSON Pointer which identifies the invalid value in the input data.</param>
     /// <param name="detail">The human-readable explanation specific to this individual error occurrence.</param>
-    /// <param name="messageId">
+    /// <param name="detailTemplateId">
     ///     The identifier of the message template; when <see langword="null" />, no
-    ///     <see cref="ErrorDetail.DetailTemplated" /> is set and the <paramref name="namedValues" /> are ignored.
+    ///     <see cref="ErrorDetail.DetailTemplated" /> is set.
     /// </param>
-    /// <param name="namedValues">
-    ///     The optional collection of parameters (names and values) that might be required to generate
-    ///     a localized message.
+    /// <param name="detailNamedValues">
+    ///     The optional parameters (names and values) that might be required to generate a localized message; they
+    ///     require <paramref name="detailTemplateId" />.
     /// </param>
     /// <returns>The current <see cref="ErrorBuilder" /> instance.</returns>
     /// <remarks>
     ///     For more details about JSON Pointers, see: <seealso href="https://datatracker.ietf.org/doc/html/rfc6901" />.
     /// </remarks>
     /// <exception cref="ArgumentNullException">
-    ///     If the <paramref name="detail" /> is <see langword="null" />, or the <paramref name="messageId" /> is set
-    ///     and a name is <see langword="null" />.
+    ///     If the <paramref name="detail" /> or a parameter name in <paramref name="detailNamedValues" /> is
+    ///     <see langword="null" />.
     /// </exception>
     /// <exception cref="ArgumentException">
-    ///     If the <paramref name="messageId" /> is empty or whitespace-only, or a name is repeated.
+    ///     If the <paramref name="detailTemplateId" /> is empty or whitespace-only, a parameter name is repeated, or
+    ///     <paramref name="detailNamedValues" /> are passed without a <paramref name="detailTemplateId" />.
     /// </exception>
-    public ErrorBuilder AddErrorDetail(string? propertyPointer, string detail, string? messageId = null,
-        params (string key, object? value)[] namedValues)
+    public ErrorBuilder AddErrorDetail(string? propertyPointer, string detail, string? detailTemplateId = null,
+        params (string Key, object? Value)[] detailNamedValues)
     {
-        var templatedMessage = messageId is null
-            ? null
-            : new TemplatedMessage(messageId, namedValues.ToDictionary(x => x.key, x => x.value));
+        var detailTemplated = TemplatedMessage.CreateOptional(detailTemplateId, detailNamedValues,
+            nameof(detailTemplateId), nameof(detailNamedValues));
 
-        return AddErrorDetail(new ErrorDetail(propertyPointer, detail, templatedMessage));
+        return AddErrorDetail(new ErrorDetail(propertyPointer, detail, detailTemplated));
     }
 
     #endregion

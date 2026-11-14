@@ -254,6 +254,18 @@ public class ErrorBuilderUnitTests
     }
 
     [Fact]
+    public void WithDetailTemplated_NullLiteral_ClearsTheValue()
+    {
+        // Act
+        var result = Sut.Validation(ErrorUri.None(), "Test title")
+            .WithDetailTemplated("message-id")
+            .WithDetailTemplated(null)
+            .Build();
+
+        // Assert
+        result.DetailTemplated.ShouldBeNull();
+    }
+    [Fact]
     public void WithDetailTemplated_DuplicateName_ThrowsArgumentException()
     {
         // Arrange
@@ -337,15 +349,48 @@ public class ErrorBuilderUnitTests
     }
 
     [Fact]
-    public void AddErrorDetail_NoMessageId_IgnoresNamedValues()
+    public void AddErrorDetail_NamedValuesWithoutTemplateId_ThrowsArgumentExceptionAndAddsNothing()
+    {
+        // Arrange
+        var sut = Sut.Validation(ErrorUri.None(), "Test title");
+
+        // Act
+        var exception = Record.Exception(() => sut.AddErrorDetail("#/name", "Too short.", null, ("min", 3)));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentException>();
+        ((ArgumentException)exception).ParamName.ShouldBe("detailNamedValues");
+        sut.Build().ErrorDetails.ShouldBeEmpty();
+    }
+
+    [Fact]
+    public void AddErrorDetail_NoTemplateIdAndNoNamedValues_AddsDetailWithoutTemplate()
     {
         // Act
         var result = Sut.Validation(ErrorUri.None(), "Test title")
-            .AddErrorDetail("#/name", "Too short.", null, ("min", 3))
+            .AddErrorDetail("#/name", "Too short.")
             .Build();
 
         // Assert
         result.ErrorDetails.ShouldHaveSingleItem().DetailTemplated.ShouldBeNull();
+    }
+
+    [Fact]
+    public void AddErrorDetail_RepeatedName_ThrowsArgumentExceptionWithClearMessage()
+    {
+        // Arrange
+        var sut = Sut.Validation(ErrorUri.None(), "Test title");
+
+        // Act
+        var exception = Record.Exception(() => sut.AddErrorDetail("#/name", "Too short.", "errors.length",
+            ("min", 3), ("min", 4)));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentException>();
+        exception.Message.ShouldContain("‘min’ is repeated");
+        ((ArgumentException)exception).ParamName.ShouldBe("detailNamedValues");
     }
 
     [Fact]

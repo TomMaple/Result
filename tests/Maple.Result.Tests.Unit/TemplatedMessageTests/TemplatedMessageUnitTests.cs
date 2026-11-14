@@ -39,7 +39,7 @@ public class TemplatedMessageUnitTests
         // Assert
         exception.ShouldNotBeNull();
         exception.ShouldBeOfType<ArgumentNullException>();
-        ((ArgumentNullException)exception).ParamName.ShouldBe("TemplateId");
+        ((ArgumentNullException)exception).ParamName.ShouldBe("templateId");
     }
 
     [Theory]
@@ -54,7 +54,7 @@ public class TemplatedMessageUnitTests
         // Assert
         exception.ShouldNotBeNull();
         exception.ShouldBeOfType<ArgumentException>();
-        ((ArgumentException)exception).ParamName.ShouldBe("TemplateId");
+        ((ArgumentException)exception).ParamName.ShouldBe("templateId");
     }
 
     [Fact]
@@ -125,6 +125,152 @@ public class TemplatedMessageUnitTests
         sut.Params.ShouldNotBeNull();
         sut.Params.ContainsKey("min").ShouldBeTrue();
         sut.Params.ContainsKey("MIN").ShouldBeFalse();
+    }
+
+    #endregion
+
+    #region parameters
+
+    [Fact]
+    public void Ctor_InlineTuples_BuildsParams()
+    {
+        // Act
+        var sut = new TemplatedMessage("errors.length", ("min", 3), ("max", null));
+
+        // Assert
+        sut.Params.ShouldNotBeNull();
+        sut.Params.Count.ShouldBe(2);
+        sut.Params["min"].ShouldBe(3);
+        sut.Params["max"].ShouldBeNull();
+    }
+
+    [Fact]
+    public void Ctor_TupleArray_BuildsParams()
+    {
+        // Arrange
+        (string Key, object? Value)[] parameters = [("min", 3), ("max", 10)];
+
+        // Act
+        var sut = new TemplatedMessage("errors.length", parameters);
+
+        // Assert
+        sut.Params.ShouldNotBeNull();
+        sut.Params.Count.ShouldBe(2);
+        sut.Params["max"].ShouldBe(10);
+    }
+
+    [Fact]
+    public void Ctor_ListOfPairs_BuildsParams()
+    {
+        // Arrange
+        var parameters = new List<KeyValuePair<string, object?>> { new("min", 3) };
+
+        // Act
+        var sut = new TemplatedMessage("errors.length", parameters);
+
+        // Assert
+        sut.Params.ShouldNotBeNull();
+        sut.Params["min"].ShouldBe(3);
+    }
+
+    [Fact]
+    public void Ctor_NullSecondArgument_KeepsNullParams()
+    {
+        // Act
+        var sut = new TemplatedMessage("errors.length", null);
+
+        // Assert
+        sut.Params.ShouldBeNull();
+    }
+
+    [Fact]
+    public void Ctor_EmptyCollectionExpression_BuildsEmptyParams()
+    {
+        // Act
+        var sut = new TemplatedMessage("errors.length", []);
+
+        // Assert
+        sut.Params.ShouldNotBeNull();
+        sut.Params.ShouldBeEmpty();
+    }
+
+    [Fact]
+    public void Ctor_EmptyTupleArray_BuildsEmptyParams()
+    {
+        // Act
+        var sut = new TemplatedMessage("errors.length", Array.Empty<(string Key, object? Value)>());
+
+        // Assert
+        sut.Params.ShouldNotBeNull();
+        sut.Params.ShouldBeEmpty();
+    }
+
+    [Fact]
+    public void Ctor_RepeatedTupleName_ThrowsArgumentException()
+    {
+        // Act
+        var exception = Record.Exception(() => new TemplatedMessage("errors.length", ("min", 3), ("min", 4)));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentException>();
+        exception.Message.ShouldContain("‘min’ is repeated");
+        ((ArgumentException)exception).ParamName.ShouldBe("parameters");
+    }
+
+    [Fact]
+    public void Ctor_RepeatedPairName_ThrowsArgumentException()
+    {
+        // Arrange
+        var parameters = new List<KeyValuePair<string, object?>> { new("min", 3), new("min", 4) };
+
+        // Act
+        var exception = Record.Exception(() => new TemplatedMessage("errors.length", parameters));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentException>();
+        ((ArgumentException)exception).ParamName.ShouldBe("parameters");
+    }
+
+    [Fact]
+    public void Ctor_NullTupleName_ThrowsArgumentNullException()
+    {
+        // Act
+        var exception = Record.Exception(() => new TemplatedMessage("errors.length", (null!, 3)));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentNullException>();
+        ((ArgumentNullException)exception).ParamName.ShouldBe("parameters");
+    }
+
+    [Fact]
+    public void Ctor_NullPairName_ThrowsArgumentNullException()
+    {
+        // Arrange
+        var parameters = new List<KeyValuePair<string, object?>> { new(null!, 3) };
+
+        // Act
+        var exception = Record.Exception(() => new TemplatedMessage("errors.length", parameters));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentNullException>();
+        ((ArgumentNullException)exception).ParamName.ShouldBe("parameters");
+    }
+
+    [Fact]
+    public void Equals_SameParamsFromTuplesAndDictionary_AreEqual()
+    {
+        // Arrange
+        var fromTuples = new TemplatedMessage("errors.length", ("min", 3), ("max", 10));
+        var fromDictionary = new TemplatedMessage("errors.length",
+            new Dictionary<string, object?> { ["max"] = 10, ["min"] = 3 });
+
+        // Act & Assert
+        fromTuples.ShouldBe(fromDictionary);
+        fromTuples.GetHashCode().ShouldBe(fromDictionary.GetHashCode());
     }
 
     #endregion

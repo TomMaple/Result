@@ -85,6 +85,113 @@ public class ErrorUnitTests
         sut.DetailTemplated.Params["key"].ShouldBeNull();
     }
 
+    [Fact]
+    public void Validation_RepeatedNamedValue_ThrowsArgumentException()
+    {
+        // Act
+        var exception = Record.Exception(() => Sut.Validation(ErrorUri.None(), "Test title",
+            detailTemplateId: "message-id", detailNamedValues: [("min", 3), ("min", 4)]));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentException>();
+        exception.Message.ShouldContain("‘min’ is repeated");
+        ((ArgumentException)exception).ParamName.ShouldBe("detailNamedValues");
+    }
+
+    [Fact]
+    public void Validation_RepeatedNamedValueInSequence_ThrowsArgumentException()
+    {
+        // Arrange
+        var namedValues = new List<KeyValuePair<string, object?>> { new("min", 3), new("min", 4) };
+
+        // Act
+        var exception = Record.Exception(() => Sut.Validation(ErrorUri.None(), "Test title",
+            detailTemplateId: "message-id", detailNamedValues: namedValues));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentException>();
+        ((ArgumentException)exception).ParamName.ShouldBe("detailNamedValues");
+    }
+
+    [Fact]
+    public void Validation_NullName_ThrowsArgumentNullException()
+    {
+        // Act
+        var exception = Record.Exception(() => Sut.Validation(ErrorUri.None(), "Test title", null, null,
+            "message-id", (null!, 3)));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentNullException>();
+        ((ArgumentNullException)exception).ParamName.ShouldBe("detailNamedValues");
+    }
+
+    [Fact]
+    public void Validation_NamedValuesWithoutTemplateId_ThrowsArgumentException()
+    {
+        // Act
+        var exception = Record.Exception(() => Sut.Validation(ErrorUri.None(), "Test title", null, null, null,
+            ("min", 3)));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentException>();
+        ((ArgumentException)exception).ParamName.ShouldBe("detailNamedValues");
+    }
+
+    [Fact]
+    public void Validation_NamedValueSequenceWithoutTemplateId_ThrowsArgumentException()
+    {
+        // Arrange
+        var namedValues = new Dictionary<string, object?> { ["min"] = 3 };
+
+        // Act
+        var exception = Record.Exception(() => Sut.Validation(ErrorUri.None(), "Test title",
+            detailNamedValues: namedValues));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentException>();
+        ((ArgumentException)exception).ParamName.ShouldBe("detailNamedValues");
+    }
+
+    [Fact]
+    public void Validation_EmptyNamedValuesWithoutTemplateId_ReturnsErrorWithoutTemplate()
+    {
+        // Act
+        var sut = Sut.Validation(ErrorUri.None(), "Test title", detailNamedValues: []);
+
+        // Assert
+        sut.DetailTemplated.ShouldBeNull();
+    }
+
+    [Fact]
+    public void Validation_TemplateIdAndEmptyNamedValues_ReturnsTemplateWithEmptyParams()
+    {
+        // Act
+        var sut = Sut.Validation(ErrorUri.None(), "Test title", detailTemplateId: "message-id",
+            detailNamedValues: []);
+
+        // Assert
+        sut.DetailTemplated.ShouldNotBeNull();
+        sut.DetailTemplated.Params.ShouldNotBeNull();
+        sut.DetailTemplated.Params.ShouldBeEmpty();
+    }
+
+    [Fact]
+    public void Validation_TemplateIdAndNullNamedValueSequence_ReturnsTemplateWithoutParams()
+    {
+        // Act
+        var sut = Sut.Validation(ErrorUri.None(), "Test title", detailTemplateId: "message-id",
+            detailNamedValues: null);
+
+        // Assert
+        sut.DetailTemplated.ShouldNotBeNull();
+        sut.DetailTemplated.Params.ShouldBeNull();
+    }
+
     #endregion
 
     #region WithErrorDetail
@@ -189,6 +296,20 @@ public class ErrorUnitTests
         exception.ShouldBeOfType<ArgumentNullException>();
     }
 
+    [Fact]
+    public void WithErrorDetail_NamedValuesWithoutTemplateId_ThrowsArgumentException()
+    {
+        // Arrange
+        var sut = Sut.Validation(ErrorUri.None(), "Test title");
+
+        // Act
+        var exception = Record.Exception(() => sut.WithErrorDetail("#/name", "Too short.", null, ("min", 3)));
+
+        // Assert
+        exception.ShouldNotBeNull();
+        exception.ShouldBeOfType<ArgumentException>();
+        ((ArgumentException)exception).ParamName.ShouldBe("detailNamedValues");
+    }
     [Fact]
     public void WithErrorDetail_NullDetailText_ThrowsArgumentNullException()
     {
