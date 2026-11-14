@@ -61,7 +61,7 @@ Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Re
 Executes the provided function only if the instance of [Result](../Result/Result.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)).
 
 ```csharp
-public static Result IfSuccess(this Result result, Func<Result> ifSuccessFunc);
+public static Result IfSuccess(this Result result, Func<Result> ifSuccessFunction);
 ```
 
 ### Parameters
@@ -96,7 +96,7 @@ Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Re
 Executes the provided function only if the instance of [Result](../Result/Result.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)).
 
 ```csharp
-public static Result<T> IfSuccess<T>(this Result result, Func<T> ifSuccessFunc);
+public static Result<T> IfSuccess<T>(this Result result, Func<T> ifSuccessFunction);
 ```
 
 ### Type Parameters
@@ -135,7 +135,7 @@ Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Re
 Executes the provided function only if the instance of [Result](../Result/Result.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)).
 
 ```csharp
-public static Result<T> IfSuccess<T>(this Result result, Func<Result<T>> ifSuccessFunc);
+public static Result<T> IfSuccess<T>(this Result result, Func<Result<T>> ifSuccessFunction);
 ```
 
 ### Type Parameters
@@ -213,7 +213,7 @@ Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Re
 Executes the provided function only if the instance of [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)).
 
 ```csharp
-public static Result IfSuccess<T>(this Result<T> result, Func<T, Result> ifSuccessFunc);
+public static Result IfSuccess<T>(this Result<T> result, Func<T, Result> ifSuccessFunction);
 ```
 
 ### Type Parameters
@@ -252,7 +252,7 @@ Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Re
 Executes the provided function only if the instance of [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)).
 
 ```csharp
-public static Result<TNext> IfSuccess<T, TNext>(this Result<T> result, Func<T, TNext> ifSuccessFunc);
+public static Result<TNext> IfSuccess<T, TNext>(this Result<T> result, Func<T, TNext> ifSuccessFunction);
 ```
 
 ### Type Parameters
@@ -294,7 +294,7 @@ Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Re
 Executes the provided function only if the instance of [Result&lt;T&gt;](../ResultT/ResultT.md) represents a successful operation (i.e., does not contain an [Error](../Error/Error.md)).
 
 ```csharp
-public static Result<TNext> IfSuccess<T, TNext>(this Result<T> result, Func<T, Result<TNext>> ifSuccessFunc);
+public static Result<TNext> IfSuccess<T, TNext>(this Result<T> result, Func<T, Result<TNext>> ifSuccessFunction);
 ```
 
 ### Type Parameters

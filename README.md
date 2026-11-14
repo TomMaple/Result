@@ -287,7 +287,7 @@ Although, mapping to HTTP responses is not part of this library and can be done 
 | **Not Found** | The resource was not found. | Invalid identifier. Try a different one. | Company with that name has not been found. | `404` (Not Found) |
 | **Not Implemented** | The operation, feature or case is not implemented yet. | To be implemented in the future. | We don’t support debit cards yet. | `501` (Not Implemented) |
 | **Unauthorized** | The authentication might be valid, but the identity does not have the required permissions. | Ask for permissions, or, a different user is required. | Action is not allowed for that user. | `403` (Forbidden) |
-| **Timeout** | The operation timed out. | Heavy load. Try again later. | Server did not respond within 30 seconds. Try again later. | `408` (Request Timeout) |
+| **Timeout** | The operation timed out. | Heavy load. Try again later. | Server did not respond within 30 seconds. Try again later. | `504` (Gateway Timeout) when an upstream server or a dependency did not respond in time;&#xA;`408` (Request Timeout) when the client did not send the complete request in time |
 | **Unavailable** | The service is not available (e.g. it is down or overloaded), but please try again later. Not for exhausted usage limits (use **Limit Exceeded**). | Some service is down. Please try again later. | Report is not available—please try again later. | `503` (Service Unavailable) |
 | **Unauthenticated** | The authentication is either missing or invalid. | Log in. | User is not logged in. | `401` (Unauthorized) |
 | **Validation** | User input data is invalid. | Update the data and try again. | Email is required. | `400` (Bad Request) |
@@ -306,14 +306,20 @@ Although, mapping to HTTP responses is not part of this library and can be done 
 
 ### Type URI
 It is a mandatory URI that identifies the type of the problem. It can be:
-* `about:blank` — the type is not specified,
-* *URI Locator* — dereferencing it SHOULD provide human-readable documentation for the problem type (use an absolute rather than a relative value) (e.g., `https://exampleapp.com/docs/errors/signup/validation/email-required`),
-* *URI Tag* — it is not dereferenceable and uniquely represents the type of the problem (e.g., `tag:exampleapp.com,2026:errors.user.signup.validation.emailRequired`).
+* `about:blank` (`ErrorUri.None()`) — the type is not specified,
+* *URI Locator* (`ErrorUri.Locator(…)`) — dereferencing it SHOULD provide human-readable documentation for the problem type (use an absolute rather than a relative value) (e.g., `https://exampleapp.com/docs/errors/signup/validation/email-required`),
+* *URI Tag* (`ErrorUri.Tag(…)`) — it is not dereferenceable and uniquely represents the type of the problem (e.g., `tag:exampleapp.com,2026:errors.user.signup.validation.emailRequired`),
+* *URN* (`ErrorUri.Urn(…)`) — a persistent, non-dereferenceable name of the type of the problem (e.g., `urn:exampleapp:errors:signup:email-required`),
+* relative reference (`ErrorUri.Relative(…)`) — a full path resolved against the base URI of the response (e.g., `/errors/signup/email-required`); RFC 9457 recommends absolute URIs when possible.
 
 ### Instance URI
-It is an optional URI that the specific occurrence of the problem. It can be:
-* *URI Locator* — dereferencing it SHOULD provide the problem details object or information about the problem occurrence in other formats (e.g., `https://exampleapp/api/errors/982384293852/details`),
-* *URI Tag* — a unique identifier for the problem occurrence which may be meaningful to the server but is opaque to the client (e.g., `tag:exampleapp.com,2026:errors.func-sgnapi-p-01.logs.20260221.db382751-81b8-40da-8302-0a07dd16a5de`).
+It is an optional URI that identifies the specific occurrence of the problem. It can be:
+* *URI Locator* (`ErrorUri.Locator(…)`) — dereferencing it SHOULD provide the problem details object or information about the problem occurrence in other formats (e.g., `https://exampleapp/api/errors/982384293852/details`),
+* *URI Tag* (`ErrorUri.Tag(…)`) — a unique identifier for the problem occurrence which may be meaningful to the server but is opaque to the client (e.g., `tag:exampleapp.com,2026:errors.func-sgnapi-p-01.logs.20260221.db382751-81b8-40da-8302-0a07dd16a5de`),
+* *URN* (`ErrorUri.Urn(…)`) — e.g., `urn:uuid:6e8bc430-9c3a-11d9-9669-0800200c9a66`,
+* relative reference (`ErrorUri.Relative(…)`) — a full path resolved against the base URI of the response (e.g., `/account/12345/msgs/abc`, as in RFC 9457).
+
+`about:blank` (`ErrorUri.None()`) is not allowed as an instance; pass `null` when there is no instance.
 
 ### Support for multiple error details / validation errors
 ```csharp
@@ -523,7 +529,7 @@ Check:
   // after
   var copy = error.ToBuilder().WithTitle("New title").Build();
   ```
-* **Public constructors removed:** `new Result()`, `new Result<T>()`, `new Error()` and `new ErrorUri(string)`. Use `Result.Success()`, `Result.FromError()`, `Result<T>.FromValue()`, `Result<T>.FromError()` (or the implicit conversions), the `Error` factory methods or `ErrorBuilder`, and `ErrorUri.None()`, `Locator()` or `Tag()`.
+* **Public constructors removed:** `new Result()`, `new Result<T>()`, `new Error()` and `new ErrorUri(string)`. Use `Result.Success()`, `Result.FromError()`, `Result<T>.FromValue()`, `Result<T>.FromError()` (or the implicit conversions), the `Error` factory methods or `ErrorBuilder`, and `ErrorUri.None()`, `Locator()`, `Tag()`, `Urn()` or `Relative()`.
 * **`TryGetMetadata<T>()` is strict.** It returns `true` only when the stored value is a `T`; there is no conversion (a stored `int` is no longer read as `long`), and a `null` value returns `false`.
 * **Nullable values.** Metadata values and the named values of templated messages (`TemplatedMessage.Params`, `detailNamedValues`, `namedValues`) are `object?`.
 * **More checks.** The title of an error must not be `null`, empty or white-space only; the category must be a defined `ErrorCategory` value; `TemplatedMessage.TemplateId` must not be blank; `ErrorDetail.Detail` must not be `null`.

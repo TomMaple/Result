@@ -16,7 +16,7 @@ The details are kept in the order they were added. Unlike [Error.WithErrorDetail
 
 
 ## AddErrorDetail(ErrorDetail)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/ErrorBuilder.cs#L318" target="_blank">ErrorBuilder.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/ErrorBuilder.cs#L330" target="_blank">ErrorBuilder.cs</a>
 
 Appends the specified individual error occurrence.
 
@@ -48,7 +48,7 @@ foreach (var errorDetail in validationResult.ErrorDetails)
 
 
 ## AddErrorDetail(String, String, String, (String, Object)[])
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/ErrorBuilder.cs#L349" target="_blank">ErrorBuilder.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/ErrorBuilder.cs#L361" target="_blank">ErrorBuilder.cs</a>
 
 Appends a new individual error occurrence.
 

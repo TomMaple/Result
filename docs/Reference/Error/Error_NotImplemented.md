@@ -18,7 +18,7 @@ It relates to `501` HTTP status code (Not Implemented).
 
 
 ## NotImplemented(ErrorUri, String, String, ErrorUri, String, (String, Object)[])
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L725" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L727" target="_blank">Error.cs</a>
 
 Creates a new instance of the [Error](Error.md) object of the *NotImplemented* category with specified parameters.
 
@@ -43,7 +43,7 @@ A mandatory short, human-readable summary of the problem.
 An optional, human-readable explanation specific to this occurrence of the problem.
 
 #### `instanceUri` [ErrorUri](../ErrorUri/ErrorUri.md)
-An optional *URI* reference that identifies the specific occurrence of the problem.
+An optional *URI* reference that identifies the specific occurrence of the problem. It must not be `about:blank` ([ErrorUri.None()](../ErrorUri/ErrorUri_None.md) or a default [ErrorUri](../ErrorUri/ErrorUri.md)); pass `null` when there is no instance.
 
 #### `detailTemplateId` [String](https://learn.microsoft.com/dotnet/api/system.string)
 An optional identifier of the message template to generate custom, localized message.
@@ -63,7 +63,7 @@ The `title` or a name in `detailNamedValues` is `null`.
 
 [ArgumentException](https://learn.microsoft.com/dotnet/api/system.argumentexception)
 
-The `title` or the `detailTemplateId` is empty or consists only of white-space characters, a name in `detailNamedValues` is repeated, or `detailNamedValues` are passed without a `detailTemplateId`.
+The `title` or the `detailTemplateId` is empty or consists only of white-space characters, a name in `detailNamedValues` is repeated, `detailNamedValues` are passed without a `detailTemplateId`, or the `instanceUri` is `about:blank`.
 
 ### Remarks
 > [!NOTE]
@@ -82,7 +82,7 @@ var error = Error.NotImplemented(
 
 
 ## NotImplemented(ErrorUri, String, String, ErrorUri, String, IEnumerable&lt;KeyValuePair&lt;String, Object&gt;&gt;)
-Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L741" target="_blank">Error.cs</a>
+Source: <a href="https://github.com/TomMaple/Maple.Result/blob/main/src/Maple.Result/Error.cs#L743" target="_blank">Error.cs</a>
 
 Creates a new instance of the [Error](Error.md) object of the *NotImplemented* category with specified parameters.
 
@@ -108,7 +108,7 @@ A mandatory short, human-readable summary of the problem.
 An optional, human-readable explanation specific to this occurrence of the problem.
 
 #### `instanceUri` [ErrorUri](../ErrorUri/ErrorUri.md)
-An optional *URI* reference that identifies the specific occurrence of the problem.
+An optional *URI* reference that identifies the specific occurrence of the problem. It must not be `about:blank` ([ErrorUri.None()](../ErrorUri/ErrorUri_None.md) or a default [ErrorUri](../ErrorUri/ErrorUri.md)); pass `null` when there is no instance.
 
 #### `detailTemplateId` [String](https://learn.microsoft.com/dotnet/api/system.string)
 An optional identifier of the message template to generate custom, localized message.
@@ -128,7 +128,7 @@ The `title` or a name in `detailNamedValues` is `null`.
 
 [ArgumentException](https://learn.microsoft.com/dotnet/api/system.argumentexception)
 
-The `title` or the `detailTemplateId` is empty or consists only of white-space characters, a name in `detailNamedValues` is repeated, or `detailNamedValues` are passed without a `detailTemplateId`.
+The `title` or the `detailTemplateId` is empty or consists only of white-space characters, a name in `detailNamedValues` is repeated, `detailNamedValues` are passed without a `detailTemplateId`, or the `instanceUri` is `about:blank`.
 
 ### Remarks
 > [!NOTE]
