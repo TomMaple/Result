@@ -357,7 +357,8 @@ public class TemplatedMessageUnitTests
     {
         // Arrange
         const string ExpectedText =
-            "{\"templateId\":\"user.account.activated\",\"params\":{\"userName\":\"johnny\",\"isSuccessful\":true,\"bonusPoints\":100,\"weight\":78.3,\"dob\":\"1980-04-19\",\"registered\":\"2022-04-15T12:17:58-05:00\"}}";
+            "{\"templateId\":\"user.account.activated\",\"params\":{\"userName\":\"johnny\",\"isSuccessful\":true,\"bonusPoints\":100," +
+            "\"weight\":78.3,\"dob\":\"1980-04-19\",\"registered\":\"2022-04-15T12:17:58-05:00\"}}";
 
         const string TemplateId = "user.account.activated";
         var parameters = new Dictionary<string, object?>

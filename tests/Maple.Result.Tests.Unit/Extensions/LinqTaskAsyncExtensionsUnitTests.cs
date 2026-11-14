@@ -8,10 +8,10 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-using System;
-using System.Threading.Tasks;
 using Maple.Result.Extensions;
 using Moq;
+using System;
+using System.Threading.Tasks;
 
 namespace Maple.Result.Tests.Unit.Extensions;
 
@@ -606,7 +606,7 @@ public class LinqTaskAsyncExtensionsUnitTests
     }
 
     // ReSharper restore RedundantAssignment
- 
+
     #endregion
 
     #region helper methods

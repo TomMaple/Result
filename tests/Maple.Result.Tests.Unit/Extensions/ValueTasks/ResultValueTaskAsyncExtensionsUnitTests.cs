@@ -8,9 +8,9 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+using Maple.Result.Extensions.ValueTasks;
 using System;
 using System.Threading.Tasks;
-using Maple.Result.Extensions.ValueTasks;
 
 namespace Maple.Result.Tests.Unit.Extensions.ValueTasks;
 

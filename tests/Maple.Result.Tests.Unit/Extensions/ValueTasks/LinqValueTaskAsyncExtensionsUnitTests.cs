@@ -8,10 +8,10 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-using System;
-using System.Threading.Tasks;
 using Maple.Result.Extensions.ValueTasks;
 using Moq;
+using System;
+using System.Threading.Tasks;
 
 namespace Maple.Result.Tests.Unit.Extensions.ValueTasks;
 
@@ -43,7 +43,9 @@ public class LinqValueTaskAsyncExtensionsUnitTests
         var sut = ValueTask.FromResult<Result<int>>(null!);
 
         // Act
-        var exception = await Record.ExceptionAsync(() => sut.SelectMany(x => ValueTask.FromResult(Result.FromValue(x.ToString())), (x, _) => (double)x).AsTask());
+        var exception = await Record.ExceptionAsync(() => sut
+            .SelectMany(x => ValueTask.FromResult(Result.FromValue(x.ToString())), (x, _) => (double)x)
+            .AsTask());
 
         // Assert
         exception.ShouldNotBeNull();
@@ -77,7 +79,9 @@ public class LinqValueTaskAsyncExtensionsUnitTests
         var sut = ValueTask.FromResult(Result.FromValue(5));
 
         // Act
-        var exception = await Record.ExceptionAsync(() => sut.SelectMany(x => ValueTask.FromResult(Result.FromValue(x.ToString())), ResultSelectorFunction!).AsTask());
+        var exception = await Record.ExceptionAsync(() => sut
+            .SelectMany(x => ValueTask.FromResult(Result.FromValue(x.ToString())), ResultSelectorFunction!)
+            .AsTask());
 
         // Assert
         exception.ShouldNotBeNull();
@@ -94,7 +98,9 @@ public class LinqValueTaskAsyncExtensionsUnitTests
         var sut = GetErrorResultValueTask<int>();
 
         // Act
-        var exception = await Record.ExceptionAsync(() => sut.SelectMany(x => ValueTask.FromResult(Result.FromValue(x.ToString())), ResultSelectorFunction!).AsTask());
+        var exception = await Record.ExceptionAsync(() => sut
+            .SelectMany(x => ValueTask.FromResult(Result.FromValue(x.ToString())), ResultSelectorFunction!)
+            .AsTask());
 
         // Assert
         exception.ShouldNotBeNull();
